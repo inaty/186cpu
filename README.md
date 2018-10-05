@@ -12,6 +12,7 @@
    cd 186cpu/<charge>  
    git add .  
    git commit -m "first commit"
-   git push origin master```  
+   git push origin master  
+   ```
 
 コマンドが合ってるかは知りません
