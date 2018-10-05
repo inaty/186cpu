@@ -277,11 +277,11 @@ let h { name = Id.L(x); args = ys; fargs = zs; body = insts; ret = t } =
     body = insts'; ret = t }
 
 (* プログラム→レジスタ割り当てされたプログラム *)
-let f (Prog(data, fundefs, insts)) =
+let f (Prog(float_table, fundefs, insts)) =
   Format.eprintf "register allocation: may take some time (up to a few minutes, depending on the size of functions)@.";
   (* 関数定義にレジスタを割り当てる *)
   let fundefs' = List.map h fundefs in
   (* 命令列にレジスタを割り当てる *)
   let insts', regenv' =
     g (Id.gentmp Type.Unit, Type.Unit) (Ans(Nop)) M.empty insts in
-  Prog(data, fundefs', insts')
+  Prog(float_table, fundefs', insts')

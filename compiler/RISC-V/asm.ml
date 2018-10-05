@@ -60,7 +60,7 @@ let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
 (* closure addressをレジスタに入れたくなったら自由レジスタの最後のレジスタを使う *)
 let reg_cl = regs.(Array.length regs - 1)
-(* swapとかで適当なアドレ雨を使いたくなったら自由レジスタの後ろから2番目のレジスタを使う *)
+(* swapとかで適当なアドレスを使いたくなったら自由レジスタの後ろから2番目のレジスタを使う *)
 let reg_sw = regs.(Array.length regs - 2)
 let reg_fsw = fregs.(Array.length fregs - 1) (* temporary for swap *)
 (* 変更 *)

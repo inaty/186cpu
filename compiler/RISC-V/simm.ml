@@ -35,5 +35,5 @@ and g' imms = function
 let h {name = l; args = xs; fargs = ys; body = insts; ret = t} =
   {name = l; args = xs; fargs = ys; body = g M.empty insts; ret = t}
 
-let f (Prog(data, fundefs, insts)) =
-  Prog(data, List.map h fundefs, g M.empty insts)
+let f (Prog(float_table, fundefs, insts)) =
+  Prog(float_table, List.map h fundefs, g M.empty insts)

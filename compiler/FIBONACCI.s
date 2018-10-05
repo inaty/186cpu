@@ -1,6 +1,3 @@
-.section	".rodata"
-.align	8
-.section	".text"
 fibonacci.11:
 	li	a1, 0
 	bne	a0, a1, be_else.26
@@ -32,9 +29,7 @@ be_else.27:
 	lw	a1, sp, 4
 	add	a0, a1, a0
 	ret
-.global	min_caml_start
 min_caml_start:
-	save	%sp, -112, %sp
 	li	a0, 5
 	sw	sp, ra, 4
 	addi	sp, sp, 8
@@ -46,5 +41,3 @@ min_caml_start:
 	call	min_caml_print_int
 	addi	sp, sp, -8
 	ld	ra, sp, 4
-	ret
-	restore

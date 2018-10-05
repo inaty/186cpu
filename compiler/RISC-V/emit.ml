@@ -255,23 +255,25 @@ let h oc {name = Id.L(x); args = _; fargs = _; body = insts; ret = _} =
   stackmap := [];
   g oc (Tail, insts)
 
-let f oc (Prog(data, fundefs, e)) =
+let f oc (Prog(float_table, fundefs, insts)) =
   Format.eprintf "generating assembly...@.";
-  Printf.fprintf oc ".section\t\".rodata\"\n";
-  Printf.fprintf oc ".align\t8\n";
-  List.iter
+  (* リンカとかのことを考えないので、そういうのはとりあえず無視 *)
+  (* Printf.fprintf oc ".section\t\".rodata\"\n";
+  Printf.fprintf oc ".align\t8\n"; *)
+  (* 浮動小数点数に対応しないのでとりあえず無視 *)
+  (* List.iter
     (fun (Id.L(x), d) ->
       Printf.fprintf oc "%s:\t! %f\n" x d;
       Printf.fprintf oc "\t.long\t0x%lx\n" (gethi d);
       Printf.fprintf oc "\t.long\t0x%lx\n" (getlo d))
-    data;
-  Printf.fprintf oc ".section\t\".text\"\n";
+    float_table; *)
+  (* Printf.fprintf oc ".section\t\".text\"\n"; *)
   List.iter (fun fundef -> h oc fundef) fundefs;
-  Printf.fprintf oc ".global\tmin_caml_start\n";
+  (* Printf.fprintf oc ".global\tmin_caml_start\n"; *)
   Printf.fprintf oc "min_caml_start:\n";
-  Printf.fprintf oc "\tsave\t%%sp, -112, %%sp\n"; (* from gcc; why 112? *)
+  (* Printf.fprintf oc "\tsave\t%%sp, -112, %%sp\n"; (* from gcc; why 112? *) *)
   stackset := S.empty;
   stackmap := [];
-  g oc (NonTail("%g0"), e); (**)
-  Printf.fprintf oc "\tret\n";
-  Printf.fprintf oc "\trestore\n"
+  g oc (NonTail("zero"), insts);
+  (* Printf.fprintf oc "\tret\n"; *)
+  (* Printf.fprintf oc "\trestore\n" *)
