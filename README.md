@@ -14,7 +14,7 @@
 3. 追跡させてコミットしてプッシュ  
    ```
    cd 186cpu
-   git add *
+   git add -A
    git commit -m "<charge> first commit"
    git push origin master
    ```
