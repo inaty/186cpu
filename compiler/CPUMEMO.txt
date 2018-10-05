@@ -1,0 +1,82 @@
+# フィボナッチを動かす
+まず動作確認を兼ねて全然risc5じゃないやつのフィボナッチコードを出力
+
+to_riscvを変える
+
+メモ全部消えた
+アー
+
+仮想マシンコード生成（Virtual.f）、
+SPARCの13 bit即値最適化（Simm13.f）、
+レジスタ割り当て（RegAlloc.f）、
+アセンブリ生成（Emit.f）を行います。
+
+addとaddiに対応（Nontailだけ？不明）
+
+これ関数呼出し規約勝手に決めていいっぽい？
+でもなんか参考にできそうなサイト見つかりはしたな
+
+そもそもTailとNontailの区別がいるのかどうか
+と思ったけど普通にretとかするからいるわ
+
+%i7 = Return address, Return address of the subroutine.
+%o7 = Called return address, Return address of the called subroutine.(再帰用？)
+%g0 = zero
+ret Synthetic instruction for: jmpl %i7 + 8, %g0
+retl Synthetic instruction for: jmpl %o7 + 8, %g0
+
+call label30 Store %pc in %o7, and jump to label30
+
+callがやってることがそもそも違うなあ
+まあでもretlを出しているところを置き換えればいいのか？
+
+set(=li)むずくないですか
+むずいわ
+やり方色々
+コンパイラがどうにかする
+アセンブラがどうにかする　←とりあえずこれ
+コアに実装してしまう
+うーん
+
+cmp bneもむずくないですか
+即値比較ができないのでレジスタを持ってくる必要があります
+ふえーん
+できた
+
+次はcallからっぽい
+
+# アセンブラ仕様
+* 実命令
+addi rd, rs1, imm
+slli rd, rs1, imm
+add rd, rs1, rs2
+sub rd, rs1, rs2
+sll rd, rs1, rs2
+jalr rd, rs1, imm
+lw rd, rs1, imm
+sw rs1, rs2, imm
+* 実命令（hardware)
+lui rd, imm
+jal rd, imm
+bne rs1, rs2, imm
+* 仮想命令
+ret = jalr zero, ra, 0
+li rd, imm = if (imm[31:12] == 0)
+               addi rd, imm
+             else if (imm[11] == 0)
+               lui rd, imm[31:12]
+               addi rd, imm[11:0]
+             else
+               lui rd, imm[31:12]
+               addi rd, imm[11:0]
+               addi rd, 0b010000000000(10bit目だけ1)
+               addi rd, 0b010000000000(10bit目だけ1)
+li rd, label = li rd, (labelの中身)
+bne rs1, rs2, label = bne rs1, rs2, (labelへのoffset)
+blt rs1, rs2, label = bl1 rs1, rs2, (labelへのoffset)
+mv rd, rs = addi rd, rs, 0
+neg rd, rs = sub rd, zero, rs
+j offset = jal zero, offset
+j label = j (labelの中身へのoffset)
+TODO:いい感じにやる
+call label = ???
