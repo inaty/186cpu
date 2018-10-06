@@ -199,7 +199,7 @@ and g' oc = function
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ss;
       Printf.fprintf oc "\tcall\t%s\n" label;
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ~-ss;
-      Printf.fprintf oc "\tld\t%s, %s, %d\n" reg_ra reg_sp (ss - 4);
+      Printf.fprintf oc "\tlw\t%s, %s, %d\n" reg_ra reg_sp (ss - 4);
       if List.mem a allregs && a <> regs.(0) then
         Printf.fprintf oc "\tmv\t%s, %s\n" a regs.(0)
       else if List.mem a allfregs && a <> fregs.(0) then
