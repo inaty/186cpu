@@ -15,21 +15,21 @@ def virtual_inst_to_real_line(inst_type, addr, inst, label_addrs):
             imm = label_addrs[operands[1]]
         else:
             imm = int(operands[1])
-        return "\taddi\t{0}, {1}".format(rd, imm)
+        return "\taddi\t{0}, zero, {1}".format(rd, imm)
     elif (inst_type == "bne" or inst_type == "blt"):
         rs1, rs2 = operands[0], operands[1]
-        offset = (label_addrs[operands[2]] - addr) * 4
+        offset = label_addrs[operands[2]] - addr
         return "\t{0}\t{1}, {2}, {3}".format(inst_type, rs1, rs2, offset)
     elif (inst_type == "mv"):
         rd, rs = operands[0], operands[1]
-        return "\tmv\t{0}, {1}".format(rd, rs)
+        return "\taddi\t{0}, {1}, 0".format(rd, rs)
     elif (inst_type == "neg"):
         rd, rs = operands[0], operands[1]
         return "\tsub\t{0}, zero, {1}".format(rd, rs)
     elif (inst_type == "j"):
         offset = None
         if operands[0] in label_addrs:
-            offset = (label_addrs[operands[0]] - line) * 4
+            offset = label_addrs[operands[0]] - line
         else:
             offset = int(operands[0])
         return "\tjal\tzero, {0}".format(offset)
@@ -59,7 +59,8 @@ def main():
     # ラベル抽出・アドレス計算
     label_addrs = {}
     addr_lines = []
-    addr = 0
+    # 1行目にjumpを入れるためにこうしている
+    addr = 4
     for line in lines:
         if line.endswith(":\n"):
             label_addrs[line.replace(":\n", "")] = addr
@@ -80,7 +81,7 @@ def main():
             lines.append(line.replace("\n", ""))
 
     # 表示
-    print("start: {0}".format(label_addrs["min_caml_start"]))
+    print("\tjal\tzero, {0}".format(label_addrs["min_caml_start"]))
     for line in lines:
         print(line)
 

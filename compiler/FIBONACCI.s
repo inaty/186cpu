@@ -16,7 +16,7 @@ be_else.27:
 	addi	sp, sp, 8
 	call	fibonacci.11
 	addi	sp, sp, -8
-	ld	ra, sp, 4
+	lw	ra, sp, 4
 	lw	a1, sp, 0
 	addi	a1, a1, -2
 	sw	sp, a0, 4
@@ -25,19 +25,19 @@ be_else.27:
 	addi	sp, sp, 16
 	call	fibonacci.11
 	addi	sp, sp, -16
-	ld	ra, sp, 12
+	lw	ra, sp, 12
 	lw	a1, sp, 4
 	add	a0, a1, a0
 	ret
 min_caml_start:
-	li	a0, 5
+	li	a0, 6
 	sw	sp, ra, 4
 	addi	sp, sp, 8
 	call	fibonacci.11
 	addi	sp, sp, -8
-	ld	ra, sp, 4
+	lw	ra, sp, 4
 	sw	sp, ra, 4
 	addi	sp, sp, 8
 	call	min_caml_print_int
 	addi	sp, sp, -8
-	ld	ra, sp, 4
+	lw	ra, sp, 4
