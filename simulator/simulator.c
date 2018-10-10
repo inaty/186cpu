@@ -113,8 +113,39 @@ int main(int argc , char* argv[]){
         //printf("cmmand[%d] is %d,bitcode below\n%s\n",pc,command[pc],int2bin(command[pc]));
 				opecode = command[pc] & 0b1111111;
 				funct3 = (command[pc] >>12) & 0b111;
+//IO関係
+	if(opecode==0b0001011){
+		rs1=(command[pc]>>15)&0x1f;
+		rs2=(command[pc]>>7)&0x1f;
+		if((command[pc]&(1<<12))==0){
+			//入力mode
+			rg[rs2]=getchar();
+			if((command[pc]&(1<<14))==0){
+				//最上bit埋め
+				rg[rs2]-=(2*(rg[rs2]&(1<<7)));
+			}
+		}else{
+			//出力mode
+			char c = (char)rg[rs1];
+			printf("%c",c);
+		}
+		pc++;
+	}
+// lui
+	else if (opecode==0b0110111){
+		imm=command[pc]&(0xfffff<<12);
+		rd = (command[pc]>>7)&0b11111;
+		rg[rd]=imm;
+		pc++;
+	}
+//auipc
+	else if (opecode==0b0010111){
+		imm=command[pc]&(0xfffff<<12);
+		rd = (command[pc]>>7)&0b11111;
+		rg[rd]=imm/4+pc;
+	}
 //jal
-	 if (opecode==0b1101111){
+	 else if (opecode==0b1101111){
 		imm = -((command[pc]&(1<<31))>>11)+(((command[pc]&(0x3ff<<21))>>20)|(command[pc]&(0xff<<12))|((command[pc]&(1<<20))>>9));//|(command[pc]&(1<<31));
 		imm = imm/4;
 		rd = (command[pc]>>7)&0b11111;
@@ -122,6 +153,16 @@ int main(int argc , char* argv[]){
 		//printf("imm=%d,%s\n",imm,int2bin(imm));
 		pc += imm;
 	 }
+//jalr命令
+	else if ((opecode==0b1100111)&&(funct3==0b000)){
+		imm = (command[pc]>>20)&0xfff;
+		imm = imm/4;
+		rs1 = (command[pc]>>15) & 0b11111;
+		rd = (command[pc]>>7) & 0b11111;
+		rg[rd]=pc+1;
+		pc=pc+imm+rs1/4;
+	}
+
 //branch系命令
 	else if (opecode==0b1100011){
 		imm=-((command[pc]&(1<<31))>>19)+(((command[pc]&(0x3f<<25))>>20)|((command[pc]&(0xf<<8))>>7)|((command[pc]&(0x1<<7))<<4));//|(command[pc]&(1<<31));
@@ -186,8 +227,44 @@ int main(int argc , char* argv[]){
 			rd = (command[pc]>>7) & 0b11111;
 		//lb
 		if(funct3==0b000){
+			rg[rd]=(mem[imm+rs1]&0x7f)-(mem[imm+rs1]&0x80);
+		}
+		//lh
+		if(funct3==0b001){
+			rg[rd]=(mem[imm+rs1]&0x7fff)-(mem[imm+rs1]&0x8000);
+		}
+		//lw
+		if(funct3==0b010){
 			rg[rd]=mem[imm+rs1];
-	}
+		}
+		//lbu
+		if(funct3==0b100){
+			rg[rd]=mem[imm+rs1]&0xff;
+		}
+		//lhu
+		if(funct3==0b101){
+			rg[rd]=mem[imm+rs1]&0xffff;
+		}
+		pc++;
+
+}
+//STORE系命令
+	else if (opecode==0b0100011){
+			imm = ((command[pc]&(0x7f<<25))>>20) | ((command[pc]&(0x1f<<7))>>7);
+			rs1 = (command[pc]>>15) & 0b11111;
+			rs2=  (command[pc]>>20) & 0b11111;
+		//sb
+		if(funct3==0b000){
+			mem[imm+rs1]=rg[rs2];
+		}
+		//sh
+		if(funct3==0b001){
+			mem[imm+rs1]=rg[rs2]&0xffff;
+		}
+		//sw
+		if(funct3==0b010){
+			mem[imm+rs1]=rg[rs2]&0xff;
+		}
 		pc++;
 }
 //OP-IMM系命令
@@ -283,6 +360,7 @@ int main(int argc , char* argv[]){
 
 
     }
+		printf("\nsuccess!\n");
 				for (int j=0;j<8;j++)
 					printf("rg[%d]=%d",j,rg[j]);
 					printf("\n");
