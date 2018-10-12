@@ -58,6 +58,11 @@ let rec occur r1 = function
   | _ -> false
 
 let rec unify t1 t2 sp ep =
+  let open Lexing in
+  Printf.printf "unifing line %d-%d characters %d-%d\n"
+    sp.pos_lnum ep.pos_lnum
+    (sp.pos_cnum - sp.pos_bol) (ep.pos_cnum - ep.pos_bol);
+  Type.print_type t1; Type.print_type t2;
   match t1, t2 with
   | Type.Unit, Type.Unit | Type.Bool, Type.Bool | Type.Int, Type.Int | Type.Float, Type.Float -> ()
   | Type.Fun(t1s, t1'), Type.Fun(t2s, t2') ->

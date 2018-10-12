@@ -11,6 +11,8 @@ and exp =
   | Neg of t
   | Add of t * t
   | Sub of t * t
+  | Mul of t * t
+  | Div of t * t
   | FNeg of t
   | FAdd of t * t
   | FSub of t * t
@@ -55,6 +57,14 @@ let print_syntax exp =
         print_syntax_sub exp2 (indent + 2);
     | Sub(exp1, exp2) ->
         printf "SUB\n";
+        print_syntax_sub exp1 (indent + 2);
+        print_syntax_sub exp2 (indent + 2);
+    | Mul(exp1, exp2) ->
+        printf "MUL\n";
+        print_syntax_sub exp1 (indent + 2);
+        print_syntax_sub exp2 (indent + 2);
+    | Div(exp1, exp2) ->
+        printf "DIV\n";
         print_syntax_sub exp1 (indent + 2);
         print_syntax_sub exp2 (indent + 2);
     | FNeg(exp) -> printf "FNEG\n"; print_syntax_sub exp (indent + 2)

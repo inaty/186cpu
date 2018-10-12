@@ -19,7 +19,7 @@ let lexbuf outchan l =
                    (Alpha.f
                       (KNormal.f
                          (let syntax = Parser.exp Lexer.token l in
-                          Syntax.print_syntax syntax;
+                          (* Syntax.print_syntax syntax; *)
                           Typing.f syntax))))))))
 
 let string s = lexbuf stdout (Lexing.from_string s)

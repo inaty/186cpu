@@ -1,6 +1,4 @@
-open Printf
-
-type t = (* MinCaml�η���ɽ�������ǡ����� (caml2html: type_t) *)
+type t =
   | Unit
   | Bool
   | Int
@@ -10,9 +8,8 @@ type t = (* MinCaml�η���ɽ�������ǡ����� (caml2
   | Array of t
   | Var of t option ref
 
-let gentyp () = Var(ref None) (* ���������ѿ������� *)
+let gentyp () = Var(ref None)
 
-(* 追加 *)
 let rec string_of_type typ =
   match typ with
   | Unit -> "unit"
@@ -34,3 +31,5 @@ let rec string_of_type typ =
       match !typeref with
       | Some(typ) -> "var " ^ (string_of_type typ)
       | None -> "var none"
+
+let print_type typ = Printf.printf "%s\n" (string_of_type typ)

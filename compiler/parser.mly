@@ -11,6 +11,8 @@ let ep () = Parsing.symbol_end_pos ()
 %token NOT
 %token MINUS
 %token PLUS
+%token AST
+%token SLASH
 %token MINUS_DOT
 %token PLUS_DOT
 %token AST_DOT
@@ -46,7 +48,7 @@ let ep () = Parsing.symbol_end_pos ()
 %left COMMA
 %left EQUAL LESS_GREATER LESS GREATER LESS_EQUAL GREATER_EQUAL
 %left PLUS MINUS PLUS_DOT MINUS_DOT
-%left AST_DOT SLASH_DOT
+%left AST SLASH AST_DOT SLASH_DOT
 %right prec_unary_minus
 %left prec_app
 %left DOT
@@ -87,6 +89,10 @@ exp:
     { (Add($1, $3), sp (), ep ()) }
 | exp MINUS exp
     { (Sub($1, $3), sp (), ep ()) }
+| exp AST exp
+    { (Mul($1, $3), sp (), ep ()) }
+| exp SLASH exp
+    { (Div($1, $3), sp (), ep ()) }
 | exp EQUAL exp
     { (Eq($1, $3), sp (), ep ()) }
 | exp LESS_GREATER exp
@@ -131,16 +137,21 @@ exp:
     { (Put($1, $4, $7), sp (), ep ()) }
 | exp SEMICOLON exp
     { (Let((Id.gentmp Type.Unit, Type.Unit), $1, $3), sp (), ep ()) }
+| exp SEMICOLON
+    { (Let((Id.gentmp Type.Unit, Type.Unit), $1, (Unit, sp (), ep ())),
+       sp (), ep ())}
 | ARRAY_CREATE simple_exp simple_exp
     %prec prec_app
     { (Array($2, $3), sp (), ep ()) }
 | error
     { failwith
-        (let sp = sp () in
+        (let open Lexing in
+         let sp = sp () in
          let ep = ep () in
          Printf.sprintf
-           "parse error near line %d, characters %d-%d"
+           "parse error near line %d-%d, characters %d-%d"
            sp.pos_lnum
+           ep.pos_lnum
            (sp.pos_cnum - sp.pos_bol)
            (ep.pos_cnum - ep.pos_bol)) }
 
