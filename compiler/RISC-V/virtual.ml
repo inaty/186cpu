@@ -41,9 +41,10 @@ let expand xts ini addf addi =
       (offset + 4, addi x t offset acc))
 
 (* 「式(Closure.t)→命令列(Asm.t)」な関数を返す。 *)
-let rec g env = function
-  | Closure.Unit -> Ans(Nop)
-  | Closure.Int(i) -> Ans(Set(i)) (* わからんけど即値かも(Closure.Intを調べる) *)
+let rec g env (exp, sp) =
+  match exp with
+  | Closure.Unit -> Ans(Nop, sp)
+  | Closure.Int(i) -> Ans(Set(i), sp)
   (* float即値はラベルを通じてメモリ内の表から引き出すという方法で無理やり実現 *)
   | Closure.Float(d) ->
       let l =
@@ -55,25 +56,25 @@ let rec g env = function
           float_table := (l, d) :: !float_table;
           l in
       let x = Id.genid "l" in
-      Let((x, Type.Int), SetL(l), Ans(LdDF(x, C(0))))
-  | Closure.Neg(x) -> Ans(Neg(x))
-  | Closure.Add(x, y) -> Ans(Add(x, V(y)))
-  | Closure.Sub(x, y) -> Ans(Sub(x, V(y)))
-  | Closure.FNeg(x) -> Ans(FNegD(x))
-  | Closure.FAdd(x, y) -> Ans(FAddD(x, y))
-  | Closure.FSub(x, y) -> Ans(FSubD(x, y))
-  | Closure.FMul(x, y) -> Ans(FMulD(x, y))
-  | Closure.FDiv(x, y) -> Ans(FDivD(x, y))
+      Let((x, Type.Int), (SetL(l), sp), Ans(LdDF(x, C(0)), sp))
+  | Closure.Neg(x) -> Ans(Neg(x), sp)
+  | Closure.Add(x, y) -> Ans(Add(x, V(y)), sp)
+  | Closure.Sub(x, y) -> Ans(Sub(x, V(y)), sp)
+  | Closure.FNeg(x) -> Ans(FNegD(x), sp)
+  | Closure.FAdd(x, y) -> Ans(FAddD(x, y), sp)
+  | Closure.FSub(x, y) -> Ans(FSubD(x, y), sp)
+  | Closure.FMul(x, y) -> Ans(FMulD(x, y), sp)
+  | Closure.FDiv(x, y) -> Ans(FDivD(x, y), sp)
   (* id_or_imm->Id.t *)
   | Closure.IfEq(x, y, e1, e2) ->
       (match M.find x env with
-      | Type.Bool | Type.Int -> Ans(IfEq(x, y, g env e1, g env e2))
-      | Type.Float -> Ans(IfFEq(x, y, g env e1, g env e2))
+      | Type.Bool | Type.Int -> Ans(IfEq(x, y, g env e1, g env e2), sp)
+      | Type.Float -> Ans(IfFEq(x, y, g env e1, g env e2), sp)
       | _ -> failwith "equality supported only for bool, int, and float")
   | Closure.IfLE(x, y, e1, e2) ->
       (match M.find x env with
-      | Type.Bool | Type.Int -> Ans(IfLE(x, y, g env e1, g env e2))
-      | Type.Float -> Ans(IfFLE(x, y, g env e1, g env e2))
+      | Type.Bool | Type.Int -> Ans(IfLE(x, y, g env e1, g env e2), sp)
+      | Type.Float -> Ans(IfFLE(x, y, g env e1, g env e2), sp)
       | _ -> failwith "inequality supported only for bool, int, and float")
   | Closure.Let((x, t1), e1, e2) ->
       let e1' = g env e1 in
@@ -81,43 +82,45 @@ let rec g env = function
       concat e1' (x, t1) e2'
   | Closure.Var(x) ->
       (match M.find x env with
-      | Type.Unit -> Ans(Nop)
-      | Type.Float -> Ans(FMovD(x))
-      | _ -> Ans(Mov(x)))
+      | Type.Unit -> Ans(Nop, sp)
+      | Type.Float -> Ans(FMovD(x), sp)
+      | _ -> Ans(Mov(x), sp))
   | Closure.MakeCls((x, t),
                     { Closure.entry = l; Closure.actual_fv = ys },
                     e2) ->
-      (* ���������������� (caml2html: virtual_makecls) *)
-      (* Closure�Υ��ɥ쥹�򥻥åȤ��Ƥ��顢��ͳ�ѿ����ͤ򥹥ȥ� *)
       let e2' = g (M.add x t env) e2 in
       let offset, store_fv =
         expand
           (List.map (fun y -> (y, M.find y env)) ys)
           (4, e2')
-          (fun y offset store_fv -> seq(StDF(y, x, C(offset)), store_fv))
-          (fun y _ offset store_fv -> seq(St(y, x, C(offset)), store_fv)) in
-      Let((x, t), Mov(reg_hp),
-          Let((reg_hp, Type.Int), Add(reg_hp, C(align offset)),
+          (fun y offset store_fv ->
+             seq ((StDF(y, x, C(offset)), sp), store_fv))
+          (fun y _ offset store_fv ->
+             seq ((St(y, x, C(offset)), sp), store_fv)) in
+      Let((x, t), (Mov(reg_hp), sp),
+          Let((reg_hp, Type.Int), (Add(reg_hp, C(align offset)), sp),
               let z = Id.genid "l" in
-              Let((z, Type.Int), SetL(l),
-                  seq(St(z, x, C(0)),
+              Let((z, Type.Int), (SetL(l), sp),
+                  seq((St(z, x, C(0)), sp),
                       store_fv))))
   | Closure.AppCls(x, ys) ->
       let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
-      Ans(CallCls(x, int, float))
+      Ans(CallCls(x, int, float), sp)
   | Closure.AppDir(Id.L(x), ys) ->
       let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
-      Ans(CallDir(Id.L(x), int, float))
+      Ans(CallDir(Id.L(x), int, float), sp)
   | Closure.Tuple(xs) -> (* �Ȥ����� (caml2html: virtual_tuple) *)
       let y = Id.genid "t" in
       let (offset, store) =
         expand
           (List.map (fun x -> (x, M.find x env)) xs)
-          (0, Ans(Mov(y)))
-          (fun x offset store -> seq(StDF(x, y, C(offset)), store))
-          (fun x _ offset store -> seq(St(x, y, C(offset)), store)) in
-      Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)), Mov(reg_hp),
-          Let((reg_hp, Type.Int), Add(reg_hp, C(align offset)),
+          (0, Ans(Mov(y), sp))
+          (fun x offset store -> seq((StDF(x, y, C(offset)), sp), store))
+          (fun x _ offset store -> seq((St(x, y, C(offset)), sp), store)) in
+      Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)),
+          (Mov(reg_hp), sp),
+          Let((reg_hp, Type.Int),
+              (Add(reg_hp, C(align offset)), sp),
               store))
   | Closure.LetTuple(xts, y, e2) ->
       let s = Closure.fv e2 in
@@ -126,35 +129,39 @@ let rec g env = function
           xts
           (0, g (M.add_list xts env) e2)
           (fun x offset load ->
-            if not (S.mem x s) then load else (* [XX] a little ad hoc optimization *)
-            fletd(x, LdDF(y, C(offset)), load))
+            if not (S.mem x s) then load else
+            fletd(x, (LdDF(y, C(offset)), sp), load))
           (fun x t offset load ->
-            if not (S.mem x s) then load else (* [XX] a little ad hoc optimization *)
-            Let((x, t), Ld(y, C(offset)), load)) in
+            if not (S.mem x s) then load else
+            Let((x, t), (Ld(y, C(offset)), sp), load)) in
       load
-  | Closure.Get(x, y) -> (* �������ɤ߽Ф� (caml2html: virtual_get) *)
+  | Closure.Get(x, y) ->
       let offset = Id.genid "o" in
       (match M.find x env with
-      | Type.Array(Type.Unit) -> Ans(Nop)
+      | Type.Array(Type.Unit) -> Ans(Nop, sp)
       | Type.Array(Type.Float) ->
-          Let((offset, Type.Int), SLL(y, C(3)),
-              Ans(LdDF(x, V(offset))))
+          Let((offset, Type.Int),
+              (SLL(y, C(3)), sp),
+              Ans(LdDF(x, V(offset)), sp))
       | Type.Array(_) ->
-          Let((offset, Type.Int), SLL(y, C(2)),
-              Ans(Ld(x, V(offset))))
+          Let((offset, Type.Int),
+              (SLL(y, C(2)), sp),
+              Ans(Ld(x, V(offset)), sp))
       | _ -> assert false)
   | Closure.Put(x, y, z) ->
       let offset = Id.genid "o" in
       (match M.find x env with
-      | Type.Array(Type.Unit) -> Ans(Nop)
+      | Type.Array(Type.Unit) -> Ans(Nop, sp)
       | Type.Array(Type.Float) ->
-          Let((offset, Type.Int), SLL(y, C(3)),
-              Ans(StDF(z, x, V(offset))))
+          Let((offset, Type.Int),
+              (SLL(y, C(3)), sp),
+              Ans(StDF(z, x, V(offset)), sp))
       | Type.Array(_) ->
-          Let((offset, Type.Int), SLL(y, C(2)),
-              Ans(St(z, x, V(offset))))
+          Let((offset, Type.Int),
+              (SLL(y, C(2)), sp),
+              Ans(St(z, x, V(offset)), sp))
       | _ -> assert false)
-  | Closure.ExtArray(Id.L(x)) -> Ans(SetL(Id.L("min_caml_" ^ x)))
+  | Closure.ExtArray(Id.L(x)) -> Ans(SetL(Id.L("min_caml_" ^ x)), sp)
 
 (* 関数(Closure.fundefs) -> 仮想マシンコード *)
 let h { Closure.name = (Id.L(x), t);
@@ -166,8 +173,10 @@ let h { Closure.name = (Id.L(x), t);
     expand
       zts
       (4, g (M.add x t (M.add_list yts (M.add_list zts M.empty))) e)
-      (fun z offset load -> fletd(z, LdDF(x, C(offset)), load))
-      (fun z t offset load -> Let((z, t), Ld(x, C(offset)), load)) in
+      (fun z offset load ->
+        fletd(z, (LdDF(x, C(offset)), Lexing.dummy_pos), load))
+      (fun z t offset load ->
+        Let((z, t), (Ld(x, C(offset)), Lexing.dummy_pos), load)) in
   match t with
   | Type.Fun(_, t2) ->
       { name = Id.L(x); args = int; fargs = float; body = load; ret = t2 }

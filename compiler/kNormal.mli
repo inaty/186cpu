@@ -1,4 +1,5 @@
-type t =
+type t = exp * Lexing.position
+and exp =
   | Unit
   | Int of int
   | Float of float

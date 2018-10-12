@@ -3,8 +3,8 @@ open Asm
 external gethi : float -> int32 = "gethi"
 external getlo : float -> int32 = "getlo"
 
-let stackset = ref S.empty (* ���Ǥ�Save���줿�ѿ��ν��� (caml2html: emit_stackset) *)
-let stackmap = ref [] (* Save���줿�ѿ��Ρ������å��ˤ��������� (caml2html: emit_stackmap) *)
+let stackset = ref S.empty
+let stackmap = ref []
 let save x =
   stackset := S.add x !stackset;
   if not (List.mem x !stackmap) then
@@ -28,7 +28,6 @@ let pp_id_or_imm = function
   | V(x) -> x
   | C(i) -> string_of_int i
 
-(* �ؿ��ƤӽФ��Τ����˰������¤��ؤ���(register shuffling) (caml2html: emit_shuffle) *)
 let rec shuffle sw xys =
   (* remove identical moves *)
   let _, xys = List.partition (fun (x, y) -> x = y) xys in
@@ -48,89 +47,105 @@ type dest =
   | NonTail of Id.t
 (* 命令列からアセンブリ生成 *)
 let rec g oc = function
-  | dest, Ans(exp) -> g' oc (dest, exp)
-  | dest, Let((x, t), inst, insts) ->
-      g' oc (NonTail(x), inst);
+  | dest, Ans(inst, sp) -> g' oc (dest, inst) sp
+  | dest, Let((x, t), (inst, sp), insts) ->
+      g' oc (NonTail(x), inst) sp;
       g oc (dest, insts)
 (* 命令からアセンブリ生成 *)
-and g' oc = function
+and g' oc (dest, inst) sp =
+  let open Lexing in
+  let lnum = sp.pos_lnum in
+  match dest, inst with
   | NonTail(_), Nop -> ()
   (* TODO:値の範囲をちゃんと扱う *)
-  | NonTail(rd), Set(imm) -> Printf.fprintf oc "\tli\t%s, %d\n" rd imm
+  | NonTail(rd), Set(imm) ->
+      Printf.fprintf oc "\tli\t%s, %d ! %d\n" rd imm lnum
   | NonTail(rd), SetL(Id.L(label)) ->
-      Printf.fprintf oc "\tli\t%s, %s\n" rd label
+      Printf.fprintf oc "\tli\t%s, %s ! %d\n" rd label lnum
   | NonTail(rd), Mov(rs) when rd = rs -> ()
-  | NonTail(rd), Mov(rs) -> Printf.fprintf oc "\tmv\t%s, %s\n" rd rs
-  | NonTail(rd), Neg(rs) -> Printf.fprintf oc "\tneg\t%s, %s\n" rd rs
+  | NonTail(rd), Mov(rs) ->
+      Printf.fprintf oc "\tmv\t%s, %s ! %d\n" rd rs lnum
+  | NonTail(rd), Neg(rs) ->
+      Printf.fprintf oc "\tneg\t%s, %s ! %d\n" rd rs lnum
   | NonTail(rd), Add(rs1, V(rs2)) ->
-    Printf.fprintf oc "\tadd\t%s, %s, %s\n" rd rs1 rs2
+      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), Add(rs1, C(imm)) ->
-    Printf.fprintf oc "\taddi\t%s, %s, %d\n" rd rs1 imm
+      Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Sub(rs1, V(rs2)) ->
-    Printf.fprintf oc "\tsub\t%s, %s, %s\n" rd rs1 rs2
+      Printf.fprintf oc "\tsub\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), Sub(rs1, C(imm)) ->
-    Printf.fprintf oc "\taddi\t%s, %s, %d\n" rd rs1 ~-imm
+      Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 ~-imm lnum
   | NonTail(rd), SLL(rs1, V(rs2)) ->
-      Printf.fprintf oc "\tsll\t%s, %s, %s\n" rd rs1 rs2
+      Printf.fprintf oc "\tsll\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), SLL(rs1, C(imm)) ->
-      Printf.fprintf oc "\tslli\t%s, %s, %d\n" rd rs1 imm
+      Printf.fprintf oc "\tslli\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   (* ldの第２オペランドは即値決め打ちでやる、ldの生成過程的にこれは大丈夫だと思う *)
   (* TODO:ここあとでちゃんとやる *)
   | NonTail(rd), Ld(rs1, C(imm)) ->
-      Printf.fprintf oc "\tlw\t%s, %s, %d\n" rd rs1 imm
+      Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(_), Ld(_) -> failwith "emit ld"
   (* TODO:ldと同様 *)
   | NonTail(_), St(rs2, rs1, C(imm)) ->
-      Printf.fprintf oc "\tsw\t%s, %s, %d\n" rs1 rs2 imm
+      Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" rs1 rs2 imm lnum
   | NonTail(x), FMovD(y) when x = y -> ()
   | NonTail(x), FMovD(y) ->
-      Printf.fprintf oc "\tfmovs\t%s, %s\n" y x;
-      Printf.fprintf oc "\tfmovs\t%s, %s\n" (co_freg y) (co_freg x)
+      Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" y x lnum;
+      Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
   | NonTail(x), FNegD(y) ->
-      Printf.fprintf oc "\tfnegs\t%s, %s\n" y x;
-      if x <> y then Printf.fprintf oc "\tfmovs\t%s, %s\n" (co_freg y) (co_freg x)
-  | NonTail(x), FAddD(y, z) -> Printf.fprintf oc "\tfaddd\t%s, %s, %s\n" y z x
-  | NonTail(x), FSubD(y, z) -> Printf.fprintf oc "\tfsubd\t%s, %s, %s\n" y z x
-  | NonTail(x), FMulD(y, z) -> Printf.fprintf oc "\tfmuld\t%s, %s, %s\n" y z x
-  | NonTail(x), FDivD(y, z) -> Printf.fprintf oc "\tfdivd\t%s, %s, %s\n" y z x
+      Printf.fprintf oc "\tfnegs\t%s, %s ! %d\n" y x lnum;
+      if x <> y then
+        Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
+  | NonTail(x), FAddD(y, z) ->
+      Printf.fprintf oc "\tfaddd\t%s, %s, %s ! %d\n" y z x lnum
+  | NonTail(x), FSubD(y, z) ->
+      Printf.fprintf oc "\tfsubd\t%s, %s, %s ! %d\n" y z x lnum
+  | NonTail(x), FMulD(y, z) ->
+      Printf.fprintf oc "\tfmuld\t%s, %s, %s ! %d\n" y z x lnum
+  | NonTail(x), FDivD(y, z) ->
+      Printf.fprintf oc "\tfdivd\t%s, %s, %s ! %d\n" y z x lnum
   | NonTail(x), LdDF(y, z') ->
-    Printf.fprintf oc "\tldd\t[%s + %s], %s\n" y (pp_id_or_imm z') x
+      Printf.fprintf oc "\tldd\t[%s + %s], %s ! %d\n"
+        y (pp_id_or_imm z') x lnum
   | NonTail(_), StDF(x, y, z') ->
-    Printf.fprintf oc "\tstd\t%s, [%s + %s]\n" x y (pp_id_or_imm z')
-  | NonTail(_), Comment(s) -> Printf.fprintf oc "\t! %s\n" s
+      Printf.fprintf oc "\tstd\t%s, [%s + %s] ! %d\n"
+        x y (pp_id_or_imm z') lnum
+  | NonTail(_), Comment(s) -> Printf.fprintf oc "\t! %s ! %d\n" s lnum
   (* TODO:yに適切な名前をつける *)
   | NonTail(_), Save(reg, y) when List.mem reg allregs &&
-                                not (S.mem y !stackset) ->
+                                  not (S.mem y !stackset) ->
       save y; (* スタックセットに記録 *)
-      Printf.fprintf oc "\tsw\t%s, %s, %d\n" reg_sp reg (offset y)
+      Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" reg_sp reg (offset y) lnum
   | NonTail(_), Save(x, y) when List.mem x allfregs &&
                                 not (S.mem y !stackset) ->
       savef y;
-      Printf.fprintf oc "\tstd\t%s, [%s + %d]\n" x reg_sp (offset y)
+      Printf.fprintf oc "\tstd\t%s, [%s + %d] ! %d\n"
+        x reg_sp (offset y) lnum
   | NonTail(_), Save(_, y) -> assert (S.mem y !stackset); ()
   (* TODO:name y *)
   | NonTail(rd), Restore(y) when List.mem rd allregs ->
-      Printf.fprintf oc "\tlw\t%s, %s, %d\n" rd reg_sp (offset y)
+      Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n"
+        rd reg_sp (offset y) lnum
   | NonTail(x), Restore(y) ->
       assert (List.mem x allfregs);
-      Printf.fprintf oc "\tldd\t[%s + %d], %s\n" reg_sp (offset y) x
+      Printf.fprintf oc "\tldd\t[%s + %d], %s ! %d\n"
+        reg_sp (offset y) x lnum
   (* retlよくわかんないけど普通にretに変更しnop削除 *)
   | Tail, (Nop | St _ | StDF _ | Comment _ | Save _ as inst) ->
       (* nontailだったことにして命令をやり、ret *)
       g' oc (NonTail(Id.gentmp Type.Unit), inst);
-      Printf.fprintf oc "\tret\n";
+      Printf.fprintf oc "\tret ! %d\n" lnum;
   | Tail, (Set _ | SetL _ | Mov _ |
            Neg _ | Add _ | Sub _ | SLL _ | Ld _ as inst) ->
       (* return valueをa0レジスタに入れている *)
       g' oc (NonTail(regs.(0)), inst);
-      Printf.fprintf oc "\tret\n";
+      Printf.fprintf oc "\tret ! %d\n" lnum;
   | Tail, (FMovD _ | FNegD _ | FAddD _ |
            FSubD _ | FMulD _ | FDivD _ | LdDF _ as exp) ->
       g' oc (NonTail(fregs.(0)), exp);
-      Printf.fprintf oc "\tret\n";
+      Printf.fprintf oc "\tret ! %d\n" lnum;
   (* TODO:これ意味わからん *)
   | Tail, (Restore(x) as exp) ->
       (match locate x with

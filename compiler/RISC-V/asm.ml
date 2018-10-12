@@ -1,11 +1,10 @@
-(* SPARC assembly with a few virtual instructions *)
-
 type id_or_imm = (* V = variable, C = constant *)
   | V of Id.t
   | C of int
 type insts = (* 命令の列 *)
-  | Ans of inst (* 値を返すなにか *)
-  | Let of (Id.t * Type.t) * inst * insts
+  | Ans of inst_pos (* 値を返すなにか *)
+  | Let of (Id.t * Type.t) * inst_pos * insts
+and inst_pos = inst * Lexing.position
 and inst = (* 命令（仮想命令含む） *)
   | Nop
   | Set of int (* レジスタ←即値、RISC-Vだとli（仮想命令）だけど変えなくていいか *)
@@ -97,18 +96,19 @@ let fv_id_or_imm = function V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Set(_) | SetL(_) | Comment(_) | Restore(_) -> []
   | Mov(x) | Neg(x) | FMovD(x) | FNegD(x) | Save(x, _) -> [x]
-  | Add(x, y') | Sub(x, y') | SLL(x, y') | Ld(x, y') | LdDF(x, y') ->
-      x :: fv_id_or_imm y'
+  | Add(x, y') | Sub(x, y') | SLL(x, y')
+  | Ld(x, y') | LdDF(x, y') -> x :: fv_id_or_imm y'
   | St(x, y, z') | StDF(x, y, z') -> x :: y :: fv_id_or_imm z'
   | FAddD(x, y) | FSubD(x, y) | FMulD(x, y) | FDivD(x, y) -> [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfGE(x, y, e1, e2) ->
-      x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
-  | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) -> x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+      x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)
+  | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) ->
+      x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)
   | CallCls(x, ys, zs) -> x :: ys @ zs
   | CallDir(_, ys, zs) -> ys @ zs
 and fv = function
-  | Ans(inst) -> fv_exp inst
-  | Let((x, t), inst, e) ->
+  | Ans(inst, _) -> fv_exp inst
+  | Let((x, t), (inst, _), e) ->
       fv_exp inst @ remove_and_uniq (S.singleton x) (fv e)
 let fv e = remove_and_uniq S.empty (fv e)
 
