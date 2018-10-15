@@ -135,22 +135,22 @@ and g' oc (dest, inst) sp =
   (* retlよくわかんないけど普通にretに変更しnop削除 *)
   | Tail, (Nop | St _ | StDF _ | Comment _ | Save _ as inst) ->
       (* nontailだったことにして命令をやり、ret *)
-      g' oc (NonTail(Id.gentmp Type.Unit), inst);
+      g' oc (NonTail(Id.gentmp Type.Unit), inst) sp;
       Printf.fprintf oc "\tret ! %d\n" lnum;
   | Tail, (Set _ | SetL _ | Mov _ |
            Neg _ | Add _ | Sub _ | SLL _ | Ld _ as inst) ->
       (* return valueをa0レジスタに入れている *)
-      g' oc (NonTail(regs.(0)), inst);
+      g' oc (NonTail(regs.(0)), inst) sp;
       Printf.fprintf oc "\tret ! %d\n" lnum;
   | Tail, (FMv _ | FNeg _ | FAdd _ |
            FSub _ | FMul _ | FDiv _ | LdDF _ as exp) ->
-      g' oc (NonTail(fregs.(0)), exp);
+      g' oc (NonTail(fregs.(0)), exp) sp;
       Printf.fprintf oc "\tret ! %d\n" lnum;
   (* TODO:これ意味わからん *)
   | Tail, (Restore(x) as exp) ->
       (match locate x with
-      | [i] -> g' oc (NonTail(regs.(0)), exp)
-      | [i; j] when i + 1 = j -> g' oc (NonTail(fregs.(0)), exp)
+      | [i] -> g' oc (NonTail(regs.(0)), exp) sp
+      | [i; j] when i + 1 = j -> g' oc (NonTail(fregs.(0)), exp) sp
       | _ -> assert false);
       Printf.fprintf oc "\tret\n";
   | Tail, IfEq(reg1, reg2, insts1, insts2) ->
