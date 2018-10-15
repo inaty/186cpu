@@ -86,26 +86,22 @@ and g' oc (dest, inst) sp =
   (* TODO:ここあとでちゃんとやる *)
   | NonTail(rd), Ld(rs1, C(imm)) ->
       Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n" rd rs1 imm lnum
-  | NonTail(_), Ld(_) -> failwith "emit ld"
   (* TODO:ldと同様 *)
   | NonTail(_), St(rs2, rs1, C(imm)) ->
       Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" rs1 rs2 imm lnum
   | NonTail(x), FMv(y) when x = y -> ()
-  | NonTail(x), FMv(y) ->
-      Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" y x lnum;
-      Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
-  | NonTail(x), FNeg(y) ->
-      Printf.fprintf oc "\tfnegs\t%s, %s ! %d\n" y x lnum;
-      if x <> y then
-        Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
-  | NonTail(x), FAdd(y, z) ->
-      Printf.fprintf oc "\tfaddd\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FSub(y, z) ->
-      Printf.fprintf oc "\tfsubd\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FMul(y, z) ->
-      Printf.fprintf oc "\tfmuld\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FDiv(y, z) ->
-      Printf.fprintf oc "\tfdivd\t%s, %s, %s ! %d\n" y z x lnum
+  | NonTail(rd), FMv(rs) ->
+      Printf.fprintf oc "\tfmv.s\t%s, %s ! %d\n" rd rs lnum;
+  | NonTail(rd), FNeg(rs) ->
+      Printf.fprintf oc "\tfneg.s\t%s, %s ! %d\n" rd rs lnum;
+  | NonTail(rd), FAdd(rs1, rs2) ->
+      Printf.fprintf oc "\tfadd.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), FSub(rs1, rs2) ->
+      Printf.fprintf oc "\tfsub.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), FMul(rs1, rs2) ->
+      Printf.fprintf oc "\tfmul.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), FDiv(rs1, rs2) ->
+      Printf.fprintf oc "\tfdiv.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   | NonTail(x), LdDF(y, z') ->
       Printf.fprintf oc "\tldd\t[%s + %s], %s ! %d\n"
         y (pp_id_or_imm z') x lnum
@@ -220,6 +216,7 @@ and g' oc (dest, inst) sp =
       else if List.mem a allfregs && a <> fregs.(0) then
         (Printf.fprintf oc "\tfmovs\t%s, %s\n" fregs.(0) a;
          Printf.fprintf oc "\tfmovs\t%s, %s\n" (co_freg fregs.(0)) (co_freg a))
+  | _, _ -> Printf.printf "later\n"
 and g'_tail_if oc reg1 reg2 insts1 insts2 b bn =
   let b_else = Id.genid (b ^ "_else") in
   Printf.fprintf oc "\t%s\t%s, %s, %s\n" bn reg1 reg2 b_else;
@@ -277,12 +274,12 @@ let f oc (Prog(float_table, fundefs, insts)) =
   (* リンカとかのことを考えないので、そういうのはとりあえず無視 *)
   (* Printf.fprintf oc ".section\t\".rodata\"\n";
   Printf.fprintf oc ".align\t8\n"; *)
-  List.iter
+  (* List.iter
     (fun (Id.L(x), d) ->
       Printf.fprintf oc "%s: ! %f\n" x d;
       Printf.fprintf oc "\t.long\t0x%lx\n" (gethi d);
       Printf.fprintf oc "\t.long\t0x%lx\n" (getlo d))
-    float_table;
+    float_table; *)
   (* Printf.fprintf oc ".section\t\".text\"\n"; *)
   List.iter (fun fundef -> h oc fundef) fundefs;
   (* Printf.fprintf oc ".global\tmin_caml_start\n"; *)
