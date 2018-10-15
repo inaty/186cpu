@@ -11,10 +11,14 @@
 
 (*NOMINCAML open MiniMLRuntime;;*)
 (*NOMINCAML open Globals;;*)
-(*MINCAML*) (*let true = 1 in TODO:ここだけ変えたので、戻す
+(*MINCAML*) (*let true = 1 in TODO:ここ変えた
 (*MINCAML*) let false = 0 in*)
-(* TODO:追加した *) let rec create_array x y =
-Array.create x y in
+(* TODO:足した *)
+let light_dirvec =
+  let dummyf2 = create_array 0 0.0 in
+  let v3 = create_array 3 0.0 in
+  let consts = create_array 60 dummyf2 in
+  (v3, consts) in
 (*MINCAML*) let rec xor x y = if x then not y else y in
 
 (******************************************************************************

@@ -11,11 +11,21 @@ clean:
 native: minrt
 bytecode: minrt_b
 
+# サフィックスルール（下）のために必要
 .SUFFIXES: .ml .mli .cmo .cmi .cmx
+
+# サフィックスルール（.ml→.cmoの変換をこれでやる、みたいな）
+# 時代遅れ説がある http://quruli.ivory.ne.jp/document/make_3.79.1/make-jp_9.html
 
 .ml.cmo:
 	$(OCAMLC) -g -c
 
+# .cmxはcの.oに相当し、object fileのnative codeを表す
+# -cは「コンパイルのみ」
+# $(OCOPT)=-ccopt -O2で、-ccoptはc用オプションを渡す。つまり「最適化レベルO2」
+# -nopervasivesはモジュールPervasivesを読まないという意味っぽい
+# $<は「最初のファイル」、つまり.ml
+# ocamloptの場合.mliを通すのは自動らしい
 .ml.cmx:
 	$(OCAMLOPT) -c $(OCOPT) -nopervasives -pp ./preprocess.sh $<
 

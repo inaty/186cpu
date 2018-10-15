@@ -25,6 +25,8 @@ let rec deref_term (e, sp, ep) =
     | Neg(e) -> Neg(deref_term e)
     | Add(e1, e2) -> Add(deref_term e1, deref_term e2)
     | Sub(e1, e2) -> Sub(deref_term e1, deref_term e2)
+    | Mul(e1, e2) -> Mul(deref_term e1, deref_term e2)
+    | Div(e1, e2) -> Div(deref_term e1, deref_term e2)
     | Eq(e1, e2) -> Eq(deref_term e1, deref_term e2)
     | LE(e1, e2) -> LE(deref_term e1, deref_term e2)
     | FNeg(e) -> FNeg(deref_term e)
@@ -57,14 +59,17 @@ let rec occur r1 = function
   | Type.Var({ contents = Some(t2) }) -> occur r1 t2
   | _ -> false
 
+(* t2がt1であるかどうかを検査 *)
 let rec unify t1 t2 sp ep =
-  let open Lexing in
+  (* let open Lexing in
   Printf.printf "unifing line %d-%d characters %d-%d\n"
     sp.pos_lnum ep.pos_lnum
     (sp.pos_cnum - sp.pos_bol) (ep.pos_cnum - ep.pos_bol);
-  Type.print_type t1; Type.print_type t2;
+  Type.print_type t1;
+  Type.print_type t2; *)
   match t1, t2 with
-  | Type.Unit, Type.Unit | Type.Bool, Type.Bool | Type.Int, Type.Int | Type.Float, Type.Float -> ()
+  | Type.Unit, Type.Unit | Type.Bool, Type.Bool
+  | Type.Int, Type.Int | Type.Float, Type.Float -> ()
   | Type.Fun(t1s, t1'), Type.Fun(t2s, t2') ->
       (try List.iter2 (fun t1 t2 -> unify t1 t2 sp ep) t1s t2s
       with Invalid_argument(_) -> raise (Unify(t1, t2, sp, ep)));
@@ -82,6 +87,7 @@ let rec unify t1 t2 sp ep =
   | _, Type.Var({ contents = None } as r2) ->
       if occur r2 t1 then raise (Unify(t1, t2, sp, ep));
       r2 := Some(t1)
+  | Type.Toplevel(type_ref), _ -> type_ref := t2
   | _, _ -> raise (Unify(t1, t2, sp, ep))
 
 let rec g env (e, _, _) =
@@ -98,7 +104,9 @@ let rec g env (e, _, _) =
         unify Type.Int (g env (e, sp, ep)) sp ep;
         Type.Int
     | Add((e1, sp1, ep1), (e2, sp2, ep2))
-    | Sub((e1, sp1, ep1), (e2, sp2, ep2)) ->
+    | Sub((e1, sp1, ep1), (e2, sp2, ep2))
+    | Mul((e1, sp1, ep1), (e2, sp2, ep2))
+    | Div((e1, sp1, ep1), (e2, sp2, ep2)) ->
         unify Type.Int (g env (e1, sp1, ep1)) sp1 ep1;
         unify Type.Int (g env (e2, sp2, ep2)) sp2 ep2;
         Type.Int
@@ -161,9 +169,9 @@ let rec g env (e, _, _) =
     failwith
       (let open Lexing in
        (Printf.sprintf "type error near line %d, characters %d-%d\n"
-          sp.pos_lnum
-          (sp.pos_cnum - sp.pos_bol)
-          (ep.pos_cnum - sp.pos_bol)) ^
+         sp.pos_lnum
+         (sp.pos_cnum - sp.pos_bol)
+         (ep.pos_cnum - ep.pos_bol)) ^
        (Printf.sprintf
          "This expression has type %s but an expression was expected of type %s"
          (Type.string_of_type (deref_typ t2))
@@ -171,7 +179,12 @@ let rec g env (e, _, _) =
 
 let f (e, sp, ep) =
   extenv := M.empty;
-  (try unify Type.Unit (g M.empty (e, sp, ep)) sp ep
-  with Unify _ -> failwith "top level does not have type unit");
+  let toplevel_type = ref Type.Unit in
+  unify (Type.Toplevel(toplevel_type)) (g M.empty (e, sp, ep)) sp ep;
+  (match !toplevel_type with
+  | Type.Unit -> ()
+  | _ ->
+      Printf.printf "warning: toplevel type is %s\n"
+        (Type.string_of_type !toplevel_type));
   extenv := M.map deref_typ !extenv;
   deref_term (e, sp, ep)

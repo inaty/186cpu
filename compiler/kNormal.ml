@@ -8,6 +8,8 @@ and exp =
   | Neg of Id.t
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
+  | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
@@ -31,7 +33,7 @@ let rec fv (e, sp) =
   match e with
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
   | Neg(x) | FNeg(x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y)
+  | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y) | FAdd(x, y) | FSub(x, y)
   | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) ->
       S.add x (S.add y (S.union (fv e1) (fv e2)))
@@ -75,6 +77,14 @@ let rec g env (e, sp, ep) =
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> (Sub(x, y), sp), Type.Int))
+  | Syntax.Mul(e1, e2) ->
+      insert_let (g env e1)
+        (fun x -> insert_let (g env e2)
+            (fun y -> (Mul(x, y), sp), Type.Int))
+  | Syntax.Div(e1, e2) ->
+      insert_let (g env e1)
+        (fun x -> insert_let (g env e2)
+            (fun y -> (Div(x, y), sp), Type.Int))
   | Syntax.FNeg(e) ->
       insert_let (g env e)
         (fun x -> (FNeg(x), sp), Type.Float)
@@ -129,10 +139,15 @@ let rec g env (e, sp, ep) =
   | Syntax.Var(x) ->
       (match M.find x !Typing.extenv with
       | Type.Array(_) as t -> (ExtArray(x), sp), t
-      | _ ->
+      | t ->
           failwith
-            (Printf.sprintf
-              "external variable %s does not have an array type" x))
+            (let open Lexing in
+             (Printf.sprintf
+               "external variable %s does not have an array type, type %s\n"
+               x (Type.string_of_type t)) ^
+             (Printf.sprintf "line %d-%d, characters %d-%d"
+                sp.pos_lnum ep.pos_lnum
+                (sp.pos_cnum - sp.pos_bol) (ep.pos_cnum - ep.pos_bol))))
   | Syntax.LetRec({Syntax.name = (x, t);
                    Syntax.args = yts;
                    Syntax.body = e1 }, e2) ->
@@ -218,6 +233,8 @@ let rec print_kNormal_sub (exp, _) indent =
   | Neg(var) -> printf "NEG %s\n" var
   | Add(var1, var2) -> printf "ADD %s %s\n" var1 var2;
   | Sub(var1, var2) -> printf "SUB %s %s\n" var1 var2;
+  | Mul(var1, var2) -> printf "MUL %s %s\n" var1 var2;
+  | Div(var1, var2) -> printf "DIV %s %s\n" var1 var2;
   | FNeg(var) -> printf "FNEG %s\n" var
   | FAdd(var1, var2) -> printf "FADD %s %s\n" var1 var2;
   | FSub(var1, var2) -> printf "FSUB %s %s\n" var1 var2;
@@ -260,4 +277,5 @@ let print_kNormal exp = print_kNormal_sub exp 0
 
 let f e =
   let r = fst (g M.empty e) in
-  printf "kNormal\n"; print_kNormal r; r
+  (* printf "kNormal\n"; print_kNormal r; *)
+  r

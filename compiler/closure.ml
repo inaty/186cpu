@@ -7,6 +7,8 @@ and exp =
   | Neg of Id.t
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
+  | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
@@ -34,8 +36,8 @@ let rec fv (e, _) =
   match e with
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
   | Neg(x) | FNeg(x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y)
-  | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
+  | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y) | FAdd(x, y)
+  | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) ->
       S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -60,6 +62,8 @@ let rec g env known (e, sp) =
     | KNormal.Neg(x) -> Neg(x)
     | KNormal.Add(x, y) -> Add(x, y)
     | KNormal.Sub(x, y) -> Sub(x, y)
+    | KNormal.Mul(x, y) -> Mul(x, y)
+    | KNormal.Div(x, y) -> Div(x, y)
     | KNormal.FNeg(x) -> FNeg(x)
     | KNormal.FAdd(x, y) -> FAdd(x, y)
     | KNormal.FSub(x, y) -> FSub(x, y)
@@ -67,7 +71,8 @@ let rec g env known (e, sp) =
     | KNormal.FDiv(x, y) -> FDiv(x, y)
     | KNormal.IfEq(x, y, e1, e2) -> IfEq(x, y, g env known e1, g env known e2)
     | KNormal.IfLE(x, y, e1, e2) -> IfLE(x, y, g env known e1, g env known e2)
-    | KNormal.Let((x, t), e1, e2) -> Let((x, t), g env known e1, g (M.add x t env) known e2)
+    | KNormal.Let((x, t), e1, e2) ->
+        Let((x, t), g env known e1, g (M.add x t env) known e2)
     | KNormal.Var(x) -> Var(x)
     | KNormal.LetRec({KNormal.name = (x, t);
                       KNormal.args = yts;

@@ -60,6 +60,8 @@ let rec g env (exp, sp) =
   | Closure.Neg(x) -> Ans(Neg(x), sp)
   | Closure.Add(x, y) -> Ans(Add(x, V(y)), sp)
   | Closure.Sub(x, y) -> Ans(Sub(x, V(y)), sp)
+  | Closure.Mul(x, y) -> Ans(Mul(x, y), sp)
+  | Closure.Div(x, y) -> Ans(Div(x, y), sp)
   | Closure.FNeg(x) -> Ans(FNegD(x), sp)
   | Closure.FAdd(x, y) -> Ans(FAddD(x, y), sp)
   | Closure.FSub(x, y) -> Ans(FSubD(x, y), sp)

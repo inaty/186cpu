@@ -7,6 +7,7 @@ type t =
   | Tuple of t list
   | Array of t
   | Var of t option ref
+  | Toplevel of t ref
 
 let gentyp () = Var(ref None)
 
@@ -26,10 +27,11 @@ let rec string_of_type typ =
       "(tuple" ^
       (List.fold_left (fun s t -> s ^ " " ^ (string_of_type t)) "" types) ^
       ")"
-  | Array(typ) -> "array " ^ (string_of_type typ)
+  | Array(typ) -> "(array " ^ (string_of_type typ) ^ ")"
   | Var(typeref) ->
-      match !typeref with
-      | Some(typ) -> "var " ^ (string_of_type typ)
-      | None -> "var none"
+      (match !typeref with
+      | Some(typ) -> "(var " ^ (string_of_type typ) ^ ")"
+      | None -> "(var none)")
+  | Toplevel(typeref) -> "toplevel " ^ (string_of_type !typeref)
 
 let print_type typ = Printf.printf "%s\n" (string_of_type typ)
