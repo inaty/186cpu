@@ -18,6 +18,7 @@ let lexbuf outchan l =
                 (iter !limit
                    (Alpha.f
                       (KNormal.f
+                         (* TODO:見た目 *)
                          (let syntax = Parser.exp Lexer.token l in
                           (* Syntax.print_syntax syntax; *)
                           Typing.f syntax))))))))

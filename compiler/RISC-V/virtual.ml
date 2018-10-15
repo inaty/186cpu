@@ -62,11 +62,11 @@ let rec g env (exp, sp) =
   | Closure.Sub(x, y) -> Ans(Sub(x, V(y)), sp)
   | Closure.Mul(x, y) -> Ans(Mul(x, y), sp)
   | Closure.Div(x, y) -> Ans(Div(x, y), sp)
-  | Closure.FNeg(x) -> Ans(FNegD(x), sp)
-  | Closure.FAdd(x, y) -> Ans(FAddD(x, y), sp)
-  | Closure.FSub(x, y) -> Ans(FSubD(x, y), sp)
-  | Closure.FMul(x, y) -> Ans(FMulD(x, y), sp)
-  | Closure.FDiv(x, y) -> Ans(FDivD(x, y), sp)
+  | Closure.FNeg(x) -> Ans(FNeg(x), sp)
+  | Closure.FAdd(x, y) -> Ans(FAdd(x, y), sp)
+  | Closure.FSub(x, y) -> Ans(FSub(x, y), sp)
+  | Closure.FMul(x, y) -> Ans(FMul(x, y), sp)
+  | Closure.FDiv(x, y) -> Ans(FDiv(x, y), sp)
   (* id_or_imm->Id.t *)
   | Closure.IfEq(x, y, e1, e2) ->
       (match M.find x env with
@@ -85,7 +85,7 @@ let rec g env (exp, sp) =
   | Closure.Var(x) ->
       (match M.find x env with
       | Type.Unit -> Ans(Nop, sp)
-      | Type.Float -> Ans(FMovD(x), sp)
+      | Type.Float -> Ans(FMv(x), sp)
       | _ -> Ans(Mov(x), sp))
   | Closure.MakeCls((x, t),
                     { Closure.entry = l; Closure.actual_fv = ys },

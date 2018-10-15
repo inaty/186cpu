@@ -74,10 +74,6 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Sub(rs1, V(rs2)) ->
       Printf.fprintf oc "\tsub\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  | NonTail(rd), Mul(rs1, rs2) ->
-      Printf.fprintf oc "\tmul\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  | NonTail(rd), Div(rs1, rs2) ->
-      Printf.fprintf oc "\tdiv\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), Sub(rs1, C(imm)) ->
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 ~-imm lnum
@@ -90,34 +86,25 @@ and g' oc (dest, inst) sp =
   (* TODO:ここあとでちゃんとやる *)
   | NonTail(rd), Ld(rs1, C(imm)) ->
       Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n" rd rs1 imm lnum
-  (* TODO:ここその場しのぎ、特にオーバーフローに対して何もしてないのはやばい *)
-  | NonTail(rd), Ld(rs1, V(imm_rs)) ->
-      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" rs1 rs1 imm_rs lnum;
-      Printf.fprintf oc "\tlw\t%s, %s, 0 ! %d\n" rd rs1 lnum;
-      Printf.fprintf oc "\tsub\t%s, %s, %s ! %d\n" rs1 rs1 imm_rs lnum
+  | NonTail(_), Ld(_) -> failwith "emit ld"
   (* TODO:ldと同様 *)
   | NonTail(_), St(rs2, rs1, C(imm)) ->
       Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" rs1 rs2 imm lnum
-  (* TODO:ldと同様 *)
-  | NonTail(_), St(rs2, rs1, V(imm_rs)) ->
-      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" rs1 rs1 imm_rs lnum;
-      Printf.fprintf oc "\tsw\t%s, %s, 0 ! %d\n" rs1 rs2 lnum;
-      Printf.fprintf oc "\tsub\t%s, %s, %s ! %d\n" rs1 rs1 imm_rs lnum
-  | NonTail(x), FMovD(y) when x = y -> ()
-  | NonTail(x), FMovD(y) ->
+  | NonTail(x), FMv(y) when x = y -> ()
+  | NonTail(x), FMv(y) ->
       Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" y x lnum;
       Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
-  | NonTail(x), FNegD(y) ->
+  | NonTail(x), FNeg(y) ->
       Printf.fprintf oc "\tfnegs\t%s, %s ! %d\n" y x lnum;
       if x <> y then
         Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
-  | NonTail(x), FAddD(y, z) ->
+  | NonTail(x), FAdd(y, z) ->
       Printf.fprintf oc "\tfaddd\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FSubD(y, z) ->
+  | NonTail(x), FSub(y, z) ->
       Printf.fprintf oc "\tfsubd\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FMulD(y, z) ->
+  | NonTail(x), FMul(y, z) ->
       Printf.fprintf oc "\tfmuld\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FDivD(y, z) ->
+  | NonTail(x), FDiv(y, z) ->
       Printf.fprintf oc "\tfdivd\t%s, %s, %s ! %d\n" y z x lnum
   | NonTail(x), LdDF(y, z') ->
       Printf.fprintf oc "\tldd\t[%s + %s], %s ! %d\n"
@@ -148,22 +135,22 @@ and g' oc (dest, inst) sp =
   (* retlよくわかんないけど普通にretに変更しnop削除 *)
   | Tail, (Nop | St _ | StDF _ | Comment _ | Save _ as inst) ->
       (* nontailだったことにして命令をやり、ret *)
-      g' oc (NonTail(Id.gentmp Type.Unit), inst) sp;
+      g' oc (NonTail(Id.gentmp Type.Unit), inst);
       Printf.fprintf oc "\tret ! %d\n" lnum;
-  | Tail, (Set _ | SetL _ | Mov _ | Neg _ | Add _ | Sub _
-           | Mul _ | Div _ | SLL _ | Ld _ as inst) ->
+  | Tail, (Set _ | SetL _ | Mov _ |
+           Neg _ | Add _ | Sub _ | SLL _ | Ld _ as inst) ->
       (* return valueをa0レジスタに入れている *)
-      g' oc (NonTail(regs.(0)), inst) sp;
+      g' oc (NonTail(regs.(0)), inst);
       Printf.fprintf oc "\tret ! %d\n" lnum;
-  | Tail, (FMovD _ | FNegD _ | FAddD _ |
-           FSubD _ | FMulD _ | FDivD _ | LdDF _ as exp) ->
-      g' oc (NonTail(fregs.(0)), exp) sp;
+  | Tail, (FMv _ | FNeg _ | FAdd _ |
+           FSub _ | FMul _ | FDiv _ | LdDF _ as exp) ->
+      g' oc (NonTail(fregs.(0)), exp);
       Printf.fprintf oc "\tret ! %d\n" lnum;
   (* TODO:これ意味わからん *)
   | Tail, (Restore(x) as exp) ->
       (match locate x with
-      | [i] -> g' oc (NonTail(regs.(0)), exp) sp
-      | [i; j] when i + 1 = j -> g' oc (NonTail(fregs.(0)), exp) sp
+      | [i] -> g' oc (NonTail(regs.(0)), exp)
+      | [i; j] when i + 1 = j -> g' oc (NonTail(fregs.(0)), exp)
       | _ -> assert false);
       Printf.fprintf oc "\tret\n";
   | Tail, IfEq(reg1, reg2, insts1, insts2) ->
@@ -201,7 +188,7 @@ and g' oc (dest, inst) sp =
       g'_args oc [(x, reg_cl)] ys zs;
       Printf.fprintf oc "\tlw\t %s, %s, 0\n" reg_sw reg_cl;
       Printf.fprintf oc "\tjalr\tzero, %s, 0\n" reg_sw;
-  | Tail, CallDir(Id.L(label), ys, zs) -> (* �����ƤӽФ� *)
+  | Tail, CallDir(Id.L(label), ys, zs) ->
       g'_args oc [] ys zs;
       Printf.fprintf oc "\tj\t%s\n" label;
   | NonTail(a), CallCls(x, ys, zs) ->
@@ -285,16 +272,17 @@ let h oc {name = Id.L(x); args = _; fargs = _; body = insts; ret = _} =
 
 let f oc (Prog(float_table, fundefs, insts)) =
   Format.eprintf "generating assembly...@.";
+  (* 頭から読んで実行する用のバイナリなので、とりあえずこうする *)
+  Printf.fprintf oc "j min_caml_start\n";
   (* リンカとかのことを考えないので、そういうのはとりあえず無視 *)
   (* Printf.fprintf oc ".section\t\".rodata\"\n";
   Printf.fprintf oc ".align\t8\n"; *)
-  (* 浮動小数点数に対応しないのでとりあえず無視 *)
-  (* List.iter
+  List.iter
     (fun (Id.L(x), d) ->
-      Printf.fprintf oc "%s:\t! %f\n" x d;
+      Printf.fprintf oc "%s: ! %f\n" x d;
       Printf.fprintf oc "\t.long\t0x%lx\n" (gethi d);
       Printf.fprintf oc "\t.long\t0x%lx\n" (getlo d))
-    float_table; *)
+    float_table;
   (* Printf.fprintf oc ".section\t\".text\"\n"; *)
   List.iter (fun fundef -> h oc fundef) fundefs;
   (* Printf.fprintf oc ".global\tmin_caml_start\n"; *)
