@@ -1,3 +1,4 @@
+import re
 import sys
 
 VIRTUAL_INST_TYPES = [
@@ -55,6 +56,9 @@ def main():
     if lines is None:
         print("file error")
         return
+
+    # コメント除去
+    lines = [re.sub("\s*!.*\n", "\n", line) for line in lines]
 
     # ラベル抽出・アドレス計算
     label_addrs = {}

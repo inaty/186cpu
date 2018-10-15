@@ -1,5 +1,10 @@
+# 全体
+コンパイル  
+`python3 label_remover.py <asmfilename>`  
+`python3 assembly_simulator.py <asmfilename>`  
+
 # コンパイラ使い方
-`make byte-code`すると`min-caml`という実行可能ファイルができる  
+`make native-code`すると`min-caml.opt`という実行可能ファイルができる  
 `./min-caml <filename(拡張子抜き)>`で`<filename>.s`という名前でアセンブリ生成  
 
 # アセンブリ仕様
