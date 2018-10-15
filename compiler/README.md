@@ -19,6 +19,8 @@
   `", "`で区切ると各oprandを分離できる。
 * 実命令
 ```
+RV32I
+
 addi rd, rs1, imm
 slli rd, rs1, imm
 add rd, rs1, rs2
@@ -31,16 +33,32 @@ sw rs1, rs2, imm
 RV32M
 mul rd, rs1, rs2
 div rd, rs1, rs2
+
+RV32F
+
+fadd.s rd, rs1, rs2
+fsub.s rd, rs1, rs2
+fmul.s rd, rs1, rs2
+fdiv.s rd, rs1, rs2
 ```
 * 実命令（hardware)
 ```
+RV32I
+
 lui rd, imm
 jal rd, imm
 bne rs1, rs2, imm
 blt rs1, rs2, imm
+
+RV32F
+
+fsgnj.s rd, rs1, rs2
+fsgnjn.s rd, rs1, rs2
 ```
 * 仮想命令  
 ```
+RV32I
+
 label: = (番地ラベル)
 ret = jalr zero, ra, 0
 li rd, imm = if (imm[31:12] == 0..0 || imm[31:12] == 1..1)
@@ -61,6 +79,10 @@ neg rd, rs = sub rd, zero, rs
 j offset = jal zero, offset
 j label = j (labelへのoffset)
 call label = jal ra, (labelへのoffset)
+
+RV32F
+fmv.s rd, rs = fsgnj.s rd, rs, rs
+fneg.s rd, rs = fsgnjn.s rd, rs, rs
 ```
 
 # アセンブラ

@@ -97,21 +97,18 @@ and g' oc (dest, inst) sp =
   | NonTail(_), St(_) ->
       Printf.fprintf oc "! later\n"
   | NonTail(x), FMv(y) when x = y -> ()
-  | NonTail(x), FMv(y) ->
-      Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" y x lnum;
-      Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
-  | NonTail(x), FNeg(y) ->
-      Printf.fprintf oc "\tfnegs\t%s, %s ! %d\n" y x lnum;
-      if x <> y then
-        Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" (co_freg y) (co_freg x) lnum
-  | NonTail(x), FAdd(y, z) ->
-      Printf.fprintf oc "\tfaddd\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FSub(y, z) ->
-      Printf.fprintf oc "\tfsubd\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FMul(y, z) ->
-      Printf.fprintf oc "\tfmuld\t%s, %s, %s ! %d\n" y z x lnum
-  | NonTail(x), FDiv(y, z) ->
-      Printf.fprintf oc "\tfdivd\t%s, %s, %s ! %d\n" y z x lnum
+  | NonTail(rd), FMv(rs) ->
+      Printf.fprintf oc "\tfmv.s\t%s, %s ! %d\n" rd rs lnum;
+  | NonTail(rd), FNeg(rs) ->
+      Printf.fprintf oc "\tfneg.s\t%s, %s ! %d\n" rd rs lnum;
+  | NonTail(rd), FAdd(rs1, rs2) ->
+      Printf.fprintf oc "\tfadd.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), FSub(rs1, rs2) ->
+      Printf.fprintf oc "\tfsub.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), FMul(rs1, rs2) ->
+      Printf.fprintf oc "\tfmul.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), FDiv(rs1, rs2) ->
+      Printf.fprintf oc "\tfdiv.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   | NonTail(x), LdDF(y, z') ->
       Printf.fprintf oc "\tldd\t[%s + %s], %s ! %d\n"
         y (pp_id_or_imm z') x lnum
