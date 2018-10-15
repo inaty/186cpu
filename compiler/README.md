@@ -27,6 +27,10 @@ sll rd, rs1, rs2
 jalr rd, rs1, imm
 lw rd, rs1, imm
 sw rs1, rs2, imm
+
+RV32M
+mul rd, rs1, rs2
+div rd, rs1, rs2
 ```
 * 実命令（hardware)
 ```

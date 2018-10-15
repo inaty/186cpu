@@ -74,6 +74,10 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Sub(rs1, V(rs2)) ->
       Printf.fprintf oc "\tsub\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), Mul(rs1, rs2) ->
+      Printf.fprintf oc "\tmul\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), Div(rs1, rs2) ->
+      Printf.fprintf oc "\tdiv\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), Sub(rs1, C(imm)) ->
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 ~-imm lnum
@@ -82,14 +86,16 @@ and g' oc (dest, inst) sp =
   (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), SLL(rs1, C(imm)) ->
       Printf.fprintf oc "\tslli\t%s, %s, %d ! %d\n" rd rs1 imm lnum
-  (* ldの第２オペランドは即値決め打ちでやる、ldの生成過程的にこれは大丈夫だと思う *)
-  (* TODO:ここあとでちゃんとやる *)
   | NonTail(rd), Ld(rs1, C(imm)) ->
       Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n" rd rs1 imm lnum
-  | NonTail(_), Ld(_) -> failwith "emit ld"
-  (* TODO:ldと同様 *)
+  (* TODO:ここあとでちゃんとやる *)
+  | NonTail(_), Ld(_) ->
+      Printf.fprintf oc "! later\n"
   | NonTail(_), St(rs2, rs1, C(imm)) ->
       Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" rs1 rs2 imm lnum
+  (* TODO:ldと同様 *)
+  | NonTail(_), St(_) ->
+      Printf.fprintf oc "! later\n"
   | NonTail(x), FMv(y) when x = y -> ()
   | NonTail(x), FMv(y) ->
       Printf.fprintf oc "\tfmovs\t%s, %s ! %d\n" y x lnum;
@@ -137,8 +143,8 @@ and g' oc (dest, inst) sp =
       (* nontailだったことにして命令をやり、ret *)
       g' oc (NonTail(Id.gentmp Type.Unit), inst) sp;
       Printf.fprintf oc "\tret ! %d\n" lnum;
-  | Tail, (Set _ | SetL _ | Mov _ |
-           Neg _ | Add _ | Sub _ | SLL _ | Ld _ as inst) ->
+  | Tail, (Set _ | SetL _ | Mov _ | Neg _ | Add _ | Sub _
+          | Mul _ | Div _ | SLL _ | Ld _ as inst) ->
       (* return valueをa0レジスタに入れている *)
       g' oc (NonTail(regs.(0)), inst) sp;
       Printf.fprintf oc "\tret ! %d\n" lnum;
@@ -277,12 +283,12 @@ let f oc (Prog(float_table, fundefs, insts)) =
   (* リンカとかのことを考えないので、そういうのはとりあえず無視 *)
   (* Printf.fprintf oc ".section\t\".rodata\"\n";
   Printf.fprintf oc ".align\t8\n"; *)
-  List.iter
+  (* List.iter
     (fun (Id.L(x), d) ->
       Printf.fprintf oc "%s: ! %f\n" x d;
       Printf.fprintf oc "\t.long\t0x%lx\n" (gethi d);
       Printf.fprintf oc "\t.long\t0x%lx\n" (getlo d))
-    float_table;
+    float_table; *)
   (* Printf.fprintf oc ".section\t\".text\"\n"; *)
   List.iter (fun fundef -> h oc fundef) fundefs;
   (* Printf.fprintf oc ".global\tmin_caml_start\n"; *)

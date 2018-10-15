@@ -1,3 +1,4 @@
+j min_caml_start
 xor.2606:
 	li	a2, 0 ! 22
 	bne	a0, a2, be_else.8492
@@ -1141,9 +1142,7 @@ be_cont.8520:
 	li	%l1, min_caml_objects ! 643
 	lw	%l2, sp, 0 ! 0
 	slli	%l2, %l2, 2 ! 643
-	add	%l1, %l1, %l2 ! 643
-	sw	%l1, a1, 0 ! 643
-	sub	%l1, %l1, %l2 ! 643
+! later
 	li	a1, 3 ! 645
 	bne	%l0, a1, be_else.8521
 	ldd	[a2 + 0], %f0 ! 648
@@ -1332,9 +1331,7 @@ be_else.8539:
 	lw	a1, sp, 0 ! 0
 	slli	a1, a1, 2 ! 693
 	lw	a2, sp, 4 ! 0
-	add	a0, a0, a1 ! 693
-	sw	a0, a2, 0 ! 693
-	sub	a0, a0, a1 ! 693
+! later
 	ret ! 693
 read_or_network.2751:
 	li	a1, 0 ! 697
@@ -1365,9 +1362,7 @@ be_else.8540:
 	lw	a1, sp, 0 ! 0
 	slli	a1, a1, 2 ! 702
 	lw	a2, sp, 4 ! 0
-	add	a0, a0, a1 ! 702
-	sw	a0, a2, 0 ! 702
-	sub	a0, a0, a1 ! 702
+! later
 	ret ! 702
 read_and_network.2753:
 	li	a1, 0 ! 706
@@ -1386,9 +1381,7 @@ be_else.8541:
 	li	a1, min_caml_and_net ! 709
 	lw	a2, sp, 0 ! 0
 	slli	a3, a2, 2 ! 709
-	add	a1, a1, a3 ! 709
-	sw	a1, a0, 0 ! 709
-	sub	a1, a1, a3 ! 709
+! later
 	addi	a0, a2, 1 ! 710
 	j	read_and_network.2753
 read_parameter.2755:
@@ -2038,9 +2031,7 @@ be_else.8558:
 solver.2797:
 	li	a3, min_caml_objects ! 846
 	slli	a0, a0, 2 ! 846
-	add	a3, a3, a0 ! 846
-	lw	a0, a3, 0 ! 846
-	sub	a3, a3, a0 ! 846
+! later
 	ldd	[a2 + 0], %f0 ! 848
 	sw	sp, a1, 0 ! 0
 	sw	sp, a0, 4 ! 0
@@ -2563,9 +2554,7 @@ be_else.8591:
 solver_fast.2820:
 	li	a3, min_caml_objects ! 940
 	slli	%l0, a0, 2 ! 940
-	add	a3, a3, %l0 ! 940
-	lw	a3, a3, 0 ! 940
-	sub	a3, a3, %l0 ! 940
+! later
 	ldd	[a2 + 0], %f0 ! 941
 	sw	sp, a0, 0 ! 0
 	sw	sp, a1, 4 ! 0
@@ -2614,9 +2603,7 @@ solver_fast.2820:
 	lw	ra, sp, 68
 	lw	a1, sp, 0 ! 0
 	slli	a1, a1, 2 ! 945
-	add	a0, a0, a1 ! 945
-	lw	a0, a0, 0 ! 945
-	sub	a0, a0, a1 ! 945
+! later
 	lw	a1, sp, 8 ! 0
 	sw	sp, a0, 64 ! 0
 	mv	a0, a1
@@ -2782,9 +2769,7 @@ be_else.8603:
 solver_fast2.2838:
 	li	a2, min_caml_objects ! 987
 	slli	a3, a0, 2 ! 987
-	add	a2, a2, a3 ! 987
-	lw	a2, a2, 0 ! 987
-	sub	a2, a2, a3 ! 987
+! later
 	sw	sp, a2, 0 ! 0
 	sw	sp, a0, 4 ! 0
 	sw	sp, a1, 8 ! 0
@@ -2810,9 +2795,7 @@ solver_fast2.2838:
 	lw	ra, sp, 44
 	lw	a1, sp, 4 ! 0
 	slli	a1, a1, 2 ! 993
-	add	a0, a0, a1 ! 993
-	lw	a0, a0, 0 ! 993
-	sub	a0, a0, a1 ! 993
+! later
 	lw	a1, sp, 0 ! 0
 	sw	sp, a0, 40 ! 0
 	mv	a0, a1
@@ -3401,9 +3384,7 @@ iter_setup_dirvec_constants.2850:
 	bg	a1, a2, ble_else.8624
 	li	a2, min_caml_objects ! 1085
 	slli	a3, a1, 2 ! 1085
-	add	a2, a2, a3 ! 1085
-	lw	a2, a2, 0 ! 1085
-	sub	a2, a2, a3 ! 1085
+! later
 	sw	sp, a1, 0 ! 0
 	sw	sp, a2, 4 ! 0
 	sw	sp, a0, 8 ! 0
@@ -3440,9 +3421,7 @@ iter_setup_dirvec_constants.2850:
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 1090
 	lw	a3, sp, 12 ! 0
-	add	a3, a3, a2 ! 1090
-	sw	a3, a0, 0 ! 1090
-	sub	a3, a3, a2 ! 1090
+! later
 	b	be_cont.8626
 be_else.8625:
 	li	a1, 2 ! 1091
@@ -3457,9 +3436,7 @@ be_else.8625:
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 1092
 	lw	a3, sp, 12 ! 0
-	add	a3, a3, a2 ! 1092
-	sw	a3, a0, 0 ! 1092
-	sub	a3, a3, a2 ! 1092
+! later
 	b	be_cont.8628
 be_else.8627:
 	lw	a0, sp, 16 ! 0
@@ -3472,9 +3449,7 @@ be_else.8627:
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 1094
 	lw	a3, sp, 12 ! 0
-	add	a3, a3, a2 ! 1094
-	sw	a3, a0, 0 ! 1094
-	sub	a3, a3, a2 ! 1094
+! later
 be_cont.8628:
 be_cont.8626:
 	addi	a1, a1, -1 ! 1096
@@ -3492,9 +3467,7 @@ setup_startp_constants.2855:
 	bg	a1, a2, ble_else.8630
 	li	a2, min_caml_objects ! 1110
 	slli	a3, a1, 2 ! 1110
-	add	a2, a2, a3 ! 1110
-	lw	a2, a2, 0 ! 1110
-	sub	a2, a2, a3 ! 1110
+! later
 	sw	sp, a1, 0 ! 0
 	sw	sp, a0, 4 ! 0
 	sw	sp, a2, 8 ! 0
@@ -3881,9 +3854,7 @@ be_else.8654:
 	j	is_second_outside.2870
 check_all_inside.2880:
 	slli	a2, a0, 2 ! 1178
-	add	a1, a1, a2 ! 1178
-	lw	a2, a1, 0 ! 1178
-	sub	a1, a1, a2 ! 1178
+! later
 	li	a3, -1 ! 1179
 	bne	a2, a3, be_else.8655
 	li	a0, 1 ! 1180
@@ -3891,9 +3862,7 @@ check_all_inside.2880:
 be_else.8655:
 	li	a3, min_caml_objects ! 1182
 	slli	a2, a2, 2 ! 1182
-	add	a3, a3, a2 ! 1182
-	lw	a2, a3, 0 ! 1182
-	sub	a3, a3, a2 ! 1182
+! later
 	std	%f4, [sp + 0] ! 0
 	std	%f2, [sp + 8] ! 0
 	std	%f0, [sp + 16] ! 0
@@ -3920,18 +3889,14 @@ be_else.8656:
 shadow_check_and_group.2886:
 	lw	a2, t2, 4 ! 0
 	slli	a3, a0, 2 ! 1198
-	add	a1, a1, a3 ! 1198
-	lw	a3, a1, 0 ! 1198
-	sub	a1, a1, a3 ! 1198
+! later
 	li	%l0, -1 ! 1198
 	bne	a3, %l0, be_else.8657
 	li	a0, 0 ! 1199
 	ret ! 1199
 be_else.8657:
 	slli	a3, a0, 2 ! 1201
-	add	a1, a1, a3 ! 1201
-	lw	a3, a1, 0 ! 1201
-	sub	a1, a1, a3 ! 1201
+! later
 	li	%l0, min_caml_intersection_point ! 1202
 	sw	sp, a1, 0 ! 0
 	sw	sp, t2, 4 ! 0
@@ -3966,9 +3931,7 @@ be_cont.8659:
 	li	a0, min_caml_objects ! 1220
 	lw	a1, sp, 12 ! 0
 	slli	a1, a1, 2 ! 1220
-	add	a0, a0, a1 ! 1220
-	lw	a0, a0, 0 ! 1220
-	sub	a0, a0, a1 ! 1220
+! later
 	sw	sp, ra, 28
 	addi	sp, sp, 32
 	call	o_isinvert.2669
@@ -4037,9 +4000,7 @@ be_else.8662:
 shadow_check_one_or_group.2889:
 	lw	a2, t2, 4 ! 0
 	slli	a3, a0, 2 ! 1228
-	add	a1, a1, a3 ! 1228
-	lw	a3, a1, 0 ! 1228
-	sub	a1, a1, a3 ! 1228
+! later
 	li	%l0, -1 ! 1229
 	bne	a3, %l0, be_else.8663
 	li	a0, 0 ! 1230
@@ -4047,9 +4008,7 @@ shadow_check_one_or_group.2889:
 be_else.8663:
 	li	%l0, min_caml_and_net ! 1232
 	slli	a3, a3, 2 ! 1232
-	add	%l0, %l0, a3 ! 1232
-	lw	a3, %l0, 0 ! 1232
-	sub	%l0, %l0, a3 ! 1232
+! later
 	li	%l0, 0 ! 1233
 	sw	sp, a1, 0 ! 0
 	sw	sp, t2, 4 ! 0
@@ -4078,9 +4037,7 @@ shadow_check_one_or_matrix.2892:
 	lw	a2, t2, 8 ! 0
 	lw	a3, t2, 4 ! 0
 	slli	%l0, a0, 2 ! 1243
-	add	a1, a1, %l0 ! 1243
-	lw	%l0, a1, 0 ! 1243
-	sub	a1, a1, %l0 ! 1243
+! later
 	lw	%l1, %l0, 0 ! 1244
 	li	%l2, -1 ! 1245
 	bne	%l1, %l2, be_else.8665
@@ -4175,9 +4132,7 @@ be_else.8675:
 	ret ! 1264
 solve_each_element.2895:
 	slli	a3, a0, 2 ! 1279
-	add	a1, a1, a3 ! 1279
-	lw	a3, a1, 0 ! 1279
-	sub	a1, a1, a3 ! 1279
+! later
 	li	%l0, -1 ! 1280
 	bne	a3, %l0, be_else.8676
 	ret ! 1280
@@ -4200,9 +4155,7 @@ be_else.8676:
 	li	a0, min_caml_objects ! 1311
 	lw	a1, sp, 12 ! 0
 	slli	a1, a1, 2 ! 1311
-	add	a0, a0, a1 ! 1311
-	lw	a0, a0, 0 ! 1311
-	sub	a0, a0, a1 ! 1311
+! later
 	sw	sp, ra, 20
 	addi	sp, sp, 24
 	call	o_isinvert.2669
@@ -4316,18 +4269,14 @@ be_cont.8683:
 	j	solve_each_element.2895
 solve_one_or_network.2899:
 	slli	a3, a0, 2 ! 1320
-	add	a1, a1, a3 ! 1320
-	lw	a3, a1, 0 ! 1320
-	sub	a1, a1, a3 ! 1320
+! later
 	li	%l0, -1 ! 1321
 	bne	a3, %l0, be_else.8688
 	ret ! 1325
 be_else.8688:
 	li	%l0, min_caml_and_net ! 1322
 	slli	a3, a3, 2 ! 1322
-	add	%l0, %l0, a3 ! 1322
-	lw	a3, %l0, 0 ! 1322
-	sub	%l0, %l0, a3 ! 1322
+! later
 	li	%l0, 0 ! 1323
 	sw	sp, a2, 0 ! 0
 	sw	sp, a1, 4 ! 0
@@ -4346,9 +4295,7 @@ be_else.8688:
 	j	solve_one_or_network.2899
 trace_or_matrix.2903:
 	slli	a3, a0, 2 ! 1330
-	add	a1, a1, a3 ! 1330
-	lw	a3, a1, 0 ! 1330
-	sub	a1, a1, a3 ! 1330
+! later
 	lw	%l0, a3, 0 ! 1331
 	li	%l1, -1 ! 1332
 	bne	%l0, %l1, be_else.8690
@@ -4461,9 +4408,7 @@ solve_each_element_fast.2909:
 	lw	a1, sp, 8 ! 0
 	slli	a2, a1, 2 ! 1373
 	lw	a3, sp, 4 ! 0
-	add	a3, a3, a2 ! 1373
-	lw	a2, a3, 0 ! 1373
-	sub	a3, a3, a2 ! 1373
+! later
 	li	%l0, -1 ! 1374
 	bne	a2, %l0, be_else.8699
 	ret ! 1374
@@ -4483,9 +4428,7 @@ be_else.8699:
 	li	a0, min_caml_objects ! 1405
 	lw	a1, sp, 16 ! 0
 	slli	a1, a1, 2 ! 1405
-	add	a0, a0, a1 ! 1405
-	lw	a0, a0, 0 ! 1405
-	sub	a0, a0, a1 ! 1405
+! later
 	sw	sp, ra, 20
 	addi	sp, sp, 24
 	call	o_isinvert.2669
@@ -4597,18 +4540,14 @@ be_cont.8705:
 	j	solve_each_element_fast.2909
 solve_one_or_network_fast.2913:
 	slli	a3, a0, 2 ! 1413
-	add	a1, a1, a3 ! 1413
-	lw	a3, a1, 0 ! 1413
-	sub	a1, a1, a3 ! 1413
+! later
 	li	%l0, -1 ! 1414
 	bne	a3, %l0, be_else.8710
 	ret ! 1418
 be_else.8710:
 	li	%l0, min_caml_and_net ! 1415
 	slli	a3, a3, 2 ! 1415
-	add	%l0, %l0, a3 ! 1415
-	lw	a3, %l0, 0 ! 1415
-	sub	%l0, %l0, a3 ! 1415
+! later
 	li	%l0, 0 ! 1416
 	sw	sp, a2, 0 ! 0
 	sw	sp, a1, 4 ! 0
@@ -4627,9 +4566,7 @@ be_else.8710:
 	j	solve_one_or_network_fast.2913
 trace_or_matrix_fast.2917:
 	slli	a3, a0, 2 ! 1423
-	add	a1, a1, a3 ! 1423
-	lw	a3, a1, 0 ! 1423
-	sub	a1, a1, a3 ! 1423
+! later
 	lw	%l0, a3, 0 ! 1424
 	li	%l1, -1 ! 1425
 	bne	%l0, %l1, be_else.8712
@@ -5611,9 +5548,7 @@ trace_reflections.2939:
 	bg	a0, a3, ble_else.8758
 	li	a3, min_caml_reflections ! 1619
 	slli	%l0, a0, 2 ! 1619
-	add	a3, a3, %l0 ! 1619
-	lw	a3, a3, 0 ! 1619
-	sub	a3, a3, %l0 ! 1619
+! later
 	sw	sp, t2, 0 ! 0
 	sw	sp, a0, 4 ! 0
 	std	%f2, [sp + 8] ! 0
@@ -5767,9 +5702,7 @@ trace_ray.2944:
 	lw	a1, sp, 40 ! 0
 	slli	a2, a1, 2 ! 1711
 	lw	a3, sp, 48 ! 0
-	add	a3, a3, a2 ! 1711
-	sw	a3, a0, 0 ! 1711
-	sub	a3, a3, a2 ! 1711
+! later
 	li	a0, 0 ! 1713
 	bne	a1, a0, be_else.8772
 	ret ! 1725
@@ -5830,9 +5763,7 @@ be_else.8771:
 	lw	a0, a0, 0 ! 1650
 	li	a1, min_caml_objects ! 1651
 	slli	a2, a0, 2 ! 1651
-	add	a1, a1, a2 ! 1651
-	lw	a1, a1, 0 ! 1651
-	sub	a1, a1, a2 ! 1651
+! later
 	sw	sp, a0, 64 ! 0
 	sw	sp, a1, 68 ! 0
 	mv	a0, a1
@@ -5882,9 +5813,7 @@ be_else.8771:
 	lw	a1, sp, 40 ! 0
 	slli	a2, a1, 2 ! 1660
 	lw	a3, sp, 48 ! 0
-	add	a3, a3, a2 ! 1660
-	sw	a3, a0, 0 ! 1660
-	sub	a3, a3, a2 ! 1660
+! later
 	lw	a0, sp, 24 ! 0
 	sw	sp, ra, 92
 	addi	sp, sp, 96
@@ -5893,9 +5822,7 @@ be_else.8771:
 	lw	ra, sp, 92
 	lw	a1, sp, 40 ! 0
 	slli	a2, a1, 2 ! 1662
-	add	a0, a0, a2 ! 1662
-	lw	a0, a0, 0 ! 1662
-	sub	a0, a0, a2 ! 1662
+! later
 	li	a2, min_caml_intersection_point ! 1662
 	mv	a1, a2
 	sw	sp, ra, 92
@@ -5930,9 +5857,7 @@ be_else.8771:
 	lw	a1, sp, 40 ! 0
 	slli	a2, a1, 2 ! 1669
 	lw	a3, sp, 88 ! 0
-	add	a3, a3, a2 ! 1669
-	sw	a3, a0, 0 ! 1669
-	sub	a3, a3, a2 ! 1669
+! later
 	lw	a0, sp, 24 ! 0
 	sw	sp, ra, 92
 	addi	sp, sp, 96
@@ -5941,9 +5866,7 @@ be_else.8771:
 	lw	ra, sp, 92
 	lw	a1, sp, 40 ! 0
 	slli	a2, a1, 2 ! 1671
-	add	a0, a0, a2 ! 1671
-	lw	a2, a0, 0 ! 1671
-	sub	a0, a0, a2 ! 1671
+! later
 	li	a3, min_caml_texture_color ! 1671
 	sw	sp, a0, 92 ! 0
 	mv	a1, a3
@@ -5956,9 +5879,7 @@ be_else.8771:
 	lw	a0, sp, 40 ! 0
 	slli	a1, a0, 2 ! 1672
 	lw	a2, sp, 92 ! 0
-	add	a2, a2, a1 ! 1672
-	lw	a1, a2, 0 ! 1672
-	sub	a2, a2, a1 ! 1672
+! later
 	li	a2, l.6832 ! 1672
 	ldd	[a2 + 0], %f0 ! 1672
 	ldd	[sp + 80], %f2 ! 0
@@ -5977,9 +5898,7 @@ be_else.8771:
 	lw	ra, sp, 100
 	lw	a1, sp, 40 ! 0
 	slli	a2, a1, 2 ! 1674
-	add	a0, a0, a2 ! 1674
-	lw	a0, a0, 0 ! 1674
-	sub	a0, a0, a2 ! 1674
+! later
 	li	a2, min_caml_nvector ! 1674
 	mv	a1, a2
 	sw	sp, ra, 100
@@ -5993,9 +5912,7 @@ be_else.8779:
 	lw	a1, sp, 40 ! 0
 	slli	a2, a1, 2 ! 1667
 	lw	a3, sp, 88 ! 0
-	add	a3, a3, a2 ! 1667
-	sw	a3, a0, 0 ! 1667
-	sub	a3, a3, a2 ! 1667
+! later
 be_cont.8780:
 	li	a0, l.6835 ! 1677
 	ldd	[a0 + 0], %f0 ! 1677
@@ -6116,9 +6033,7 @@ ble_else.8785:
 	li	a2, -1 ! 1698
 	slli	a0, a0, 2 ! 1698
 	lw	a3, sp, 48 ! 0
-	add	a3, a3, a0 ! 1698
-	sw	a3, a2, 0 ! 1698
-	sub	a3, a3, a0 ! 1698
+! later
 ble_cont.8786:
 	li	a0, 2 ! 1701
 	lw	a2, sp, 72 ! 0
@@ -6175,9 +6090,7 @@ be_else.8791:
 	li	a1, min_caml_intersected_object_id ! 1742
 	lw	a1, a1, 0 ! 1742
 	slli	a1, a1, 2 ! 1742
-	add	a0, a0, a1 ! 1742
-	lw	a0, a0, 0 ! 1742
-	sub	a0, a0, a1 ! 1742
+! later
 	lw	a1, sp, 12 ! 0
 	sw	sp, a0, 16 ! 0
 	mv	a0, a1
@@ -6262,9 +6175,7 @@ iter_trace_diffuse_rays.2953:
 	li	%l1, 0 ! 1758
 	bg	a3, %l1, ble_else.8799
 	slli	%l1, a3, 2 ! 1759
-	add	a0, a0, %l1 ! 1759
-	lw	%l1, a0, 0 ! 1759
-	sub	a0, a0, %l1 ! 1759
+! later
 	sw	sp, a2, 0 ! 0
 	sw	sp, t2, 4 ! 0
 	sw	sp, %l0, 8 ! 0
@@ -6294,9 +6205,7 @@ iter_trace_diffuse_rays.2953:
 	lw	a0, sp, 16 ! 0
 	slli	a1, a0, 2 ! 1766
 	lw	a2, sp, 12 ! 0
-	add	a2, a2, a1 ! 1766
-	lw	a1, a2, 0 ! 1766
-	sub	a2, a2, a1 ! 1766
+! later
 	li	a3, l.6861 ! 1766
 	ldd	[a3 + 0], %f0 ! 1766
 	ldd	[sp + 24], %f2 ! 0
@@ -6315,9 +6224,7 @@ be_else.8800:
 	addi	a1, a0, 1 ! 1764
 	slli	a1, a1, 2 ! 1764
 	lw	a2, sp, 12 ! 0
-	add	a2, a2, a1 ! 1764
-	lw	a1, a2, 0 ! 1764
-	sub	a2, a2, a1 ! 1764
+! later
 	li	a3, l.6858 ! 1764
 	ldd	[a3 + 0], %f0 ! 1764
 	ldd	[sp + 24], %f2 ! 0
@@ -6487,9 +6394,7 @@ calc_diffuse_using_1point.2966:
 	lw	a2, sp, 4 ! 0
 	slli	a3, a2, 2 ! 1816
 	lw	%l0, sp, 12 ! 0
-	add	%l0, %l0, a3 ! 1816
-	lw	a3, %l0, 0 ! 1816
-	sub	%l0, %l0, a3 ! 1816
+! later
 	sw	sp, a0, 24 ! 0
 	mv	a0, a1
 	mv	a1, a3
@@ -6507,14 +6412,10 @@ calc_diffuse_using_1point.2966:
 	lw	a1, sp, 4 ! 0
 	slli	a2, a1, 2 ! 1819
 	lw	a3, sp, 16 ! 0
-	add	a3, a3, a2 ! 1819
-	lw	a2, a3, 0 ! 1819
-	sub	a3, a3, a2 ! 1819
+! later
 	slli	a3, a1, 2 ! 1820
 	lw	%l0, sp, 20 ! 0
-	add	%l0, %l0, a3 ! 1820
-	lw	a3, %l0, 0 ! 1820
-	sub	%l0, %l0, a3 ! 1820
+! later
 	lw	t2, sp, 0 ! 0
 	mv	a1, a2
 	mv	a2, a3
@@ -6528,16 +6429,12 @@ calc_diffuse_using_1point.2966:
 	lw	a1, sp, 4 ! 0
 	slli	a1, a1, 2 ! 1821
 	lw	a2, sp, 24 ! 0
-	add	a2, a2, a1 ! 1821
-	lw	a1, a2, 0 ! 1821
-	sub	a2, a2, a1 ! 1821
+! later
 	li	a2, min_caml_diffuse_ray ! 1821
 	j	vecaccumv.2659
 calc_diffuse_using_5points.2969:
 	slli	%l1, a0, 2 ! 1830
-	add	a1, a1, %l1 ! 1830
-	lw	a1, a1, 0 ! 1830
-	sub	a1, a1, %l1 ! 1830
+! later
 	sw	sp, %l0, 0 ! 0
 	sw	sp, a3, 4 ! 0
 	sw	sp, a2, 8 ! 0
@@ -6552,9 +6449,7 @@ calc_diffuse_using_5points.2969:
 	addi	a2, a1, -1 ! 1831
 	slli	a2, a2, 2 ! 1831
 	lw	a3, sp, 8 ! 0
-	add	a3, a3, a2 ! 1831
-	lw	a2, a3, 0 ! 1831
-	sub	a3, a3, a2 ! 1831
+! later
 	sw	sp, a0, 16 ! 0
 	mv	a0, a2
 	sw	sp, ra, 20
@@ -6565,9 +6460,7 @@ calc_diffuse_using_5points.2969:
 	lw	a1, sp, 12 ! 0
 	slli	a2, a1, 2 ! 1832
 	lw	a3, sp, 8 ! 0
-	add	a3, a3, a2 ! 1832
-	lw	a2, a3, 0 ! 1832
-	sub	a3, a3, a2 ! 1832
+! later
 	sw	sp, a0, 20 ! 0
 	mv	a0, a2
 	sw	sp, ra, 28
@@ -6579,9 +6472,7 @@ calc_diffuse_using_5points.2969:
 	addi	a2, a1, 1 ! 1833
 	slli	a2, a2, 2 ! 1833
 	lw	a3, sp, 8 ! 0
-	add	a3, a3, a2 ! 1833
-	lw	a2, a3, 0 ! 1833
-	sub	a3, a3, a2 ! 1833
+! later
 	sw	sp, a0, 24 ! 0
 	mv	a0, a2
 	sw	sp, ra, 28
@@ -6592,9 +6483,7 @@ calc_diffuse_using_5points.2969:
 	lw	a1, sp, 12 ! 0
 	slli	a2, a1, 2 ! 1834
 	lw	a3, sp, 4 ! 0
-	add	a3, a3, a2 ! 1834
-	lw	a2, a3, 0 ! 1834
-	sub	a3, a3, a2 ! 1834
+! later
 	sw	sp, a0, 28 ! 0
 	mv	a0, a2
 	sw	sp, ra, 36
@@ -6606,9 +6495,7 @@ calc_diffuse_using_5points.2969:
 	lw	a2, sp, 0 ! 0
 	slli	a3, a2, 2 ! 1836
 	lw	%l0, sp, 16 ! 0
-	add	%l0, %l0, a3 ! 1836
-	lw	a3, %l0, 0 ! 1836
-	sub	%l0, %l0, a3 ! 1836
+! later
 	sw	sp, a0, 32 ! 0
 	mv	a0, a1
 	mv	a1, a3
@@ -6621,9 +6508,7 @@ calc_diffuse_using_5points.2969:
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 1837
 	lw	a3, sp, 20 ! 0
-	add	a3, a3, a2 ! 1837
-	lw	a2, a3, 0 ! 1837
-	sub	a3, a3, a2 ! 1837
+! later
 	mv	a1, a2
 	sw	sp, ra, 36
 	addi	sp, sp, 40
@@ -6634,9 +6519,7 @@ calc_diffuse_using_5points.2969:
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 1838
 	lw	a3, sp, 24 ! 0
-	add	a3, a3, a2 ! 1838
-	lw	a2, a3, 0 ! 1838
-	sub	a3, a3, a2 ! 1838
+! later
 	mv	a1, a2
 	sw	sp, ra, 36
 	addi	sp, sp, 40
@@ -6647,9 +6530,7 @@ calc_diffuse_using_5points.2969:
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 1839
 	lw	a3, sp, 28 ! 0
-	add	a3, a3, a2 ! 1839
-	lw	a2, a3, 0 ! 1839
-	sub	a3, a3, a2 ! 1839
+! later
 	mv	a1, a2
 	sw	sp, ra, 36
 	addi	sp, sp, 40
@@ -6660,9 +6541,7 @@ calc_diffuse_using_5points.2969:
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 1840
 	lw	a3, sp, 32 ! 0
-	add	a3, a3, a2 ! 1840
-	lw	a2, a3, 0 ! 1840
-	sub	a3, a3, a2 ! 1840
+! later
 	mv	a1, a2
 	sw	sp, ra, 36
 	addi	sp, sp, 40
@@ -6672,9 +6551,7 @@ calc_diffuse_using_5points.2969:
 	lw	a0, sp, 12 ! 0
 	slli	a0, a0, 2 ! 1842
 	lw	a1, sp, 8 ! 0
-	add	a1, a1, a0 ! 1842
-	lw	a0, a1, 0 ! 1842
-	sub	a1, a1, a0 ! 1842
+! later
 	sw	sp, ra, 36
 	addi	sp, sp, 40
 	call	p_energy.2713
@@ -6683,9 +6560,7 @@ calc_diffuse_using_5points.2969:
 	li	a1, min_caml_rgb ! 1843
 	lw	a2, sp, 0 ! 0
 	slli	a2, a2, 2 ! 1843
-	add	a0, a0, a2 ! 1843
-	lw	a0, a0, 0 ! 1843
-	sub	a0, a0, a2 ! 1843
+! later
 	li	a2, min_caml_diffuse_ray ! 1843
 	mv	t1, a1
 	mv	a1, a0
@@ -6707,9 +6582,7 @@ do_without_neighbors.2975:
 	li	a1, 0 ! 1852
 	lw	a2, sp, 12 ! 0
 	slli	a3, a2, 2 ! 1852
-	add	a0, a0, a3 ! 1852
-	lw	a0, a0, 0 ! 1852
-	sub	a0, a0, a3 ! 1852
+! later
 	bg	a0, a1, ble_else.8814
 	lw	a0, sp, 8 ! 0
 	sw	sp, ra, 20
@@ -6719,9 +6592,7 @@ do_without_neighbors.2975:
 	lw	ra, sp, 20
 	lw	a1, sp, 12 ! 0
 	slli	a2, a1, 2 ! 1854
-	add	a0, a0, a2 ! 1854
-	lw	a0, a0, 0 ! 1854
-	sub	a0, a0, a2 ! 1854
+! later
 	li	a2, 0 ! 1854
 	bne	a0, a2, be_else.8815
 	b	be_cont.8816
@@ -6781,15 +6652,11 @@ get_surface_id.2982:
 	lw	ra, sp, 4
 	lw	a1, sp, 0 ! 0
 	slli	a1, a1, 2 ! 1877
-	add	a0, a0, a1 ! 1877
-	lw	a0, a0, 0 ! 1877
-	sub	a0, a0, a1 ! 1877
+! later
 	ret ! 1877
 neighbors_are_available.2985:
 	slli	%l1, a0, 2 ! 1883
-	add	a2, a2, %l1 ! 1883
-	lw	%l1, a2, 0 ! 1883
-	sub	a2, a2, %l1 ! 1883
+! later
 	sw	sp, a2, 0 ! 0
 	sw	sp, a3, 4 ! 0
 	sw	sp, %l0, 8 ! 0
@@ -6805,9 +6672,7 @@ neighbors_are_available.2985:
 	lw	a1, sp, 16 ! 0
 	slli	a2, a1, 2 ! 1885
 	lw	a3, sp, 12 ! 0
-	add	a3, a3, a2 ! 1885
-	lw	a2, a3, 0 ! 1885
-	sub	a3, a3, a2 ! 1885
+! later
 	lw	a3, sp, 8 ! 0
 	sw	sp, a0, 20 ! 0
 	mv	a1, a3
@@ -6822,9 +6687,7 @@ neighbors_are_available.2985:
 	lw	a0, sp, 16 ! 0
 	slli	a2, a0, 2 ! 1886
 	lw	a3, sp, 4 ! 0
-	add	a3, a3, a2 ! 1886
-	lw	a2, a3, 0 ! 1886
-	sub	a3, a3, a2 ! 1886
+! later
 	lw	a3, sp, 8 ! 0
 	mv	a1, a3
 	mv	a0, a2
@@ -6839,9 +6702,7 @@ neighbors_are_available.2985:
 	addi	a2, a0, -1 ! 1887
 	slli	a2, a2, 2 ! 1887
 	lw	a3, sp, 0 ! 0
-	add	a3, a3, a2 ! 1887
-	lw	a2, a3, 0 ! 1887
-	sub	a3, a3, a2 ! 1887
+! later
 	lw	%l0, sp, 8 ! 0
 	mv	a1, %l0
 	mv	a0, a2
@@ -6856,9 +6717,7 @@ neighbors_are_available.2985:
 	addi	a0, a0, 1 ! 1888
 	slli	a0, a0, 2 ! 1888
 	lw	a2, sp, 0 ! 0
-	add	a2, a2, a0 ! 1888
-	lw	a0, a2, 0 ! 1888
-	sub	a2, a2, a0 ! 1888
+! later
 	lw	a2, sp, 8 ! 0
 	mv	a1, a2
 	sw	sp, ra, 28
@@ -6885,9 +6744,7 @@ be_else.8823:
 try_exploit_neighbors.2991:
 	lw	%l2, t2, 4 ! 0
 	slli	%l3, a0, 2 ! 1901
-	add	a3, a3, %l3 ! 1901
-	lw	%l3, a3, 0 ! 1901
-	sub	a3, a3, %l3 ! 1901
+! later
 	li	%l4, 4 ! 1902
 	bg	%l4, %l1, ble_else.8827
 	li	%l4, 0 ! 1905
@@ -6925,9 +6782,7 @@ try_exploit_neighbors.2991:
 	lw	a0, sp, 32 ! 0
 	slli	a0, a0, 2 ! 1919
 	lw	a1, sp, 24 ! 0
-	add	a1, a1, a0 ! 1919
-	lw	a0, a1, 0 ! 1919
-	sub	a1, a1, a0 ! 1919
+! later
 	lw	a1, sp, 16 ! 0
 	lw	t2, sp, 12 ! 0
 	lw	 t1, t2, 0
@@ -6941,9 +6796,7 @@ be_else.8829:
 	lw	ra, sp, 44
 	lw	%l0, sp, 16 ! 0
 	slli	a1, %l0, 2 ! 1911
-	add	a0, a0, a1 ! 1911
-	lw	a0, a0, 0 ! 1911
-	sub	a0, a0, a1 ! 1911
+! later
 	li	a1, 0 ! 1911
 	bne	a0, a1, be_else.8830
 	b	be_cont.8831
@@ -7103,9 +6956,7 @@ pretrace_diffuse_rays.3004:
 	lw	ra, sp, 20
 	lw	a1, sp, 8 ! 0
 	slli	a2, a1, 2 ! 1972
-	add	a0, a0, a2 ! 1972
-	lw	a0, a0, 0 ! 1972
-	sub	a0, a0, a2 ! 1972
+! later
 	li	a2, 0 ! 1972
 	bne	a0, a2, be_else.8840
 	b	be_cont.8841
@@ -7141,19 +6992,13 @@ be_else.8840:
 	li	a1, min_caml_dirvecs ! 1981
 	lw	a2, sp, 16 ! 0
 	slli	a2, a2, 2 ! 1981
-	add	a1, a1, a2 ! 1981
-	lw	a1, a1, 0 ! 1981
-	sub	a1, a1, a2 ! 1981
+! later
 	lw	a2, sp, 8 ! 0
 	slli	a3, a2, 2 ! 1982
 	lw	%l0, sp, 20 ! 0
-	add	%l0, %l0, a3 ! 1982
-	lw	a3, %l0, 0 ! 1982
-	sub	%l0, %l0, a3 ! 1982
+! later
 	slli	%l0, a2, 2 ! 1983
-	add	a0, a0, %l0 ! 1983
-	lw	a0, a0, 0 ! 1983
-	sub	a0, a0, %l0 ! 1983
+! later
 	lw	t2, sp, 4 ! 0
 	mv	a2, a0
 	mv	a0, a1
@@ -7172,9 +7017,7 @@ be_else.8840:
 	lw	ra, sp, 28
 	lw	a1, sp, 8 ! 0
 	slli	a2, a1, 2 ! 1985
-	add	a0, a0, a2 ! 1985
-	lw	a0, a0, 0 ! 1985
-	sub	a0, a0, a2 ! 1985
+! later
 	li	a2, min_caml_diffuse_ray ! 1985
 	mv	a1, a2
 	sw	sp, ra, 28
@@ -7269,9 +7112,7 @@ pretrace_pixels.3007:
 	lw	a2, sp, 20 ! 0
 	slli	a3, a2, 2 ! 2006
 	lw	%l0, sp, 16 ! 0
-	add	%l0, %l0, a3 ! 2006
-	lw	a3, %l0, 0 ! 2006
-	sub	%l0, %l0, a3 ! 2006
+! later
 	li	%l1, l.6305 ! 2006
 	ldd	[%l1 + 0], %f2 ! 2006
 	lw	t2, sp, 12 ! 0
@@ -7285,9 +7126,7 @@ pretrace_pixels.3007:
 	lw	a0, sp, 20 ! 0
 	slli	a1, a0, 2 ! 2007
 	lw	a2, sp, 16 ! 0
-	add	a2, a2, a1 ! 2007
-	lw	a1, a2, 0 ! 2007
-	sub	a2, a2, a1 ! 2007
+! later
 	mv	a0, a1
 	sw	sp, ra, 60
 	addi	sp, sp, 64
@@ -7303,9 +7142,7 @@ pretrace_pixels.3007:
 	lw	a0, sp, 20 ! 0
 	slli	a1, a0, 2 ! 2008
 	lw	a2, sp, 16 ! 0
-	add	a2, a2, a1 ! 2008
-	lw	a1, a2, 0 ! 2008
-	sub	a2, a2, a1 ! 2008
+! later
 	lw	a3, sp, 8 ! 0
 	mv	a0, a1
 	mv	a1, a3
@@ -7317,9 +7154,7 @@ pretrace_pixels.3007:
 	lw	a0, sp, 20 ! 0
 	slli	a1, a0, 2 ! 2011
 	lw	a2, sp, 16 ! 0
-	add	a2, a2, a1 ! 2011
-	lw	a1, a2, 0 ! 2011
-	sub	a2, a2, a1 ! 2011
+! later
 	li	a3, 0 ! 2011
 	lw	t2, sp, 4 ! 0
 	mv	a0, a1
@@ -7415,9 +7250,7 @@ scan_pixel.3018:
 ble_else.8847:
 	li	%l3, min_caml_rgb ! 2039
 	slli	%l4, a0, 2 ! 2039
-	add	a3, a3, %l4 ! 2039
-	lw	%l4, a3, 0 ! 2039
-	sub	a3, a3, %l4 ! 2039
+! later
 	sw	sp, t2, 0 ! 0
 	sw	sp, a2, 4 ! 0
 	sw	sp, %l1, 8 ! 0
@@ -7453,9 +7286,7 @@ ble_else.8847:
 	lw	a0, sp, 28 ! 0
 	slli	a1, a0, 2 ! 2045
 	lw	a2, sp, 16 ! 0
-	add	a2, a2, a1 ! 2045
-	lw	a1, a2, 0 ! 2045
-	sub	a2, a2, a1 ! 2045
+! later
 	li	a3, 0 ! 2045
 	lw	t2, sp, 12 ! 0
 	mv	a0, a1
@@ -7720,9 +7551,7 @@ init_line_elements.3034:
 	lw	a1, sp, 4 ! 0
 	slli	a2, a1, 2 ! 2100
 	lw	a3, sp, 0 ! 0
-	add	a3, a3, a2 ! 2100
-	sw	a3, a0, 0 ! 2100
-	sub	a3, a3, a2 ! 2100
+! later
 	addi	a1, a1, -1 ! 2101
 	mv	a0, a3
 	j	init_line_elements.3034
@@ -7840,14 +7669,10 @@ calc_dirvec.3044:
 	li	a0, min_caml_dirvecs ! 2143
 	lw	a1, sp, 4 ! 0
 	slli	a1, a1, 2 ! 2143
-	add	a0, a0, a1 ! 2143
-	lw	a0, a0, 0 ! 2143
-	sub	a0, a0, a1 ! 2143
+! later
 	lw	a1, sp, 0 ! 0
 	slli	a2, a1, 2 ! 2144
-	add	a0, a0, a2 ! 2144
-	lw	a2, a0, 0 ! 2144
-	sub	a0, a0, a2 ! 2144
+! later
 	sw	sp, a0, 32 ! 0
 	std	%f0, [sp + 40] ! 0
 	std	%f4, [sp + 48] ! 0
@@ -7870,9 +7695,7 @@ calc_dirvec.3044:
 	addi	a1, a0, 40 ! 2145
 	slli	a1, a1, 2 ! 2145
 	lw	a2, sp, 32 ! 0
-	add	a2, a2, a1 ! 2145
-	lw	a1, a2, 0 ! 2145
-	sub	a2, a2, a1 ! 2145
+! later
 	mv	a0, a1
 	sw	sp, ra, 68
 	addi	sp, sp, 72
@@ -7900,9 +7723,7 @@ calc_dirvec.3044:
 	addi	a1, a0, 80 ! 2146
 	slli	a1, a1, 2 ! 2146
 	lw	a2, sp, 32 ! 0
-	add	a2, a2, a1 ! 2146
-	lw	a1, a2, 0 ! 2146
-	sub	a2, a2, a1 ! 2146
+! later
 	mv	a0, a1
 	sw	sp, ra, 68
 	addi	sp, sp, 72
@@ -7939,9 +7760,7 @@ calc_dirvec.3044:
 	addi	a1, a0, 1 ! 2147
 	slli	a1, a1, 2 ! 2147
 	lw	a2, sp, 32 ! 0
-	add	a2, a2, a1 ! 2147
-	lw	a1, a2, 0 ! 2147
-	sub	a2, a2, a1 ! 2147
+! later
 	mv	a0, a1
 	sw	sp, ra, 84
 	addi	sp, sp, 88
@@ -7987,9 +7806,7 @@ calc_dirvec.3044:
 	addi	a1, a0, 41 ! 2148
 	slli	a1, a1, 2 ! 2148
 	lw	a2, sp, 32 ! 0
-	add	a2, a2, a1 ! 2148
-	lw	a1, a2, 0 ! 2148
-	sub	a2, a2, a1 ! 2148
+! later
 	mv	a0, a1
 	sw	sp, ra, 108
 	addi	sp, sp, 112
@@ -8026,9 +7843,7 @@ calc_dirvec.3044:
 	addi	a0, a0, 81 ! 2149
 	slli	a0, a0, 2 ! 2149
 	lw	a1, sp, 32 ! 0
-	add	a1, a1, a0 ! 2149
-	lw	a0, a1, 0 ! 2149
-	sub	a1, a1, a0 ! 2149
+! later
 	sw	sp, ra, 124
 	addi	sp, sp, 128
 	call	d_vec.2724
@@ -8236,9 +8051,7 @@ create_dirvec_elements.3063:
 	lw	a1, sp, 4 ! 0
 	slli	a2, a1, 2 ! 2191
 	lw	a3, sp, 0 ! 0
-	add	a3, a3, a2 ! 2191
-	sw	a3, a0, 0 ! 2191
-	sub	a3, a3, a2 ! 2191
+! later
 	addi	a1, a1, -1 ! 2192
 	mv	a0, a3
 	j	create_dirvec_elements.3063
@@ -8267,14 +8080,10 @@ create_dirvecs.3066:
 	lw	a1, sp, 4 ! 0
 	slli	a2, a1, 2 ! 2198
 	lw	a3, sp, 0 ! 0
-	add	a3, a3, a2 ! 2198
-	sw	a3, a0, 0 ! 2198
-	sub	a3, a3, a2 ! 2198
+! later
 	li	a0, min_caml_dirvecs ! 2199
 	slli	a2, a1, 2 ! 2199
-	add	a0, a0, a2 ! 2199
-	lw	a0, a0, 0 ! 2199
-	sub	a0, a0, a2 ! 2199
+! later
 	li	a2, 118 ! 2199
 	mv	a1, a2
 	sw	sp, ra, 12
@@ -8291,9 +8100,7 @@ init_dirvec_constants.3068:
 	li	a2, 0 ! 2209
 	bg	a1, a2, ble_else.8872
 	slli	a2, a1, 2 ! 2210
-	add	a0, a0, a2 ! 2210
-	lw	a2, a0, 0 ! 2210
-	sub	a0, a0, a2 ! 2210
+! later
 	sw	sp, a0, 0 ! 0
 	sw	sp, a1, 4 ! 0
 	mv	a0, a2
@@ -8313,9 +8120,7 @@ init_vecset_constants.3071:
 	bg	a0, a1, ble_else.8874
 	li	a1, min_caml_dirvecs ! 2217
 	slli	a2, a0, 2 ! 2217
-	add	a1, a1, a2 ! 2217
-	lw	a1, a1, 0 ! 2217
-	sub	a1, a1, a2 ! 2217
+! later
 	li	a2, 119 ! 2217
 	sw	sp, a0, 0 ! 0
 	mv	a0, a1
@@ -8390,9 +8195,7 @@ add_reflection.3075:
 	sw	a1, a2, 0 ! 2238
 	lw	a2, sp, 0 ! 0
 	slli	a2, a2, 2 ! 2238
-	add	a0, a0, a2 ! 2238
-	sw	a0, a1, 0 ! 2238
-	sub	a0, a0, a2 ! 2238
+! later
 	ret ! 2238
 setup_rect_reflection.3082:
 	li	a2, 4 ! 2243
@@ -8603,9 +8406,7 @@ setup_reflections.3088:
 	bg	a0, a1, ble_else.8881
 	li	a1, min_caml_objects ! 2273
 	slli	a2, a0, 2 ! 2273
-	add	a1, a1, a2 ! 2273
-	lw	a1, a1, 0 ! 2273
-	sub	a1, a1, a2 ! 2273
+! later
 	sw	sp, a0, 0 ! 0
 	sw	sp, a1, 4 ! 0
 	mv	a0, a1

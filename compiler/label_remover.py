@@ -57,6 +57,8 @@ def main():
         print("file error")
         return
 
+    lines = [line for line in lines if line[0] != '!']
+
     # コメント除去
     lines = [re.sub("\s*!.*\n", "\n", line) for line in lines]
 
