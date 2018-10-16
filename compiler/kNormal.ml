@@ -1,21 +1,22 @@
-open Printf (* print_kNormalのため *)
+open Printf
 
-(* give names to intermediate values (K-normalization) *)
-
-type t = (* K���������μ� (caml2html: knormal_t) *)
+type t = exp * Lexing.position
+and exp =
   | Unit
   | Int of int
   | Float of float
   | Neg of Id.t
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
+  | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
-  | IfEq of Id.t * Id.t * t * t (* ���� + ʬ�� (caml2html: knormal_branch) *)
-  | IfLE of Id.t * Id.t * t * t (* ���� + ʬ�� *)
+  | IfEq of Id.t * Id.t * t * t
+  | IfLE of Id.t * Id.t * t * t
   | Let of (Id.t * Type.t) * t * t
   | Var of Id.t
   | LetRec of fundef * t
@@ -28,11 +29,14 @@ type t = (* K���������μ� (caml2html: knormal_t) *)
   | ExtFunApp of Id.t * Id.t list
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
-let rec fv = function (* ���˽и������ʼ�ͳ�ʡ��ѿ� (caml2html: knormal_fv) *)
+let rec fv (e, sp) =
+  match e with
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
   | Neg(x) | FNeg(x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
-  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
+  | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y) | FAdd(x, y) | FSub(x, y)
+  | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
+  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) ->
+      S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
   | Var(x) -> S.singleton x
   | LetRec({ name = (x, t); args = yts; body = e1 }, e2) ->
@@ -43,87 +47,119 @@ let rec fv = function (* ���˽и������ʼ�ͳ�ʡ��ѿ� 
   | Put(x, y, z) -> S.of_list [x; y; z]
   | LetTuple(xs, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xs)))
 
-let insert_let (e, t) k = (* let���������������ؿ� (caml2html: knormal_insert) *)
+let insert_let ((e, sp), t) k =
   match e with
   | Var(x) -> k x
   | _ ->
       let x = Id.gentmp t in
       let e', t' = k x in
-      Let((x, t), e, e'), t'
+      (Let((x, t), (e, sp), e'), sp), t'
 
-let rec g env = function (* K�������롼�������� (caml2html: knormal_g) *)
-  | Syntax.Unit -> Unit, Type.Unit
-  | Syntax.Bool(b) -> Int(if b then 1 else 0), Type.Int (* ������true, false������1, 0���Ѵ� (caml2html: knormal_bool) *)
-  | Syntax.Int(i) -> Int(i), Type.Int
-  | Syntax.Float(d) -> Float(d), Type.Float
-  | Syntax.Not(e) -> g env (Syntax.If(e, Syntax.Bool(false), Syntax.Bool(true)))
+let rec g env (e, sp, ep) =
+  match e with
+  | Syntax.Unit -> (Unit, sp), Type.Unit
+  | Syntax.Bool(b) -> (Int(if b then 1 else 0), sp), Type.Int
+  | Syntax.Int(i) -> (Int(i), sp), Type.Int
+  | Syntax.Float(d) -> (Float(d), sp), Type.Float
+  | Syntax.Not(e) ->
+      g env
+        (Syntax.If(e,
+                   (Syntax.Bool(false), sp, ep),
+                   (Syntax.Bool(true), sp, ep)), sp, ep)
   | Syntax.Neg(e) ->
       insert_let (g env e)
-        (fun x -> Neg(x), Type.Int)
-  | Syntax.Add(e1, e2) -> (* ­������K������ (caml2html: knormal_add) *)
+        (fun x -> (Neg(x), sp), Type.Int)
+  | Syntax.Add(e1, e2) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
-            (fun y -> Add(x, y), Type.Int))
+            (fun y -> (Add(x, y), sp), Type.Int))
   | Syntax.Sub(e1, e2) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
-            (fun y -> Sub(x, y), Type.Int))
+            (fun y -> (Sub(x, y), sp), Type.Int))
+  | Syntax.Mul(e1, e2) ->
+      insert_let (g env e1)
+        (fun x -> insert_let (g env e2)
+            (fun y -> (Mul(x, y), sp), Type.Int))
+  | Syntax.Div(e1, e2) ->
+      insert_let (g env e1)
+        (fun x -> insert_let (g env e2)
+            (fun y -> (Div(x, y), sp), Type.Int))
   | Syntax.FNeg(e) ->
       insert_let (g env e)
-        (fun x -> FNeg(x), Type.Float)
+        (fun x -> (FNeg(x), sp), Type.Float)
   | Syntax.FAdd(e1, e2) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
-            (fun y -> FAdd(x, y), Type.Float))
+            (fun y -> (FAdd(x, y), sp), Type.Float))
   | Syntax.FSub(e1, e2) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
-            (fun y -> FSub(x, y), Type.Float))
+            (fun y -> (FSub(x, y), sp), Type.Float))
   | Syntax.FMul(e1, e2) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
-            (fun y -> FMul(x, y), Type.Float))
+            (fun y -> (FMul(x, y), sp), Type.Float))
   | Syntax.FDiv(e1, e2) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
-            (fun y -> FDiv(x, y), Type.Float))
+            (fun y -> (FDiv(x, y), sp), Type.Float))
   | Syntax.Eq _ | Syntax.LE _ as cmp ->
-      g env (Syntax.If(cmp, Syntax.Bool(true), Syntax.Bool(false)))
-  | Syntax.If(Syntax.Not(e1), e2, e3) -> g env (Syntax.If(e1, e3, e2)) (* not�ˤ���ʬ�����Ѵ� (caml2html: knormal_not) *)
-  | Syntax.If(Syntax.Eq(e1, e2), e3, e4) ->
+      g env
+        (Syntax.If((cmp, sp, ep),
+                   (Syntax.Bool(true), sp, ep),
+                   (Syntax.Bool(false), sp, ep)), sp, ep)
+  | Syntax.If((Syntax.Not(e1), _, _), e2, e3) ->
+      g env ((Syntax.If(e1, e3, e2)), sp, ep)
+  | Syntax.If((Syntax.Eq(e1, e2), _, _), e3, e4) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y ->
               let e3', t3 = g env e3 in
               let e4', t4 = g env e4 in
-              IfEq(x, y, e3', e4'), t3))
-  | Syntax.If(Syntax.LE(e1, e2), e3, e4) ->
+              (IfEq(x, y, e3', e4'), sp), t3))
+  | Syntax.If((Syntax.LE(e1, e2), _, _), e3, e4) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y ->
               let e3', t3 = g env e3 in
               let e4', t4 = g env e4 in
-              IfLE(x, y, e3', e4'), t3))
-  | Syntax.If(e1, e2, e3) -> g env (Syntax.If(Syntax.Eq(e1, Syntax.Bool(false)), e3, e2)) (* ���ӤΤʤ�ʬ�����Ѵ� (caml2html: knormal_if) *)
+              (IfLE(x, y, e3', e4'), sp), t3))
+  | Syntax.If(e1, e2, e3) ->
+    g env
+      (Syntax.If((Syntax.Eq(e1,
+                            (Syntax.Bool(false), sp, ep)), sp, ep),
+                 e3,
+                 e2), sp, ep)
   | Syntax.Let((x, t), e1, e2) ->
       let e1', t1 = g env e1 in
       let e2', t2 = g (M.add x t env) e2 in
-      Let((x, t), e1', e2'), t2
-  | Syntax.Var(x) when M.mem x env -> Var(x), M.find x env
-  | Syntax.Var(x) -> (* ���������λ��� (caml2html: knormal_extarray) *)
+      (Let((x, t), e1', e2'), sp), t2
+  | Syntax.Var(x) when M.mem x env -> (Var(x), sp), M.find x env
+  | Syntax.Var(x) ->
       (match M.find x !Typing.extenv with
-      | Type.Array(_) as t -> ExtArray x, t
-      | _ -> failwith (Printf.sprintf "external variable %s does not have an array type" x))
-  | Syntax.LetRec({ Syntax.name = (x, t); Syntax.args = yts; Syntax.body = e1 }, e2) ->
+      | Type.Array(_) as t -> (ExtArray(x), sp), t
+      | t ->
+          failwith
+            (let open Lexing in
+             (Printf.sprintf
+               "external variable %s does not have an array type, type %s\n"
+               x (Type.string_of_type t)) ^
+             (Printf.sprintf "line %d-%d, characters %d-%d"
+                sp.pos_lnum ep.pos_lnum
+                (sp.pos_cnum - sp.pos_bol) (ep.pos_cnum - ep.pos_bol))))
+  | Syntax.LetRec({Syntax.name = (x, t);
+                   Syntax.args = yts;
+                   Syntax.body = e1 }, e2) ->
       let env' = M.add x t env in
       let e2', t2 = g env' e2 in
       let e1', t1 = g (M.add_list yts env') e1 in
-      LetRec({ name = (x, t); args = yts; body = e1' }, e2'), t2
-  | Syntax.App(Syntax.Var(f), e2s) when not (M.mem f env) -> (* �����ؿ��θƤӽФ� (caml2html: knormal_extfunapp) *)
+      (LetRec({ name = (x, t); args = yts; body = e1' }, e2'), sp), t2
+  | Syntax.App((Syntax.Var(f), _, _), e2s) when not (M.mem f env) ->
       (match M.find f !Typing.extenv with
       | Type.Fun(_, t) ->
-          let rec bind xs = function (* "xs" are identifiers for the arguments *)
-            | [] -> ExtFunApp(f, xs), t
+          let rec bind xs = function
+            | [] -> (ExtFunApp(f, xs), sp), t
             | e2 :: e2s ->
                 insert_let (g env e2)
                   (fun x -> bind (xs @ [x]) e2s) in
@@ -134,16 +170,16 @@ let rec g env = function (* K�������롼�������� (c
       | _, Type.Fun(_, t) as g_e1 ->
           insert_let g_e1
             (fun f ->
-              let rec bind xs = function (* "xs" are identifiers for the arguments *)
-                | [] -> App(f, xs), t
+              let rec bind xs = function
+                | [] -> (App(f, xs), sp), t
                 | e2 :: e2s ->
                     insert_let (g env e2)
                       (fun x -> bind (xs @ [x]) e2s) in
               bind [] e2s) (* left-to-right evaluation *)
       | _ -> assert false)
   | Syntax.Tuple(es) ->
-      let rec bind xs ts = function (* "xs" and "ts" are identifiers and types for the elements *)
-        | [] -> Tuple(xs), Type.Tuple(ts)
+      let rec bind xs ts = function
+        | [] -> (Tuple(xs), sp), Type.Tuple(ts)
         | e :: es ->
             let _, t as g_e = g env e in
             insert_let g_e
@@ -153,7 +189,7 @@ let rec g env = function (* K�������롼�������� (c
       insert_let (g env e1)
         (fun y ->
           let e2', t2 = g (M.add_list xts env) e2 in
-          LetTuple(xts, y, e2'), t2)
+          (LetTuple(xts, y, e2'), sp), t2)
   | Syntax.Array(e1, e2) ->
       insert_let (g env e1)
         (fun x ->
@@ -164,67 +200,46 @@ let rec g env = function (* K�������롼�������� (c
                 match t2 with
                 | Type.Float -> "create_float_array"
                 | _ -> "create_array" in
-              ExtFunApp(l, [x; y]), Type.Array(t2)))
+              (ExtFunApp(l, [x; y]), sp), Type.Array(t2)))
   | Syntax.Get(e1, e2) ->
       (match g env e1 with
       |        _, Type.Array(t) as g_e1 ->
           insert_let g_e1
             (fun x -> insert_let (g env e2)
-                (fun y -> Get(x, y), t))
+                (fun y -> (Get(x, y), sp), t))
       | _ -> assert false)
   | Syntax.Put(e1, e2, e3) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> insert_let (g env e3)
-                (fun z -> Put(x, y, z), Type.Unit)))
-
-(* 課題用の追加 *)
+                (fun z -> (Put(x, y, z), sp), Type.Unit)))
 
 let print_space indent = print_string (String.make indent ' ')
 
-(* idが並んだものは全部var *)
-let string_of_vars vars =
-  let f s var = s ^ " " ^ var in
-  List.fold_left f "" vars
+let rec string_of_id_type_list id_type_list =
+  match id_type_list with
+  | [] -> ""
+  | [(id, typ)] -> "(" ^ id ^ ", " ^ (Type.string_of_type typ) ^ ")"
+  | (id, typ) :: id_type_list ->
+      "(" ^ id ^ ", " ^ (Type.string_of_type typ) ^ ") " ^
+       (string_of_id_type_list id_type_list)
 
-(* (id, type)が並んだものは全部arg *)
-let string_of_args args =
-  let f s (name, typ) =
-    s ^ " (" ^ name ^ ", " ^ (Type.string_of_type typ) ^ ")" in
-  List.fold_left f "" args
-
-let rec print_kNormal_sub exp indent =
+let rec print_kNormal_sub (exp, _) indent =
   print_space indent;
   match exp with
   | Unit -> printf "UNIT\n"
   | Int(i) -> printf "INT %d\n" i
   | Float(f) -> printf "FLOAT %f\n" f
   | Neg(var) -> printf "NEG %s\n" var
-  | Add(var1, var2) ->
-      printf "ADD\n";
-      print_space (indent + 2); printf "%s\n" var1;
-      print_space (indent + 2); printf "%s\n" var2
-  | Sub(var1, var2) ->
-      printf "SUB\n";
-      print_space (indent + 2); printf "%s\n" var1;
-      print_space (indent + 2); printf "%s\n" var2
+  | Add(var1, var2) -> printf "ADD %s %s\n" var1 var2;
+  | Sub(var1, var2) -> printf "SUB %s %s\n" var1 var2;
+  | Mul(var1, var2) -> printf "MUL %s %s\n" var1 var2;
+  | Div(var1, var2) -> printf "DIV %s %s\n" var1 var2;
   | FNeg(var) -> printf "FNEG %s\n" var
-  | FAdd(var1, var2) ->
-      printf "FADD\n";
-      print_space (indent + 2); printf "%s\n" var1;
-      print_space (indent + 2); printf "%s\n" var2
-  | FSub(var1, var2) ->
-      printf "FSUB\n";
-      print_space (indent + 2); printf "%s\n" var1;
-      print_space (indent + 2); printf "%s\n" var2
-  | FMul(var1, var2) ->
-      printf "FMUL\n";
-      print_space (indent + 2); printf "%s\n" var1;
-      print_space (indent + 2); printf "%s\n" var2
-  | FDiv(var1, var2) ->
-      printf "FDIV\n";
-      print_space (indent + 2); printf "%s\n" var1;
-      print_space (indent + 2); printf "%s\n" var2
+  | FAdd(var1, var2) -> printf "FADD %s %s\n" var1 var2;
+  | FSub(var1, var2) -> printf "FSUB %s %s\n" var1 var2;
+  | FMul(var1, var2) -> printf "FMUL %s %s\n" var1 var2;
+  | FDiv(var1, var2) -> printf "FDIV %s %s\n" var1 var2;
   | IfEq(var1, var2, exp1, exp2) ->
       printf "IFEQ %s %s\n" var1 var2;
       print_kNormal_sub exp1 (indent + 2);
@@ -233,33 +248,34 @@ let rec print_kNormal_sub exp indent =
       printf "IFLE %s %s\n" var1 var2;
       print_kNormal_sub exp1 (indent + 2);
       print_kNormal_sub exp2 (indent + 2)
-  | Let((var, typ), letexp, exp) ->
-      printf "LET %s %s\n" var (Type.string_of_type typ);
-      print_kNormal_sub letexp (indent + 2);
+  | Let((var, typ), exp1, exp2) ->
+      printf "LET %s (TYPE %s)\n" var (Type.string_of_type typ);
+      print_kNormal_sub exp1 (indent + 2);
       print_space indent; printf "IN\n";
-      print_kNormal_sub exp (indent + 2)
+      print_kNormal_sub exp2 (indent + 2)
   | Var(var) -> printf "VAR %s\n" var
-  | LetRec({name = (fname, ftype); args = args; body = fexp}, exp) ->
-      printf "LETREC %s %s\n" fname (Type.string_of_type ftype);
-      print_space indent; printf "ARGS:%s\n" (string_of_args args);
+  | LetRec({name = (fname, ftype); args = fargs; body = fexp}, exp) ->
+      printf "LETREC %s (TYPE %s ARGS %s)\n"
+        fname
+        (Type.string_of_type ftype)
+        (string_of_id_type_list fargs);
       print_kNormal_sub fexp (indent + 2);
       print_space indent; printf "IN\n";
       print_kNormal_sub exp (indent + 2)
-  | App(fname, vars) -> printf "APP %s%s\n" fname (string_of_vars vars)
-  | Tuple(vars) -> printf "TUPLE%s\n" (string_of_vars vars)
-  (* 引数じゃなくてもidとtypeが一体になってるやつはargと呼ぶことにする *)
-  | LetTuple(args, var, exp) ->
-      printf "LETTUPLE%s\n" (string_of_args args);
-      print_space (indent + 2); printf "%s\n" var;
+  | App(fname, args) -> printf "APP %s %s\n" fname (Id.pp_list args)
+  | Tuple(vars) -> printf "TUPLE %s\n" (Id.pp_list vars)
+  | LetTuple(vars, var, exp) ->
+      printf "LETTUPLE %s %s\n" (string_of_id_type_list vars) var;
       print_space indent; printf "IN\n";
       print_kNormal_sub exp (indent + 2)
   | Get(var1, var2) -> printf "GET %s %s\n" var1 var2
   | Put(var1, var2, var3) -> printf "PUT %s %s %s\n" var1 var2 var3
   | ExtArray(var) -> printf "EXTARRAY %s\n" var
-  | ExtFunApp(var, vars) -> printf "EXTFUNAPP %s%s\n" var (string_of_vars vars)
+  | ExtFunApp(var, vars) -> printf "EXTFUNAPP %s %s\n" var (Id.pp_list vars)
 
 let print_kNormal exp = print_kNormal_sub exp 0
 
 let f e =
   let r = fst (g M.empty e) in
-  (* print_kNormal r; *) r
+  (* printf "kNormal\n"; print_kNormal r; *)
+  r

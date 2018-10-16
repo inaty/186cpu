@@ -1,11 +1,10 @@
-(* SPARC assembly with a few virtual instructions *)
-
 type id_or_imm = (* V = variable, C = constant *)
   | V of Id.t
   | C of int
 type insts = (* 命令の列 *)
-  | Ans of inst (* 値を返すなにか *)
-  | Let of (Id.t * Type.t) * inst * insts
+  | Ans of inst_pos (* 値を返すなにか *)
+  | Let of (Id.t * Type.t) * inst_pos * insts
+and inst_pos = inst * Lexing.position
 and inst = (* 命令（仮想命令含む） *)
   | Nop
   | Set of int (* レジスタ←即値、RISC-Vだとli（仮想命令）だけど変えなくていいか *)
@@ -14,15 +13,17 @@ and inst = (* 命令（仮想命令含む） *)
   | Neg of Id.t
   | Add of Id.t * id_or_imm
   | Sub of Id.t * id_or_imm
+  | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | SLL of Id.t * id_or_imm
   | Ld of Id.t * id_or_imm
   | St of Id.t * Id.t * id_or_imm
-  | FMovD of Id.t
-  | FNegD of Id.t
-  | FAddD of Id.t * Id.t
-  | FSubD of Id.t * Id.t
-  | FMulD of Id.t * Id.t
-  | FDivD of Id.t * Id.t
+  | FMv of Id.t
+  | FNeg of Id.t
+  | FAdd of Id.t * Id.t
+  | FSub of Id.t * Id.t
+  | FMul of Id.t * Id.t
+  | FDiv of Id.t * Id.t
   | LdDF of Id.t * id_or_imm (* わからんけどラベルから値を引き出す操作っぽい *)
   | StDF of Id.t * Id.t * id_or_imm (* stのdoubleword float（？） *)
   | Comment of string
@@ -96,19 +97,21 @@ let rec remove_and_uniq xs = function
 let fv_id_or_imm = function V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Set(_) | SetL(_) | Comment(_) | Restore(_) -> []
-  | Mov(x) | Neg(x) | FMovD(x) | FNegD(x) | Save(x, _) -> [x]
-  | Add(x, y') | Sub(x, y') | SLL(x, y') | Ld(x, y') | LdDF(x, y') ->
-      x :: fv_id_or_imm y'
+  | Mov(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) -> [x]
+  | Add(x, y') | Sub(x, y') | SLL(x, y')
+  | Ld(x, y') | LdDF(x, y') -> x :: fv_id_or_imm y'
   | St(x, y, z') | StDF(x, y, z') -> x :: y :: fv_id_or_imm z'
-  | FAddD(x, y) | FSubD(x, y) | FMulD(x, y) | FDivD(x, y) -> [x; y]
+  | Mul(x, y) | Div(x, y)
+  | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfGE(x, y, e1, e2) ->
-      x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
-  | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) -> x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+      x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)
+  | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) ->
+      x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)
   | CallCls(x, ys, zs) -> x :: ys @ zs
   | CallDir(_, ys, zs) -> ys @ zs
 and fv = function
-  | Ans(inst) -> fv_exp inst
-  | Let((x, t), inst, e) ->
+  | Ans(inst, _) -> fv_exp inst
+  | Let((x, t), (inst, _), e) ->
       fv_exp inst @ remove_and_uniq (S.singleton x) (fv e)
 let fv e = remove_and_uniq S.empty (fv e)
 

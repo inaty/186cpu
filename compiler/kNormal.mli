@@ -1,10 +1,13 @@
-type t =
+type t = exp * Lexing.position
+and exp =
   | Unit
   | Int of int
   | Float of float
   | Neg of Id.t
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
+  | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
@@ -26,3 +29,4 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 val fv : t -> S.t
 val f : Syntax.t -> t
+val print_kNormal : t -> unit

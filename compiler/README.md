@@ -1,19 +1,57 @@
+# 全体
+コンパイル  
+`python3 label_remover.py <asmfilename>`  
+`python3 assembly_simulator.py <asmfilename>`  
+or
+`python3 assembler.py <asmfilename> <option>`  
+
 # コンパイラ使い方
-`make byte-code`すると`min-caml`という実行可能ファイルができる  
+`make native-code`すると`min-caml.opt`という実行可能ファイルができる  
 `./min-caml <filename(拡張子抜き)>`で`<filename>.s`という名前でアセンブリ生成  
 
-# アセンブリ仕様
+# アセンブラ仕様
+`python3 assembler.py <asmfilename> <option>`  
+結果は標準出力に出る。  
+optionは-から始まる文字列で、lを含んでいるとlittle endianに、xを含んでいると16進数出力になる。
+* アセンブリファイルは「命令フォーマットは下に準拠、実命令のみ」のものである必要がある。  
+  特にオペコードと第一オペランドとの区切りがタブでないと動かないことに注意  
+  （困るのであれば変えられます）  
+* 対応している命令がコンパイラと一致していないので命令リストを書いておく（アセンブラのほうが多い）
+```
+RV32I
+
+OP-IMM rd, rs1, imm (nopは除く)
+lui rd, imm
+auipc rd, imm
+OP rd, rs1, rs2
+jal rd, imm
+jalr rd, rs1 imm
+BRANCH rs1, rs2, imm
+LORD rd, rs1, imm
+STORE rs1, rs2, imm
+
+ORIGINAL
+in rd, rs1, imm (rdに値が入る、rs1とimmはダミー、0埋め)
+ins rd, rs1, imm (rdに値が入る、rs1とimmはダミー、最上位ビット埋め)
+out rd, rs1, imm (rs1の値を送る、rdとimmはダミー)
+※このダミーはアセンブラを書きやすくするためにこうしている
+ダミーはそのままバイナリに反映されてしまうので、レジスタにはzero、即値には0を指定するとよい
+```
+
+# コンパイラの生成アセンブリ仕様
 * レジスタ名  
   https://github.com/riscv/riscv-asm-manual/blob/master/riscv-asm.md
   に準拠。x8は未定
 * 命令のフォーマット  
   ラベルではない各行は、  
-  `\t<opcode>\toprand1[, <oprand2>[, <oprand3>]\n]`  
+  `\t<opcode>\t<oprand1>[, <oprand2>[, <oprand3>]\n]`  
   となっている。  
   そのため、頭と尻の`\t・\n`を落として`\t`で区切るとopcodeとoprandを分離でき、  
-  `", "`で区切ると各oprandを分離できる。
+  `", "`で区切ると各oprandを分離できる。  
 * 実命令
 ```
+RV32I
+
 addi rd, rs1, imm
 slli rd, rs1, imm
 add rd, rs1, rs2
@@ -22,16 +60,36 @@ sll rd, rs1, rs2
 jalr rd, rs1, imm
 lw rd, rs1, imm
 sw rs1, rs2, imm
+
+RV32M
+mul rd, rs1, rs2
+div rd, rs1, rs2
+
+RV32F
+
+fadd.s rd, rs1, rs2
+fsub.s rd, rs1, rs2
+fmul.s rd, rs1, rs2
+fdiv.s rd, rs1, rs2
 ```
 * 実命令（hardware)
 ```
+RV32I
+
 lui rd, imm
 jal rd, imm
 bne rs1, rs2, imm
 blt rs1, rs2, imm
+
+RV32F
+
+fsgnj.s rd, rs1, rs2
+fsgnjn.s rd, rs1, rs2
 ```
 * 仮想命令  
 ```
+RV32I
+
 label: = (番地ラベル)
 ret = jalr zero, ra, 0
 li rd, imm = if (imm[31:12] == 0..0 || imm[31:12] == 1..1)
@@ -52,6 +110,10 @@ neg rd, rs = sub rd, zero, rs
 j offset = jal zero, offset
 j label = j (labelへのoffset)
 call label = jal ra, (labelへのoffset)
+
+RV32F
+fmv.s rd, rs = fsgnj.s rd, rs, rs
+fneg.s rd, rs = fsgnjn.s rd, rs, rs
 ```
 
 # アセンブラ

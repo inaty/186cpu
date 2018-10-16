@@ -1,7 +1,10 @@
-type id_or_imm = V of Id.t | C of int
+type id_or_imm =
+  | V of Id.t
+  | C of int
 type insts =
-  | Ans of inst
-  | Let of (Id.t * Type.t) * inst * insts
+  | Ans of inst_pos
+  | Let of (Id.t * Type.t) * inst_pos * insts
+and inst_pos = inst * Lexing.position
 and inst =
   | Nop
   | Set of int
@@ -10,15 +13,17 @@ and inst =
   | Neg of Id.t
   | Add of Id.t * id_or_imm
   | Sub of Id.t * id_or_imm
+  | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | SLL of Id.t * id_or_imm
   | Ld of Id.t * id_or_imm
   | St of Id.t * Id.t * id_or_imm
-  | FMovD of Id.t
-  | FNegD of Id.t
-  | FAddD of Id.t * Id.t
-  | FSubD of Id.t * Id.t
-  | FMulD of Id.t * Id.t
-  | FDivD of Id.t * Id.t
+  | FMv of Id.t
+  | FNeg of Id.t
+  | FAdd of Id.t * Id.t
+  | FSub of Id.t * Id.t
+  | FMul of Id.t * Id.t
+  | FDiv of Id.t * Id.t
   | LdDF of Id.t * id_or_imm
   | StDF of Id.t * Id.t * id_or_imm
   | Comment of string
@@ -32,13 +37,13 @@ and inst =
   (* closure address, integer arguments, and float arguments *)
   | CallCls of Id.t * Id.t list * Id.t list
   | CallDir of Id.l * Id.t list * Id.t list
-  | Save of Id.t * Id.t (* �쥸�����ѿ����ͤ򥹥��å��ѿ�����¸ *)
-  | Restore of Id.t (* �����å��ѿ������ͤ����� *)
+  | Save of Id.t * Id.t
+  | Restore of Id.t
 type fundef = { name : Id.l; args : Id.t list; fargs : Id.t list; body : insts; ret : Type.t }
 type prog = Prog of (Id.l * float) list * fundef list * insts
 
-val fletd : Id.t * inst * insts -> insts (* shorthand of Let for float *)
-val seq : inst * insts -> insts (* shorthand of Let for unit *)
+val fletd : Id.t * inst_pos * insts -> insts (* shorthand of Let for float *)
+val seq : inst_pos * insts -> insts (* shorthand of Let for unit *)
 
 val regs : Id.t array
 val fregs : Id.t array

@@ -1,7 +1,9 @@
+import re
 import sys
 
 VIRTUAL_INST_TYPES = [
-    "ret", "li", "bne", "blt", "mv", "neg", "j", "call"
+    "ret", "li", "bne", "blt", "mv", "neg", "j", "call",
+    "fmv.s", "fneg.s"
 ]
 
 def virtual_inst_to_real_line(inst_type, addr, inst, label_addrs):
@@ -29,7 +31,7 @@ def virtual_inst_to_real_line(inst_type, addr, inst, label_addrs):
     elif (inst_type == "j"):
         offset = None
         if operands[0] in label_addrs:
-            offset = label_addrs[operands[0]] - line
+            offset = label_addrs[operands[0]] - addr
         else:
             offset = int(operands[0])
         return "\tjal\tzero, {0}".format(offset)
@@ -39,6 +41,15 @@ def virtual_inst_to_real_line(inst_type, addr, inst, label_addrs):
             return "\tjal\tra, {0}".format(offset)
         else:
             return "\tcall\t{0}".format(operands[0])
+    elif (inst_type == "fmv.s"):
+        rd, rs = operands[0], operands[1]
+        return "\tfsgnj.s {0}, {1}, {1}".format(rd, rs)
+    elif (inst_type == "fneg.s"):
+        rd, rs = operands[0], operands[1]
+        return "\tfsgnjn.s {0}, {1}, {1}".format(rd, rs)
+    else:
+        print("virtual_inst_to_real_line")
+        return
 
 
 def main():
@@ -56,11 +67,17 @@ def main():
         print("file error")
         return
 
+    # コメント行（!から始まる行）除去
+    lines = [line for line in lines if line[0] != '!']
+
+    # コメント除去
+    # （任意個の空白）!（任意の文字列）（改行）　→　（改行）
+    lines = [re.sub("\s*!.*\n", "\n", line) for line in lines]
+
     # ラベル抽出・アドレス計算
     label_addrs = {}
     addr_lines = []
-    # 1行目にjumpを入れるためにこうしている
-    addr = 4
+    addr = 0
     for line in lines:
         if line.endswith(":\n"):
             label_addrs[line.replace(":\n", "")] = addr
@@ -76,12 +93,11 @@ def main():
         if inst_type in VIRTUAL_INST_TYPES:
             real_line = virtual_inst_to_real_line(inst_type, addr, inst,
                                                   label_addrs)
-            lines.append(real_line)
         else:
-            lines.append(line.replace("\n", ""))
+            real_line = line.replace("\n", "")
+        lines.append(real_line)
 
     # 表示
-    print("\tjal\tzero, {0}".format(label_addrs["min_caml_start"]))
     for line in lines:
         print(line)
 

@@ -1,11 +1,14 @@
 type closure = { entry : Id.l; actual_fv : Id.t list }
-type t =
+type t = exp * Syntax.position
+and exp =
   | Unit
   | Int of int
   | Float of float
   | Neg of Id.t
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
+  | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
