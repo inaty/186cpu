@@ -3,6 +3,8 @@ let limit = ref 1000
 let rec iter n e =
   Format.eprintf "iteration %d@." n;
   if n = 0 then e else
+  let e = Cse.f e in
+  KNormal.print_kNormal e; (* TODO:何故遅くなる？ *)
   let e' = Elim.f (ConstFold.f (Inline.f (Assoc.f (Beta.f e)))) in
   if e = e' then e else
   iter (n - 1) e'
