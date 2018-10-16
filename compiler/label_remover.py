@@ -31,7 +31,7 @@ def virtual_inst_to_real_line(inst_type, addr, inst, label_addrs):
     elif (inst_type == "j"):
         offset = None
         if operands[0] in label_addrs:
-            offset = label_addrs[operands[0]] - line
+            offset = label_addrs[operands[0]] - addr
         else:
             offset = int(operands[0])
         return "\tjal\tzero, {0}".format(offset)
@@ -67,6 +67,7 @@ def main():
         print("file error")
         return
 
+    # コメント行（!から始まる行）除去
     lines = [line for line in lines if line[0] != '!']
 
     # コメント除去

@@ -276,7 +276,7 @@ let h oc {name = Id.L(x); args = _; fargs = _; body = insts; ret = _} =
 let f oc (Prog(float_table, fundefs, insts)) =
   Format.eprintf "generating assembly...@.";
   (* 頭から読んで実行する用のバイナリなので、とりあえずこうする *)
-  Printf.fprintf oc "j min_caml_start\n";
+  Printf.fprintf oc "\tj\tmin_caml_start\n";
   (* リンカとかのことを考えないので、そういうのはとりあえず無視 *)
   (* Printf.fprintf oc ".section\t\".rodata\"\n";
   Printf.fprintf oc ".align\t8\n"; *)
