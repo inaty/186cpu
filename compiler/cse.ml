@@ -13,10 +13,12 @@ let rec simple_exp exp =
   | ExtArray(_) -> true
   | Let(_, (exp1, sp1), (exp2, sp2))
   | IfEq(_, _, (exp1, sp1), (exp2, sp2))
-  | IfLE(_, _, (exp1, sp1), (exp2, sp2)) -> simple_exp exp1 && simple_exp exp2
-  (* letrecは定義した関数をexp内で使ってはいけないのでレアケースだが、 *)
-  (* let rec f x = x + 1 in 5 などは一応simple_expに入る *)
-  | LetRec(_, (exp, _)) | LetTuple(_, _, (exp, _))-> simple_exp exp
+  | IfLE(_, _, (exp1, sp1), (exp2, sp2))
+  | LetRec({name = _; args = _; body = (exp1, sp1)}, (exp2, sp2)) ->
+      (* letrecは定義した関数をexp内で使ってはいけないのでレアケースだが、 *)
+      (* let rec f x = x + 1 in 5 などは一応simple_expに入る *)
+      simple_exp exp1 && simple_exp exp2
+  | LetTuple(_, _, (exp, _))-> simple_exp exp
   | App(_) | Get(_) | Put(_) | ExtFunApp(_) -> false
 
 let rec simple_exp_equal_sub exp1 exp2 mapping =
@@ -48,7 +50,7 @@ let rec simple_exp_equal_sub exp1 exp2 mapping =
       && simple_exp_equal_sub fexp1 fexp2 mapping
   | LetRec(fundef1, (exp1, sp1)), LetRec(fundef2, (exp2, sp2)) ->
       (* fundefで定義される関数が呼ばれるならAppがあることになりどの道アウトなので、
-      fundefをmappingに反映させるのは省略している *)
+      fundefの中身equalチェックおよびfundefをmappingに反映させるのは省略している *)
       simple_exp_equal_sub exp1 exp2 mapping
   (* rx = right side x *)
   | LetTuple(xtlist1, rx1, (exp1, sp1)), LetTuple(xtlist2, rx2, (exp2, sp2)) ->
