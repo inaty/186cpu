@@ -270,6 +270,7 @@ int main(int argc , char* argv[]){
 //OP-IMM系命令
 	else if (opecode==0b0010011){
 			imm = command[pc]>>20;
+			imm =imm- 2*(imm & (1<<11));
 			rs1 = (command[pc]>>15) & 0b11111;
 			rd = (command[pc]>>7) & 0b11111;
 		//addi
