@@ -65,17 +65,21 @@ int main(int argc , char* argv[]){
 		int opecode,imm,rs2,rs1,rd,funct3,tmp;
 		unsigned int mem[SIZE];
 		unsigned int rg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		float frg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     opterr = 0;
 	//initial memory
 	for(int i=0;i<SIZE;i++){
 		mem[i]=i;
 	}
     strcpy(fname,"test.txt");
-    while ((opt = getopt(argc,argv ,"bf:")) !=-1){
+    while ((opt = getopt(argc,argv ,"bdf:")) !=-1){
         switch (opt){
             case 'b':
                 flag++;
                 break;
+						case 'd':
+								flag=flag+4;
+								break;
             case 'f':
                 flag=flag+2;
                 strcpy(fname,optarg);
@@ -110,7 +114,20 @@ int main(int argc , char* argv[]){
 
     int pc=0;//プログラム開始
     while (command[pc]!=0){
+				rg[0]=0;//ゼロレジスタ初期化
         //printf("cmmand[%d] is %d,bitcode below\n%s\n",pc,command[pc],int2bin(command[pc]));
+				if ((flag&4)==4){
+				for (int j=0;j<32;j++){
+					if (rg[j]!=0)
+					printf("rg[%d]=%d",j,rg[j]);
+				}
+					printf("\n");
+				for (int j=0;j<32;j++){
+					if (frg[j]!=0)
+					printf("frg[%d]=%.3f",j,frg[j]);
+				}
+					printf("\n");
+				}
 				opecode = command[pc] & 0b1111111;
 				funct3 = (command[pc] >>12) & 0b111;
 //IO関係
@@ -136,6 +153,8 @@ int main(int argc , char* argv[]){
 		imm=command[pc]&(0xfffff<<12);
 		rd = (command[pc]>>7)&0b11111;
 		rg[rd]=imm;
+		if ((flag&4)==4)
+			printf("pc[%d],lui\n",pc);
 		pc++;
 	}
 //auipc
@@ -143,6 +162,8 @@ int main(int argc , char* argv[]){
 		imm=command[pc]&(0xfffff<<12);
 		rd = (command[pc]>>7)&0b11111;
 		rg[rd]=imm/4+pc;
+		if ((flag&4)==4)
+			printf("pc[%d],auipc\n",pc);
 	}
 //jal
 	 else if (opecode==0b1101111){
@@ -150,6 +171,8 @@ int main(int argc , char* argv[]){
 		imm = imm/4;
 		rd = (command[pc]>>7)&0b11111;
 		rg[rd]=pc+1;
+		if ((flag&4)==4)
+			printf("pc[%d],jal:pc<-%d\n",pc,pc+imm);
 		//printf("imm=%d,%s\n",imm,int2bin(imm));
 		pc += imm;
 	 }
@@ -160,7 +183,10 @@ int main(int argc , char* argv[]){
 		rs1 = (command[pc]>>15) & 0b11111;
 		rd = (command[pc]>>7) & 0b11111;
 		rg[rd]=pc+1;
-		pc=pc+imm+rs1/4;
+		rs1=rs1/4;
+		if ((flag&4)==4)
+		printf("pc[%d],jalr:pc<-%d\n",pc,pc+imm+rs1);
+		pc=pc+imm+rs1;
 	}
 
 //branch系命令
@@ -172,6 +198,8 @@ int main(int argc , char* argv[]){
 		//printf("imm=%d,%s\n",imm,int2bin(imm));
 		//beq
 		if (funct3 == 0b000){
+		if ((flag&4)==4)
+			printf("pc[%d],beq\n",pc);
 			if (rg[rs1] ==rg[rs2]){
 					pc +=imm;
 			}else{
@@ -180,6 +208,8 @@ int main(int argc , char* argv[]){
 		}
 		//bne
 		if (funct3 == 0b001) {
+		if ((flag&4)==4)
+			printf("pc[%d],bne\n",pc);
 			if (rg[rs1] !=rg[rs2]){
 					pc +=imm;
 			}else{
@@ -188,6 +218,8 @@ int main(int argc , char* argv[]){
 		}
 		//blt
 		if (funct3 == 0b100) {
+		if ((flag&4)==4)
+			printf("pc[%d],blt\n",pc);
 			if (rg[rs1] < rg[rs2]){
 					pc +=imm;
 			}else{
@@ -196,6 +228,8 @@ int main(int argc , char* argv[]){
 		}
 		//bge
 		if (funct3 == 0b101) {
+		if ((flag&4)==4)
+			printf("pc[%d],bge\n",pc);
 			if (rg[rs1] >= rg[rs2]){
 					pc +=imm;
 			}else{
@@ -204,6 +238,8 @@ int main(int argc , char* argv[]){
 		}
 		//bltu
 		if (funct3 == 0b110) {
+		if ((flag&4)==4)
+			printf("pc[%d],bltu\n",pc);
 			if (rg[rs1] < rg[rs2]){
 					pc +=imm;
 			}else{
@@ -212,6 +248,8 @@ int main(int argc , char* argv[]){
 		}
 		//bgtu
 		if (funct3 == 0b111) {
+		if ((flag&4)==4)
+			printf("pc[%d],bgtu\n",pc);
 			if (rg[rs1] >= rg[rs2]){
 					pc +=imm;
 			}else{
@@ -227,22 +265,32 @@ int main(int argc , char* argv[]){
 			rd = (command[pc]>>7) & 0b11111;
 		//lb
 		if(funct3==0b000){
+		if ((flag&4)==4)
+			printf("pc[%d],lb\n",pc);
 			rg[rd]=(mem[imm+rs1]&0x7f)-(mem[imm+rs1]&0x80);
 		}
 		//lh
 		if(funct3==0b001){
+		if ((flag&4)==4)
+			printf("pc[%d],lh\n",pc);
 			rg[rd]=(mem[imm+rs1]&0x7fff)-(mem[imm+rs1]&0x8000);
 		}
 		//lw
 		if(funct3==0b010){
+		if ((flag&4)==4)
+			printf("pc[%d],lw\n",pc);
 			rg[rd]=mem[imm+rs1];
 		}
 		//lbu
 		if(funct3==0b100){
+		if ((flag&4)==4)
+			printf("pc[%d],lbu\n",pc);
 			rg[rd]=mem[imm+rs1]&0xff;
 		}
 		//lhu
 		if(funct3==0b101){
+		if ((flag&4)==4)
+			printf("pc[%d],lhu\n",pc);
 			rg[rd]=mem[imm+rs1]&0xffff;
 		}
 		pc++;
@@ -255,14 +303,20 @@ int main(int argc , char* argv[]){
 			rs2=  (command[pc]>>20) & 0b11111;
 		//sb
 		if(funct3==0b000){
+		if ((flag&4)==4)
+			printf("pc[%d],sb\n",pc);
 			mem[imm+rs1]=rg[rs2];
 		}
 		//sh
 		if(funct3==0b001){
+		if ((flag&4)==4)
+			printf("pc[%d],sh\n",pc);
 			mem[imm+rs1]=rg[rs2]&0xffff;
 		}
 		//sw
 		if(funct3==0b010){
+		if ((flag&4)==4)
+			printf("pc[%d],sw\n",pc);
 			mem[imm+rs1]=rg[rs2]&0xff;
 		}
 		pc++;
@@ -275,26 +329,38 @@ int main(int argc , char* argv[]){
 			rd = (command[pc]>>7) & 0b11111;
 		//addi
 		if(funct3==0b000){
+		if ((flag&4)==4)
+			printf("pc[%d],addi\n",pc);
 			rg[rd]=rg[rs1]+imm;
 		}
 		//slti
 		if(funct3==0b010){
+		if ((flag&4)==4)
+			printf("pc[%d],slti\n",pc);
 			rg[rd]=(rg[rs1]<imm) ? 1:0;
 		}
 		//sltiu
 		if(funct3==0b011){
+		if ((flag&4)==4)
+			printf("pc[%d],sltiu\n",pc);
 			rg[rd]=(rg[rs1]<imm) ? 1:0;
 		}
 		//xori
 		if(funct3==0b100){
+		if ((flag&4)==4)
+			printf("pc[%d],xori\n",pc);
 			rg[rd]=rg[rs1]^imm;
 		}
 		//ori
 		if(funct3==0b110){
+		if ((flag&4)==4)
+			printf("pc[%d],ori\n",pc);
 			rg[rd]=rg[rs1]|imm;
 		}
 		//andi
 		if(funct3==0b110){
+		if ((flag&4)==4)
+			printf("pc[%d],andi\n",pc);
 			rg[rd]=rg[rs1] & imm;
 		}
 		pc++;
@@ -308,46 +374,112 @@ int main(int argc , char* argv[]){
 			rd = (command[pc]>>7) & 0b11111;
 		//add
 		if((funct3==0b000)&&(imm!=0b0100000)){
+		if ((flag&4)==4)
+			printf("pc[%d],add\n",pc);
 			rg[rd]=rg[rs1]+rg[rs2];
 		}
 		//sub
 		if((funct3==0b000)&&(imm==0b0100000)){
+		if ((flag&4)==4)
+			printf("pc[%d],sub\n",pc);
 			rg[rd]=rg[rs1]-rg[rs2];
+		}
+		//mul
+		if((funct3==0b000)&&(imm==0b0110011)){
+		if ((flag&4)==4)
+			printf("pc[%d],mul\n",pc);
+			rg[rd]=rg[rs1]*rg[rs2];
+		}
+		//div
+		if((funct3==0b100)&&(imm==0b0110011)){
+		if ((flag&4)==4)
+			printf("pc[%d],div\n",pc);
+			rg[rd]=rg[rs1]/rg[rs2];
 		}
 		//sll
 		if(funct3==0b001){
+		if ((flag&4)==4)
+			printf("pc[%d],sll\n",pc);
 			rg[rd]=rg[rs1]<<rg[rs2];
 		}
 		//slt
 		if(funct3==0b010){
+		if ((flag&4)==4)
+			printf("pc[%d],slt\n",pc);
 			rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
 		}
 		//sltu
 		if(funct3==0b011){
+		if ((flag&4)==4)
+			printf("pc[%d],sltu\n",pc);
 			rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
 		}
 		//xor
 		if(funct3==0b100){
+		if ((flag&4)==4)
+			printf("pc[%d],xor\n",pc);
 			rg[rd]=rg[rs1] ^ rg[rs2];
 		}
 		//sll
 		if((funct3==0b001)&&(imm==0b0100000)){
+		if ((flag&4)==4)
+			printf("pc[%d],sll\n",pc);
 			rg[rd]=rg[rs1]>>rg[rs2];
 		}
 		//sra
 		if((funct3==0b001)&&(imm==0b0100000)){
+		if ((flag&4)==4)
+			printf("pc[%d],sra\n",pc);
 			tmp=rg[rs1];
 			rg[rd]=tmp>>rg[rs2];
 		}
 		//or
 		if(funct3==0b110){
+		if ((flag&4)==4)
+			printf("pc[%d],or\n",pc);
 			rg[rd]=rg[rs1] | rg[rs2];
 		}
 		//and
 		if(funct3==0b111){
+		if ((flag&4)==4)
+			printf("pc[%d],and\n",pc);
 			rg[rd]=rg[rs1] & rg[rs2];
 		}
 		pc++;
+	}
+	//float 演算
+	else if (opecode==0b1010011){
+			imm = command[pc]>>25;
+			rs2 = (command[pc]>>20) & 0b11111;
+			rs1 = (command[pc]>>15) & 0b11111;
+			rd = (command[pc]>>7) & 0b11111;
+
+		//fadd.s
+		if(imm==0){
+		if ((flag&4)==4)
+			printf("pc[%d],fadd.s\n",pc);
+			frg[rd]=frg[rs1]+frg[rs2];
+		}
+		//fsub.s
+		if(imm==4){
+		if ((flag&4)==4)
+			printf("pc[%d],fsub.s\n",pc);
+			frg[rd]=frg[rs1]-frg[rs2];
+		}
+		//fmul.s
+		if(imm==8){
+		if ((flag&4)==4)
+			printf("pc[%d],fmul.s\n",pc);
+			frg[rd]=frg[rs1]*frg[rs2];
+		}
+		//fdiv.s
+		if(imm==12){
+		if ((flag&4)==4)
+			printf("pc[%d],fdiv.s\n",pc);
+			frg[rd]=frg[rs1]/frg[rs2];
+		}
+
+	pc++;
 	}
 	//例外処理
 	else {
@@ -362,8 +494,15 @@ int main(int argc , char* argv[]){
 
     }
 		printf("\nsuccess!\n");
-				for (int j=0;j<8;j++)
+				for (int j=0;j<32;j++){
+					if (rg[j]!=0)
 					printf("rg[%d]=%d",j,rg[j]);
+				}
+					printf("\n");
+				for (int j=0;j<32;j++){
+					if (rg[j]!=0)
+					printf("frg[%d]=%.3f",j,frg[j]);
+				}
 					printf("\n");
   return 0;
 }
