@@ -28,19 +28,23 @@ let pp_id_or_imm = function
   | V(x) -> x
   | C(i) -> string_of_int i
 
-let rec shuffle sw xys =
-  (* remove identical moves *)
-  let _, xys = List.partition (fun (x, y) -> x = y) xys in
-  (* find acyclic moves *)
-  match List.partition (fun (_, y) -> List.mem_assoc y xys) xys with
+(* swはスワップ用の一時レジスタ *)
+(* レジスタ代入が絡まっているとき、swapしてどうにかする *)
+let rec shuffle sw moves =
+  (* rd = rsなら代入しても意味ないので除く *)
+  let moves = List.filter (fun (rd, rs) -> rd <> rs) moves in
+  (* y <- x のうち、 z <- yが存在してしまうもの *)
+  let postmove (rd, rs) = List.exists (fun (rd', rs') -> rd = rs') moves in
+  let postmoves, premoves = List.partition postmove moves in
+  match premoves, postmoves with
   | [], [] -> []
-  | (x, y) :: xys, [] -> (* no acyclic moves; resolve a cyclic move *)
-      (y, sw) :: (x, y) :: shuffle sw (List.map
-                                         (function
-                                           | (y', z) when y = y' -> (sw, z)
-                                           | yz -> yz)
-                                         xys)
-  | xys, acyc -> acyc @ shuffle sw xys
+  | [], (rd, rs) :: moves ->
+      (* premovesがないのにpostmovesはあるので、これはループしている *)
+      (* hoge <- rd <- rsを hoge <- sw <-(1) rd <- rsにして脱出 *)
+      let replace (rd', rs') = if rs' = rd then (rd', sw) else (rd', rs') in
+      (* TODO:ここ新しいswapレジスタ渡したほうがいいかもしれないのでは？ *)
+      (sw, rd) :: (rd, rs) :: shuffle sw (List.map replace moves)
+  | _, _ -> premoves @ postmoves
 
 type dest =
   | Tail
@@ -194,7 +198,9 @@ and g' oc (dest, inst) sp =
   | Tail, CallDir(Id.L(label), ys, zs) ->
       g'_args oc [] ys zs;
       Printf.fprintf oc "\tj\t%s\n" label;
-  | NonTail(a), CallCls(x, ys, zs) ->
+  (* 内部関数呼出しをする *)
+  (* 必要な変数はsaveされているはず *)
+  | NonTail(rd), CallCls(x, ys, zs) ->
       g'_args oc [(x, reg_cl)] ys zs;
       let ss = stacksize () in
       Printf.fprintf oc "\tsw\t%s, %s, %d\n" reg_sp reg_ra (ss - 4);
@@ -203,26 +209,24 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tjalr\t%s, %s, 0\n" reg_ra reg_sw;
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ~-ss;
       Printf.fprintf oc "\tlw\t%s, %s, %d\n" reg_ra reg_sp (ss - 4);
-      if List.mem a allregs && a <> regs.(0) then
-        (* TODO:謎（向きは合わせたっぽい） *)
-        Printf.fprintf oc "\tmv\t%s, %s\n" a regs.(0)
-      else if List.mem a allfregs && a <> fregs.(0) then
-        (Printf.fprintf oc "\tfmovs\t%s, %s\n" fregs.(0) a;
-         Printf.fprintf oc "\tfmovs\t%s, %s\n" (co_freg fregs.(0)) (co_freg a))
-  | NonTail(a), CallDir(Id.L(label), ys, zs) ->
-      g'_args oc [] ys zs;
+      if List.mem rd allregs && rd <> regs.(0) then
+        Printf.fprintf oc "\tmv\t%s, %s\n" rd regs.(0)
+      else if List.mem rd allfregs && rd <> fregs.(0) then
+        Printf.fprintf oc "\tfmovs\t%s, %s\n" fregs.(0) a
+  (* 外部関数呼出しをする *)
+  (* わからんけど、たぶんここに来るまでに変数は適宜saveされている？ *)
+  | NonTail(rd), CallDir(Id.L(label), args, fargs) ->
+      g'_args oc [] args fargs;
       let ss = stacksize () in
-      (* 変更 *)
       Printf.fprintf oc "\tsw\t%s, %s, %d\n" reg_sp reg_ra (ss - 4);
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ss;
       Printf.fprintf oc "\tcall\t%s\n" label;
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ~-ss;
       Printf.fprintf oc "\tlw\t%s, %s, %d\n" reg_ra reg_sp (ss - 4);
-      if List.mem a allregs && a <> regs.(0) then
-        Printf.fprintf oc "\tmv\t%s, %s\n" a regs.(0)
-      else if List.mem a allfregs && a <> fregs.(0) then
-        (Printf.fprintf oc "\tfmovs\t%s, %s\n" fregs.(0) a;
-         Printf.fprintf oc "\tfmovs\t%s, %s\n" (co_freg fregs.(0)) (co_freg a))
+      if List.mem rd allregs && rd <> regs.(0) then
+        Printf.fprintf oc "\tmv\t%s, %s\n" rd regs.(0)
+      else if List.mem rd allfregs && rd <> fregs.(0) then
+        Printf.fprintf oc "\tfmv.s\t%s, %s\n" rd fregs.(0)
 and g'_tail_if oc reg1 reg2 insts1 insts2 b bn =
   let b_else = Id.genid (b ^ "_else") in
   Printf.fprintf oc "\t%s\t%s, %s, %s\n" bn reg1 reg2 b_else;
@@ -245,26 +249,18 @@ and g'_non_tail_if oc dest reg1 reg2 insts1 insts2 b bn =
   Printf.fprintf oc "%s:\n" b_cont;
   let stackset2 = !stackset in
   stackset := S.inter stackset1 stackset2
-(* TODO:わからん *)
-and g'_args oc x_reg_cl ys zs =
-  let (i, yrs) =
-    List.fold_left
-      (fun (i, yrs) y -> (i + 1, (y, regs.(i)) :: yrs))
-      (0, x_reg_cl)
-      ys in
+(* 引数レジスタへ値を代入する処理 *)
+and g'_args oc x_reg_cl args fargs =
+  let move_cons (i, moves) arg = (i + 1, (regs.(i), arg) :: moves) in
+  let (_, moves) = List.fold_left move_cons (0, x_reg_cl) args in
   List.iter
-    (fun (y, r) -> Printf.fprintf oc "\tmv\t%s, %s\n" r y)
-    (shuffle reg_sw yrs);
-  let (d, zfrs) =
-    List.fold_left
-      (fun (d, zfrs) z -> (d + 1, (z, fregs.(d)) :: zfrs))
-      (0, [])
-      zs in
+    (fun (rd, rs) -> Printf.fprintf oc "\tmv\t%s, %s\n" rd rs)
+    (shuffle reg_sw moves);
+  let fmove_cons (i, fmoves) farg = (i + 1, (fregs.(i), farg) :: fmoves) in
+  let (_, fmoves) = List.fold_left fmove_cons (0, []) fargs in
   List.iter
-    (fun (z, fr) ->
-      Printf.fprintf oc "\tfmovs\t%s, %s\n" z fr;
-      Printf.fprintf oc "\tfmovs\t%s, %s\n" (co_freg z) (co_freg fr))
-    (shuffle reg_fsw zfrs)
+    (fun (rd, rs) -> Printf.fprintf oc "\tfmv.s\t%s, %s\n" rd rs)
+    (shuffle reg_fsw fmoves)
 
 (* 再帰関数のアセンブリ出力 *)
 let h oc {name = Id.L(x); args = _; fargs = _; body = insts; ret = _} =

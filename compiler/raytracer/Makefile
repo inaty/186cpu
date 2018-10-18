@@ -32,6 +32,7 @@ bytecode: minrt_b
 .mli.cmi:
 	$(OCAMLC) -g -c -nopervasives -pp ./preprocess.sh $<
 
+# miniMLRuntime -> globals -> minrt
 minrt.cmx: globals.cmx miniMLRuntime.cmx
 minrt.cmo: globals.cmo miniMLRuntime.cmi
 globals.cmx: miniMLRuntime.cmx

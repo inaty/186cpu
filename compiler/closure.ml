@@ -114,6 +114,7 @@ let rec g env known (e, sp) =
     | KNormal.Get(x, y) -> Get(x, y)
     | KNormal.Put(x, y, z) -> Put(x, y, z)
     | KNormal.ExtArray(x) -> ExtArray(Id.L(x))
+    (* 外部関数適用は全部　min_caml_ がついてcallされる（ここ重要っぽい） *)
     | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys) in
   (e', !sp')
 

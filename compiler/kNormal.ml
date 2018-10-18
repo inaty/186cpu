@@ -214,7 +214,7 @@ let rec g env (e, sp, ep) =
             (fun y -> insert_let (g env e3)
                 (fun z -> (Put(x, y, z), sp), Type.Unit)))
 
-let print_space indent = print_string (String.make indent ' ')
+let print_space indent = eprintf "%s" (String.make indent ' ')
 
 let rec string_of_id_type_list id_type_list =
   match id_type_list with
@@ -227,55 +227,52 @@ let rec string_of_id_type_list id_type_list =
 let rec print_kNormal_sub (exp, _) indent =
   print_space indent;
   match exp with
-  | Unit -> printf "UNIT\n"
-  | Int(i) -> printf "INT %d\n" i
-  | Float(f) -> printf "FLOAT %f\n" f
-  | Neg(var) -> printf "NEG %s\n" var
-  | Add(var1, var2) -> printf "ADD %s %s\n" var1 var2;
-  | Sub(var1, var2) -> printf "SUB %s %s\n" var1 var2;
-  | Mul(var1, var2) -> printf "MUL %s %s\n" var1 var2;
-  | Div(var1, var2) -> printf "DIV %s %s\n" var1 var2;
-  | FNeg(var) -> printf "FNEG %s\n" var
-  | FAdd(var1, var2) -> printf "FADD %s %s\n" var1 var2;
-  | FSub(var1, var2) -> printf "FSUB %s %s\n" var1 var2;
-  | FMul(var1, var2) -> printf "FMUL %s %s\n" var1 var2;
-  | FDiv(var1, var2) -> printf "FDIV %s %s\n" var1 var2;
+  | Unit -> eprintf "UNIT\n"
+  | Int(i) -> eprintf "INT %d\n" i
+  | Float(f) -> eprintf "FLOAT %f\n" f
+  | Neg(var) -> eprintf "NEG %s\n" var
+  | Add(var1, var2) -> eprintf "ADD %s %s\n" var1 var2;
+  | Sub(var1, var2) -> eprintf "SUB %s %s\n" var1 var2;
+  | Mul(var1, var2) -> eprintf "MUL %s %s\n" var1 var2;
+  | Div(var1, var2) -> eprintf "DIV %s %s\n" var1 var2;
+  | FNeg(var) -> eprintf "FNEG %s\n" var
+  | FAdd(var1, var2) -> eprintf "FADD %s %s\n" var1 var2;
+  | FSub(var1, var2) -> eprintf "FSUB %s %s\n" var1 var2;
+  | FMul(var1, var2) -> eprintf "FMUL %s %s\n" var1 var2;
+  | FDiv(var1, var2) -> eprintf "FDIV %s %s\n" var1 var2;
   | IfEq(var1, var2, exp1, exp2) ->
-      printf "IFEQ %s %s\n" var1 var2;
+      eprintf "IFEQ %s %s\n" var1 var2;
       print_kNormal_sub exp1 (indent + 2);
       print_kNormal_sub exp2 (indent + 2)
   | IfLE(var1, var2, exp1, exp2) ->
-      printf "IFLE %s %s\n" var1 var2;
+      eprintf "IFLE %s %s\n" var1 var2;
       print_kNormal_sub exp1 (indent + 2);
       print_kNormal_sub exp2 (indent + 2)
   | Let((var, typ), exp1, exp2) ->
-      printf "LET %s (TYPE %s)\n" var (Type.string_of_type typ);
+      eprintf "LET %s (TYPE %s)\n" var (Type.string_of_type typ);
       print_kNormal_sub exp1 (indent + 2);
-      print_space indent; printf "IN\n";
+      print_space indent; eprintf "IN\n";
       print_kNormal_sub exp2 (indent + 2)
-  | Var(var) -> printf "VAR %s\n" var
+  | Var(var) -> eprintf "VAR %s\n" var
   | LetRec({name = (fname, ftype); args = fargs; body = fexp}, exp) ->
-      printf "LETREC %s (TYPE %s ARGS %s)\n"
+      eprintf "LETREC %s (TYPE %s ARGS %s)\n"
         fname
         (Type.string_of_type ftype)
         (string_of_id_type_list fargs);
       print_kNormal_sub fexp (indent + 2);
-      print_space indent; printf "IN\n";
+      print_space indent; eprintf "IN\n";
       print_kNormal_sub exp (indent + 2)
-  | App(fname, args) -> printf "APP %s %s\n" fname (Id.pp_list args)
-  | Tuple(vars) -> printf "TUPLE %s\n" (Id.pp_list vars)
+  | App(fname, args) -> eprintf "APP %s %s\n" fname (Id.pp_list args)
+  | Tuple(vars) -> eprintf "TUPLE %s\n" (Id.pp_list vars)
   | LetTuple(vars, var, exp) ->
-      printf "LETTUPLE %s %s\n" (string_of_id_type_list vars) var;
-      print_space indent; printf "IN\n";
+      eprintf "LETTUPLE %s %s\n" (string_of_id_type_list vars) var;
+      print_space indent; eprintf "IN\n";
       print_kNormal_sub exp (indent + 2)
-  | Get(var1, var2) -> printf "GET %s %s\n" var1 var2
-  | Put(var1, var2, var3) -> printf "PUT %s %s %s\n" var1 var2 var3
-  | ExtArray(var) -> printf "EXTARRAY %s\n" var
-  | ExtFunApp(var, vars) -> printf "EXTFUNAPP %s %s\n" var (Id.pp_list vars)
+  | Get(var1, var2) -> eprintf "GET %s %s\n" var1 var2
+  | Put(var1, var2, var3) -> eprintf "PUT %s %s %s\n" var1 var2 var3
+  | ExtArray(var) -> eprintf "EXTARRAY %s\n" var
+  | ExtFunApp(var, vars) -> eprintf "EXTFUNAPP %s %s\n" var (Id.pp_list vars)
 
 let print_kNormal exp = print_kNormal_sub exp 0
 
-let f e =
-  let r = fst (g M.empty e) in
-  (* printf "kNormal\n"; print_kNormal r; *)
-  r
+let f e = fst (g M.empty e)

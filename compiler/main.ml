@@ -3,8 +3,8 @@ let limit = ref 1000
 let rec iter n e =
   Format.eprintf "iteration %d@." n;
   if n = 0 then e else
-  let e = Cse.f e in
-  KNormal.print_kNormal e; (* TODO:何故遅くなる？ *)
+  let e' = Cse.f e in
+  (* KNormal.print_kNormal e'; *)
   let e' = Elim.f (ConstFold.f (Inline.f (Assoc.f (Beta.f e)))) in
   if e = e' then e else
   iter (n - 1) e'
@@ -12,18 +12,17 @@ let rec iter n e =
 let lexbuf outchan l =
   Id.counter := 0;
   Typing.extenv := M.empty;
+  let syntax = Parser.exp Lexer.token l in
+  (* Syntax.print_syntax syntax; *)
+  let knormal = (KNormal.f Typing.f syntax) in
+  (* KNormal.print_kNormal knormal; *)
   Emit.f outchan
     (RegAlloc.f
        (Simm.f
           (Virtual.f
              (Closure.f
                 (iter !limit
-                   (Alpha.f
-                      (KNormal.f
-                         (* TODO:見た目 *)
-                         (let syntax = Parser.exp Lexer.token l in
-                          (* Syntax.print_syntax syntax; *)
-                          Typing.f syntax))))))))
+                   (Alpha.f knormal ))))))
 
 let string s = lexbuf stdout (Lexing.from_string s)
 

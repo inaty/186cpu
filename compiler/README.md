@@ -9,6 +9,9 @@ or
 `make native-code`すると`min-caml.opt`という実行可能ファイルができる  
 `./min-caml <filename(拡張子抜き)>`で`<filename>.s`という名前でアセンブリ生成  
 
+# 組み込み関数集  
+
+
 # アセンブラ仕様
 `python3 assembler.py <asmfilename> <option>`  
 結果は標準出力に出る。  

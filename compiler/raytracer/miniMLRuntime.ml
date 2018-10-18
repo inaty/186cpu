@@ -69,7 +69,7 @@ let rec read_token in_token =
     End_of_file ->
       if in_token then () else raise End_of_file
 
-let read_float () = 
+let read_float () =
   Buffer.clear buf;
   read_token false;
   try
@@ -77,11 +77,10 @@ let read_float () =
   with
     Failure _ -> failwith ((Buffer.contents buf) ^ ": float conversion failed.")
 
-let read_int () = 
+let read_int () =
   Buffer.clear buf;
   read_token false;
   try
     int_of_string (Buffer.contents buf)
   with
     Failure _ -> failwith ((Buffer.contents buf) ^ ": int conversion failed.")
-
