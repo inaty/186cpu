@@ -51,45 +51,52 @@ out rd, rs1, imm (rs1の値を送る、rdとimmはダミー)
   となっている。  
   そのため、頭と尻の`\t・\n`を落として`\t`で区切るとopcodeとoprandを分離でき、  
   `", "`で区切ると各oprandを分離できる。  
-* 実命令
-```
-RV32I
-
-addi rd, rs1, imm
-slli rd, rs1, imm
-add rd, rs1, rs2
-sub rd, rs1, rs2
-sll rd, rs1, rs2
-jalr rd, rs1, imm
-lw rd, rs1, imm
-sw rs1, rs2, imm
-
-RV32M
-mul rd, rs1, rs2
-div rd, rs1, rs2
-
-RV32F
-
-fadd.s rd, rs1, rs2
-fsub.s rd, rs1, rs2
-fmul.s rd, rs1, rs2
-fdiv.s rd, rs1, rs2
-```
-* 実命令（hardware)
+* 命令（libmincaml.sの中身も含む）
 ```
 RV32I
 
 lui rd, imm
 jal rd, imm
+jalr rd, rs1, imm
 bne rs1, rs2, imm
 blt rs1, rs2, imm
+lw rd, rs1, imm
+sw rs1, rs2, imm
+addi rd, rs1, imm
+slli rd, rs1, imm
+add rd, rs1, rs2
+sub rd, rs1, rs2
+sll rd, rs1, rs2
+
+RV32M
+
+mul rd, rs1, rs2
+div rd, rs1, rs2
 
 RV32F
 
+flw rd, rs1, imm
+fadd.s rd, rs1, rs2, rm(<>)
+fsub.s rd, rs1, rs2, rm(<>)
+fmul.s rd, rs1, rs2, rm(<>)
+fdiv.s rd, rs1, rs2, rm(<>)
+fsqrt.s rd, rs1, rm(<>)
 fsgnj.s rd, rs1, rs2
 fsgnjn.s rd, rs1, rs2
+fsgnjx.s rd, rs1, rs2
+fcvt.w.s rd, rs1, rm(<>, rdn)
+feq.s rd, rs1, rs2
+flt.s rd, rs1, rs2
+fcvt.s.w rd, rs1, rm(<>)
+
+ORIGINAL
+※これはfpu作れという意味ではなくて、レイトレ試す上でライブラリ作りをサボっただけ（あとでやる？）
+fcos.s rd, rs1, rm(<>)
+fsin.s rd, rs1, rm(<>)
+fatan.s rd, rs1, rm(<>)
+
 ```
-* 仮想命令  
+* 仮想命令（リンカが消す）
 ```
 RV32I
 
