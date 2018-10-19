@@ -199,9 +199,9 @@ and g' oc (dest, inst) sp =
       g'_args oc [] ys zs;
       Printf.fprintf oc "\tj\t%s\n" label;
   (* 内部関数呼出しをする *)
-  (* 必要な変数はsaveされているはず *)
-  | NonTail(rd), CallCls(x, ys, zs) ->
-      g'_args oc [(x, reg_cl)] ys zs;
+  (* 必要な変数はsaveされている？ *)
+  | NonTail(rd), CallCls(x, args, fargs) ->
+      g'_args oc [(x, reg_cl)] args fargs;
       let ss = stacksize () in
       Printf.fprintf oc "\tsw\t%s, %s, %d\n" reg_sp reg_ra (ss - 4);
       Printf.fprintf oc "\tlw\t%s, %s, 0\n" reg_sw reg_cl;
@@ -212,7 +212,7 @@ and g' oc (dest, inst) sp =
       if List.mem rd allregs && rd <> regs.(0) then
         Printf.fprintf oc "\tmv\t%s, %s\n" rd regs.(0)
       else if List.mem rd allfregs && rd <> fregs.(0) then
-        Printf.fprintf oc "\tfmovs\t%s, %s\n" fregs.(0) a
+        Printf.fprintf oc "\tfmv.s\t%s, %s\n" rd fregs.(0)
   (* 外部関数呼出しをする *)
   (* わからんけど、たぶんここに来るまでに変数は適宜saveされている？ *)
   | NonTail(rd), CallDir(Id.L(label), args, fargs) ->

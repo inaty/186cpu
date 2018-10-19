@@ -14,7 +14,7 @@ let lexbuf outchan l =
   Typing.extenv := M.empty;
   let syntax = Parser.exp Lexer.token l in
   (* Syntax.print_syntax syntax; *)
-  let knormal = (KNormal.f Typing.f syntax) in
+  let knormal = KNormal.f (Typing.f syntax) in
   (* KNormal.print_kNormal knormal; *)
   Emit.f outchan
     (RegAlloc.f
@@ -22,7 +22,7 @@ let lexbuf outchan l =
           (Virtual.f
              (Closure.f
                 (iter !limit
-                   (Alpha.f knormal ))))))
+                   (Alpha.f knormal))))))
 
 let string s = lexbuf stdout (Lexing.from_string s)
 
