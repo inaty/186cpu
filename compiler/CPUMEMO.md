@@ -18,6 +18,18 @@ create_arrayがあるがこれはlexerで対応済みなので問題なし
 とりあえずこの方針のままでいいかなあ  
 
 * 戻りメモ
+```
+SPARC
+%i7 = Return address, Return address of the subroutine.
+%o7 = Called return address, Return address of the called subroutine.(再帰用？)
+%g0 = zero
+ret Synthetic instruction for: jmpl %i7 + 8, %g0
+retl Synthetic instruction for: jmpl %o7 + 8, %g0
+
+call label30 Store %pc in %o7, and jump to label30
+```  
+これをどう置きかえるか  
+えー、これ別に区別しなくていいんじゃないのか→とりあえず消した
 raがあるところへの復帰はret
 
 すぐ書けるライブラリは書いたのでとりあえずは動きそうな気がしなくもないんだけどどうだろう

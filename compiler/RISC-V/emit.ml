@@ -203,12 +203,20 @@ and g' oc (dest, inst) sp =
   | NonTail(rd), CallCls(x, args, fargs) ->
       g'_args oc [(x, reg_cl)] args fargs;
       let ss = stacksize () in
+      (* 現スタックの一番上にraを保存(caller save) *)
       Printf.fprintf oc "\tsw\t%s, %s, %d\n" reg_sp reg_ra (ss - 4);
-      Printf.fprintf oc "\tlw\t%s, %s, 0\n" reg_sw reg_cl;
+      (* spを更新し、新スタックへ移動 *)
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ss;
+      (* tmpにclをロード *)
+      Printf.fprintf oc "\tlw\t%s, %s, 0\n" reg_sw reg_cl;
+      (* clへ飛ぶ、raを更新 *)
       Printf.fprintf oc "\tjalr\t%s, %s, 0\n" reg_ra reg_sw;
+      (* 向こうではraを使って戻り、ここに来る *)
+      (* spを更新し、現スタックへ戻す *)
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ~-ss;
+      (* raを復帰 *)
       Printf.fprintf oc "\tlw\t%s, %s, %d\n" reg_ra reg_sp (ss - 4);
+      (* 返り値をrdに入れる *)
       if List.mem rd allregs && rd <> regs.(0) then
         Printf.fprintf oc "\tmv\t%s, %s\n" rd regs.(0)
       else if List.mem rd allfregs && rd <> fregs.(0) then
@@ -220,7 +228,7 @@ and g' oc (dest, inst) sp =
       let ss = stacksize () in
       Printf.fprintf oc "\tsw\t%s, %s, %d\n" reg_sp reg_ra (ss - 4);
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ss;
-      Printf.fprintf oc "\tcall\t%s\n" label;
+      Printf.fprintf oc "\tjal\t%s\n" label;
       Printf.fprintf oc "\taddi\t%s, %s, %d\n" reg_sp reg_sp ~-ss;
       Printf.fprintf oc "\tlw\t%s, %s, %d\n" reg_ra reg_sp (ss - 4);
       if List.mem rd allregs && rd <> regs.(0) then
@@ -290,5 +298,5 @@ let f oc (Prog(float_table, fundefs, insts)) =
   stackset := S.empty;
   stackmap := [];
   g oc (NonTail("zero"), insts);
-  (* Printf.fprintf oc "\tret\n"; *)
+  Printf.fprintf oc "\tret\n";
   (* Printf.fprintf oc "\trestore\n" *)
