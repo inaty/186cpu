@@ -9,8 +9,9 @@ let rec target' src (dest, t) (inst, pos) =
   | FMv(x) when x = src && is_reg dest ->
       assert (t = Type.Float);
       false, [dest]
-  | IfEq(_, _, e1, e2) | IfLE(_, _, e1, e2) | IfGE(_, _, e1, e2)
+  | IfEq(_, _, e1, e2) | IfLE(_, _, e1, e2)
   | IfFEq(_, _, e1, e2) | IfFLE(_, _, e1, e2) ->
+  (* | IfGE(_, _, e1, e2) *)
       let c1, rs1 = target src (dest, t) e1 in
       let c2, rs2 = target src (dest, t) e2 in
       c1 && c2, rs1 @ rs2
@@ -172,10 +173,10 @@ and g' dest cont regenv (inst, sp) =
       let constr e1' e2' =
         IfLE(find x Type.Int regenv, find y Type.Int regenv, e1', e2') in
       g'_if dest cont regenv inst constr e1 e2
-  | IfGE(x, y, e1, e2) as inst ->
+  (* | IfGE(x, y, e1, e2) as inst ->
       let constr e1' e2' =
         IfGE(find x Type.Int regenv, find y Type.Int regenv, e1', e2') in
-      g'_if dest cont regenv inst constr e1 e2
+      g'_if dest cont regenv inst constr e1 e2 *)
   | IfFEq(x, y, e1, e2) as inst ->
       let constr e1' e2' =
         IfFEq(find x Type.Float regenv, find y Type.Float regenv, e1', e2') in

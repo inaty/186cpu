@@ -147,16 +147,22 @@ def main():
     with open(argv[1]) as file:
         lines = file.readlines()
 
+    opt_debug = False
+    if len(argv) > 2 and argv[2] == "-d":
+        opt_debug = True
+
     regs = {"pc": 0, "zero": 0, "ra": 0, "sp": 0, "a0": 0, "a1": 0}
     mem_init()
 
     cont = True
     while cont:
-        # print(regs)
+        if opt_debug:
+            print(regs)
         # print(M)
         # fetch
         line = fetch(regs["pc"], lines)
-        # print(line.strip("\n"))
+        if opt_debug:
+            print(line.strip("\n"))
         # decode
         opcode, operand = line.strip("\t\n").split("\t")
         operands = operand.split(", ")

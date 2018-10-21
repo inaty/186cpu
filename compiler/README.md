@@ -20,8 +20,15 @@
 
 # コンパイラ仕様
 * レジスタ名  
-  https://github.com/riscv/riscv-asm-manual/blob/master/riscv-asm.md
-  に準拠。x8は未定
+  ~~https://github.com/riscv/riscv-asm-manual/blob/master/riscv-asm.md に準拠~~  
+  適当に作りました。また変わるかも  
+```
+ra (=x1), sp (=x2) caller save
+x3 = 未定
+x4 = ヒープポインタ(ヒープに触るとき以外アクセスしない)
+a0~a21 (=x5~x26)　caller save
+t0~t4 (=x27~x31) callee save
+```  
 * hoge.sフォーマット  
   命令行は  
   `\t<opcode>\t<operand1>[, <operand2>[, <operand3>[, <operand4]]\n]`  
@@ -30,7 +37,7 @@
   ラベル行は  
   `:label\n`  
 * ハードウェア・シミュレータに存在していることが要求されている命令一覧  
-これに追加して疑似命令も吐くが、リンカを通すとだいたい消える（リンカの項にて詳述）  
+  これに追加して疑似命令も吐くが、リンカを通すとだいたい消える（リンカの項にて詳述）  
 
 ```
 RV32I

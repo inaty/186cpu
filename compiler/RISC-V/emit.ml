@@ -92,14 +92,14 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tslli\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Ld(rs1, C(imm)) ->
       Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n" rd rs1 imm lnum
-  (* TODO:ここあとでちゃんとやる *)
-  | NonTail(_), Ld(_) ->
-      Printf.fprintf oc "! later\n"
+  | NonTail(rd), Ld(rs1, V(rs2)) ->
+      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs1 rs2 lnum;
+      Printf.fprintf oc "\tlw\t%s, %s, 0 ! %d\n" rd "t0" lnum
   | NonTail(_), St(rs2, rs1, C(imm)) ->
       Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" rs1 rs2 imm lnum
-  (* TODO:ldと同様 *)
-  | NonTail(_), St(_) ->
-      Printf.fprintf oc "! later\n"
+  | NonTail(_), St(rs2, rs1, V(rs3)) ->
+      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs2 rs3 lnum;
+      Printf.fprintf oc "\tsw\t%s, %s, 0 ! %d\n" "t0" rs1 lnum
   | NonTail(x), FMv(y) when x = y -> ()
   | NonTail(rd), FMv(rs) ->
       Printf.fprintf oc "\tfmv.s\t%s, %s ! %d\n" rd rs lnum;
@@ -162,12 +162,10 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tret\n";
   | Tail, IfEq(reg1, reg2, insts1, insts2) ->
       g'_tail_if oc reg1 reg2 insts1 insts2 "be" "bne"
-  (* 中途半端な反転 *)
-  (* TODO:できてない、あとでやる *)
   | Tail, IfLE(reg1, reg2, insts1, insts2) ->
-      g'_tail_if oc reg2 reg1 insts1 insts2 "ble" "bg"
-  | Tail, IfGE(reg1, reg2, insts1, insts2) ->
-      g'_tail_if oc reg2 reg1 insts1 insts2 "bge" "bl"
+      g'_tail_if oc reg2 reg1 insts1 insts2 "bge" "blt"
+  (* | Tail, IfGE(reg1, reg2, insts1, insts2) ->
+      g'_tail_if oc reg1 reg2 insts1 insts2 "bge" "bl" *)
   | Tail, IfFEq(reg1, reg2, e1, e2) ->
       Printf.fprintf oc "\tfcmpd\t%s, %s\n" reg1 reg2;
       Printf.fprintf oc "\tnop\n";
@@ -180,9 +178,9 @@ and g' oc (dest, inst) sp =
       g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "be" "bne"
   (* TODO:できてない、あとでやる *)
   | NonTail(rd), IfLE(rs1, rs2, insts1, insts2) ->
-      g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "ble" "bg"
-  | NonTail(rd), IfGE(rs1, rs2, insts1, insts2) ->
-      g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "bge" "bl"
+      g'_non_tail_if oc (NonTail(rd)) rs2 rs1 insts2 insts1 "bge" "blt"
+  (* | NonTail(rd), IfGE(rs1, rs2, insts1, insts2) ->
+      g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "bge" "bl" *)
   | NonTail(z), IfFEq(x, y, e1, e2) ->
       Printf.fprintf oc "\tfcmpd\t%s, %s\n" x y;
       Printf.fprintf oc "\tnop\n";
@@ -250,7 +248,7 @@ and g'_non_tail_if oc dest reg1 reg2 insts1 insts2 b bn =
   let stackset_back = !stackset in
   g oc (dest, insts1);
   let stackset1 = !stackset in
-  Printf.fprintf oc "\tb\t%s\n" b_cont;
+  Printf.fprintf oc "\tj\t%s\n" b_cont;
   Printf.fprintf oc "%s:\n" b_else;
   stackset := stackset_back;
   g oc (dest, insts2);

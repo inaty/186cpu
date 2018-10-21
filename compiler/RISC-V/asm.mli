@@ -31,7 +31,7 @@ and inst =
   (* 変更(op2をid_or_immからId.tに) *)
   | IfEq of Id.t * Id.t * insts * insts
   | IfLE of Id.t * Id.t * insts * insts
-  | IfGE of Id.t * Id.t * insts * insts
+  (* | IfGE of Id.t * Id.t * insts * insts *)
   | IfFEq of Id.t * Id.t * insts * insts
   | IfFLE of Id.t * Id.t * insts * insts
   (* closure address, integer arguments, and float arguments *)
@@ -56,7 +56,7 @@ val reg_ra : Id.t
 val reg_hp : Id.t
 val reg_sp : Id.t
 val is_reg : Id.t -> bool
-val co_freg : Id.t -> Id.t
+(* val co_freg : Id.t -> Id.t *)
 
 val fv : insts -> Id.t list
 val concat : insts -> Id.t * Type.t -> insts -> insts

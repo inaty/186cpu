@@ -31,7 +31,7 @@ and inst = (* 命令（仮想命令含む） *)
   (* 変更(op2をid_or_immからId.tに) *)
   | IfEq of Id.t * Id.t * insts * insts
   | IfLE of Id.t * Id.t * insts * insts
-  | IfGE of Id.t * Id.t * insts * insts (* �����оΤǤϤʤ��Τ�ɬ�� *)
+  (* | IfGE of Id.t * Id.t * insts * insts (* �����оΤǤϤʤ��Τ�ɬ�� *) *)
   | IfFEq of Id.t * Id.t * insts * insts
   | IfFLE of Id.t * Id.t * insts * insts
   (* closure address, integer arguments, and float arguments *)
@@ -52,31 +52,27 @@ let seq(e1, e2) = Let((Id.gentmp Type.Unit, Type.Unit), e1, e2)
 (* 引数レジスタはこれの先頭から割り当てられていくっぽい *)
 (* TODO:個数とか変える *)
 (* 先頭4つだけ正しくした *)
-let regs =
-  [| "a0"; "a1"; "a2"; "a3";
-     "%l0"; "%l1"; "%l2"; "%l3"; "%l4"; "%l5"; "%l6"; "%l7";
-     "%o0"; "%o1"; "%o2"; "%o3"; "t1"; "t2" |]
-let fregs = Array.init 16 (fun i -> Printf.sprintf "%%f%d" (i * 2))
+(* TODO:caller-saveとcallee-save *)
+(* 今は多分全部saveする仕様 *)
+(* TODO:regsを直接見ている悪いやつをどうにかする *)
+let regs = Array.init 22 (fun i -> Printf.sprintf "a%d" i)
+let regs_tmp = Array.init 5 (fun i -> Printf.sprintf "t%d" i)
+let fregs = Array.init 27 (fun i -> Printf.sprintf "fa%d" i)
+let fregs_tmp = Array.init 5 (fun i -> Printf.sprintf "ft%d" i)
 let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
-(* closure addressをレジスタに入れたくなったら自由レジスタの最後のレジスタを使う *)
-let reg_cl = regs.(Array.length regs - 1)
-(* swapとかで適当なアドレスを使いたくなったら自由レジスタの後ろから2番目のレジスタを使う *)
-let reg_sw = regs.(Array.length regs - 2)
-let reg_fsw = fregs.(Array.length fregs - 1) (* temporary for swap *)
-(* 変更 *)
-let reg_sp = "sp" (* stack pointer *)
-let reg_hp = "%i1" (* heap pointer (caml2html: sparcasm_reghp) *)
-(* 変更 *)
+(* TODO:こいつら退避不要ならそれを反映させていいのでは？とりあえずaの末端のまま *)
+let reg_cl = regs.(Array.length regs - 1) (* closure address用のtmp *)
+let reg_sw = regs.(Array.length regs - 2) (* swap用のtmp *)
+let reg_fsw = fregs.(Array.length fregs - 1)
 let reg_ra = "ra" (* return address *)
-(* 変更 *)
-let is_reg x = (x.[0] = '%') ||
-               List.exists (fun el -> el = x) allregs ||
-               x = "ra" ||
-               x = "sp" ||
-               x = "t1" ||
-               x = "t2"
-let co_freg_table =
+let reg_sp = "sp" (* stack pointer *)
+let reg_hp = "x4" (* heap pointer *)
+let is_reg x =
+  List.exists (fun el -> el = x) allregs
+  || List.exists (fun el -> el = x) allfregs
+  || x = reg_ra || x = reg_sp || x = reg_hp
+(* let co_freg_table =
   let ht = Hashtbl.create 16 in
   for i = 0 to 15 do
     Hashtbl.add
@@ -85,7 +81,7 @@ let co_freg_table =
       (Printf.sprintf "%%f%d" (i * 2 + 1))
   done;
   ht
-let co_freg freg = Hashtbl.find co_freg_table freg (* "companion" freg *)
+let co_freg freg = Hashtbl.find co_freg_table freg (* "companion" freg *) *)
 
 (* super-tenuki *)
 let rec remove_and_uniq xs = function
@@ -103,7 +99,8 @@ let rec fv_exp = function
   | St(x, y, z') | StDF(x, y, z') -> x :: y :: fv_id_or_imm z'
   | Mul(x, y) | Div(x, y)
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
-  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfGE(x, y, e1, e2) ->
+  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) ->
+  (* | IfGE(x, y, e1, e2) -> *)
       x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)
   | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) ->
       x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)

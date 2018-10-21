@@ -5,7 +5,7 @@ let rec iter n e =
   if n = 0 then e else
   let e' = Cse.f e in
   (* KNormal.print_kNormal e'; *)
-  let e' = Elim.f (ConstFold.f (Inline.f (Assoc.f (Beta.f e)))) in
+  let e' = Elim.f (ConstFold.f (Inline.f (Assoc.f (Beta.f e')))) in
   if e = e' then e else
   iter (n - 1) e'
 
