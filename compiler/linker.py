@@ -5,14 +5,15 @@ import sys
 
 def check_and_int(i, bit, mode = ""):
     i = int(i)
+    us = (0 <= i and i < 2**(bit+1))
+    s = (-(2**bit) <= i and i < 2**bit)
     if mode == "unsigned":
-        assert 0 <= i and i < 2**(bit+1)
+        assert us
     elif mode == "both":
-        assert 0 <= i and i < 2**(bit+1)
-        assert -(2**bit) <= i and i < 2**bit
+        assert us or s, "i = {}, bit = {}".format(i, bit)
     else:
         # signed
-        assert -(2**bit) <= i and i < 2**bit
+        assert s
     return i
 
 def sign_extend(i, bit):

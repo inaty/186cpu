@@ -59,7 +59,7 @@ TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%) $(TESTS:%=test/%.res) $(TESTS:%=te
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
 test/%.ss: test/%.s
-	python3 linker.py libmincaml.S test/%.s
+	python3 linker.py libmincaml.S $<
 # python3 simulator.py test/hoge.ss > test/hoge.res
 test/%.res: test/%.ss
 	python3 simulator.py $< > $@
