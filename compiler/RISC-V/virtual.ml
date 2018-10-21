@@ -99,7 +99,8 @@ let rec g env (exp, sp) =
              seq ((StDF(y, x, C(offset)), sp), store_fv))
           (fun y _ offset store_fv ->
              seq ((St(y, x, C(offset)), sp), store_fv)) in
-      Let((x, t), (Mov(reg_hp), sp),
+      Let((x, t),
+          (Mov(reg_hp), sp),
           Let((reg_hp, Type.Int), (Add(reg_hp, C(align offset)), sp),
               let z = Id.genid "l" in
               Let((z, Type.Int), (SetL(l), sp),

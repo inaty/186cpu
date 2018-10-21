@@ -24,8 +24,8 @@
   適当に作りました。また変わるかも  
 ```
 ra (=x1), sp (=x2) caller save
-x3 = 未定
-x4 = ヒープポインタ(ヒープに触るとき以外アクセスしない)
+ap (=x3) = array pointer (array_create以外でアクセスしない)（これはインチキなので後で直す）
+hp (=x4) = heap pointer (ヒープに触るとき以外アクセスしない)(というかよくわからない)
 a0~a21 (=x5~x26)　caller save
 t0~t4 (=x27~x31) callee save
 ```  

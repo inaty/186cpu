@@ -98,8 +98,8 @@ and g' oc (dest, inst) sp =
   | NonTail(_), St(rs2, rs1, C(imm)) ->
       Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" rs1 rs2 imm lnum
   | NonTail(_), St(rs2, rs1, V(rs3)) ->
-      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs2 rs3 lnum;
-      Printf.fprintf oc "\tsw\t%s, %s, 0 ! %d\n" "t0" rs1 lnum
+      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs1 rs3 lnum;
+      Printf.fprintf oc "\tsw\t%s, %s, 0 ! %d\n" "t0" rs2 lnum
   | NonTail(x), FMv(y) when x = y -> ()
   | NonTail(rd), FMv(rs) ->
       Printf.fprintf oc "\tfmv.s\t%s, %s ! %d\n" rd rs lnum;
@@ -176,9 +176,8 @@ and g' oc (dest, inst) sp =
       g'_tail_if oc reg1 reg2 e1 e2 "fble" "fbg"
   | NonTail(rd), IfEq(rs1, rs2, insts1, insts2) ->
       g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "be" "bne"
-  (* TODO:できてない、あとでやる *)
   | NonTail(rd), IfLE(rs1, rs2, insts1, insts2) ->
-      g'_non_tail_if oc (NonTail(rd)) rs2 rs1 insts2 insts1 "bge" "blt"
+      g'_non_tail_if oc (NonTail(rd)) rs2 rs1 insts1 insts2 "bge" "blt"
   (* | NonTail(rd), IfGE(rs1, rs2, insts1, insts2) ->
       g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "bge" "bl" *)
   | NonTail(z), IfFEq(x, y, e1, e2) ->
@@ -191,7 +190,7 @@ and g' oc (dest, inst) sp =
       g'_non_tail_if oc (NonTail(z)) x y e1 e2 "fble" "fbg"
   | Tail, CallCls(x, ys, zs) ->
       g'_args oc [(x, reg_cl)] ys zs;
-      Printf.fprintf oc "\tlw\t %s, %s, 0\n" reg_sw reg_cl;
+      Printf.fprintf oc "\tlw\t%s, %s, 0\n" reg_sw reg_cl;
       Printf.fprintf oc "\tjalr\tzero, %s, 0\n" reg_sw;
   | Tail, CallDir(Id.L(label), ys, zs) ->
       g'_args oc [] ys zs;

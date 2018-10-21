@@ -168,8 +168,9 @@ let rec g env (e, _, _) =
   with Unify(t1, t2, sp, ep) ->
     failwith
       (let open Lexing in
-       (Printf.sprintf "type error near line %d, characters %d-%d\n"
+       (Printf.sprintf "type error near line %d-%d, characters %d-%d\n"
          sp.pos_lnum
+         ep.pos_lnum
          (sp.pos_cnum - sp.pos_bol)
          (ep.pos_cnum - ep.pos_bol)) ^
        (Printf.sprintf

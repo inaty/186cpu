@@ -36,7 +36,7 @@ def read_into_inputbuf():
     inputbuf = [s for s in input().strip("\n").split() if s != ""]
 
 def mem_init():
-    for i in range(0, 100):
+    for i in range(0, 30000):
         M.append(0)
 
 def fetch(pc, lines):
@@ -101,7 +101,7 @@ def execute(opcode, operands, regs):
         regs[rd] = sign_extend((regs[rs1] + regs[rs2]) & F8, 32)
     elif (opcode == "sub"):
         rd, rs1, rs2 = operands
-        regs[rd] = ((regs[rs1] - regs[rs2]) & F8, 32)
+        regs[rd] = sign_extend((regs[rs1] - regs[rs2]) & F8, 32)
     elif (opcode == "sll"):
         rd, rs1, rs2 = operands
         regs[rd] = ((regs[rs1] << regs[rs2]) & F8, 32)
@@ -151,13 +151,18 @@ def main():
     if len(argv) > 2 and argv[2] == "-d":
         opt_debug = True
 
-    regs = {"pc": 0, "zero": 0, "ra": 0, "sp": 0, "a0": 0, "a1": 0}
+    regs = {
+        "pc": 0, "zero": 0, "ra": 0, "sp": 0, "hp": 40000, "ap": 80000,
+        "a0": 0, "a1": 0, "t0": 0,
+    }
     mem_init()
 
     cont = True
     while cont:
         if opt_debug:
             print(regs)
+        if opt_debug:
+            print(M[2000:2020])
         # print(M)
         # fetch
         line = fetch(regs["pc"], lines)
@@ -170,6 +175,6 @@ def main():
         cont = execute(opcode, operands, regs)
         regs["zero"] = 0
         # sleep
-        time.sleep(0.001)
+        # time.sleep(0.001)
 
 main()
