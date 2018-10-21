@@ -30,20 +30,20 @@
   ラベル行は  
   `:label\n`  
 * ハードウェア・シミュレータに存在していることが要求されている命令一覧  
-これに追加して疑似命令も吐くが、リンカを通すと消える（リンカの項にて詳述）  
+これに追加して疑似命令も吐くが、リンカを通すとだいたい消える（リンカの項にて詳述）  
 
 ```
 RV32I
 
-lui rd, imm
-jal rd, imm
-jalr rd, rs1, imm
-bne rs1, rs2, imm
-blt rs1, rs2, imm
-lw rd, rs1, imm
-sw rs1, rs2, imm
-addi rd, rs1, imm
-slli rd, rs1, imm
+lui rd, imm (32bit both)
+jal rd, imm (20bit signed)
+jalr rd, rs1, imm (12bit signed)
+bne rs1, rs2, imm (12bit signed)
+blt rs1, rs2, imm (12bit signed)
+lw rd, rs1, imm (12bit signed)
+sw rs1, rs2, imm (12bit signed)
+addi rd, rs1, imm(12bit signed)
+slli rd, rs1, imm(5bit unsigned)
 add rd, rs1, rs2
 sub rd, rs1, rs2
 sll rd, rs1, rs2
@@ -72,10 +72,13 @@ flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
 
 ORIGINAL
+in rd, rs1, imm (rdに値が入る、rs1とimmはダミー、0埋め)
+ins rd, rs1, imm (rdに値が入る、rs1とimmはダミー、最上位ビット埋め)
+out rd, rs1, imm (rs1の値を送る、rdとimmはダミー)
 ※これはfpu作れという意味ではなくて、レイトレ試す上でライブラリ作りをサボっただけ（あとでやる？）
-fcos.s rd, rs1, rm(<>)
-fsin.s rd, rs1, rm(<>)
-fatan.s rd, rs1, rm(<>)
+fcos.s rd, rs1, rm(rne)
+fsin.s rd, rs1, rm(rne)
+fatan.s rd, rs1, rm(rne)
 
 ```
 
@@ -89,17 +92,18 @@ pseudo1
 RV32I
 
 ret = jalr zero, ra, 0
-li rd, label = tmp_lui rd, label
-               tmp_addi rd, rd, label
-li rd, imm = if (imm[31:12] == 0..0 || imm[31:11] == 1..1)
-               addi rd, zero, imm
-             else
-               lui rd, (imm[31:12] + imm[11])
-               addi rd, rd, imm[11:0]
-             end
+li rd, label(32bit unsigned)  = tmp_lui rd, label
+                                tmp_addi rd, rd, label
+li rd, imm(32bit both) = if (imm[31:12] == 0..0 || imm[31:11] == 1..1)
+                           addi rd, zero, imm
+                         else
+                           lui rd, (imm[31:12] + imm[11])
+                           addi rd, rd, imm[11:0]
+                         end
 mv rd, rs = addi rd, rs, 0
 neg rd, rs = sub rd, zero, rs
-j imm = jal zero, imm(20bit)
+(20bit signed)
+j imm = jal zero, imm
 
 RV32F
 fmv.s rd, rs = fsgnj.s rd, rs, rs
@@ -117,20 +121,37 @@ label: = (消去、番地記録)
 pseudo2
 RV32I
 
+(32bit unsigned)
 tmp_lui rd, label = lui rd, (labelの中身immに対し imm[31:12] + imm[11])
 tmp_addi rd, rd, label = addi rd, rd, (labelの中身immに対しimm[11:0])
-bne rs1, rs2, label = bne rs1, rs2, (labelへのoffset)(12bit)
-blt rs1, rs2, label = blt rs1, rs2, (labelへのoffset)(12bit)
-j label = jal zero, (labelへのoffset)(20bit)
-jal label = jal ra, (labelへのoffset)(20bit)
+(12bit signed)
+bne rs1, rs2, label = bne rs1, rs2, (labelへのoffset)
+blt rs1, rs2, label = blt rs1, rs2, (labelへのoffset)
+(20bit signed)
+j label = jal zero, (labelへのoffset)
+jal label = jal ra, (labelへのoffset)
 ```
 最後にレジスタ名を全て変換して終了  
-リンカで消えない疑似命令というのもある予定（？）  
+コンパイラの吐くアセンブリの中にはリンカで消えない疑似命令があるので注意（以下で詳述）  
+
+# こまかいとこ、即値について  
+  命令によっては下1bitを切るみたいなのがあるが、アセンブリの際にはそのまま元の数字を書く  
+  シミュレーター/アセンブラでどうにかする  
+  範囲外のbitが0であるような数にしている（つもり）  
+  即値は仕様書にsignedと明記されている場合は全部signed、
+  明記されていない場合は全部unsigned  
+
 
 # シミュレータ仕様
   プログラム領域とデータ領域は完全に分離している（嘘だが暫定でこう）  
   よって暗黙のうちに、pc系の命令はプログラム領域のみのアドレスを扱い、loadStore系の命令はデータ領域のアドレスのみを扱う  
+  メモリの中身は全てsigned int  
   シミュレート開始時に各種レジスタとpcは全て値0（特にspが0であることは重要）  
+  ioは文字列  
+* 対応命令セット  
+  コンパイラのところにある要求命令一覧全て（の予定だけどfloat全部無視）  
+  inは空白など区切りで1かたまり読み込み、整数として解釈してレジスタに入れる
+  `fin 0`……疑似命令、シミュレーション終了
 
 # アセンブラ仕様
 * 入力ファイルのフォーマット  

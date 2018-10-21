@@ -298,5 +298,5 @@ let f oc (Prog(float_table, fundefs, insts)) =
   stackset := S.empty;
   stackmap := [];
   g oc (NonTail("zero"), insts);
-  Printf.fprintf oc "\tret\n";
+  Printf.fprintf oc "\tfin\t0\n";
   (* Printf.fprintf oc "\trestore\n" *)

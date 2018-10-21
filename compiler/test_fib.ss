@@ -35,9 +35,10 @@
 	lw	ra, sp, 4
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 156
+	jal	ra, 160
 	addi	sp, sp, -8
 	lw	ra, sp, 4
+	fin	0
 	feq.s	f0, f0, f1
 	jalr	zero, ra, 0
 	flt.s	f0, f0, f1

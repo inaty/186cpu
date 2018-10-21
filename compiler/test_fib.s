@@ -42,3 +42,4 @@ min_caml_start:
 	jal	min_caml_print_int
 	addi	sp, sp, -8
 	lw	ra, sp, 4
+	fin	0

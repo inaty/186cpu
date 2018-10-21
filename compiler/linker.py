@@ -1,6 +1,28 @@
 import re
 import sys
 
+# common to simulator
+
+def check_and_int(i, bit, mode = ""):
+    i = int(i)
+    if mode == "unsigned":
+        assert 0 <= i and i < 2**(bit+1)
+    elif mode == "both":
+        assert 0 <= i and i < 2**(bit+1)
+        assert -(2**bit) <= i and i < 2**bit
+    else:
+        # signed
+        assert -(2**bit) <= i and i < 2**bit
+    return i
+
+def sign_extend(i, bit):
+    assert i >= 0
+    s = 1 << (bit - 1)
+    if i & s != 0:
+        i = i - 2**bit
+    return i
+
+
 def opformat(opcode, operands):
     if len(operands) == 0:
         return "\t{}\n".format(opcode)
@@ -8,15 +30,6 @@ def opformat(opcode, operands):
     for operand in operands[1:]:
         op += ", {}".format(operand)
     return op + "\n"
-
-def check_and_int(i, bit, signed = True):
-    i = int(i)
-    if signed:
-        assert -(2**bit) <= i and i < 2**bit, "imm invalid"
-        return i
-    else:
-        assert 0 <= i and i < 2**(bit+1), "imm invalid"
-        return i
 
 def replace_pseudo1(line, labels_addrs):
     # ラベルはそのまま返す
@@ -31,40 +44,36 @@ def replace_pseudo1(line, labels_addrs):
     if opcode == "li":
         rd, op2 = operands
         if op2 in labels_addrs:
-            label = op2
             # li rd, labelは完全には変換せず、tmp_命令にする
+            label = op2
             return [
                 opformat("tmp_lui", [rd, label]),
                 opformat("tmp_addi", [rd, rd, label])
             ]
         else:
             # li rd, immは完全に変換できるが、immによって場合分けが必要
-            imm = check_and_int(op2, 32)
+            imm = check_and_int(op2, 32, "both")
             # imm[31:12] == 0..0 || imm[31:11] == 1..1
-            if ((imm >= 0 and (imm & 0xfffff000 == 0))
-                    or (imm < 0 and (~imm & 0xfffff800 == 0))):
+            if (imm & 0xfffff000 == 0) or (~imm & 0xfffff800 == 0):
                 # 1命令で済むパターン
                 return [opformat("addi", [rd, "zero", imm])]
             else:
                 # 2命令かかるパターン
                 # immu = imm[31:12] + imm[11] (unsigned)
-                immu = ((imm >> 12) & (0xffffffff >> 12)) + (imm >> 11 & 1)
+                immu = (imm & 0xfffff000) + (imm & 0x00000800)
                 # imml = imm[11:0] (signed)
-                imml = imm & 0xfff
-                if imm & 0x800 != 0:
-                    # 元々負だったので、符号拡張された負の数にする
-                    imml = imm - 2**12
+                imml = sign_extend(imm & 0xfff, 12)
                 return [
                     opformat("lui", [rd, immu]),
                     opformat("addi", [rd, rd, imml])
                 ]
-    if opcode == "mv":
+    elif opcode == "mv":
         rd, rs = operands
         return [opformat("addi", [rd, rs, 0])]
-    if opcode == "neg":
+    elif opcode == "neg":
         rd, rs = operands
         return [opformat("sub", [rd, "zero", rs])]
-    if opcode == "j":
+    elif opcode == "j":
         op = operands[0]
         if op in labels_addrs:
             # j label はまだ解決できない
@@ -73,13 +82,13 @@ def replace_pseudo1(line, labels_addrs):
             imm = check_and_int(op, 20)
             assert imm & 1 == 0
             return [opformat("jal", ["zero", imm])]
-    if opcode == "fmv.s":
+    elif opcode == "fmv.s":
         rd, rs = operands
         return [opformat("fsgnj.s", [rd, rs, rs])]
-    if opcode == "fneg.s":
+    elif opcode == "fneg.s":
         rd, rs = operands
         return [opformat("jsgnjn.s", [rd, rs, rs])]
-    
+
     return [line]
 
 def replace_pseudo2(line, labels_addrs, cur_addr):
@@ -88,10 +97,11 @@ def replace_pseudo2(line, labels_addrs, cur_addr):
     if opcode == "tmp_lui":
         rd, label = operands
         imm = labels_addrs[label]
+        check_and_int(imm, 32, "unsigned")
         # immu = imm[31:12] + imm[11] (unsigned)
-        immu = ((imm >> 12) & (0xffffffff >> 12)) + (imm >> 11 & 1)
+        immu = (imm & 0xfffff000) + (imm & 0x00000800)
         return opformat("lui", [rd, immu])
-    if opcode == "tmp_addi":
+    elif opcode == "tmp_addi":
         rd, rd2, label = operands
         assert rd == rd2
         imm = labels_addrs[label]
@@ -101,24 +111,23 @@ def replace_pseudo2(line, labels_addrs, cur_addr):
             # 元々負だったので、符号拡張された負の数にする
             imml = imm - 2**12
         return opformat("addi", [rd, rd, imml])
-    if (opcode == "bne" or opcode == "blt") and operands[2] in labels_addrs:
+    elif (opcode == "bne" or opcode == "blt") and operands[2] in labels_addrs:
         rs1, rs2, label = operands
         imm = labels_addrs[label] - cur_addr
         check_and_int(imm, 12)
         return opformat(opcode, [rs1, rs2, imm])
-    if opcode == "j" and operands[0] in labels_addrs:
+    elif opcode == "j" and operands[0] in labels_addrs:
         label = operands[0]
         imm = labels_addrs[label] - cur_addr
         check_and_int(imm, 20)
         return opformat("jal", ["zero", imm])
-    if opcode == "jal" and operands[0] in labels_addrs:
+    elif opcode == "jal" and operands[0] in labels_addrs:
         label = operands[0]
         imm = labels_addrs[label] - cur_addr
         check_and_int(imm, 20)
         return opformat("jal", ["ra", imm])
-
-    return line
-
+    else:
+        return line
 
 
 def main():
