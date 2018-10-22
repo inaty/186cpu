@@ -118,4 +118,4 @@ let rec concat e1 xt e2 =
   | Ans(inst) -> Let(xt, inst, e2)
   | Let(yt, inst, e1') -> Let(yt, inst, concat e1' xt e2)
 
-let align i = (if i mod 8 = 0 then i else i + 4)
+let align i = i (* (if i mod 8 = 0 then i else i + 4) *)

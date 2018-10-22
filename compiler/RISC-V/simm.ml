@@ -23,7 +23,7 @@ and g' imms (inst, pos) =
     | Add(x, V(y)) when M.mem y imms -> Add(x, C(M.find y imms))
     | Add(x, V(y)) when M.mem x imms -> Add(y, C(M.find x imms))
     | Sub(x, V(y)) when M.mem y imms -> Sub(x, C(M.find y imms))
-    (* 本当はまずいが多分大丈夫 *)
+    (* 本当は桁数チェックしないとまずいが多分大丈夫 *)
     | SLL(x, V(y)) when M.mem y imms -> SLL(x, C(M.find y imms))
     | Ld(x, V(y)) when M.mem y imms -> Ld(x, C(M.find y imms))
     | St(x, y, V(z)) when M.mem z imms -> St(x, y, C(M.find z imms))

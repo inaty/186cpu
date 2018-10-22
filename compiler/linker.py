@@ -13,7 +13,7 @@ def check_and_int(i, bit, mode = ""):
         assert us or s, "i = {}, bit = {}".format(i, bit)
     else:
         # signed
-        assert s
+        assert s, "{} {} {}".format(i, bit, mode)
     return i
 
 def sign_extend(i, bit):
@@ -101,7 +101,7 @@ def replace_pseudo2(line, labels_addrs, cur_addr):
         imm = labels_addrs[label]
         check_and_int(imm, 32, "unsigned")
         # immu = imm[31:12] + imm[11] (unsigned)
-        immu = (imm & 0xfffff000) + (imm & 0x00000800)
+        immu = (imm & 0xfffff000) + ((imm & 0x00000800) << 1)
         return opformat("lui", [rd, immu])
     elif opcode == "tmp_addi":
         rd, rd2, label = operands

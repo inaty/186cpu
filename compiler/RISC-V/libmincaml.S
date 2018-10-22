@@ -1,56 +1,56 @@
 min_caml_fequal:
-	feq.s	f0, f0, f1
+	feq.s	fa0, fa0, fa1
 	ret
 min_caml_fless:
-	flt.s	f0, f0, f1
+	flt.s	fa0, fa0, fa1
 	ret
 min_caml_fispos:
-	fcvt.s.w	f31, zero, rne
-	flt.s	f0, f31, f0
+	fcvt.s.w	ft0, zero, rne
+	flt.s	fa0, ft0, fa0
 	ret
 min_caml_fisneg:
-	fcvt.s.w	f31, zero, rne
-	flt.s	f0, f0, f31
+	fcvt.s.w	ft0, zero, rne
+	flt.s	fa0, fa0, ft0
 	ret
 min_caml_fiszero:
-	fcvt.s.w	f31, zero, rne
-	feq.s	f0, f0, f31
+	fcvt.s.w	ft0, zero, rne
+	feq.s	fa0, fa0, ft0
 	ret
 !min_caml_fhalf:
 !	li	x31, float_0.5
-!	flw	f31, x31, 0
-!	fmul.s	f0, f0, f31, rne
+!	flw	ft0, x31, 0
+!	fmul.s	fa0, fa0, ft0, rne
 !	ret
 min_caml_fsqr:
-	fmul.s	f0, f0, f0, rne
+	fmul.s	fa0, fa0, fa0, rne
 	ret
 min_caml_fabs:
-	fsgnjx.s	f0, f0, f0
+	fsgnjx.s	fa0, fa0, fa0
 	ret
 min_caml_fneg:
-	fsgnjn.s	f0, f0, f0
+	fsgnjn.s	fa0, fa0, fa0
 	ret
 min_caml_sqrt:
-	fsqrt.s	f0, f0, rne
+	fsqrt.s	fa0, fa0, rne
 	ret
 min_caml_floor:
-	fcvt.w.s	t0, f0, rdn
-	fcvt.s.w	f0, t0, rne
+	fcvt.w.s	t0, fa0, rdn
+	fcvt.s.w	fa0, t0, rne
 	ret
 min_caml_int_of_float:
-	fcvt.s.w	a0, f0, rne
+	fcvt.w.s	a0, fa0, rtz
 	ret
 min_caml_float_of_int:
-	fcvt.w.s	f0, a0, rne
+	fcvt.s.w	fa0, a0, rne
 	ret
 min_caml_cos:
-	fcos.s	f0, f0, rne
+	fcos.s	fa0, fa0, rne
 	ret
 min_caml_sin:
-	fsin.s	f0, f0, rne
+	fsin.s	fa0, fa0, rne
 	ret
 min_caml_atan:
-	fatan.s	f0, f0, rne
+	fatan.s	fa0, fa0, rne
 	ret
 min_caml_print_char:
 	out	zero, a0, 0
@@ -63,6 +63,15 @@ min_caml_create_array_loop:
 	sw	ap, a1, 0
 	addi	ap, ap, 4
 	blt	ap, t0, min_caml_create_array_loop
+	ret
+min_caml_create_float_array:
+	slli	a0, a0, 2 ! 要素数を4倍
+	add	t0, ap, a0 ! 終点
+	mv	a0, ap ! 配列先頭アドレスを先に返り値にセット
+min_caml_create_float_array_loop:
+	fsw	ap, fa0, 0
+	addi	ap, ap, 4
+	blt	ap, t0, min_caml_create_float_array_loop
 	ret
 min_caml_print_int_reverced_array.74:
 	lw	a3, a21, 8 ! 0
@@ -220,5 +229,7 @@ min_caml_print_newline:
 	li	t0, 10
 	out	zero, t0, 0
 	ret
+min_caml_truncate:
+	j	min_caml_int_of_float
 !float_0.5:
 !	bit 0.5

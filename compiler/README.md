@@ -27,7 +27,7 @@ ra (=x1), sp (=x2) caller save
 ap (=x3) = array pointer (array_create以外でアクセスしない)（これはインチキなので後で直す）
 hp (=x4) = heap pointer (ヒープに触るとき以外アクセスしない)(というかよくわからない)
 a0~a21 (=x5~x26)　caller save
-t0~t4 (=x27~x31) callee save
+t0~t4 (=x27~x31) caller save
 ```  
 * hoge.sフォーマット  
   命令行は  
@@ -65,6 +65,7 @@ remu rd, rs1, rs2
 RV32F
 
 flw rd, rs1, imm
+fsw rd, rs1, imm
 fadd.s rd, rs1, rs2, rm(rne)
 fsub.s rd, rs1, rs2, rm(rne)
 fmul.s rd, rs1, rs2, rm(rne)
@@ -73,7 +74,7 @@ fsqrt.s rd, rs1, rm(rne)
 fsgnj.s rd, rs1, rs2
 fsgnjn.s rd, rs1, rs2
 fsgnjx.s rd, rs1, rs2
-fcvt.w.s rd, rs1, rm(rdn)
+fcvt.w.s rd, rs1, rm(rdz)
 feq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)

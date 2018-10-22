@@ -36,7 +36,8 @@ let expand xts ini addf addi =
     ini
     (fun (offset, acc) x ->
       let offset = align offset in
-      (offset + 8, addf x offset acc))
+      (* memo:8→4 *)
+      (offset + 4, addf x offset acc))
     (fun (offset, acc) x t ->
       (offset + 4, addi x t offset acc))
 
@@ -144,7 +145,7 @@ let rec g env (exp, sp) =
       | Type.Array(Type.Unit) -> Ans(Nop, sp)
       | Type.Array(Type.Float) ->
           Let((offset, Type.Int),
-              (SLL(y, C(3)), sp),
+              (SLL(y, C(2)), sp),
               Ans(LdDF(x, V(offset)), sp))
       | Type.Array(_) ->
           Let((offset, Type.Int),
@@ -157,7 +158,7 @@ let rec g env (exp, sp) =
       | Type.Array(Type.Unit) -> Ans(Nop, sp)
       | Type.Array(Type.Float) ->
           Let((offset, Type.Int),
-              (SLL(y, C(3)), sp),
+              (SLL(y, C(2)), sp),
               Ans(StDF(z, x, V(offset)), sp))
       | Type.Array(_) ->
           Let((offset, Type.Int),

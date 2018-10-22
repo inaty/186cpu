@@ -106,39 +106,45 @@ and g' oc (dest, inst) sp =
   | NonTail(rd), FNeg(rs) ->
       Printf.fprintf oc "\tfneg.s\t%s, %s ! %d\n" rd rs lnum;
   | NonTail(rd), FAdd(rs1, rs2) ->
-      Printf.fprintf oc "\tfadd.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+      Printf.fprintf oc "\tfadd.s\t%s, %s, %s, rne ! %d\n" rd rs1 rs2 lnum
   | NonTail(rd), FSub(rs1, rs2) ->
-      Printf.fprintf oc "\tfsub.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+      Printf.fprintf oc "\tfsub.s\t%s, %s, %s, rne ! %d\n" rd rs1 rs2 lnum
   | NonTail(rd), FMul(rs1, rs2) ->
-      Printf.fprintf oc "\tfmul.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+      Printf.fprintf oc "\tfmul.s\t%s, %s, %s, rne ! %d\n" rd rs1 rs2 lnum
   | NonTail(rd), FDiv(rs1, rs2) ->
-      Printf.fprintf oc "\tfdiv.s\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  | NonTail(x), LdDF(y, z') ->
-      Printf.fprintf oc "\tldd\t[%s + %s], %s ! %d\n"
-        y (pp_id_or_imm z') x lnum
-  | NonTail(_), StDF(x, y, z') ->
-      Printf.fprintf oc "\tstd\t%s, [%s + %s] ! %d\n"
-        x y (pp_id_or_imm z') lnum
+      Printf.fprintf oc "\tfdiv.s\t%s, %s, %s, rne ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), LdDF(rs1, C(imm)) ->
+      Printf.fprintf oc "\tflw\t%s, %s, %d ! %d\n" rd rs1 imm lnum
+  | NonTail(rd), LdDF(rs1, V(rs2)) ->
+      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs1 rs2 lnum;
+      Printf.fprintf oc "\tflw\t%s, %s, 0 ! %d\n" rd "t0" lnum
+  | NonTail(_), StDF(rs2, rs1, C(imm)) ->
+      Printf.fprintf oc "\tfsw\t%s, %s, %d ! %d\n" rs1 rs2 imm lnum
+  | NonTail(_), StDF(rs2, rs1, V(rs3)) ->
+      Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs1 rs3 lnum;
+      Printf.fprintf oc "\tfsw\t%s, %s, 0 ! %d\n" "t0" rs2 lnum
   | NonTail(_), Comment(s) -> Printf.fprintf oc "\t! %s ! %d\n" s lnum
   (* TODO:yに適切な名前をつける *)
   | NonTail(_), Save(reg, y) when List.mem reg allregs &&
                                   not (S.mem y !stackset) ->
       save y; (* スタックセットに記録 *)
       Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" reg_sp reg (offset y) lnum
-  | NonTail(_), Save(x, y) when List.mem x allfregs &&
-                                not (S.mem y !stackset) ->
+  (* TODO:yに適切な名前をつける *)
+  | NonTail(_), Save(x, y) when List.mem x allfregs
+                                && not (S.mem y !stackset) ->
       savef y;
-      Printf.fprintf oc "\tstd\t%s, [%s + %d] ! %d\n"
-        x reg_sp (offset y) lnum
+      Printf.fprintf oc "\tfsw\t%s, %s, %d ! %d\n"
+        reg_sp x (offset y) lnum
   | NonTail(_), Save(_, y) -> assert (S.mem y !stackset); ()
   (* TODO:name y *)
   | NonTail(rd), Restore(y) when List.mem rd allregs ->
       Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n"
         rd reg_sp (offset y) lnum
+  (* TODO: name x y *)
   | NonTail(x), Restore(y) ->
       assert (List.mem x allfregs);
-      Printf.fprintf oc "\tldd\t[%s + %d], %s ! %d\n"
-        reg_sp (offset y) x lnum
+      Printf.fprintf oc "\tflw\t%s, %s, %d ! %d\n"
+        x reg_sp (offset y) lnum
   (* retlよくわかんないけど普通にretに変更しnop削除 *)
   | Tail, (Nop | St _ | StDF _ | Comment _ | Save _ as inst) ->
       (* nontailだったことにして命令をやり、ret *)
@@ -189,7 +195,8 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tnop\n";
       g'_non_tail_if oc (NonTail(z)) x y e1 e2 "fble" "fbg"
   | Tail, CallCls(x, ys, zs) ->
-      g'_args oc [(x, reg_cl)] ys zs;
+      (* 入れ替え *)
+      g'_args oc [(reg_cl, x)] ys zs;
       Printf.fprintf oc "\tlw\t%s, %s, 0\n" reg_sw reg_cl;
       Printf.fprintf oc "\tjalr\tzero, %s, 0\n" reg_sw;
   | Tail, CallDir(Id.L(label), ys, zs) ->
@@ -198,7 +205,8 @@ and g' oc (dest, inst) sp =
   (* 内部関数呼出しをする *)
   (* 必要な変数はsaveされている？ *)
   | NonTail(rd), CallCls(x, args, fargs) ->
-      g'_args oc [(x, reg_cl)] args fargs;
+      (* 入れ替え *)
+      g'_args oc [(reg_cl, x)] args fargs;
       let ss = stacksize () in
       (* 現スタックの一番上にraを保存(caller save) *)
       Printf.fprintf oc "\tsw\t%s, %s, %d\n" reg_sp reg_ra (ss - 4);
@@ -281,12 +289,11 @@ let f oc (Prog(float_table, fundefs, insts)) =
   (* リンカとかのことを考えないので、そういうのはとりあえず無視 *)
   (* Printf.fprintf oc ".section\t\".rodata\"\n";
   Printf.fprintf oc ".align\t8\n"; *)
-  (* List.iter
+  List.iter
     (fun (Id.L(x), d) ->
       Printf.fprintf oc "%s: ! %f\n" x d;
-      Printf.fprintf oc "\t.long\t0x%lx\n" (gethi d);
-      Printf.fprintf oc "\t.long\t0x%lx\n" (getlo d))
-    float_table; *)
+      Printf.fprintf oc "\tfloat\t%f\n" d)
+    float_table;
   (* Printf.fprintf oc ".section\t\".text\"\n"; *)
   List.iter (fun fundef -> h oc fundef) fundefs;
   (* Printf.fprintf oc ".global\tmin_caml_start\n"; *)
