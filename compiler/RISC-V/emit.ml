@@ -44,7 +44,7 @@ let rec shuffle sw moves =
       let replace (rd', rs') = if rs' = rd then (rd', sw) else (rd', rs') in
       (* TODO:ここ新しいswapレジスタ渡したほうがいいかもしれないのでは？ *)
       (sw, rd) :: (rd, rs) :: shuffle sw (List.map replace moves)
-  | _, _ -> premoves @ postmoves
+  | _, _ -> premoves @ shuffle sw postmoves
 
 type dest =
   | Tail

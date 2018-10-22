@@ -216,5 +216,9 @@ bge_cont.139:
 	lw	a1, sp, 0 ! 0
 	lw	a20, a21, 0
 	jalr	zero, a20, 0
+min_caml_print_newline:
+	li	t0, 10
+	out	zero, t0, 0
+	ret
 !float_0.5:
 !	bit 0.5

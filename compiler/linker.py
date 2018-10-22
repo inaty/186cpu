@@ -39,7 +39,8 @@ def replace_pseudo1(line, labels_addrs):
     # retの変換
     if line == "\tret\n":
         return [opformat("jalr", ["zero", "ra", "0"])]
-    # ret以外はopcodeとoprandに分けられる
+
+    # print(line)
     opcode, operands = line.strip("\t\n").split("\t")
     operands = operands.split(", ")
     if opcode == "li":
@@ -61,7 +62,7 @@ def replace_pseudo1(line, labels_addrs):
             else:
                 # 2命令かかるパターン
                 # immu = imm[31:12] + imm[11] (unsigned)
-                immu = (imm & 0xfffff000) + (imm & 0x00000800)
+                immu = (imm & 0xfffff000) + ((imm & 0x00000800) << 1)
                 # imml = imm[11:0] (signed)
                 imml = sign_extend(imm & 0xfff, 12)
                 return [

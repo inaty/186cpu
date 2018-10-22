@@ -35,8 +35,8 @@ def read_into_inputbuf():
     assert inputbuf == []
     inputbuf = [s for s in input().strip("\n").split() if s != ""]
 
-def mem_init():
-    for i in range(0, 30000):
+def mem_init(n):
+    for i in range(0, n):
         M.append(0)
 
 def fetch(pc, lines):
@@ -50,7 +50,7 @@ def execute(opcode, operands, regs):
     if (opcode == "lui"):
         rd, imm = operands
         imm = check_and_int(imm, 32, "both")
-        assert imm & 0xfff == 0
+        assert imm & 0xfff == 0, imm
         regs[rd] = sign_extend(imm & 0xfffff000, 32)
     elif (opcode == "jal"):
         rd, imm = operands
@@ -152,17 +152,17 @@ def main():
         opt_debug = True
 
     regs = {
-        "pc": 0, "zero": 0, "ra": 0, "sp": 0, "hp": 40000, "ap": 80000,
+        "pc": 0, "zero": 0, "ra": 0, "sp": 40000, "hp": 80000, "ap": 120000,
         "a0": 0, "a1": 0, "t0": 0,
     }
-    mem_init()
+    mem_init(40000)
 
     cont = True
     while cont:
         if opt_debug:
             print(regs)
-        if opt_debug:
-            print(M[2000:2020])
+        # if opt_debug:
+            # print(M[2000:2020])
         # print(M)
         # fetch
         line = fetch(regs["pc"], lines)
