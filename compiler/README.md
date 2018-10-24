@@ -83,7 +83,10 @@ ORIGINAL
 in rd, rs1, imm (rdに値が入る、rs1とimmはダミー、0埋め)
 ins rd, rs1, imm (rdに値が入る、rs1とimmはダミー、最上位ビット埋め)
 out rd, rs1, imm (rs1の値を送る、rdとimmはダミー)
-※これはfpu作れという意味ではなくて、レイトレ試す上でライブラリ作りをサボっただけ（あとでやる？）
+※以下はサボり（あとでやる）
+readint 0
+readfloat 0
+※以下はfpu作れという意味ではなくて、レイトレ試す上でライブラリ作りをサボっただけ（あとでやる？）
 fcos.s rd, rs1, rm(rne)
 fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)

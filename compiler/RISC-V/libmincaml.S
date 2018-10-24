@@ -1,26 +1,26 @@
 min_caml_fequal:
-	feq.s	fa0, fa0, fa1
+	feq.s	a0, fa0, fa1
 	ret
 min_caml_fless:
-	flt.s	fa0, fa0, fa1
+	flt.s	a0, fa0, fa1
 	ret
 min_caml_fispos:
 	fcvt.s.w	ft0, zero, rne
-	flt.s	fa0, ft0, fa0
+	flt.s	a0, ft0, fa0
 	ret
 min_caml_fisneg:
 	fcvt.s.w	ft0, zero, rne
-	flt.s	fa0, fa0, ft0
+	flt.s	a0, fa0, ft0
 	ret
 min_caml_fiszero:
 	fcvt.s.w	ft0, zero, rne
-	feq.s	fa0, fa0, ft0
+	feq.s	a0, fa0, ft0
 	ret
-!min_caml_fhalf:
-!	li	x31, float_0.5
-!	flw	ft0, x31, 0
-!	fmul.s	fa0, fa0, ft0, rne
-!	ret
+min_caml_fhalf:
+	li	x31, min_caml_fhalf_float_0.5
+	flw	ft0, x31, 0
+	fmul.s	fa0, fa0, ft0, rne
+	ret
 min_caml_fsqr:
 	fmul.s	fa0, fa0, fa0, rne
 	ret
@@ -231,5 +231,11 @@ min_caml_print_newline:
 	ret
 min_caml_truncate:
 	j	min_caml_int_of_float
-!float_0.5:
-!	bit 0.5
+min_caml_fhalf_float_0.5:
+	float	0.5
+min_caml_read_int:
+	readint	0
+	ret
+min_caml_read_float:
+	readfloat	0
+	ret

@@ -108,10 +108,7 @@ def replace_pseudo2(line, labels_addrs, cur_addr):
         assert rd == rd2
         imm = labels_addrs[label]
         # imml = imm[11:0] (signed)
-        imml = imm & 0xfff
-        if imm & 0x800 != 0:
-            # 元々負だったので、符号拡張された負の数にする
-            imml = imm - 2**12
+        imml = sign_extend(imm & 0xfff, 12)
         return opformat("addi", [rd, rd, imml])
     elif (opcode == "bne" or opcode == "blt") and operands[2] in labels_addrs:
         rs1, rs2, label = operands
