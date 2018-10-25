@@ -176,8 +176,15 @@ def execute(opcode, operands, regs, fregs, file = None):
         fregs[rd] = r
     elif opcode == "fcvt.w.s":
         rd, rs1, rm = operands
-        # assert rm == "rtz", rm
-        regs[rd] = int(fregs[rs1])
+        if rm == "rtz":
+            regs[rd] = int(fregs[rs1])
+        elif rm == "rdn":
+            if fregs[rs1] >= 0:
+                regs[rd] = int(fregs[rs1])
+            else:
+                regs[rd] = -int(-fregs[rs1])
+        else:
+            assert False, rm
     elif opcode == "fcvt.s.w":
         rd, rs1, rm = operands
         fregs[rd] = float(regs[rs1])
@@ -254,24 +261,30 @@ def main():
     if len(argv) > 2 and argv[2] == "-d":
         opt_debug = True
 
-    # hogefile = open("hoge.ppm", "w")
-    hogefile = None
 
-    # regs = {
-    #     "pc": 0, "zero": 0, "ra": 0, "sp": 400000000, "hp": 800000000,
-    #     "ap": 1200000000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
-    #     "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
-    # }
+    # レイトレ用
+    hogefile = open("hoge.ppm", "w")
     regs = {
-        "pc": 0, "zero": 0, "ra": 0, "sp": 400000, "hp": 800000,
-        "ap": 1200000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
+        "pc": 0, "zero": 0, "ra": 0, "sp": 400000000, "hp": 800000000,
+        "ap": 1200000000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
         "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
     }
+    mem_init(400000000, lines)
     fregs = {
         "fa0": 0.0, "fa1": 0.0, "ft0": 0.0, "ft1": 0.0,
     }
-    # mem_init(400000000, lines)
-    mem_init(400000, lines)
+
+    # 一般用(軽量)
+    # hogefile = None
+    # regs = {
+    #     "pc": 0, "zero": 0, "ra": 0, "sp": 400000, "hp": 800000,
+    #     "ap": 1200000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
+    #     "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
+    # }
+    # fregs = {
+    #     "fa0": 0.0, "fa1": 0.0, "ft0": 0.0, "ft1": 0.0,
+    # }
+    # mem_init(400000, lines)
 
 
     cont = True
@@ -317,5 +330,13 @@ def main():
         #         if M[i] != M_old[i]:
         #             l.append((4*i, M[i]))
         #     print(l)
+
+    print("used memory")
+    for i in range(0, len(M)/1024):
+        for j in range(0, 1024):
+            if M[i*1024 + j] != 0:
+                break
+            if j == 1023:
+                print("{:10d} - {:10d}".format(i*1024, i*1024+1023))
 
 main()

@@ -74,7 +74,7 @@ fsqrt.s rd, rs1, rm(rne)
 fsgnj.s rd, rs1, rs2
 fsgnjn.s rd, rs1, rs2
 fsgnjx.s rd, rs1, rs2
-fcvt.w.s rd, rs1, rm(rdz)
+fcvt.w.s rd, rs1, rm(rtz, rdn)
 feq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
