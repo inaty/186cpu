@@ -254,17 +254,25 @@ def main():
     if len(argv) > 2 and argv[2] == "-d":
         opt_debug = True
 
-    hogefile = open("hoge.ppm", "w")
+    # hogefile = open("hoge.ppm", "w")
+    hogefile = None
 
+    # regs = {
+    #     "pc": 0, "zero": 0, "ra": 0, "sp": 400000000, "hp": 800000000,
+    #     "ap": 1200000000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
+    #     "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
+    # }
     regs = {
-        "pc": 0, "zero": 0, "ra": 0, "sp": 400000000, "hp": 800000000,
-        "ap": 1200000000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
+        "pc": 0, "zero": 0, "ra": 0, "sp": 400000, "hp": 800000,
+        "ap": 1200000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
         "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
     }
     fregs = {
         "fa0": 0.0, "fa1": 0.0, "ft0": 0.0, "ft1": 0.0,
     }
-    mem_init(400000000, lines)
+    # mem_init(400000000, lines)
+    mem_init(400000, lines)
+
 
     cont = True
     cnt = 0

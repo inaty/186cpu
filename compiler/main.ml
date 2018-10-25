@@ -9,20 +9,26 @@ let rec iter n e =
   if e = e' then e else
   iter (n - 1) e'
 
+
 let lexbuf outchan l =
   Id.counter := 0;
   Typing.extenv := M.empty;
   let syntax = Parser.exp Lexer.token l in
   (* Syntax.print_syntax syntax; *)
   let knormal = KNormal.f (Typing.f syntax) in
-  (* KNormal.print_kNormal knormal; *)
-  Emit.f outchan
-    (RegAlloc.f
-       (Simm.f
-          (Virtual.f
-             (Closure.f
-                (iter !limit
-                   (Alpha.f knormal))))))
+  KNormal.print_kNormal knormal;
+  (* 課題03-2*)
+  (* このmatch行のClosure.fとLambdaLifting.fが入れ替え可能になっている *)
+  (* match (Closure.f (iter !limit (Alpha.f knormal))) with *)
+  match (LambdaLifting.f (iter !limit (Alpha.f knormal))) with
+  | Closure.Prog(fundefs, t) as prog ->
+      Closure.print_fundefs fundefs;
+      Closure.print_closure_t t;
+      Emit.f outchan
+        (RegAlloc.f
+          (Simm.f
+            (Virtual.f prog)))
+
 
 let string s = lexbuf stdout (Lexing.from_string s)
 

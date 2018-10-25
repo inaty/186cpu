@@ -1,3 +1,5 @@
+open Printf
+
 type closure = { entry : Id.l; actual_fv : Id.t list }
 type t = exp * Lexing.position
 and exp =
@@ -122,3 +124,79 @@ let f e =
   toplevel := [];
   let e' = g M.empty S.empty e in
   Prog(List.rev !toplevel, e')
+
+(* 課題03-2のための表示関数 *)
+(* kNormalの中にあるものをコピペして少し変更 *)
+
+let print_space indent = eprintf "%s" (String.make indent ' ')
+
+let rec string_of_id_type_list id_type_list =
+  match id_type_list with
+  | [] -> ""
+  | [(id, typ)] -> "(" ^ id ^ ", " ^ (Type.string_of_type typ) ^ ")"
+  | (id, typ) :: id_type_list ->
+      "(" ^ id ^ ", " ^ (Type.string_of_type typ) ^ ") " ^
+       (string_of_id_type_list id_type_list)
+
+let rec print_closure_t_sub (exp, _) indent =
+  print_space indent;
+  match exp with
+  | Unit -> eprintf "UNIT\n"
+  | Int(i) -> eprintf "INT %d\n" i
+  | Float(f) -> eprintf "FLOAT %f\n" f
+  | Neg(var) -> eprintf "NEG %s\n" var
+  | Add(var1, var2) -> eprintf "ADD %s %s\n" var1 var2;
+  | Sub(var1, var2) -> eprintf "SUB %s %s\n" var1 var2;
+  | Mul(var1, var2) -> eprintf "MUL %s %s\n" var1 var2;
+  | Div(var1, var2) -> eprintf "DIV %s %s\n" var1 var2;
+  | FNeg(var) -> eprintf "FNEG %s\n" var
+  | FAdd(var1, var2) -> eprintf "FADD %s %s\n" var1 var2;
+  | FSub(var1, var2) -> eprintf "FSUB %s %s\n" var1 var2;
+  | FMul(var1, var2) -> eprintf "FMUL %s %s\n" var1 var2;
+  | FDiv(var1, var2) -> eprintf "FDIV %s %s\n" var1 var2;
+  | IfEq(var1, var2, exp1, exp2) ->
+      eprintf "IFEQ %s %s\n" var1 var2;
+      print_closure_t_sub exp1 (indent + 2);
+      print_closure_t_sub exp2 (indent + 2)
+  | IfLE(var1, var2, exp1, exp2) ->
+      eprintf "IFLE %s %s\n" var1 var2;
+      print_closure_t_sub exp1 (indent + 2);
+      print_closure_t_sub exp2 (indent + 2)
+  | Let((var, typ), exp1, exp2) ->
+      eprintf "LET %s (TYPE %s)\n" var (Type.string_of_type typ);
+      print_closure_t_sub exp1 (indent + 2);
+      print_space indent; eprintf "IN\n";
+      print_closure_t_sub exp2 (indent + 2)
+  | Var(var) -> eprintf "VAR %s\n" var
+  | MakeCls((f, t), {entry = Id.L(lf); actual_fv = fvs}, cl_t) ->
+      eprintf "MAKECLS %s (TYPE %s ENTRY %s FV %s)\n"
+        f
+        (Type.string_of_type t)
+        lf
+        (Id.pp_list fvs);
+      print_space indent; eprintf "IN\n";
+      print_closure_t_sub cl_t (indent + 2)
+  | AppCls(f, args) -> eprintf "APPCLS %s %s\n" f (Id.pp_list args)
+  | AppDir(Id.L(lf), args) -> eprintf "APPDIR %s %s\n" lf (Id.pp_list args)
+  | Tuple(vars) -> eprintf "TUPLE %s\n" (Id.pp_list vars)
+  | LetTuple(vars, var, exp) ->
+      eprintf "LETTUPLE %s %s\n" (string_of_id_type_list vars) var;
+      print_space indent; eprintf "IN\n";
+      print_closure_t_sub exp (indent + 2)
+  | Get(var1, var2) -> eprintf "GET %s %s\n" var1 var2
+  | Put(var1, var2, var3) -> eprintf "PUT %s %s %s\n" var1 var2 var3
+  | ExtArray(Id.L(la)) -> eprintf "EXTARRAY %s\n" la
+
+let print_closure_t cl_t = print_closure_t_sub cl_t 0
+
+let rec print_fundefs fundefs =
+  match fundefs with
+  | {name = (Id.L(f), t);
+     args = args; formal_fv = fvs; body = body} :: fundefs ->
+      eprintf "FUN %s (TYPE %s)\n" f (Type.string_of_type t);
+      eprintf "ARGS %s\n" (string_of_id_type_list args);
+      eprintf "FVS %s\n" (string_of_id_type_list fvs);
+      eprintf "BODY\n";
+      print_closure_t_sub body 2;
+      print_fundefs fundefs
+  | [] -> ()
