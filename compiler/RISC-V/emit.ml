@@ -61,7 +61,6 @@ and g' oc (dest, inst) sp =
   let lnum = sp.pos_lnum in
   match dest, inst with
   | NonTail(_), Nop -> ()
-  (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), Set(imm) ->
       Printf.fprintf oc "\tli\t%s, %d ! %d\n" rd imm lnum
   | NonTail(rd), SetL(Id.L(label)) ->
@@ -73,7 +72,6 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tneg\t%s, %s ! %d\n" rd rs lnum
   | NonTail(rd), Add(rs1, V(rs2)) ->
       Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), Add(rs1, C(imm)) ->
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Sub(rs1, V(rs2)) ->
@@ -82,12 +80,10 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tmul\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   | NonTail(rd), Div(rs1, rs2) ->
       Printf.fprintf oc "\tdiv\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), Sub(rs1, C(imm)) ->
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 ~-imm lnum
   | NonTail(rd), SLL(rs1, V(rs2)) ->
       Printf.fprintf oc "\tsll\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  (* TODO:値の範囲をちゃんと扱う *)
   | NonTail(rd), SLL(rs1, C(imm)) ->
       Printf.fprintf oc "\tslli\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Ld(rs1, C(imm)) ->
@@ -123,16 +119,17 @@ and g' oc (dest, inst) sp =
   | NonTail(_), StDF(rs2, rs1, V(rs3)) ->
       Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs1 rs3 lnum;
       Printf.fprintf oc "\tfsw\t%s, %s, 0 ! %d\n" "t0" rs2 lnum
-  | NonTail(_), Comment(s) -> Printf.fprintf oc "\t! %s ! %d\n" s lnum
   (* TODO:yに適切な名前をつける *)
   | NonTail(_), Save(reg, y) when List.mem reg allregs &&
                                   not (S.mem y !stackset) ->
       save y; (* スタックセットに記録 *)
+      (* TODO:ここ12bit以内かどうか考えるべき *)
       Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" reg_sp reg (offset y) lnum
   (* TODO:yに適切な名前をつける *)
   | NonTail(_), Save(x, y) when List.mem x allfregs
                                 && not (S.mem y !stackset) ->
       savef y;
+      (* TODO:ここ12bit以内かどうか考えるべき *)
       Printf.fprintf oc "\tfsw\t%s, %s, %d ! %d\n"
         reg_sp x (offset y) lnum
   | NonTail(_), Save(_, y) -> assert (S.mem y !stackset); ()
@@ -145,14 +142,13 @@ and g' oc (dest, inst) sp =
       assert (List.mem x allfregs);
       Printf.fprintf oc "\tflw\t%s, %s, %d ! %d\n"
         x reg_sp (offset y) lnum
-  (* retlよくわかんないけど普通にretに変更しnop削除 *)
-  | Tail, (Nop | St _ | StDF _ | Comment _ | Save _ as inst) ->
+  | Tail, (Nop | St _ | StDF _ | Save _ as inst) ->
       (* nontailだったことにして命令をやり、ret *)
       g' oc (NonTail(Id.gentmp Type.Unit), inst) sp;
       Printf.fprintf oc "\tret ! %d\n" lnum;
   | Tail, (Set _ | SetL _ | Mov _ | Neg _ | Add _ | Sub _
           | Mul _ | Div _ | SLL _ | Ld _ as inst) ->
-      (* return valueをa0レジスタに入れている *)
+      (* return valueをa0レジスタに入れてret *)
       g' oc (NonTail(regs.(0)), inst) sp;
       Printf.fprintf oc "\tret ! %d\n" lnum;
   | Tail, (FMv _ | FNeg _ | FAdd _ |
@@ -170,8 +166,7 @@ and g' oc (dest, inst) sp =
       g'_tail_if oc reg1 reg2 insts1 insts2 "be" "bne"
   | Tail, IfLE(reg1, reg2, insts1, insts2) ->
       g'_tail_if oc reg2 reg1 insts1 insts2 "bge" "blt"
-  (* | Tail, IfGE(reg1, reg2, insts1, insts2) ->
-      g'_tail_if oc reg1 reg2 insts1 insts2 "bge" "bl" *)
+  (* TODO:fix *)
   | Tail, IfFEq(reg1, reg2, e1, e2) ->
       Printf.fprintf oc "\tfcmpd\t%s, %s\n" reg1 reg2;
       Printf.fprintf oc "\tnop\n";
@@ -180,12 +175,12 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tfcmpd\t%s, %s\n" reg1 reg2;
       Printf.fprintf oc "\tnop\n";
       g'_tail_if oc reg1 reg2 e1 e2 "fble" "fbg"
+  (* TODO:fixend *)
   | NonTail(rd), IfEq(rs1, rs2, insts1, insts2) ->
       g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "be" "bne"
   | NonTail(rd), IfLE(rs1, rs2, insts1, insts2) ->
       g'_non_tail_if oc (NonTail(rd)) rs2 rs1 insts1 insts2 "bge" "blt"
-  (* | NonTail(rd), IfGE(rs1, rs2, insts1, insts2) ->
-      g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "bge" "bl" *)
+  (* TODO:fix *)
   | NonTail(z), IfFEq(x, y, e1, e2) ->
       Printf.fprintf oc "\tfcmpd\t%s, %s\n" x y;
       Printf.fprintf oc "\tnop\n";
@@ -194,6 +189,7 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\tfcmpd\t%s, %s\n" x y;
       Printf.fprintf oc "\tnop\n";
       g'_non_tail_if oc (NonTail(z)) x y e1 e2 "fble" "fbg"
+  (* TODO:fixend *)
   | Tail, CallCls(x, ys, zs) ->
       (* 入れ替え *)
       g'_args oc [(reg_cl, x)] ys zs;
@@ -284,23 +280,15 @@ let h oc {name = Id.L(x); args = _; fargs = _; body = insts; ret = _} =
 
 let f oc (Prog(float_table, fundefs, insts)) =
   Format.eprintf "generating assembly...@.";
-  (* 頭から読んで実行する用のバイナリなので、とりあえずこうする *)
   Printf.fprintf oc "\tj\tmin_caml_start\n";
-  (* リンカとかのことを考えないので、そういうのはとりあえず無視 *)
-  (* Printf.fprintf oc ".section\t\".rodata\"\n";
-  Printf.fprintf oc ".align\t8\n"; *)
   List.iter
     (fun (Id.L(x), d) ->
-      Printf.fprintf oc "%s: ! %f\n" x d;
+      Printf.fprintf oc "%s:\n" x;
       Printf.fprintf oc "\tfloat\t%f\n" d)
     float_table;
-  (* Printf.fprintf oc ".section\t\".text\"\n"; *)
   List.iter (fun fundef -> h oc fundef) fundefs;
-  (* Printf.fprintf oc ".global\tmin_caml_start\n"; *)
   Printf.fprintf oc "min_caml_start:\n";
-  (* Printf.fprintf oc "\tsave\t%%sp, -112, %%sp\n"; (* from gcc; why 112? *) *)
   stackset := S.empty;
   stackmap := [];
   g oc (NonTail("zero"), insts);
   Printf.fprintf oc "\tfin\t0\n";
-  (* Printf.fprintf oc "\trestore\n" *)

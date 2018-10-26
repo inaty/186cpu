@@ -26,7 +26,6 @@ and inst = (* 命令（仮想命令含む） *)
   | FDiv of Id.t * Id.t
   | LdDF of Id.t * id_or_imm (* わからんけどラベルから値を引き出す操作っぽい *)
   | StDF of Id.t * Id.t * id_or_imm (* stのdoubleword float（？） *)
-  | Comment of string
   (* virtual instructions *)
   (* 変更(op2をid_or_immからId.tに) *)
   | IfEq of Id.t * Id.t * insts * insts
@@ -92,7 +91,7 @@ let rec remove_and_uniq xs = function
 (* free variables in the order of use (for spilling) (caml2html: sparcasm_fv) *)
 let fv_id_or_imm = function V(x) -> [x] | _ -> []
 let rec fv_exp = function
-  | Nop | Set(_) | SetL(_) | Comment(_) | Restore(_) -> []
+  | Nop | Set(_) | SetL(_) | Restore(_) -> []
   | Mov(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) -> [x]
   | Add(x, y') | Sub(x, y') | SLL(x, y')
   | Ld(x, y') | LdDF(x, y') -> x :: fv_id_or_imm y'

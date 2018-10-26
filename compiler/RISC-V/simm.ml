@@ -1,7 +1,7 @@
 open Asm
 
-(* 命令列に対する13bit即値最適化 *)
-(* レジスタの中身が13bitまでの即値だった場合はそこをC(i)にする *)
+(* 命令列に対する12bit即値最適化 *)
+(* レジスタの中身が12bitまでの即値だった場合はそこをC(i)にする *)
 let rec g imms insts =
   match insts with
   | Ans(inst_pos) -> Ans(g' imms inst_pos)
@@ -15,8 +15,7 @@ let rec g imms insts =
   | Let(xt, (SLL(y, C(i)), sp), e) when M.mem y imms -> (* for array access *)
       g imms (Let(xt, (Set((M.find y imms) lsl i), sp), e))
   | Let(xt, inst, e) -> Let(xt, g' imms inst, g imms e)
-(* 命令に対する13bit即値最適化 *)
-(* envは即値リスト（大事） *)
+(* 命令に対する12bit即値最適化 *)
 and g' imms (inst, pos) =
   let inst =
     match inst with

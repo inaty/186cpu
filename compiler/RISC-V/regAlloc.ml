@@ -129,7 +129,7 @@ and g'_and_restore dest cont regenv inst =
 (* TODO:即値ifに関するものは消していい *)
 and g' dest cont regenv (inst, sp) =
   match inst with
-  | Nop | Set _ | SetL _ | Comment _ | Restore _ -> (Ans(inst, sp), regenv)
+  | Nop | Set _ | SetL _ | Restore _ -> (Ans(inst, sp), regenv)
   | Mov(x) -> (Ans(Mov(find x Type.Int regenv), sp), regenv)
   | Neg(x) -> (Ans(Neg(find x Type.Int regenv), sp), regenv)
   | Add(x, y') ->

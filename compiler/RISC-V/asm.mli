@@ -26,7 +26,6 @@ and inst =
   | FDiv of Id.t * Id.t
   | LdDF of Id.t * id_or_imm
   | StDF of Id.t * Id.t * id_or_imm
-  | Comment of string
   (* virtual instructions *)
   (* 変更(op2をid_or_immからId.tに) *)
   | IfEq of Id.t * Id.t * insts * insts
