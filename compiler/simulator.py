@@ -179,27 +179,24 @@ def execute(opcode, operands, regs, fregs, file = None):
         if rm == "rtz":
             regs[rd] = int(fregs[rs1])
         elif rm == "rdn":
-            if fregs[rs1] >= 0:
-                regs[rd] = int(fregs[rs1])
-            else:
-                regs[rd] = -int(-fregs[rs1])
+            regs[rd] = int(math.floor(fregs[rs1]))
         else:
             assert False, rm
-    elif opcode == "fcvt.s.w":
-        rd, rs1, rm = operands
-        fregs[rd] = float(regs[rs1])
-    elif opcode == "flt.s":
-        rd, rs1, rs2 = operands
-        if fregs[rs1] < fregs[rs2]:
-            regs[rd] = 1
-        else:
-            regs[rd] = 0
     elif opcode == "feq.s":
         rd, rs1, rs2 = operands
         if fregs[rs1] == fregs[rs2]:
             regs[rd] = 1
         else:
             regs[rd] = 0
+    elif opcode == "flt.s":
+        rd, rs1, rs2 = operands
+        if fregs[rs1] < fregs[rs2]:
+            regs[rd] = 1
+        else:
+            regs[rd] = 0
+    elif opcode == "fcvt.s.w":
+        rd, rs1, rm = operands
+        fregs[rd] = float(regs[rs1])
     elif opcode == "in":
         rd, rs1, imm = operands
         if inputbuf == []:
@@ -331,8 +328,9 @@ def main():
         #             l.append((4*i, M[i]))
         #     print(l)
 
+    # 使用されたメモリ領域の出力だが、バグっているっぽい
     print("used memory")
-    for i in range(0, len(M)/1024):
+    for i in range(0, len(M)//1024):
         for j in range(0, 1024):
             if M[i*1024 + j] != 0:
                 break
