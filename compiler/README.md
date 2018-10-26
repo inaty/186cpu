@@ -354,45 +354,48 @@ LORD rd, rs1, imm
 STORE rs1, rs2, imm
 OP rd, rs1, rs2
 
-ORIGINAL
-in rd, rs1, imm (rdに値が入る、rs1とimmはダミー、0埋め)
-ins rd, rs1, imm (rdに値が入る、rs1とimmはダミー、最上位ビット埋め)
-out rd, rs1, imm (rs1の値を送る、rdとimmはダミー)
-※このダミーはアセンブラを書きやすくするためにこうしている
-ダミーはそのままバイナリに反映されてしまうので、レジスタにはzero、即値には0を指定するとよい
-```
-* リンカは吐くけどアセンブラは対応していない命令一覧
-```
 RV32M
 mul rd, rs1, rs2
 div rd, rs1, rs2
 
 RV32F
-flw rd, rs1, imm(12bit signed)
-fsw rs1, rs2, imm(12bit signed)
+flw rd, rs1, imm
+fsw rs1, rs2, imm
 fadd.s rd, rs1, rs2, rm(rne)
 fsub.s rd, rs1, rs2, rm(rne)
 fmul.s rd, rs1, rs2, rm(rne)
 fdiv.s rd, rs1, rs2, rm(rne)
----
 fsqrt.s rd, rs1, rm(rne)
+fsgnj.s rd, rs1, rs2
 fsgnjn.s rd, rs1, rs2
 fsgnjx.s rd, rs1, rs2
 fcvt.w.s rd, rs1, rm(rdn, rtz)
-feq.s rd, rs1, rs2
+lfeq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
----
-fsgnj.s rd, rs1, rs2
 
 ORIGINAL
-float f(float string)　←命令ではなく、データ置く用
-fin 0
----
-fcos.s rd, rs1, rm(rne)
-fsin.s rd, rs1, rm(rne)
-fatan.s rd, rs1, rm(rne)
-out rd, rs1, imm(0)
+in rd, rs1, imm (rdに値が入る、rs1とimmはダミー、0埋め)
+ins rd, rs1, imm (rdに値が入る、rs1とimmはダミー、最上位ビット埋め)
+out rd, rs1, imm (rs1の値を送る、rdとimmはダミー)
+→コアの仕様通り
+※このダミーはアセンブラを書きやすくするためにこうしている
+ダミーはそのままバイナリに反映されてしまうので、レジスタにはzero、即値には0を指定するとよい
+
+float f(float string)　→　fの32bit表現
+※命令ではなく、データ置く用
+
+fin 0 →　0...0
+
+fcos.s rd, rs1, rm(rne)　→　1100001 00000 rs1 rm rd 1010011
+fsin.s rd, rs1, rm(rne)　→　1100001 00001 rs1 rm rd 1010011
+fatan.s rd, rs1, rm(rne)　→　1101001 00000 rs1 rm rd 1010011
+※サボり、これは最終的には消す
+ちなみにそれぞれfcvt.w.d, fcvt.wu.d, fcvt.d.wと同じ
+```
+* リンカは吐くけどアセンブラは対応していない命令一覧
+```
+ORIGINAL
 readint 0
 readfloat 0
 
