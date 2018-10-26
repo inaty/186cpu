@@ -188,8 +188,8 @@ def regnum(regname):
     matched = re.match("x(\d{1,2})", regname)
     if matched:
         n = int(matched.group(1))
-        if 0 <= n and n <= 31:
-            return n
+        assert 0 <= n and n <= 31, n
+        return n
 
     # 名前固定レジスタ
     if (regname == "zero"):
@@ -198,40 +198,40 @@ def regnum(regname):
         return 1
     if (regname == "sp"):
         return 2
-    if (regname == "gp"):
+    if (regname == "ap"):
         return 3
-    if (regname == "tp"):
+    if (regname == "hp"):
         return 4
-    if (regname == "fp"):
-        return 8
+
+    # a0など
+    matched = re.match("a(\d{1,2})", regname)
+    if matched:
+        n = int(matched.group(1))
+        assert 0 <= n and n <= 21, n
+        return n+5
 
     # t0など
     matched = re.match("t(\d)", regname)
     if matched:
         n = int(matched.group(1))
-        if 0 <= n and n <= 2:
-            return 5+n
-        if 3 <= n and n <= 6:
-            return 28 + (n-3)
+        assert 0 <= n and n <= 4, n
+        return n+27
 
-    # a0など
-    matched = re.match("a(\d)", regname)
+    # fa0など
+    matched = re.match("fa(\d{1,2})", regname)
     if matched:
         n = int(matched.group(1))
-        if 0 <= n and n <= 7:
-            return 10+n
+        assert 0 <= n and n <= 26, n
+        return n
 
-    # s0など
-    matched = re.match("s(\d{1,2})", regname)
+    # t0など
+    matched = re.match("ft(\d)", regname)
     if matched:
         n = int(matched.group(1))
-        if 0 <= n and n <= 1:
-            return 8+n
-        if 2 <= n and n <= 11:
-            return 18 + (n-2)
+        assert 0 <= n and n <= 4, n
+        return n+27
 
-    print(regname)
-    assert False
+    assert False, regname
 
 def regstr(regname):
     n = regnum(regname)
@@ -279,7 +279,7 @@ def binary_string_of_inst(opcode, operands):
         opcode_org = opcode
         opcode, imm1 = Irm_opcodes[opcode], Irm_imms[opcode]
         rd, rs1 = regstr(operands[0]), regstr(operands[1])
-        rm = rms[oprands[2]]
+        rm = rms[operands[2]]
         return "{}{}{}{}{}".format(imm1, rs1, rm, rd, opcode)
     elif opcode in S_opcodes:
         opcode, funct3 = S_opcodes[opcode], S_funct3s[opcode]
@@ -313,6 +313,8 @@ def binary_string_of_inst(opcode, operands):
         return "".join(["{:08b}".format(b) for b in struct.pack(">f", f)])
     elif opcode == "fin":
         return "0" * 32
+    elif opcode == "readint" or "readfloat":
+        return "1" * 32
     else:
         assert False, "{} {}".format(opcode, ", ".join(operands))
 

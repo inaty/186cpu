@@ -31,12 +31,18 @@
 * レジスタ名  
   ~~https://github.com/riscv/riscv-asm-manual/blob/master/riscv-asm.md に準拠~~  
   適当に作りました。また変わるかも(tが減りそう)  
+
 ```
+整数レジスタ
 ra (=x1), sp (=x2) caller save
 ap (=x3) = array pointer (array_create以外でアクセスしない)（これはインチキなので後で直す）
 hp (=x4) = heap pointer (ヒープに触るとき以外アクセスしない)(というかよくわからない)
 a0~a21 (=x5~x26)　caller save
 t0~t4 (=x27~x31) caller save
+
+浮動小数点数レジスタ
+fa0~fa26 (=f0~f26) caller save
+ft0~ft4 (=f27~f31) caller save
 ```  
 * 出力ファイルhoge.sフォーマット  
   命令行は  
@@ -264,6 +270,7 @@ jal label = jal ra, (labelへのoffset)
 * コンパイルしたプログラムもしくはライブラリを入れた時のリンカの最終的な出力  
   これに加えて不正な入力をした場合それは素通しされるので注意
   あと未解決ラベルも素通しされるので注意
+
 ```
 RV32I
 lui rd, imm(32bit signed, 下12bitは0)
@@ -326,8 +333,8 @@ fbg rs1, rs2, label
   メモリの中身は全てsigned int  
   シミュレート開始時に各種レジスタとpcは全て値0（特にspが0であることは重要）  
 * 対応命令セット  
-  コンパイラのところにある要求命令一覧全て+α(`divu, remu, in, printint`)  
-  `in` 標準入力から空白区切りで文字列表現された数字を読み込む。これ多分解釈間違ってて、本来は文字を1文字読み込むだけのはず
+  リンカから出される命令全て+α(`divu, remu, in, printint`)  
+  `in` 標準入力から空白区切りで文字列表現された数字を読み込む。これ多分解釈間違ってて、本来は文字を1文字読み込むだけのはずなのであとで直す
   `out` 標準出力に数字を文字列として出力 or ファイルに数字を文字列として出力
   `readint` 標準入力から空白区切りで文字列表現された数字を読み込む
   `readfloat` 標準入力から空白区切りで文字列表現された実数を読み込む
@@ -335,10 +342,10 @@ fbg rs1, rs2, label
 
 # アセンブラ仕様
 * 入力ファイルのフォーマット  
-  実行可能アセンブリであり、各行が
+  実行可能アセンブリであり、各行が  
   `\t<opcode>\t<operand1>[, <operand2>[, <operand3>, <operand4>]]\n]`  
-  である必要がある（先頭や区切り文字が違うと動作しない）（変更要望
-  あれば教えて）  
+  である必要がある（先頭や区切り文字が違うと動作しない）
+  （変更要望あれば教えて）  
 * 対応命令一覧  
 
 ```
@@ -392,14 +399,15 @@ fsin.s rd, rs1, rm(rne)　→　1100001 00001 rs1 rm rd 1010011
 fatan.s rd, rs1, rm(rne)　→　1101001 00000 rs1 rm rd 1010011
 ※サボり、これは最終的には消す
 ちなみにそれぞれfcvt.w.d, fcvt.wu.d, fcvt.d.wと同じ
+
+readint 0　→　1...1
+readfloat 0　→　1...1
+※設定しとかないとアセンブリが通らないので書いているがめちゃくちゃなのでここには来ないで
+min_caml_read_intとmin_caml_read_floatが呼ばれなくてバグがなければ来ないはず
 ```
 * リンカは吐くけどアセンブラは対応していない命令一覧
-```
-ORIGINAL
-readint 0
-readfloat 0
 
-PSEUDO
+```
 なし
 ```
 
