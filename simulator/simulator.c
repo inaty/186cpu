@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
+#include<math.h>
 #define SIZE 8096
 int num (char* a){
     int n = strlen(a);
@@ -183,10 +184,9 @@ int main(int argc , char* argv[]){
 		rs1 = (command[pc]>>15) & 0b11111;
 		rd = (command[pc]>>7) & 0b11111;
 		rg[rd]=pc+1;
-		rs1=rs1/4;
 		if ((flag&4)==4)
-		printf("pc[%d],jalr:pc<-%d\n",pc,pc+imm+rs1);
-		pc=pc+imm+rs1;
+		printf("pc[%d],jalr:pc<-%d\n",pc,pc+imm+rg[rs1]/4);
+		pc=pc+imm+rg[rs1]/4;
 	}
 
 //branch系命令
@@ -447,6 +447,24 @@ int main(int argc , char* argv[]){
 		}
 		pc++;
 	}
+	//flw
+	else if ((opecode==0b0000111)&&(funct3==0b010)){
+			imm = command[pc]>>20;
+			rd = (command[pc]>>7) & 0b11111;
+			rs1 = (command[pc]>>15) & 0b11111;
+		if ((flag&4)==4)
+			printf("pc[%d],flw\n",pc);
+			rg[rd]=(float)mem[imm+rs1];
+			pc++;
+			}
+	//fsw
+	else if ((opecode==0b0100111)&&(funct3==0b010)){
+			rs1 = (command[pc]>>15) & 0b11111;
+		if ((flag&4)==4)
+			printf("pc[%d],fsw\n",pc);
+			mem[imm+rs1]=(unsigned int)(rg[rs2]&0xff);
+			pc++;
+	}
 	//float 演算
 	else if (opecode==0b1010011){
 			imm = command[pc]>>25;
@@ -478,6 +496,32 @@ int main(int argc , char* argv[]){
 			printf("pc[%d],fdiv.s\n",pc);
 			frg[rd]=frg[rs1]/frg[rs2];
 		}
+		//fsqrt.s
+		if((imm==0b0101100)&&(rs2==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fsqrt.s\n",pc);
+			frg[rd]=sqrt(frg[rs1]);
+		}
+		//fsgnj.s
+		if((imm==0b00100000)&&(funct3==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fsgnj.s\n",pc);
+			frg[rd]=(float)(((unsigned int)frg[rs1])&0x7fffffff+((unsigned int)frg[rs2])&0x80000000);
+		}
+		//fsgnjn.s
+		if((imm==0b00100000)&&(funct3==1)){
+		if ((flag&4)==4)
+			printf("pc[%d],fsgnjn.s\n",pc);
+			frg[rd]=(float)((unsigned int)frg[rs1]&0x7fffffff+(0x80000000^((unsigned int)frg[rs2]&0x80000000)));
+		}
+		//fsgnjx.s
+		if((imm==0b00100000)&&(funct3==2)){
+		if ((flag&4)==4)
+			printf("pc[%d],fsgnjx.s\n",pc);
+			frg[rd]=(float)((unsigned int)frg[rs1]&0x7fffffff+(((unsigned int)frg[rs1]&0x80000000)^((unsigned int)frg[rs2]&0x80000000)));
+		
+		}
+		//
 
 	pc++;
 	}
@@ -500,7 +544,7 @@ int main(int argc , char* argv[]){
 				}
 					printf("\n");
 				for (int j=0;j<32;j++){
-					if (rg[j]!=0)
+					if (frg[j]!=0)
 					printf("frg[%d]=%.3f",j,frg[j]);
 				}
 					printf("\n");

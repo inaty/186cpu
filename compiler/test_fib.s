@@ -22,24 +22,24 @@ be_else.27:
 	addi	a1, a1, -2 ! 4
 	sw	sp, a0, 4 ! 0
 	mv	a0, a1
-	sw	sp, ra, 12
-	addi	sp, sp, 16
+	sw	sp, ra, 8
+	addi	sp, sp, 12
 	jal	fibonacci.11
-	addi	sp, sp, -16
-	lw	ra, sp, 12
+	addi	sp, sp, -12
+	lw	ra, sp, 8
 	lw	a1, sp, 4 ! 0
 	add	a0, a1, a0 ! 4
 	ret ! 4
 min_caml_start:
 	li	a0, 6 ! 5
-	sw	sp, ra, 4
-	addi	sp, sp, 8
+	sw	sp, ra, 0
+	addi	sp, sp, 4
 	jal	fibonacci.11
-	addi	sp, sp, -8
-	lw	ra, sp, 4
-	sw	sp, ra, 4
-	addi	sp, sp, 8
+	addi	sp, sp, -4
+	lw	ra, sp, 0
+	sw	sp, ra, 0
+	addi	sp, sp, 4
 	jal	min_caml_print_int
-	addi	sp, sp, -8
-	lw	ra, sp, 4
+	addi	sp, sp, -4
+	lw	ra, sp, 0
 	fin	0
