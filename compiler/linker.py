@@ -110,7 +110,8 @@ def replace_pseudo2(line, labels_addrs, cur_addr):
         # imml = imm[11:0] (signed)
         imml = sign_extend(imm & 0xfff, 12)
         return opformat("addi", [rd, rd, imml])
-    elif (opcode == "bne" or opcode == "blt") and operands[2] in labels_addrs:
+    elif (opcode == "beq" or opcode == "bne" or opcode == "blt") \
+            and operands[2] in labels_addrs:
         rs1, rs2, label = operands
         imm = labels_addrs[label] - cur_addr
         check_and_int(imm, 12)

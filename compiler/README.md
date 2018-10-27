@@ -30,6 +30,16 @@
   （sp, hp, apはそれぞれその指す番地から正の向きにどんどんメモリ領域を食っていくのである程度の間隔を開けて配置する必要がある）
   ここは適切なメモリマップが見つかったらいい感じに初期化する処理を入れたい（が、メモリマップの調査検討はシミュレータ待ち）
   レイトレを動かしたときは各100000000*4Bの領域を確保していた　こんなにいるかわからんが、少なくともこれの1/100にするとはみ出る
+* IOの仕様（コアのコピペ）（2018/10/27）
+  オペコード 0001011
+  31:20　使わない
+  19:15 出力命令の時に出力する値が入ったレジスタ 下位8bitを送ります
+  14 入力のとき1なら0埋め 0なら最上位bitで埋め
+  13　使わないかな
+  12　1なら出力0で入力
+  11:7 入力のときに受け取った値を入れるレジスタ
+  6:0 opcode 0001011
+
 
 # コンパイラ仕様
 * レジスタ名  
@@ -104,6 +114,7 @@ fbg rs1, rs2, label
 ```
 
 * libmincaml.Sに含まれている命令一覧  
+ちなみにt0, t1, t2, t3まで使う（t1, t2, t3はread_intのみ）
 
 ```
 上と被ってるやつ
@@ -114,6 +125,7 @@ sw rd, rs1, imm(signed 12bit?)
 addi rd, rs1, imm(signed 12bit?)
 slli rd, rs1, imm(2)
 add rd, rs1, rs2
+sub rd, rs1, rs2
 
 RV32M
 mul rd, rs1, rs2
@@ -148,12 +160,15 @@ feq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
 
+PSEUDO
+beq rs1, rs2, label
+
 ORIGINAL
 fcos.s rd, rs1, rm(rne)
 fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
+in rd, rs1, imm
 out rd, rs1, imm(0)
-readint 0
 readfloat 0
 ```
 
@@ -198,8 +213,8 @@ fin 0
 fcos.s rd, rs1, rm(rne)
 fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
+in rd, rs1, imm
 out rd, rs1, imm(0)
-readint 0
 readfloat 0
 
 
@@ -210,6 +225,7 @@ mv rd, rs
 neg rd, rs
 fmv.s rd, rs
 fneg.s rd, rs
+beq rs1, rs2, label
 bne rs1, rs2, label
 blt rs1, rs2, label
 j label
@@ -263,6 +279,7 @@ RV32I
 tmp_lui rd, label = lui rd, (labelの中身immに対し imm[31:12] + imm[11])
 tmp_addi rd, rd, label = addi rd, rd, (labelの中身immに対しimm[11:0])
 (12bit signed)
+beq rs1, rs2, label = beq rs1, rs2, (labelへのoffset)
 bne rs1, rs2, label = bne rs1, rs2, (labelへのoffset)
 blt rs1, rs2, label = blt rs1, rs2, (labelへのoffset)
 (20bit signed)
@@ -280,8 +297,9 @@ RV32I
 lui rd, imm(32bit signed, 下12bitは0)
 jal rd, imm
 jalr rd, rs1, imm(0)
-bne rs1, rs2, imm(?bit)
-blt rs1, rs2, imm(?bit)
+beq rs1, rs2, imm(12bit signed)
+bne rs1, rs2, imm(12bit signed)
+blt rs1, rs2, imm(12bit signed)
 lw rd, rs1, imm(12bit signed)
 sw rs1, rs2, imm(12bit signed)
 addi rd, rs1, imm(12bit signed)
@@ -319,8 +337,8 @@ fin 0
 fcos.s rd, rs1, rm(rne)
 fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
+in rd, rs1, imm
 out rd, rs1, imm(0)
-readint 0
 readfloat 0
 
 PSEUDO
@@ -404,10 +422,10 @@ fatan.s rd, rs1, rm(rne)　→　1101001 00000 rs1 rm rd 1010011
 ※サボり、これは最終的には消す
 ちなみにそれぞれfcvt.w.d, fcvt.wu.d, fcvt.d.wと同じ
 
-readint 0　→　1...1
 readfloat 0　→　1...1
 ※設定しとかないとアセンブリが通らないので書いているがめちゃくちゃなのでここには来ないで
 min_caml_read_intとmin_caml_read_floatが呼ばれなくてバグがなければ来ないはず
+
 ```
 * リンカは吐くけどアセンブラは対応していない命令一覧
 

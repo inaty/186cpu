@@ -74,6 +74,12 @@ def execute(opcode, operands, regs, fregs, file = None):
         regs[rd] = regs["pc"] + 4
         regs["pc"] = regs[rs1] + imm
         pc_increment = False
+    elif opcode == "beq":
+        rs1, rs2, imm = operands
+        imm = check_and_int(imm, 12)
+        if (regs[rs1] == regs[rs2]):
+            regs["pc"] = regs["pc"] + imm
+            pc_increment = False
     elif (opcode == "bne"):
         rs1, rs2, imm = operands
         imm = check_and_int(imm, 12)
@@ -199,31 +205,18 @@ def execute(opcode, operands, regs, fregs, file = None):
         fregs[rd] = float(regs[rs1])
     elif opcode == "in":
         rd, rs1, imm = operands
-        if inputbuf == []:
-            read_into_inputbuf()
-        regs[rd] = check_and_int(inputbuf[0], 8, "both") & 0x000000ff
-        inputbuf.pop(0)
+        regs[rd] = ord(sys.stdin.read(1))
     elif opcode == "out":
         rd, rs1, imm = operands
         if file:
             file.write(chr(regs[rs1] & 0x000000ff))
         else:
             sys.stdout.write(chr(regs[rs1] & 0x000000ff))
-    elif opcode == "readint":
-        if inputbuf == []:
-            read_into_inputbuf()
-        regs["a0"] = sign_extend(check_and_int(inputbuf[0], 32, "both"), 32)
-        inputbuf.pop(0)
     elif opcode == "readfloat":
         if inputbuf == []:
             read_into_inputbuf()
         fregs["fa0"] = float(inputbuf[0])
         inputbuf.pop(0)
-    elif opcode == "printint":
-        # 使わない説
-        rs1 = operands[0]
-        i = int(regs[rs1])
-        file.write(i.to_bytes(1, "big"))
     elif opcode == "fcos.s":
         rd, rs1, rm = operands
         fregs[rd] = math.cos(fregs[rs1])
@@ -260,28 +253,28 @@ def main():
 
 
     # レイトレ用
-    hogefile = open("hoge.ppm", "w")
-    regs = {
-        "pc": 0, "zero": 0, "ra": 0, "sp": 400000000, "hp": 800000000,
-        "ap": 1200000000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
-        "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
-    }
-    mem_init(400000000, lines)
-    fregs = {
-        "fa0": 0.0, "fa1": 0.0, "ft0": 0.0, "ft1": 0.0,
-    }
-
-    # 一般用(軽量)
-    # hogefile = None
+    # hogefile = open("hoge.ppm", "w")
     # regs = {
-    #     "pc": 0, "zero": 0, "ra": 0, "sp": 400000, "hp": 800000,
-    #     "ap": 1200000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
+    #     "pc": 0, "zero": 0, "ra": 0, "sp": 400000000, "hp": 800000000,
+    #     "ap": 1200000000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
     #     "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
     # }
+    # mem_init(400000000, lines)
     # fregs = {
     #     "fa0": 0.0, "fa1": 0.0, "ft0": 0.0, "ft1": 0.0,
     # }
-    # mem_init(400000, lines)
+
+    # 一般用(軽量)
+    hogefile = None
+    regs = {
+        "pc": 0, "zero": 0, "ra": 0, "sp": 400000, "hp": 800000,
+        "ap": 1200000, "a0": 0, "a1": 0, "a2": 0, "a3": 0, "a4": 0,
+        "a5": 0, "a6": 0, "a7": 0, "a8": 0, "a20": 0, "a21": 0, "t0": 0
+    }
+    fregs = {
+        "fa0": 0.0, "fa1": 0.0, "ft0": 0.0, "ft1": 0.0,
+    }
+    mem_init(400000, lines)
 
 
     cont = True
@@ -328,13 +321,14 @@ def main():
         #             l.append((4*i, M[i]))
         #     print(l)
 
+    # レイトレ用
     # 使用されたメモリ領域の出力だが、バグっているっぽい
-    print("used memory")
-    for i in range(0, len(M)//1024):
-        for j in range(0, 1024):
-            if M[i*1024 + j] != 0:
-                break
-            if j == 1023:
-                print("{:10d} - {:10d}".format(i*1024, i*1024+1023))
+    # print("used memory")
+    # for i in range(0, len(M)//1024):
+    #     for j in range(0, 1024):
+    #         if M[i*1024 + j] != 0:
+    #             break
+    #         if j == 1023:
+    #             print("{:10d} - {:10d}".format(i*1024, i*1024+1023))
 
 main()

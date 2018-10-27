@@ -53,10 +53,14 @@ join-reg join-reg2 non-tail-if non-tail-if2 \
 inprod inprod-rec inprod-loop matmul matmul-flat \
 manyargs
 
-do_test: $(TESTS:%=test/%.cmp)
+TESTS2 = readint
 
-.PRECIOUS: test/%.s test/% test/%.res test/%.ans test/%.cmp
-TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp)
+do_test: $(TESTS:%=test/%.cmp) $(TESTS2:%=test2/%.cmp)
+
+.PRECIOUS: test/%.s test/%.ss test/%.res test/%.ans test/%.cmp \
+	test2/%.s test2/%.ss test2/%.res test2/%.ans test2/%.cmp
+TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp) \
+$(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
@@ -70,6 +74,20 @@ test/%.ans: test/%.ml
 	ocaml $< > $@
 test/%.cmp: test/%.res test/%.ans
 	diff $^ > $@
+
+test2/%.s: $(RESULT) test2/%.ml
+	./$(RESULT) test2/$*
+test2/%.ss: test2/%.s
+	python3 linker.py libmincaml.S $<
+# python3 simulator.py test/hoge.ss > test/hoge.res
+test2/%.res: test2/%.ss test2/%.in
+	python3 simulator.py $< < test2/$*.in > $@
+# ここが普通のocamlで実行する処理、mlはocamlでもmincamlでも走るようになっていてこれはよし
+# test2/%.ans: test2/%.ml test2/%.in
+# 	ocaml $< < test2/$*.in > $@
+test2/%.cmp: test2/%.res test2/%.ans
+	diff $^ > $@
+
 
 # なんかいらなさそうだったのでコメントアウト
 # min-caml.html: main.mli main.ml id.ml m.ml s.ml \

@@ -313,7 +313,7 @@ def binary_string_of_inst(opcode, operands):
         return "".join(["{:08b}".format(b) for b in struct.pack(">f", f)])
     elif opcode == "fin":
         return "0" * 32
-    elif opcode == "readint" or "readfloat":
+    elif opcode == "readfloat":
         return "1" * 32
     else:
         assert False, "{} {}".format(opcode, ", ".join(operands))

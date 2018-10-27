@@ -234,7 +234,37 @@ min_caml_truncate:
 min_caml_fhalf_float_0.5:
 	float	0.5
 min_caml_read_int:
-	readint	0
+	li	t1, 32
+	li	t2, 10
+min_caml_read_int_discard:
+	in	t0, zero, 0
+	beq	t0, t1, min_caml_read_int_discard
+	beq	t0, t2, min_caml_read_int_discard
+	li	a0, 0
+	li	t1, 48
+	li	t2, 57
+	li	t3, 10
+	li	t4, 45
+	bne	t0, t4, min_caml_read_int_body
+	in	t0, zero, 0
+	j	min_caml_read_int_body_minus
+min_caml_read_int_body:
+	blt	t0, t1, min_caml_read_int_ret
+	blt	t2, t0, min_caml_read_int_ret
+	mul	a0, a0, t3
+	addi	t0, t0, -48
+	add	a0, a0, t0
+	in	t0, zero, 0
+	j	min_caml_read_int_body
+min_caml_read_int_body_minus:
+	blt	t0, t1, min_caml_read_int_ret
+	blt	t2, t0, min_caml_read_int_ret
+	mul	a0, a0, t3
+	addi	t0, t0, -48
+	sub	a0, a0, t0
+	in	t0, zero, 0
+	j	min_caml_read_int_body_minus
+min_caml_read_int_ret:
 	ret
 min_caml_read_float:
 	readfloat	0
