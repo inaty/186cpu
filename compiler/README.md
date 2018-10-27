@@ -16,6 +16,12 @@
   <option>は-から始まる文字列で、  
   lを含んでいるとlittle endianに、xを含んでいると16進数出力になる。  
   レジスタの通称削除は今はここでやっている（消す予定）  
+* sld_converter
+  uenokuにもらった
+  ./a.out input.sld output.txt output.bin
+  とやるとinput.sldをバイナリ化できる
+  ライブラリの実装的にread_intやread_floatが全部バイナリ入力なのでなんか試したい場合はこれ使う必要あり
+  sldじゃないと変換できない？
 
 # 細かい仕様
 * 即値について  
@@ -114,7 +120,8 @@ fbg rs1, rs2, label
 ```
 
 * libmincaml.Sに含まれている命令一覧  
-ちなみにt0, t1, t2, t3まで使う（t1, t2, t3はread_intのみ）
+temporaryはt0まで使う  
+readint, readfloatはビッグエンディアンで入ってくることを前提としている
 
 ```
 上と被ってるやつ
@@ -123,7 +130,7 @@ RV32I
 lw rd, rs1, imm(signed 12bit?)
 sw rd, rs1, imm(signed 12bit?)
 addi rd, rs1, imm(signed 12bit?)
-slli rd, rs1, imm(2)
+slli rd, rs1, imm(8)
 add rd, rs1, rs2
 sub rd, rs1, rs2
 
@@ -159,9 +166,7 @@ fcvt.w.s rd, rs1, rm(rdn, rtz)
 feq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
-
-PSEUDO
-beq rs1, rs2, label
+fmv.w.x	fa0, t0
 
 ORIGINAL
 fcos.s rd, rs1, rm(rne)
@@ -169,7 +174,6 @@ fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
 in rd, rs1, imm
 out rd, rs1, imm(0)
-readfloat 0
 ```
 
 * 被りを消すと最終的には
@@ -204,7 +208,7 @@ fcvt.w.s rd, rs1, rm(rdn, rtz)
 feq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
-
+fmv.w.x	fa0, t0
 
 ORIGINAL
 float f(float string)　←命令ではなく、データ置く用
@@ -215,8 +219,6 @@ fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
 in rd, rs1, imm
 out rd, rs1, imm(0)
-readfloat 0
-
 
 PSEUDO
 li rd, imm (12bit)
@@ -319,16 +321,15 @@ fadd.s rd, rs1, rs2, rm(rne)
 fsub.s rd, rs1, rs2, rm(rne)
 fmul.s rd, rs1, rs2, rm(rne)
 fdiv.s rd, rs1, rs2, rm(rne)
----
 fsqrt.s rd, rs1, rm(rne)
+fsgnj.s rd, rs1, rs2
 fsgnjn.s rd, rs1, rs2
 fsgnjx.s rd, rs1, rs2
 fcvt.w.s rd, rs1, rm(rdn, rtz)
 feq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
----
-fsgnj.s rd, rs1, rs2
+fmv.w.x	fa0, t0
 
 ORIGINAL
 float f(float string)　←命令ではなく、データ置く用
@@ -339,7 +340,6 @@ fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
 in rd, rs1, imm
 out rd, rs1, imm(0)
-readfloat 0
 
 PSEUDO
 なし
@@ -356,10 +356,8 @@ fbg rs1, rs2, label
   シミュレート開始時に各種レジスタとpcは全て値0（特にspが0であることは重要）  
 * 対応命令セット  
   リンカから出される命令全て+α(`divu, remu, in, printint`)  
-  `in` 標準入力から空白区切りで文字列表現された数字を読み込む。これ多分解釈間違ってて、本来は文字を1文字読み込むだけのはずなのであとで直す
+  `in` 標準入力からバイナリを1B読み込んでrdに入れる
   `out` 標準出力に数字を文字列として出力 or ファイルに数字を文字列として出力
-  `readint` 標準入力から空白区切りで文字列表現された数字を読み込む
-  `readfloat` 標準入力から空白区切りで文字列表現された実数を読み込む
   `fin 0` シミュレーション終了
 
 # アセンブラ仕様
@@ -402,6 +400,7 @@ fcvt.w.s rd, rs1, rm(rdn, rtz)
 lfeq.s rd, rs1, rs2
 flt.s rd, rs1, rs2
 fcvt.s.w rd, rs1, rm(rne)
+fmv.w.x	fa0, t0
 
 ORIGINAL
 in rd, rs1, imm (rdに値が入る、rs1とimmはダミー、0埋め)
@@ -422,15 +421,48 @@ fatan.s rd, rs1, rm(rne)　→　1101001 00000 rs1 rm rd 1010011
 ※サボり、これは最終的には消す
 ちなみにそれぞれfcvt.w.d, fcvt.wu.d, fcvt.d.wと同じ
 
-readfloat 0　→　1...1
-※設定しとかないとアセンブリが通らないので書いているがめちゃくちゃなのでここには来ないで
-min_caml_read_intとmin_caml_read_floatが呼ばれなくてバグがなければ来ないはず
-
 ```
 * リンカは吐くけどアセンブラは対応していない命令一覧
 
 ```
 なし
+```
+
+* readint書いたけどいらなくなったので供養
+```
+min_caml_read_int:
+	li	t1, 32
+	li	t2, 10
+min_caml_read_int_discard:
+	in	t0, zero, 0
+	beq	t0, t1, min_caml_read_int_discard
+	beq	t0, t2, min_caml_read_int_discard
+	li	a0, 0
+	li	t1, 48
+	li	t2, 57
+	li	t3, 10
+	li	t4, 45
+	bne	t0, t4, min_caml_read_int_body
+	in	t0, zero, 0
+	j	min_caml_read_int_body_minus
+min_caml_read_int_body:
+	blt	t0, t1, min_caml_read_int_ret
+	blt	t2, t0, min_caml_read_int_ret
+	mul	a0, a0, t3
+	addi	t0, t0, -48
+	add	a0, a0, t0
+	in	t0, zero, 0
+	j	min_caml_read_int_body
+min_caml_read_int_body_minus:
+	blt	t0, t1, min_caml_read_int_ret
+	blt	t2, t0, min_caml_read_int_ret
+	mul	a0, a0, t3
+	addi	t0, t0, -48
+	sub	a0, a0, t0
+	in	t0, zero, 0
+	j	min_caml_read_int_body_minus
+min_caml_read_int_ret:
+	ret
 ```
 
 # こっから下が最終的な公開情報になる予定

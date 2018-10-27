@@ -1,4 +1,5 @@
 import math
+import struct
 import sys
 import datetime
 
@@ -22,7 +23,7 @@ def sign_extend(i, bit):
         return i
     s = 1 << (bit - 1)
     if i & s != 0:
-        i = i - 2**bit
+        i = i - (2**bit)
     return i
 
 
@@ -121,7 +122,7 @@ def execute(opcode, operands, regs, fregs, file = None):
         regs[rd] = sign_extend((regs[rs1] - regs[rs2]) & F8, 32)
     elif (opcode == "sll"):
         rd, rs1, rs2 = operands
-        regs[rd] = ((regs[rs1] << regs[rs2]) & F8, 32)
+        regs[rd] = sign_extend((regs[rs1] << regs[rs2]) & F8, 32)
     elif (opcode == "mul"):
         rd, rs1, rs2 = operands
         regs[rd] = sign_extend((regs[rs1] * regs[rs2]) & F8, 32)
@@ -203,20 +204,20 @@ def execute(opcode, operands, regs, fregs, file = None):
     elif opcode == "fcvt.s.w":
         rd, rs1, rm = operands
         fregs[rd] = float(regs[rs1])
+    elif opcode == "fmv.w.x":
+        rd, rs1 = operands
+        fregs[rd] = struct.unpack(">f", struct.pack(">i", regs[rs1]))[0]
     elif opcode == "in":
         rd, rs1, imm = operands
-        regs[rd] = ord(sys.stdin.read(1))
+        regs[rd] &= 0xffffff00
+        regs[rd] |= (sys.stdin.buffer.read(1)[0] & 0xff)
+        regs[rd] = sign_extend(regs[rd], 32)
     elif opcode == "out":
         rd, rs1, imm = operands
         if file:
             file.write(chr(regs[rs1] & 0x000000ff))
         else:
             sys.stdout.write(chr(regs[rs1] & 0x000000ff))
-    elif opcode == "readfloat":
-        if inputbuf == []:
-            read_into_inputbuf()
-        fregs["fa0"] = float(inputbuf[0])
-        inputbuf.pop(0)
     elif opcode == "fcos.s":
         rd, rs1, rm = operands
         fregs[rd] = math.cos(fregs[rs1])

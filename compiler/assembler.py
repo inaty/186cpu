@@ -128,6 +128,7 @@ Irm_opcodes = {
     "fcos.s": "1010011",
     "fsin.s": "1010011",
     "fatan.s": "1010011",
+    "fmv.w.x": "1010011",
 }
 Irm_imms = {
     "fsqrt.s": "010110000000",
@@ -136,6 +137,7 @@ Irm_imms = {
     "fcos.s": "110000100000",
     "fsin.s": "110000100001",
     "fatan.s": "110100100000",
+    "fmv.w.x": "111100000000",
 }
 
 S_opcodes = {
@@ -279,7 +281,10 @@ def binary_string_of_inst(opcode, operands):
         opcode_org = opcode
         opcode, imm1 = Irm_opcodes[opcode], Irm_imms[opcode]
         rd, rs1 = regstr(operands[0]), regstr(operands[1])
-        rm = rms[operands[2]]
+        if opcode_org = "fmv.w.x":
+            rm = "000"
+        else:
+            rm = rms[operands[2]]
         return "{}{}{}{}{}".format(imm1, rs1, rm, rd, opcode)
     elif opcode in S_opcodes:
         opcode, funct3 = S_opcodes[opcode], S_funct3s[opcode]
@@ -313,8 +318,6 @@ def binary_string_of_inst(opcode, operands):
         return "".join(["{:08b}".format(b) for b in struct.pack(">f", f)])
     elif opcode == "fin":
         return "0" * 32
-    elif opcode == "readfloat":
-        return "1" * 32
     else:
         assert False, "{} {}".format(opcode, ", ".join(operands))
 
