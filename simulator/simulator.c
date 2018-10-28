@@ -521,10 +521,69 @@ int main(int argc , char* argv[]){
 			frg[rd]=(float)((unsigned int)frg[rs1]&0x7fffffff+(((unsigned int)frg[rs1]&0x80000000)^((unsigned int)frg[rs2]&0x80000000)));
 		
 		}
-		//
+		//fcvt.w.s
+		if((imm==0b1100000)&&(rs2==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fcvt.w.s\n",pc);
+			frg[rd]=1/frg[rs1];
+		}
+		//feq.d
+		if((imm==0b1010001)&&(funct3==2)){
+		if ((flag&4)==4)
+			printf("pc[%d],feq.s\n",pc);
+			rg[rd]=(frg[rs1]==frg[rs2])?1:0;
+		}
+		//flt.d
+		if((imm==0b1010001)&&(funct3==1)){
+		if ((flag&4)==4)
+			printf("pc[%d],flt.s\n",pc);
+			rg[rd]=(frg[rs1]<frg[rs2])?1:0;
+		}
+		//fle.d
+		if((imm==0b1010001)&&(funct3==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fle.s\n",pc);
+			rg[rd]=(frg[rs1]<=frg[rs2])?1:0;
+		}
+		//fcvt.s.w
+		if((imm==0b1101000)&&(rs2==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fcvt.s.w\n",pc);
+			frg[rd]=1/frg[rs1];
+		}
+		//fmv.w.x
+		if((imm==0b1111000)&&(funct3==0)&&(rs2==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fmv.w.x\n",pc);
+			frg[rd]=(float)rg[rs1];
+		}
+		//fcos.s
+		if((imm==0b1100001)&&(rs2==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fcos.s\n",pc);
+			frg[rd]=cosf(frg[rs1]);
+		}
+		//fsin.s
+		if((imm==0b1100001)&&(rs2==1)){
+		if ((flag&4)==4)
+			printf("pc[%d],fsin.s\n",pc);
+			frg[rd]=sinf(frg[rs1]);
+		}
+		//fatan.s
+		if((imm==0b1101001)&&(rs2==0)){
+		if ((flag&4)==4)
+			printf("pc[%d],fatan.s\n",pc);
+			frg[rd]=atanf(frg[rs1]);
+		}
+
+
+
+
 
 	pc++;
 	}
+	//PSEUDO
+	//else if (
 	//例外処理
 	else {
 		printf("command[%d]に命令セットにないcodeが含まれているよ!\n",pc);

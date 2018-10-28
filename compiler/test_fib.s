@@ -24,11 +24,7 @@ be_else.25:
 	mv	a0, a1
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-<<<<<<< HEAD
-	jal	fibonacci.11
-=======
 	jal	fibonacci.10
->>>>>>> 739ff2d8efaf153492dc4d6611a9a48c62870f86
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	lw	a1, sp, 4 ! 0
@@ -38,16 +34,7 @@ min_caml_start:
 	li	a0, 6 ! 5
 	sw	sp, ra, 0
 	addi	sp, sp, 4
-<<<<<<< HEAD
-	jal	fibonacci.11
-	addi	sp, sp, -4
-	lw	ra, sp, 0
-	sw	sp, ra, 0
-	addi	sp, sp, 4
-	jal	min_caml_print_int
-=======
 	jal	fibonacci.10
->>>>>>> 739ff2d8efaf153492dc4d6611a9a48c62870f86
 	addi	sp, sp, -4
 	lw	ra, sp, 0
 	fin	0

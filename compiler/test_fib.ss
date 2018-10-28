@@ -33,26 +33,6 @@
 	jal	ra, -124
 	addi	sp, sp, -4
 	lw	ra, sp, 0
-<<<<<<< HEAD
-	sw	sp, ra, 0
-	addi	sp, sp, 4
-	jal	ra, 428
-	addi	sp, sp, -4
-	lw	ra, sp, 0
-	fin	0
-	feq.s	fa0, fa0, fa1
-	jalr	zero, ra, 0
-	flt.s	fa0, fa0, fa1
-	jalr	zero, ra, 0
-	fcvt.s.w	ft0, zero, rne
-	flt.s	fa0, ft0, fa0
-	jalr	zero, ra, 0
-	fcvt.s.w	ft0, zero, rne
-	flt.s	fa0, fa0, ft0
-	jalr	zero, ra, 0
-	fcvt.s.w	ft0, zero, rne
-	feq.s	fa0, fa0, ft0
-=======
 	fin	0
 	feq.s	a0, fa0, fa1
 	jalr	zero, ra, 0
@@ -71,7 +51,6 @@
 	addi	x31, x31, 960
 	flw	ft0, x31, 0
 	fmul.s	fa0, fa0, ft0, rne
->>>>>>> 739ff2d8efaf153492dc4d6611a9a48c62870f86
 	jalr	zero, ra, 0
 	fmul.s	fa0, fa0, fa0, rne
 	jalr	zero, ra, 0
@@ -257,14 +236,10 @@
 	jalr	zero, a20, 0
 	addi	t0, zero, 10
 	out	zero, t0, 0
-<<<<<<< HEAD
-=======
 	jalr	zero, ra, 0
 	jal	zero, -696
 	float	0.5
 	readint	0
 	jalr	zero, ra, 0
 	readfloat	0
->>>>>>> 739ff2d8efaf153492dc4d6611a9a48c62870f86
 	jalr	zero, ra, 0
-	jal	zero, -696
