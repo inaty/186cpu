@@ -3,7 +3,7 @@
 #include<string.h>
 #include<unistd.h>
 #include<math.h>
-#define SIZE 8096
+#define SIZE 80960000
 int num (char* a){
     int n = strlen(a);
     int sum=0;
@@ -58,19 +58,22 @@ char *int16bin(int x){
 int main(int argc , char* argv[]){
     FILE *fp;
     char cmd[34];
-    unsigned int command[1000];
+    unsigned int *command;
     char fname[80];
     int flag=0;
     int i = 0;
     int opt;
 		int opecode,imm,rs2,rs1,rd,funct3,tmp;
-		unsigned int mem[SIZE];
+		unsigned int *mem;
 		unsigned int rg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		float frg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     opterr = 0;
+		command=(unsigned int*)malloc((sizeof (unsigned int))*1000);
+		mem=(unsigned int*)malloc((sizeof (unsigned int))*SIZE);
+
 	//initial memory
 	for(int i=0;i<SIZE;i++){
-		mem[i]=i;
+		mem[i]=0;
 	}
     strcpy(fname,"test.txt");
     while ((opt = getopt(argc,argv ,"bdf:")) !=-1){
@@ -128,6 +131,11 @@ int main(int argc , char* argv[]){
 					printf("frg[%d]=%.3f",j,frg[j]);
 				}
 					printf("\n");
+				for (int j=0;j<32;j++){
+					if (mem[j]!=0)
+					printf("mem[%d]=%u",j,mem[j]);
+				}
+					printf("\n\n");
 				}
 				opecode = command[pc] & 0b1111111;
 				funct3 = (command[pc] >>12) & 0b111;
@@ -162,7 +170,7 @@ int main(int argc , char* argv[]){
 	else if (opecode==0b0010111){
 		imm=command[pc]&(0xfffff<<12);
 		rd = (command[pc]>>7)&0b11111;
-		rg[rd]=imm/4+pc;
+		rg[rd]=imm+4*pc;
 		if ((flag&4)==4)
 			printf("pc[%d],auipc\n",pc);
 	}
@@ -171,7 +179,7 @@ int main(int argc , char* argv[]){
 		imm = -((command[pc]&(1<<31))>>11)+(((command[pc]&(0x3ff<<21))>>20)|(command[pc]&(0xff<<12))|((command[pc]&(1<<20))>>9));//|(command[pc]&(1<<31));
 		imm = imm/4;
 		rd = (command[pc]>>7)&0b11111;
-		rg[rd]=pc+1;
+		rg[rd]=4*(pc+1);
 		if ((flag&4)==4)
 			printf("pc[%d],jal:pc<-%d\n",pc,pc+imm);
 		//printf("imm=%d,%s\n",imm,int2bin(imm));
@@ -180,13 +188,13 @@ int main(int argc , char* argv[]){
 //jalr命令
 	else if ((opecode==0b1100111)&&(funct3==0b000)){
 		imm = (command[pc]>>20)&0xfff;
-		imm = imm/4;
+		imm = imm - (imm&0x800)*2;
 		rs1 = (command[pc]>>15) & 0b11111;
 		rd = (command[pc]>>7) & 0b11111;
-		rg[rd]=pc+1;
+		rg[rd]=4*(pc+1);
 		if ((flag&4)==4)
-		printf("pc[%d],jalr:pc<-%d\n",pc,pc+imm+rg[rs1]/4);
-		pc=pc+imm+rg[rs1]/4;
+		printf("pc[%d],jalr:pc<-%d,imm=%d,rs1=%d\n",pc,pc+(imm+rg[rs1])/4,imm,rs1);
+		pc=(imm+rg[rs1])/4;
 	}
 
 //branch系命令
@@ -195,7 +203,8 @@ int main(int argc , char* argv[]){
 		rs1 = (command[pc]&(0x1f<<15))>>15;
 		rs2 = (command[pc]&(0x1f<<20))>>20;
 		imm=imm/4;
-		//printf("imm=%d,%s\n",imm,int2bin(imm));
+		if ((flag&4)==4)
+		printf("imm=%d,rs1=%d,rs2=%d\n",imm,rs1,rs2);
 		//beq
 		if (funct3 == 0b000){
 		if ((flag&4)==4)
@@ -209,7 +218,7 @@ int main(int argc , char* argv[]){
 		//bne
 		if (funct3 == 0b001) {
 		if ((flag&4)==4)
-			printf("pc[%d],bne\n",pc);
+			printf("pc[%d],bne,imm/4=%d\n",pc,imm);
 			if (rg[rs1] !=rg[rs2]){
 					pc +=imm;
 			}else{
@@ -261,37 +270,40 @@ int main(int argc , char* argv[]){
 //load系命令
 	else if (opecode==0b0000011){
 			imm = command[pc]>>20;
+			imm = imm-2*(imm&0x800);
 			rs1 = (command[pc]>>15) & 0b11111;
 			rd = (command[pc]>>7) & 0b11111;
+		if ((flag&4)==4)
+		printf("imm=%d,rs1=%d,rd=%d\n",imm,rs1,rd);
 		//lb
 		if(funct3==0b000){
 		if ((flag&4)==4)
 			printf("pc[%d],lb\n",pc);
-			rg[rd]=(mem[imm+rs1]&0x7f)-(mem[imm+rs1]&0x80);
+			rg[rd]=(mem[imm+rg[rs1]]&0x7f)-(mem[imm+rg[rs1]]&0x80);
 		}
 		//lh
 		if(funct3==0b001){
 		if ((flag&4)==4)
 			printf("pc[%d],lh\n",pc);
-			rg[rd]=(mem[imm+rs1]&0x7fff)-(mem[imm+rs1]&0x8000);
+			rg[rd]=(mem[imm+rg[rs1]]&0x7fff)-(mem[imm+rg[rs1]]&0x8000);
 		}
 		//lw
 		if(funct3==0b010){
 		if ((flag&4)==4)
-			printf("pc[%d],lw\n",pc);
-			rg[rd]=mem[imm+rs1];
+			printf("pc[%d],lw,mem[%d]loaded\n",pc,imm+rg[rs1]);
+			rg[rd]=mem[imm+rg[rs1]];
 		}
 		//lbu
 		if(funct3==0b100){
 		if ((flag&4)==4)
 			printf("pc[%d],lbu\n",pc);
-			rg[rd]=mem[imm+rs1]&0xff;
+			rg[rd]=mem[imm+rg[rs1]]&0xff;
 		}
 		//lhu
 		if(funct3==0b101){
 		if ((flag&4)==4)
 			printf("pc[%d],lhu\n",pc);
-			rg[rd]=mem[imm+rs1]&0xffff;
+			rg[rd]=mem[imm+rg[rs1]]&0xffff;
 		}
 		pc++;
 
@@ -299,25 +311,28 @@ int main(int argc , char* argv[]){
 //STORE系命令
 	else if (opecode==0b0100011){
 			imm = ((command[pc]&(0x7f<<25))>>20) | ((command[pc]&(0x1f<<7))>>7);
+			imm = imm + (imm&0x800)*2;
 			rs1 = (command[pc]>>15) & 0b11111;
 			rs2=  (command[pc]>>20) & 0b11111;
+		if ((flag&4)==4)
+		printf("imm=%d,rs1=%d,rs2=%d\n",imm,rs1,rs2);
 		//sb
 		if(funct3==0b000){
 		if ((flag&4)==4)
 			printf("pc[%d],sb\n",pc);
-			mem[imm+rs1]=rg[rs2];
+			mem[imm+rg[rs1]]=rg[rs2]&0xff;
 		}
 		//sh
 		if(funct3==0b001){
 		if ((flag&4)==4)
 			printf("pc[%d],sh\n",pc);
-			mem[imm+rs1]=rg[rs2]&0xffff;
+			mem[imm+rg[rs1]]=rg[rs2]&0xffff;
 		}
 		//sw
 		if(funct3==0b010){
 		if ((flag&4)==4)
-			printf("pc[%d],sw\n",pc);
-			mem[imm+rs1]=rg[rs2]&0xff;
+			printf("pc[%d],sw,mem[%d]changed\n",pc,imm+rg[rs1]);
+			mem[imm+rg[rs1]]=rg[rs2];
 		}
 		pc++;
 }
@@ -327,6 +342,8 @@ int main(int argc , char* argv[]){
 			imm =imm- 2*(imm & (1<<11));
 			rs1 = (command[pc]>>15) & 0b11111;
 			rd = (command[pc]>>7) & 0b11111;
+		if ((flag&4)==4)
+		printf("imm=%d,rs1=%d,rd=%d\n",imm,rs1,rd);
 		//addi
 		if(funct3==0b000){
 		if ((flag&4)==4)
@@ -372,6 +389,8 @@ int main(int argc , char* argv[]){
 			rs2 = (command[pc]>>20) & 0b11111;
 			rs1 = (command[pc]>>15) & 0b11111;
 			rd = (command[pc]>>7) & 0b11111;
+		if ((flag&4)==4)
+		printf("imm=%d,rs1=%d,rs2=%d,rd=%d\n",imm,rs1,rs2,rd);
 		//add
 		if((funct3==0b000)&&(imm!=0b0100000)){
 		if ((flag&4)==4)
@@ -454,7 +473,7 @@ int main(int argc , char* argv[]){
 			rs1 = (command[pc]>>15) & 0b11111;
 		if ((flag&4)==4)
 			printf("pc[%d],flw\n",pc);
-			rg[rd]=(float)mem[imm+rs1];
+			frg[rd]=(float)mem[imm+rg[rs1]];
 			pc++;
 			}
 	//fsw
@@ -462,7 +481,7 @@ int main(int argc , char* argv[]){
 			rs1 = (command[pc]>>15) & 0b11111;
 		if ((flag&4)==4)
 			printf("pc[%d],fsw\n",pc);
-			mem[imm+rs1]=(unsigned int)(rg[rs2]&0xff);
+			mem[imm+rg[rs1]]=(((unsigned int)frg[rs2])&0xff);
 			pc++;
 	}
 	//float 演算
@@ -605,6 +624,11 @@ int main(int argc , char* argv[]){
 				for (int j=0;j<32;j++){
 					if (frg[j]!=0)
 					printf("frg[%d]=%.3f",j,frg[j]);
+				}
+					printf("\n");
+				for (int j=0;j<32;j++){
+					if (mem[j]!=0)
+					printf("mem[%d]=%u",j,mem[j]);
 				}
 					printf("\n");
   return 0;
