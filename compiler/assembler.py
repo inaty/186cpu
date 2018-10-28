@@ -281,7 +281,7 @@ def binary_string_of_inst(opcode, operands):
         opcode_org = opcode
         opcode, imm1 = Irm_opcodes[opcode], Irm_imms[opcode]
         rd, rs1 = regstr(operands[0]), regstr(operands[1])
-        if opcode_org = "fmv.w.x":
+        if opcode_org == "fmv.w.x":
             rm = "000"
         else:
             rm = rms[operands[2]]
