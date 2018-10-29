@@ -56,7 +56,7 @@ char *int16bin(int x){
 //入力が２進数の時 -b をつける　
 //ファイルの名前をつけたいときは-f [ファイル名]
 int main(int argc , char* argv[]){
-    FILE *fp;
+    FILE *fp,*fpi;
     char cmd[34];
     unsigned int *command;
     char fname[80];
@@ -70,11 +70,15 @@ int main(int argc , char* argv[]){
     opterr = 0;
 		command=(unsigned int*)malloc((sizeof (unsigned int))*1000);
 		mem=(unsigned int*)malloc((sizeof (unsigned int))*SIZE);
+		char input;
 
 	//initial memory
 	for(int i=0;i<SIZE;i++){
 		mem[i]=0;
 	}
+	//initial register
+	for(int i=0;i<32;i++)
+		rg[i]=SIZE/32*i;
     strcpy(fname,"test.txt");
     while ((opt = getopt(argc,argv ,"bdf:")) !=-1){
         switch (opt){
@@ -102,14 +106,21 @@ int main(int argc , char* argv[]){
         printf("ファイルが開けないよ\n");
         return -1;
     }
+		fpi=fopen("input.b","rb");
+    if(fpi==NULL){
+        printf("ファイルが開けないよ\n");
+        return -1;
+    }
     while(fgets(cmd,34,fp)!=NULL) {
         if ((flag&1)==1){
         cmd[32]='\0';
     command[i]=num(cmd);
+		mem[i]=command[i];
     i++;
       }else{
         cmd[8]='\0';
     command[i]=num16(cmd);
+		mem[i]=command[i];
     i++;
       }
     }
@@ -122,7 +133,7 @@ int main(int argc , char* argv[]){
         //printf("cmmand[%d] is %d,bitcode below\n%s\n",pc,command[pc],int2bin(command[pc]));
 				if ((flag&4)==4){
 				for (int j=0;j<32;j++){
-					if (rg[j]!=0)
+					if (rg[j]!=SIZE/32*j)
 					printf("rg[%d]=%d",j,rg[j]);
 				}
 					printf("\n");
@@ -131,10 +142,11 @@ int main(int argc , char* argv[]){
 					printf("frg[%d]=%.3f",j,frg[j]);
 				}
 					printf("\n");
-				for (int j=0;j<32;j++){
+				/*for (int j=0;j<32;j++){
 					if (mem[j]!=0)
 					printf("mem[%d]=%u",j,mem[j]);
 				}
+				*/
 					printf("\n\n");
 				}
 				opecode = command[pc] & 0b1111111;
@@ -145,7 +157,8 @@ int main(int argc , char* argv[]){
 		rs2=(command[pc]>>7)&0x1f;
 		if((command[pc]&(1<<12))==0){
 			//入力mode
-			rg[rs2]=getchar();
+			fgets(&input,1,fpi);
+			rg[rs2]=(unsigned int)input;
 			if((command[pc]&(1<<14))==0){
 				//最上bit埋め
 				rg[rs2]-=(2*(rg[rs2]&(1<<7)));
@@ -193,7 +206,7 @@ int main(int argc , char* argv[]){
 		rd = (command[pc]>>7) & 0b11111;
 		rg[rd]=4*(pc+1);
 		if ((flag&4)==4)
-		printf("pc[%d],jalr:pc<-%d,imm=%d,rs1=%d\n",pc,pc+(imm+rg[rs1])/4,imm,rs1);
+		printf("pc[%d],jalr:pc<-%d,imm=%d,rs1=%d\n",pc,(imm+rg[rs1])/4,imm,rs1);
 		pc=(imm+rg[rs1])/4;
 	}
 
@@ -617,7 +630,7 @@ int main(int argc , char* argv[]){
     }
 		printf("\nsuccess!\n");
 				for (int j=0;j<32;j++){
-					if (rg[j]!=0)
+					if (rg[j]!=SIZE/32*j)
 					printf("rg[%d]=%d",j,rg[j]);
 				}
 					printf("\n");
@@ -626,10 +639,11 @@ int main(int argc , char* argv[]){
 					printf("frg[%d]=%.3f",j,frg[j]);
 				}
 					printf("\n");
-				for (int j=0;j<32;j++){
+				/*for (int j=0;j<32;j++){
 					if (mem[j]!=0)
 					printf("mem[%d]=%u",j,mem[j]);
 				}
+				*/
 					printf("\n");
   return 0;
 }
