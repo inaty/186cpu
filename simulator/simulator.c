@@ -130,6 +130,7 @@ int main(int argc , char* argv[]){
     int pc=0;//プログラム開始
     while (command[pc]!=0){
 				rg[0]=0;//ゼロレジスタ初期化
+				frg[0]=0;
         //printf("cmmand[%d] is %d,bitcode below\n%s\n",pc,command[pc],int2bin(command[pc]));
 				if ((flag&4)==4){
 				for (int j=0;j<32;j++){
@@ -155,9 +156,11 @@ int main(int argc , char* argv[]){
 	if(opecode==0b0001011){
 		rs1=(command[pc]>>15)&0x1f;
 		rs2=(command[pc]>>7)&0x1f;
+		if ((flag&4)==4)
+			printf("pc[%d],io\n",pc);
 		if((command[pc]&(1<<12))==0){
 			//入力mode
-			fgets(&input,1,fpi);
+			fread(&input,sizeof(input),sizeof(input),fpi);
 			rg[rs2]=(unsigned int)input;
 			if((command[pc]&(1<<14))==0){
 				//最上bit埋め
@@ -207,7 +210,7 @@ int main(int argc , char* argv[]){
 		rg[rd]=4*(pc+1);
 		if ((flag&4)==4)
 		printf("pc[%d],jalr:pc<-%d,imm=%d,rs1=%d\n",pc,(imm+rg[rs1])/4,imm,rs1);
-		pc=(imm+rg[rs1])/4;
+		pc=(imm+(int)rg[rs1])/4;
 	}
 
 //branch系命令
@@ -222,7 +225,7 @@ int main(int argc , char* argv[]){
 		if (funct3 == 0b000){
 		if ((flag&4)==4)
 			printf("pc[%d],beq\n",pc);
-			if (rg[rs1] ==rg[rs2]){
+			if ((int)rg[rs1] ==(int)rg[rs2]){
 					pc +=imm;
 			}else{
 				pc++;
@@ -232,7 +235,7 @@ int main(int argc , char* argv[]){
 		if (funct3 == 0b001) {
 		if ((flag&4)==4)
 			printf("pc[%d],bne,imm/4=%d\n",pc,imm);
-			if (rg[rs1] !=rg[rs2]){
+			if ((int)rg[rs1] !=(int)rg[rs2]){
 					pc +=imm;
 			}else{
 				pc++;
@@ -242,7 +245,7 @@ int main(int argc , char* argv[]){
 		if (funct3 == 0b100) {
 		if ((flag&4)==4)
 			printf("pc[%d],blt\n",pc);
-			if (rg[rs1] < rg[rs2]){
+			if ((int)rg[rs1] < (int)rg[rs2]){
 					pc +=imm;
 			}else{
 				pc++;
@@ -268,10 +271,10 @@ int main(int argc , char* argv[]){
 				pc++;
 			}
 		}
-		//bgtu
+		//bgeu
 		if (funct3 == 0b111) {
 		if ((flag&4)==4)
-			printf("pc[%d],bgtu\n",pc);
+			printf("pc[%d],bgeu\n",pc);
 			if (rg[rs1] >= rg[rs2]){
 					pc +=imm;
 			}else{
@@ -304,7 +307,7 @@ int main(int argc , char* argv[]){
 		if(funct3==0b010){
 		if ((flag&4)==4)
 			printf("pc[%d],lw,mem[%d]loaded\n",pc,imm+rg[rs1]);
-			rg[rd]=mem[imm+rg[rs1]];
+			rg[rd]=mem[imm+(int)rg[rs1]];
 		}
 		//lbu
 		if(funct3==0b100){
@@ -345,7 +348,7 @@ int main(int argc , char* argv[]){
 		if(funct3==0b010){
 		if ((flag&4)==4)
 			printf("pc[%d],sw,mem[%d]changed\n",pc,imm+rg[rs1]);
-			mem[imm+rg[rs1]]=rg[rs2];
+			mem[imm+(int)rg[rs1]]=rg[rs2];
 		}
 		pc++;
 }
@@ -361,13 +364,13 @@ int main(int argc , char* argv[]){
 		if(funct3==0b000){
 		if ((flag&4)==4)
 			printf("pc[%d],addi\n",pc);
-			rg[rd]=rg[rs1]+imm;
+			rg[rd]=(int)rg[rs1]+imm;
 		}
 		//slti
 		if(funct3==0b010){
 		if ((flag&4)==4)
 			printf("pc[%d],slti\n",pc);
-			rg[rd]=(rg[rs1]<imm) ? 1:0;
+			rg[rd]=((int)rg[rs1]<imm) ? 1:0;
 		}
 		//sltiu
 		if(funct3==0b011){
@@ -388,10 +391,16 @@ int main(int argc , char* argv[]){
 			rg[rd]=rg[rs1]|imm;
 		}
 		//andi
-		if(funct3==0b110){
+		if(funct3==0b111){
 		if ((flag&4)==4)
 			printf("pc[%d],andi\n",pc);
 			rg[rd]=rg[rs1] & imm;
+		}
+		//slli
+		if(funct3==0b001){
+			if((flag&4)==4)
+				printf("pc[%d],slli\n",pc);
+			rg[rd]=rg[rs1]<<(unsigned int)(imm&0b11111);
 		}
 		pc++;
 }
@@ -405,49 +414,49 @@ int main(int argc , char* argv[]){
 		if ((flag&4)==4)
 		printf("imm=%d,rs1=%d,rs2=%d,rd=%d\n",imm,rs1,rs2,rd);
 		//add
-		if((funct3==0b000)&&(imm!=0b0100000)){
+		if((funct3==0b000)&&(imm==0b0000000)){
 		if ((flag&4)==4)
 			printf("pc[%d],add\n",pc);
-			rg[rd]=rg[rs1]+rg[rs2];
+			rg[rd]=(int)rg[rs1]+(int)rg[rs2];
 		}
 		//sub
 		if((funct3==0b000)&&(imm==0b0100000)){
 		if ((flag&4)==4)
 			printf("pc[%d],sub\n",pc);
-			rg[rd]=rg[rs1]-rg[rs2];
+			rg[rd]=(int)rg[rs1]-(int)rg[rs2];
 		}
 		//mul
-		if((funct3==0b000)&&(imm==0b0110011)){
+		if((funct3==0b000)&&(imm==0b0000001)){
 		if ((flag&4)==4)
 			printf("pc[%d],mul\n",pc);
-			rg[rd]=rg[rs1]*rg[rs2];
+			rg[rd]=(int)rg[rs1]*(int)rg[rs2];
 		}
 		//div
-		if((funct3==0b100)&&(imm==0b0110011)){
+		if((funct3==0b100)&&(imm==0b0000001)){
 		if ((flag&4)==4)
 			printf("pc[%d],div\n",pc);
-			rg[rd]=rg[rs1]/rg[rs2];
+			rg[rd]=(int)rg[rs1]/(int)rg[rs2];
 		}
 		//sll
-		if(funct3==0b001){
+		if(funct3==0b001&&imm==0){
 		if ((flag&4)==4)
 			printf("pc[%d],sll\n",pc);
 			rg[rd]=rg[rs1]<<rg[rs2];
 		}
 		//slt
-		if(funct3==0b010){
+		if(funct3==0b010&&imm==0){
 		if ((flag&4)==4)
 			printf("pc[%d],slt\n",pc);
 			rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
 		}
 		//sltu
-		if(funct3==0b011){
+		if(funct3==0b011&imm==0){
 		if ((flag&4)==4)
 			printf("pc[%d],sltu\n",pc);
 			rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
 		}
 		//xor
-		if(funct3==0b100){
+		if(funct3==0b100&&imm==0){
 		if ((flag&4)==4)
 			printf("pc[%d],xor\n",pc);
 			rg[rd]=rg[rs1] ^ rg[rs2];

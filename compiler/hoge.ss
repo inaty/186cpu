@@ -1,10 +1,6 @@
-	jal	zero, 116
-	addi	a1, zero, 0
-	bne	a0, a1, 12
-	addi	a0, zero, 0
-	jalr	zero, ra, 0
+	jal	zero, 64
 	addi	a1, zero, 1
-	bne	a0, a1, 12
+	blt	a1, a0, 12
 	addi	a0, zero, 1
 	jalr	zero, ra, 0
 	addi	a1, a0, -1
@@ -12,25 +8,21 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, -52
+	jal	ra, -36
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a1, sp, 0
-	addi	a1, a1, -2
-	sw	sp, a0, 4
-	addi	a0, a1, 0
-	sw	sp, ra, 8
-	addi	sp, sp, 12
-	jal	ra, -88
-	addi	sp, sp, -12
-	lw	ra, sp, 8
-	lw	a1, sp, 4
-	add	a0, a1, a0
+	mul	a0, a1, a0
 	jalr	zero, ra, 0
-	addi	a0, zero, 6
+	addi	a0, zero, 10
 	sw	sp, ra, 0
 	addi	sp, sp, 4
-	jal	ra, -124
+	jal	ra, -72
+	addi	sp, sp, -4
+	lw	ra, sp, 0
+	sw	sp, ra, 0
+	addi	sp, sp, 4
+	jal	ra, 448
 	addi	sp, sp, -4
 	lw	ra, sp, 0
 	fin	0
@@ -48,7 +40,7 @@
 	feq.s	a0, fa0, ft0
 	jalr	zero, ra, 0
 	lui	x31, 0
-	addi	x31, x31, 960
+	addi	x31, x31, 928
 	flw	ft0, x31, 0
 	fmul.s	fa0, fa0, ft0, rne
 	jalr	zero, ra, 0
@@ -174,7 +166,7 @@
 	addi	a21, hp, 0
 	addi	hp, hp, 16
 	lui	a0, 0
-	addi	a0, a0, 364
+	addi	a0, a0, 332
 	sw	a21, a0, 0
 	lw	a2, sp, 0
 	sw	a21, a2, 8
@@ -203,7 +195,7 @@
 	addi	a21, hp, 0
 	addi	hp, hp, 8
 	lui	a0, 0
-	addi	a0, a0, 424
+	addi	a0, a0, 392
 	sw	a21, a0, 0
 	lw	a3, sp, 0
 	sw	a21, a3, 4
@@ -224,7 +216,7 @@
 	addi	a21, hp, 0
 	addi	hp, hp, 16
 	lui	a0, 0
-	addi	a0, a0, 476
+	addi	a0, a0, 444
 	sw	a21, a0, 0
 	lw	a0, sp, 20
 	sw	a21, a0, 8

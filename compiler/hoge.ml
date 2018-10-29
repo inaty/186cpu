@@ -1,5 +1,4 @@
-let rec fibonacci n =
-  if n = 0 then 0 else
-  if n = 1 then 1 else
-  (fibonacci (n-1)) + (fibonacci (n-2)) in
-(fibonacci 6)
+let rec fact n =
+	if n>1 then n*(fact (n-1))
+				else 1 in
+print_int(fact 10)
