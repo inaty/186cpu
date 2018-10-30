@@ -46,7 +46,6 @@
   11:7 入力のときに受け取った値を入れるレジスタ
   6:0 opcode 0001011
 
-
 # コンパイラ仕様
 * レジスタ名  
   ~~https://github.com/riscv/riscv-asm-manual/blob/master/riscv-asm.md に準拠~~  
