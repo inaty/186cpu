@@ -1,0 +1,8 @@
+simulator_copy.c
+*.o
+*.cmi
+*.cmx
+lexer.ml
+min-caml.opt
+parser.ml
+parser.mli
