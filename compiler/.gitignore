@@ -6,3 +6,5 @@ lexer.ml
 min-caml.opt
 parser.ml
 parser.mli
+/._d
+/._ncdi
