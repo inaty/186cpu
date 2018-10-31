@@ -17,8 +17,8 @@ let lexbuf outchan l =
   (* Syntax.print_syntax syntax; *)
   let knormal = KNormal.f (Typing.f syntax) in
   (* KNormal.print_kNormal knormal; *)
-  match (Closure.f (iter !limit (Alpha.f knormal))) with
-  (* match (LambdaLifting.f (iter !limit (Alpha.f knormal))) with *)
+  (*match (Closure.f (iter !limit (Alpha.f knormal))) with*)
+   match (LambdaLifting.f (iter !limit (Alpha.f knormal))) with 
   | Closure.Prog(fundefs, t) as prog ->
       (* Closure.print_fundefs fundefs;
       Closure.print_closure_t t; *)
