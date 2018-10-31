@@ -5,9 +5,9 @@ module fmul(
   input wire [31:0] x1,
   input wire [31:0] x2,
   output wire [31:0] y,
-  output wire ovf,
+  output wire ovf/*,
   output wire [9:0] eo,
-  output wire [22:0] mo);
+  output wire [22:0] mo */);
 
   wire [0:0] s1;
   wire [7:0] e1;
@@ -67,8 +67,8 @@ module fmul(
   
   assign ovf = (eb[9:8] == 2'b01);
   assign y = (eb[9] == 1) ? ((eb > -23) ? {ss,8'b0,mbs[47:25]} : {ss,31'b0} ) : ((eb[8] == 1) ? {ss,8'd255,31'b0} : {ss,eb[7:0],mbs[47:25]} );
-  assign eo = eb[9:0];
-  assign mo = mbs[47:25];
+//  assign eo = eb[9:0];
+//  assign mo = mbs[47:25];
 endmodule
 `default_nettype wire
 
