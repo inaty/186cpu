@@ -1,10 +1,12 @@
-simulator_copy.c
 *.o
 *.cmi
 *.cmx
+*.cmo
 lexer.ml
 min-caml.opt
 parser.ml
 parser.mli
 /._d
 /._ncdi
+simulator_copy.c
+reportmemo.txt

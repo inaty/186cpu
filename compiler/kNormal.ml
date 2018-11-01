@@ -47,13 +47,13 @@ let rec fv (e, sp) =
   | Put(x, y, z) -> S.of_list [x; y; z]
   | LetTuple(xs, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xs)))
 
-let insert_let ((e, sp), t) k =
-  match e with
-  | Var(x) -> k x
+let insert_let ((exp, sp), t) genbody =
+  match exp with
+  | Var(x) -> genbody x
   | _ ->
       let x = Id.gentmp t in
-      let e', t' = k x in
-      (Let((x, t), (e, sp), e'), sp), t'
+      let bodykNormal_t, bodyt = genbody x in
+      (Let((x, t), (exp, sp), bodykNormal_t), sp), bodyt
 
 let rec g env (e, sp, ep) =
   match e with
@@ -190,17 +190,27 @@ let rec g env (e, sp, ep) =
         (fun y ->
           let e2', t2 = g (M.add_list xts env) e2 in
           (LetTuple(xts, y, e2'), sp), t2)
-  | Syntax.Array(e1, e2) ->
-      insert_let (g env e1)
+  | Syntax.Array(num_syntax_t, el_syntax_t) ->
+      let bodygen x =
+        let num_kNormal_t, el_t = g env el_syntax_t in
+        let bodygen' y =
+          let l =
+            match el_t with
+            | Type.Float -> "create_float_array"
+            | _ -> "create_array" in
+          (ExtFunApp(l, [x; y]), sp), Type.Array(el_t) in
+        insert_let (num_kNormal_t, el_t) bodygen' in
+      insert_let (g env num_syntax_t) bodygen
+      (* insert_let (g env num_syntax_t)
         (fun x ->
-          let _, t2 as g_e2 = g env e2 in
+          let _, t2 as g_e2 = g env el_syntax_t in
           insert_let g_e2
             (fun y ->
               let l =
                 match t2 with
                 | Type.Float -> "create_float_array"
                 | _ -> "create_array" in
-              (ExtFunApp(l, [x; y]), sp), Type.Array(t2)))
+              (ExtFunApp(l, [x; y]), sp), Type.Array(t2))) *)
   | Syntax.Get(e1, e2) ->
       (match g env e1 with
       |        _, Type.Array(t) as g_e1 ->

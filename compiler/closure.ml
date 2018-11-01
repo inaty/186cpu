@@ -180,7 +180,7 @@ let rec print_closure_t_sub (exp, _) indent =
   | AppDir(Id.L(lf), args) -> eprintf "APPDIR %s %s\n" lf (Id.pp_list args)
   | Tuple(vars) -> eprintf "TUPLE %s\n" (Id.pp_list vars)
   | LetTuple(vars, var, exp) ->
-      eprintf "LETTUPLE %s %s\n" (string_of_id_type_list vars) var;
+      eprintf "LETTUPLE (%s) %s\n" (string_of_id_type_list vars) var;
       print_space indent; eprintf "IN\n";
       print_closure_t_sub exp (indent + 2)
   | Get(var1, var2) -> eprintf "GET %s %s\n" var1 var2
