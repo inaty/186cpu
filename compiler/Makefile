@@ -41,7 +41,7 @@ alpha.mli alpha.ml cse.mli cse.ml beta.mli beta.ml assoc.mli assoc.ml \
 inline.mli inline.ml constFold.mli constFold.ml elim.mli elim.ml \
 lambdaLifting.mli lambdaLifting.ml \
 closure.mli closure.ml \
-tupleFlatten.mli tupleFlatten.ml \
+tupleFlatten.mli tupleFlatten.ml tupleElim.mli tupleElim.ml \
 asm.mli asm.ml virtual.mli virtual.ml \
 simm.mli simm.ml regAlloc.mli regAlloc.ml emit.mli emit.ml \
 main.mli main.ml

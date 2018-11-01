@@ -23,7 +23,8 @@ let lexbuf outchan l =
   | Closure.Prog(fundefs, t) as prog ->
       (* Closure.print_fundefs fundefs;
       Closure.print_closure_t t; *)
-      let prog = TupleFlatten.f prog in
+      (* let prog = TupleFlatten.f prog in *)
+      let prog = TupleElim.f (TupleFlatten.f prog) in
       begin match prog with
       | Closure.Prog(fundefs, t) as prog ->
           Closure.print_fundefs fundefs;

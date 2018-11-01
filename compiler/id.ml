@@ -10,6 +10,7 @@ let counter = ref 0
 let genid s =
   incr counter;
   Printf.sprintf "%s.%d" s !counter
+let rec genid_n s n = if n = 0 then [] else (genid s :: genid_n s (n - 1))
 
 let rec id_of_typ = function
   | Type.Unit -> "u"
