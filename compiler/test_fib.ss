@@ -239,7 +239,20 @@
 	jalr	zero, ra, 0
 	jal	zero, -696
 	float	0.5
-	readint	0
+	in	a0, zero, 0
+	slli	a0, a0, 8
+	in	a0, zero, 0
+	slli	a0, a0, 8
+	in	a0, zero, 0
+	slli	a0, a0, 8
+	in	a0, zero, 0
 	jalr	zero, ra, 0
-	readfloat	0
+	in	t0, zero, 0
+	slli	t0, t0, 8
+	in	t0, zero, 0
+	slli	t0, t0, 8
+	in	t0, zero, 0
+	slli	t0, t0, 8
+	in	t0, zero, 0
+	fmv.w.x	fa0, t0
 	jalr	zero, ra, 0

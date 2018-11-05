@@ -361,7 +361,7 @@ def main():
             continue
 
         if opt_little:
-            b = b[24:31] + b[16:23] + b[8:15] + b[0:7]
+            b = b[24:32] + b[16:24] + b[8:16] + b[0:8]
         if opt_hexadecimal:
             i = int("0" + b, 2)
             print("{:08x}".format(i))
