@@ -3,4 +3,4 @@
 #include<string.h>
 #include<unistd.h>
 #include<math.h>
-void exec(unsigned int*,float*,int,unsigned int*,unsigned int*,int*,FILE*,FILE*);
+void exec(unsigned int*,float*,int,unsigned int*,unsigned int*,int*,FILE*,FILE*,int*,unsigned int*);

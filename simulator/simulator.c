@@ -7,6 +7,7 @@
 #include"bin.h"
 #define SIZE 2147483644
 #define INPUT 1000000000//10億
+#define KIZAMI 100000000
 
 //入力が２進数の時 -b をつける　
 //ファイルの名前をつけたいときは-f [ファイル名]
@@ -18,21 +19,19 @@ int main(int argc , char* argv[]){
     char fname[80];
     int flag=0;
     int i = 0;
+		int jc=0;
     int opt,length=0;
-		unsigned int *mem;
-		unsigned int rg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		unsigned int *mem,*mmap;
+		unsigned int rg[32]={0,0,400000000,800000000,1200000000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		float frg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     opterr = 0;
 		command=(unsigned int*)malloc((sizeof (unsigned int))*INPUT);
 		counter=(unsigned int*)malloc((sizeof (unsigned int))*INPUT);
 		mem=(unsigned int*)calloc(SIZE,(sizeof (unsigned int)));
-
+		mmap=(unsigned int*)calloc(SIZE/KIZAMI,(sizeof (unsigned int)));
 	for(int i=0;i<1000;i++){
 		counter[i]=0;
 	}
-	//initial register
-	for(int i=0;i<32;i++)
-		rg[i]=10000000*i+1000000;
     strcpy(fname,"test.txt");
     while ((opt = getopt(argc,argv ,"bdpf:")) !=-1){
         switch (opt){
@@ -44,6 +43,7 @@ int main(int argc , char* argv[]){
 								break;
 						case 'p':
 								flag=flag+8;
+								break;
             case 'f':
                 flag=flag+2;
                 strcpy(fname,optarg);
@@ -67,7 +67,7 @@ int main(int argc , char* argv[]){
         printf("ファイルが開けないよ\n");
         return -1;
     }
-		fpo=fopen("output.ppm","wb");
+		fpo=fopen("output.ppm","wb+");
 		if(fpo==NULL){
 				printf("ファイルが開けないよ\n");
 				return -1;
@@ -88,18 +88,17 @@ int main(int argc , char* argv[]){
     }
 
 
-
     int pc=0;//プログラム開始
     while (command[pc]!=0){
 			counter[pc]++;
-			exec(rg,frg,flag,command,mem,&pc,fpi,fpo);
+			exec(rg,frg,flag,command,mem,&pc,fpi,fpo,&jc,mmap);
     }
 		fclose(fpi);
 		fclose(fpo);
-		/*
+		if ((flag&4)==4){
 		printf("\nsuccess!\n");
 				for (int j=0;j<32;j++){
-					if (rg[j]!=SIZE/32*j)
+					if (rg[j]!=0)
 					printf("rg[%d]=%d",j,rg[j]);
 				}
 					printf("\n");
@@ -108,16 +107,18 @@ int main(int argc , char* argv[]){
 					printf("frg[%d]=%.3f",j,frg[j]);
 				}
 					printf("\n");
-				*/
+				}
 				/*for (int j=0;j<32;j++){
 					if (mem[j]!=0)
 					printf("mem[%d]=%u",j,mem[j]);
 				}
 				*/
-				/*
-				for (int i=0;i<length;i++){
-					printf("%d->%d\n",i,counter[i]);
+				
+		if ((flag&8)==8){
+			printf("jumpcounter=%d\n",jc);
+				for (int i=0;i<SIZE/KIZAMI;i++){
+					printf("memory map%d*%d->%d\n",i,KIZAMI,mmap[i]);
 				}
-				*/
+		}
   return 0;
 }

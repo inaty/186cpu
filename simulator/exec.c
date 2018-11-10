@@ -4,7 +4,8 @@
 #include<unistd.h>
 #include<math.h>
 #include"bin.h"
-void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo){
+#define KIZAMI 100000000
+void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,int* jc,unsigned int*mmap){
 				//printf("ho");
 				char input;
 				int opecode,imm,rs2,rs1,rd,funct3,tmp;
@@ -52,9 +53,8 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			
 		}else{
 			//出力mode
-			char c = *((char*)&rg[rs1]);
-			//printf("%c",c);
-			fwrite (&c,sizeof(c),1,fpo);
+			char c=(char)(rg[rs1]&0x000000ff);
+			fwrite (&c,sizeof(char),1,fpo);
 		}
 		*pc=*pc+1;
 	}
@@ -85,6 +85,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],jal:*pc<-%d\n",*pc,*pc+imm);
 		//printf("imm=%d,%s\n",imm,int2bin(imm));
 		*pc=*pc + imm;
+		*jc=*jc+1;
 	 }
 //jalr命令
 	else if ((opecode==0b1100111)&&(funct3==0b000)){
@@ -96,6 +97,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 		printf("*pc[%d],jalr:*pc<-%d,imm=%d,rs1=%d\n",*pc,(imm+rg[rs1])/4,imm,rs1);
 		*pc=(imm+(int)rg[rs1])/4;
+		*jc=*jc+1;
 	}
 
 //branch系命令
@@ -112,6 +114,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],beq\n",*pc);
 			if ((int)rg[rs1] ==(int)rg[rs2]){
 					*pc=*pc+imm;
+					*jc=*jc+1;
 			}else{
 				*pc=*pc+1;
 			}
@@ -122,6 +125,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],bne,imm/4=%d\n",*pc,imm);
 			if ((int)rg[rs1] !=(int)rg[rs2]){
 					*pc =*pc+imm;
+					*jc =*jc+1;
 			}else{
 				*pc=*pc+1;
 			}
@@ -132,6 +136,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],blt\n",*pc);
 			if ((int)rg[rs1] < (int)rg[rs2]){
 					*pc=*pc+imm;
+					*jc =*jc+1;
 			}else{
 				*pc=*pc+1;
 			}
@@ -142,6 +147,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],bge\n",*pc);
 			if (rg[rs1] >= rg[rs2]){
 					*pc =*pc + imm;
+					*jc =*jc+1;
 			}else{
 				*pc=*pc+1;
 			}
@@ -152,6 +158,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],bltu\n",*pc);
 			if (rg[rs1] < rg[rs2]){
 					*pc=*pc+imm;
+					*jc =*jc+1;
 			}else{
 				*pc=*pc+1;
 			}
@@ -162,6 +169,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],bgeu\n",*pc);
 			if (rg[rs1] >= rg[rs2]){
 					*pc =*pc+imm;
+					*jc =*jc+1;
 			}else{
 				*pc=*pc+1;
 			}
@@ -196,6 +204,8 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],lw,mem[%d]loaded\n",*pc,(imm+rg[rs1])/4);
 			rg[rd]=mem[(imm+(int)rg[rs1])/4];
+			mmap[(imm+(int)rg[rs1]/4)/KIZAMI]++;
+
 		}
 		//lbu
 		else if(funct3==0b100){
@@ -240,6 +250,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],sw,mem[%d]changed\n",*pc,(imm+rg[rs1])/4);
 			mem[(imm+(int)rg[rs1])/4]=rg[rs2];
+			mmap[((imm+(int)rg[rs1])/4)/KIZAMI]++;
 		}
 		else{
 			printf("error\n");
@@ -338,7 +349,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		else if(funct3==0b001&&imm==0){
 		if ((flag&4)==4)
 			printf("*pc[%d],sll\n",*pc);
-			rg[rd]=rg[rs1]<<rg[rs2];
+			rg[rd]=rg[rs1]<<(int)rg[rs2];
 		}
 		//slt
 		else if(funct3==0b010&&imm==0){
@@ -397,6 +408,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],flw,imm=%d,rd=%d,rs1=%d,mem[%d]=%d\n",*pc,imm,rd,rs1,(imm+(int)rg[rs1])/4,mem[(imm+(int)rg[rs1])/4]);
 			frg[rd]=*((float*)&mem[(imm+(int)rg[rs1])/4]);
+			mmap[(imm+(int)(rg[rs1])/4)/KIZAMI]++;
 			*pc=*pc+1;
 			}
 	//fsw
@@ -407,13 +419,8 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			rs2 = (command[*pc]>>20) & 0b11111;
 		if ((flag&4)==4)
 			printf("*pc[%d],fsw,imm=%d,rs1=%d,rs2=%d,frg[rs2]=%lf,mem[%d]=%d\n",*pc,imm,rs1,rs2,frg[rs2],(imm+(int)rg[rs1])/4,mem[(imm+(int)rg[rs1])/4]);
-			/*union{ float f; int i;} a;
-			a.f = frg[rs2];
-			printf("%f,(%d)"
-			a.i=a.i&0xff;
-			mem[(imm+(int)rg[rs1])/4]=a.i;
-			*/
 			mem[(imm+(int)rg[rs1])/4]=*((unsigned int*)(&frg[rs2]));
+			mmap[(imm+(int)(rg[rs1])/4)/KIZAMI]++;
 		if ((flag&4)==4)
 			printf("memには%dが入ったよ\n",mem[(imm+(int)rg[rs1])/4]);
 			*pc=*pc+1;
