@@ -23,9 +23,9 @@ int main(){
 //処理開始
 
 
+			frg[rd]=(float)((int)rg[rs1]);
 
 
-			frg[rd]=*((float*)&rg[rs1]);
 
 
 //処理終わり

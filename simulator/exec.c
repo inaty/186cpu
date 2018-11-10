@@ -4,8 +4,8 @@
 #include<unistd.h>
 #include<math.h>
 #include"bin.h"
-#define KIZAMI 100000000
-void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,int* jc,unsigned int*mmap){
+#define KIZAMI 1000000
+void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,long long int* jc,long long int*mmap){
 				//printf("ho");
 				char input;
 				int opecode,imm,rs2,rs1,rd,funct3,tmp;
@@ -530,7 +530,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		else if((imm==0b1101000)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fcvt.s.w\n",*pc);
-			frg[rd]=(float)rg[rs1];
+			frg[rd]=(float)((int)rg[rs1]);
 		}
 		//fmv.w.x
 		else if((imm==0b1111000)&&(funct3==0)&&(rs2==0)){
