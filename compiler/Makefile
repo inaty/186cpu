@@ -48,7 +48,7 @@ main.mli main.ml
 
 # 要適宜追加
 # ack
-TESTS = print sum-tail gcd sum fib ack even-odd \
+TESTS = cos print sum-tail gcd sum fib ack even-odd \
 adder funcomp cls-rec cls-bug cls-bug2 cls-reg-bug \
 shuffle spill spill2 spill3 join-stack join-stack2 join-stack3 \
 join-reg join-reg2 non-tail-if non-tail-if2 \
@@ -60,9 +60,10 @@ TESTS2 = ball
 do_test: $(TESTS:%=test/%.cmp) \
 	 # $(TESTS2:%=test2/%.cmp)
 
-.PRECIOUS: test/%.s test/%.ss test/%.res test/%.ans test/%.cmp \
+.PRECIOUS: test/%.s test/%.ss test/%.out test/%.res test/%.ans test/%.cmp \
 	test2/%.s test2/%.ss test2/%.res test2/%.ans test2/%.cmp
-TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp) \
+TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.out) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp) \
+mytest.s mytest.ss mytest.out mytest.res
 # $(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
 
 sim: simulator_copy.c
@@ -72,9 +73,9 @@ test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
 test/%.ss: test/%.s
 	python3 linker.py libmincaml.S $<
+# python3 assembler.py test/%.ss > test/%.res
 test/%.out: test/%.ss
 	python3 assembler.py $< > $@
-# python3 simulator.py test/hoge.ss > test/hoge.res
 test/%.res: test/%.out sim
 	./sim $< -o $@ -b
 # ここが普通のocamlで実行する処理、mlはocamlでもmincamlでも走るようになっていてこれはよし
@@ -96,6 +97,17 @@ test/%.cmp: test/%.res test/%.ans
 # test2/%.cmp: test2/%.res test2/%.ans
 # 	diff $^ > $@
 
+mytest: mytest.res
+	#
+
+mytest.s: $(RESULT) mytest.ml
+	./$(RESULT) mytest
+mytest.ss: mytest.s
+	python3 linker.py libmincaml.S $<
+mytest.out: mytest.ss
+	python3 assembler.py $< > mytest.out
+mytest.res: mytest.out sim
+	./sim $< -o $@ -b
 
 # なんかいらなさそうだったのでコメントアウト
 # min-caml.html: main.mli main.ml id.ml m.ml s.ml \

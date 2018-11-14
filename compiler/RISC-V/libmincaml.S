@@ -55,6 +55,9 @@ min_caml_atan:
 min_caml_print_char:
 	out	zero, a0, 0
 	ret
+min_caml_print_float:
+	printfloat	zero, fa0, rne
+	ret
 min_caml_create_array:
 	slli	a0, a0, 2 ! 要素数を4倍
 	add	t0, ap, a0 ! 終点
