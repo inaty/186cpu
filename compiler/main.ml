@@ -27,8 +27,8 @@ let lexbuf outchan l =
       (* let prog = TupleElim.f (TupleFlatten.f prog) in *)
       begin match prog with
       | Closure.Prog(fundefs, t) as prog ->
-          Closure.print_fundefs fundefs;
-          Closure.print_closure_t t;
+          (* Closure.print_fundefs fundefs;
+          Closure.print_closure_t t; *)
           Emit.f outchan
             (RegAlloc.f
               (Simm.f
