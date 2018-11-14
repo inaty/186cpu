@@ -10,3 +10,4 @@ parser.mli
 /._ncdi
 simulator_copy.c
 reportmemo.txt
+sim
