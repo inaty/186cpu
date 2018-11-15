@@ -122,7 +122,8 @@ fbg rs1, rs2, label
 ```
 
 * libmincaml.Sに含まれている命令一覧  
-temporaryはt0まで使う  
+temporaryはt0, ft0まで使う  
+今の所ちゃんと全部退避されてから呼ばれるのでtemporaryをあまり使う感じではない（これ後々どうするか、退避を封じて呼んでtmp使うタイプにするかtmp全部なくして汎用レジスタのみにするかまだ未定）
 readint, readfloatはビッグエンディアンで入ってくることを前提としている
 
 ```
@@ -153,11 +154,13 @@ li rd, imm(signed 12bit?)
 li rd, label
 mv rd, rs
 neg rd, rs1
+beq rs1, rs2, label
 bne rs1, rs2, label
 blt rs1, rs2, label
 j label
 jal label
 ret
+fmv.s rd, rs
 
 被ってないやつ
 RV32F

@@ -41,7 +41,10 @@ def replace_pseudo1(line, labels_addrs):
         return [opformat("jalr", ["zero", "ra", "0"])]
 
     # print(line)
-    opcode, operands = line.strip("\t\n").split("\t")
+    try:
+        opcode, operands = line.strip("\t\n").split("\t")
+    except ValueError:
+        assert False, line.strip("\t\n").split("\t")
     operands = operands.split(", ")
     if opcode == "li":
         rd, op2 = operands
