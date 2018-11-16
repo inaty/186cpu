@@ -57,39 +57,57 @@ manyargs
 
 TESTS2 = ball
 
-do_test: $(TESTS:%=test/%.cmp) $(TESTS2:%=test2/%.cmp)
+do_test: $(TESTS:%=test/%.cmp) \
+	 # $(TESTS2:%=test2/%.cmp)
 
-.PRECIOUS: test/%.s test/%.ss test/%.res test/%.ans test/%.cmp \
+.PRECIOUS: test/%.s test/%.ss test/%.out test/%.res test/%.ans test/%.cmp \
 	test2/%.s test2/%.ss test2/%.res test2/%.ans test2/%.cmp
-TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp) \
-$(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
+TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.out) $(TESTS:%=test/%.res) $(TESTS:%=test/%.ans) $(TESTS:%=test/%.cmp) \
+mytest.s mytest.ss mytest.out mytest.res
+# $(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
+
+sim: simulator_copy.c
+	gcc simulator_copy.c -o sim -lm
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
 test/%.ss: test/%.s
 	python3 linker.py libmincaml.S $<
-# python3 simulator.py test/hoge.ss > test/hoge.res
-test/%.res: test/%.ss
-	python3 simulator.py $< > $@
+# python3 assembler.py test/%.ss > test/%.res
+test/%.out: test/%.ss
+	python3 assembler.py $< > $@
+test/%.res: test/%.out sim
+	./sim $< -o $@ -b
 # ここが普通のocamlで実行する処理、mlはocamlでもmincamlでも走るようになっていてこれはよし
 test/%.ans: test/%.ml
 	ocaml $< > $@
 test/%.cmp: test/%.res test/%.ans
 	diff $^ > $@
 
-test2/%.s: $(RESULT) test2/%.ml
-	./$(RESULT) test2/$*
-test2/%.ss: test2/%.s
-	python3 linker.py libmincaml.S $<
-# python3 simulator.py test/hoge.ss > test/hoge.res
-test2/%.res: test2/%.ss test2/%.in
-	python3 simulator.py $< < test2/$*.in > $@
-# ここが普通のocamlで実行する処理、mlはocamlでもmincamlでも走るようになっていてこれはよし
-# test2/%.ans: test2/%.ml test2/%.in
-# 	ocaml $< < test2/$*.in > $@
-test2/%.cmp: test2/%.res test2/%.ans
-	diff $^ > $@
+# test2/%.s: $(RESULT) test2/%.ml
+# 	./$(RESULT) test2/$*
+# test2/%.ss: test2/%.s
+# 	python3 linker.py libmincaml.S $<
+# # python3 simulator.py test/hoge.ss > test/hoge.res
+# test2/%.res: test2/%.ss test2/%.in
+# 	python3 simulator.py $< < test2/$*.in > $@
+# # ここが普通のocamlで実行する処理、mlはocamlでもmincamlでも走るようになっていてこれはよし
+# # test2/%.ans: test2/%.ml test2/%.in
+# # 	ocaml $< < test2/$*.in > $@
+# test2/%.cmp: test2/%.res test2/%.ans
+# 	diff $^ > $@
 
+mytest: mytest.res
+	#
+
+mytest.s: $(RESULT) mytest.ml
+	./$(RESULT) mytest
+mytest.ss: mytest.s
+	python3 linker.py libmincaml.S $<
+mytest.out: mytest.ss
+	python3 assembler.py $< > mytest.out
+mytest.res: mytest.out sim
+	./sim $< -o $@ -b
 
 # なんかいらなさそうだったのでコメントアウト
 # min-caml.html: main.mli main.ml id.ml m.ml s.ml \

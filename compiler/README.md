@@ -10,6 +10,9 @@
   いずれは拡張子`.S`であれば任意個のライブラリをリンクできる（予定）  
 * シミュレータ  
   `python3 simulator.py hoge.ss`でシミュレート  
+  シミュレータ係のシミュレータができたので開発終了（2018/11/14）
+  以降の変更はサポートされない
+  * printfloat
 * アセンブラ
   `python3 assembler.py hoge.ss <option>`でアセンブル  
   結果は「01が並んで1命令ごとに改行が入った文字列」で、標準出力に出る  
@@ -119,7 +122,8 @@ fbg rs1, rs2, label
 ```
 
 * libmincaml.Sに含まれている命令一覧  
-temporaryはt0まで使う  
+temporaryはt0, ft0まで使う  
+今の所ちゃんと全部退避されてから呼ばれるのでtemporaryをあまり使う感じではない（これ後々どうするか、退避を封じて呼んでtmp使うタイプにするかtmp全部なくして汎用レジスタのみにするかまだ未定）
 readint, readfloatはビッグエンディアンで入ってくることを前提としている
 
 ```
@@ -150,11 +154,13 @@ li rd, imm(signed 12bit?)
 li rd, label
 mv rd, rs
 neg rd, rs1
+beq rs1, rs2, label
 bne rs1, rs2, label
 blt rs1, rs2, label
 j label
 jal label
 ret
+fmv.s rd, rs
 
 被ってないやつ
 RV32F
@@ -173,6 +179,7 @@ fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
 in rd, rs1, imm
 out rd, rs1, imm(0)
+printfloat rd, rs1, rm
 ```
 
 * 被りを消すと最終的には
@@ -218,6 +225,7 @@ fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
 in rd, rs1, imm
 out rd, rs1, imm(0)
+printfloat rd, rs1, rm
 
 PSEUDO
 li rd, imm (12bit)
@@ -339,6 +347,7 @@ fsin.s rd, rs1, rm(rne)
 fatan.s rd, rs1, rm(rne)
 in rd, rs1, imm
 out rd, rs1, imm(0)
+printfloat rd, rs1, rm
 
 PSEUDO
 なし
@@ -419,6 +428,10 @@ fsin.s rd, rs1, rm(rne)　→　1100001 00001 rs1 rm rd 1010011
 fatan.s rd, rs1, rm(rne)　→　1101001 00000 rs1 rm rd 1010011
 ※サボり、これは最終的には消す
 ちなみにそれぞれfcvt.w.d, fcvt.wu.d, fcvt.d.wと同じ
+
+printfloat rd, rs1, rm　→　1101001 00001 rs1 rm rd 1010011
+※デバッグ用、printf("%.12f\n", (rs1の中身))を呼んでくれればいい、rdとrmはダミー
+ちなみにfcvt.d.wuと同じ
 
 ```
 * リンカは吐くけどアセンブラは対応していない命令一覧

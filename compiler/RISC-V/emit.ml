@@ -284,7 +284,7 @@ let f oc (Prog(float_table, fundefs, insts)) =
   List.iter
     (fun (Id.L(x), d) ->
       Printf.fprintf oc "%s:\n" x;
-      Printf.fprintf oc "\tfloat\t%f\n" d)
+      Printf.fprintf oc "\tfloat\t%.11f\n" d)
     float_table;
   List.iter (fun fundef -> h oc fundef) fundefs;
   Printf.fprintf oc "min_caml_start:\n";
