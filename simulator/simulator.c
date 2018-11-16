@@ -12,15 +12,15 @@
 //入力が２進数の時 -b をつける　
 //ファイルの名前をつけたいときは-f [ファイル名]
 int main(int argc , char* argv[]){
-    FILE *fp,*fpi,*fpo;
-    char cmd[34];
-    unsigned int *command;
+		FILE *fp,*fpi,*fpo;
+		char cmd[34];
+		unsigned int *command;
 		unsigned int *counter;
-    char fname[80];
-    int flag=0;
-    int i = 0;
+		char fname[80];
+		int flag=0;
+		int i = 0;
 		long long int jc=0;
-    int opt,length=0;
+		int opt,length=0;
 		unsigned int *mem;
 		long long int *mmap;
 		unsigned int rg[32]={0,0,400000000,800000000,1200000000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -33,30 +33,30 @@ int main(int argc , char* argv[]){
 	for(int i=0;i<1000;i++){
 		counter[i]=0;
 	}
-    strcpy(fname,"test.txt");
-    while ((opt = getopt(argc,argv ,"bdpf:")) !=-1){
-        switch (opt){
-            case 'b':
-                flag++;
-                break;
+		strcpy(fname,"test.txt");
+		while ((opt = getopt(argc,argv ,"bdpf:")) !=-1){
+			switch (opt){
+						case 'b':
+								flag++;
+								break;
 						case 'd':
 								flag=flag+4;
 								break;
 						case 'p':
 								flag=flag+8;
 								break;
-            case 'f':
-                flag=flag+2;
-                strcpy(fname,optarg);
-                break;
-            default:
-                printf("指定されたオプションを使ってね！\n");
-                break;
-            }
-    }
-    if ((flag&2)==0){
-        strcpy(fname,"test.txt");
-    }
+						case 'f':
+								flag=flag+2;
+								strcpy(fname,optarg);
+								break;
+						default:
+								printf("指定されたオプションを使ってね！\n");
+								break;
+						}
+		}
+		if ((flag&2)==0){
+				strcpy(fname,"test.txt");
+			}
     //printf("fname=%s",fname);
     fp=fopen(fname,"r");
     if(fp==NULL){

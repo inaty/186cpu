@@ -6,11 +6,10 @@
 #include"bin.h"
 #define KIZAMI 1000000
 void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,long long int* jc,long long int*mmap){
-				//printf("ho");
-				char input;
-				int opecode,imm,rs2,rs1,rd,funct3,tmp;
+	char input;
+	int opecode,imm,rs2,rs1,rd,funct3,tmp;
 				rg[0]=0;//ゼロレジスタ初期化
-        //printf("cmmand[%d] is %d,bitcode below\n%s\n",*pc,command[*pc],int2bin(command[*pc]));
+//printf("cmmand[%d] is %d,bitcode below\n%s\n",*pc,command[*pc],int2bin(command[*pc]));
 				if ((flag&4)==4){
 				for (int j=0;j<32;j++){
 					if (rg[j]!=10000000*j+1000000)
@@ -29,8 +28,8 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				*/
 					printf("\n\n");
 				}
-				opecode = command[*pc] & 0b1111111;
-				funct3 = (command[*pc] >>12) & 0b111;
+	opecode = command[*pc] & 0b1111111;
+	funct3 = (command[*pc] >>12) & 0b111;
 //IO関係
 	if(opecode==0b0001011){
 		rs1=(command[*pc]>>15)&0x1f;
@@ -561,6 +560,13 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 	*pc=*pc+1;
 	}
+	//print_float
+	else if (opecode==0b1101011){
+			rs1 = (command[*pc]>>15) & 0b11111;
+			fwrite (&frg[rs1],sizeof(float),1,fpo);
+			*pc=*pc +1;
+		}
+			
 	//例外処理
 	else {
 		printf("command[%d]に命令セットにないcodeが含まれているよ!\n",*pc);
