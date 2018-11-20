@@ -17,6 +17,8 @@ int main(int argc , char* argv[]){
 		unsigned int *command;
 		unsigned int *counter;
 		char fname[80];
+		char foname[80];
+		char finame[80];
 		int flag=0;
 		int i = 0;
 		long long int jc=0;
@@ -34,7 +36,7 @@ int main(int argc , char* argv[]){
 		counter[i]=0;
 	}
 		strcpy(fname,"test.txt");
-		while ((opt = getopt(argc,argv ,"bdpf:")) !=-1){
+		while ((opt = getopt(argc,argv ,"bdpi:o:f:")) !=-1){
 			switch (opt){
 						case 'b':
 								flag++;
@@ -44,6 +46,14 @@ int main(int argc , char* argv[]){
 								break;
 						case 'p':
 								flag=flag+8;
+								break;
+						case 'i':
+								flag=flag+32;
+								strcpy(finame,optarg);
+								break;
+						case 'o':
+								flag=flag+16;
+								strcpy(foname,optarg);
 								break;
 						case 'f':
 								flag=flag+2;
@@ -57,18 +67,24 @@ int main(int argc , char* argv[]){
 		if ((flag&2)==0){
 				strcpy(fname,"test.txt");
 			}
+		if ((flag&16)==0){
+				strcpy(foname,"output.ppm");
+			}
+		if ((flag&16)==0){
+				strcpy(finame,"input.bin");
+			}
     //printf("fname=%s",fname);
     fp=fopen(fname,"r");
     if(fp==NULL){
         printf("ファイルが開けないよ\n");
         return -1;
     }
-		fpi=fopen("input.bin","rb");
+		fpi=fopen(finame,"rb");
     if(fpi==NULL){
         printf("ファイルが開けないよ\n");
         return -1;
     }
-		fpo=fopen("output.ppm","wb+");
+		fpo=fopen(foname,"wb+");
 		if(fpo==NULL){
 				printf("ファイルが開けないよ\n");
 				return -1;

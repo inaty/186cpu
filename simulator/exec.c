@@ -564,6 +564,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 	else if (opecode==0b1101011){
 			rs1 = (command[*pc]>>15) & 0b11111;
 			fwrite (&frg[rs1],sizeof(float),1,fpo);
+			//printf("print_float:%1.2f\n",frg[rs1]);
 			*pc=*pc +1;
 		}
 			
