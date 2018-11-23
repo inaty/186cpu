@@ -66,8 +66,14 @@ TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.out) $(TESTS:%
 mytest.s mytest.ss mytest.out mytest.res
 # $(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
 
-sim: simulator_copy.c
-	gcc simulator_copy.c -o sim -lm
+sim: ../simulator/exec.c ../simulator/bin.c ../simulator/simulator.c
+	gcc ../simulator/exec.c ../simulator/bin.c ../simulator/simulator.c -o sim -lm
+
+rt.ppm: $(RESULT) sim
+	./$(RESULT) raytracer/minrt
+	python3 linker.py libmincaml.S raytracer/minrt.s
+	python3 assembler.py raytracer/minrt.ss > raytracer/minrt.out
+	./sim -f raytracer/minrt.out -i raytracer/sld/contest.bin -o raytracer/rt.ppm -b
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
@@ -77,7 +83,7 @@ test/%.ss: test/%.s
 test/%.out: test/%.ss
 	python3 assembler.py $< > $@
 test/%.res: test/%.out sim
-	./sim $< -o $@ -b
+	./sim -f $< -i raytracer/sld/contest.bin -o $@ -b
 # ここが普通のocamlで実行する処理、mlはocamlでもmincamlでも走るようになっていてこれはよし
 test/%.ans: test/%.ml
 	ocaml $< > $@

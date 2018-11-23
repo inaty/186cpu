@@ -3,7 +3,8 @@ let limit = ref 1000
 let rec iter n e =
   Format.eprintf "iteration %d@." n;
   if n = 0 then e else
-  let e' = Cse.f e in
+  let e' = e in
+  (* let e' = Cse.f e in *)
   let e' = Elim.f (ConstFold.f (Inline.f (Assoc.f (Beta.f e')))) in
   (* KNormal.print_kNormal e'; *)
   if e = e' then e else
@@ -17,8 +18,8 @@ let lexbuf outchan l =
   (* Syntax.print_syntax syntax; *)
   let knormal = KNormal.f (Typing.f syntax) in
   (* KNormal.print_kNormal knormal; *)
-  (* match (Closure.f (iter !limit (Alpha.f knormal))) with *)
-  match (Closure.f (Alpha.f knormal)) with
+  match (Closure.f (iter !limit (Alpha.f knormal))) with
+  (* match (Closure.f (Alpha.f knormal)) with *)
   (* match (LambdaLifting.f (iter !limit (Alpha.f knormal))) with *)
   | Closure.Prog(fundefs, t) as prog ->
       (* Closure.print_fundefs fundefs;

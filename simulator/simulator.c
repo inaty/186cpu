@@ -106,7 +106,9 @@ int main(int argc , char* argv[]){
 
 
     int pc=0;//プログラム開始
+    long long int cnt = 0;
     while (command[pc]!=0){
+			++cnt;
 			counter[pc]++;
 			exec(rg,frg,flag,command,mem,&pc,fpi,fpo,&jc,mmap);
     }
@@ -130,12 +132,13 @@ int main(int argc , char* argv[]){
 					printf("mem[%d]=%u",j,mem[j]);
 				}
 				*/
-				
+
 		if ((flag&8)==8){
 			printf("jumpcounter=%lld\n",jc);
 				for (int i=0;i<400;i++){
 					printf("memory map%d*%d->%lld\n",i,KIZAMI,mmap[i]);
 				}
 		}
+		fprintf(stderr, "cnt = %ld\n", cnt);
   return 0;
 }
