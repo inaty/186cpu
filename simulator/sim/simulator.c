@@ -5,7 +5,7 @@
 #include<math.h>
 #include"exec.h"
 #include"bin.h"
-#define SIZE (2400 * 1024)
+#define SIZE (2400 * 1024 / 4)
 #define INPUT 1000000000//10億
 #define KIZAMI 1024
 

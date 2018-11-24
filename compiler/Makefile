@@ -66,8 +66,9 @@ TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.out) $(TESTS:%
 mytest.s mytest.ss mytest.out mytest.res
 # $(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
 
-sim: ../simulator/exec.c ../simulator/bin.c ../simulator/simulator.c
-	gcc ../simulator/exec.c ../simulator/bin.c ../simulator/simulator.c -o sim -lm
+SIMDIR = ../simulator/sim
+sim: $(SIMDIR)/exec.c $(SIMDIR)/bin.c $(SIMDIR)/simulator.c
+	gcc $(SIMDIR)/exec.c $(SIMDIR)/bin.c $(SIMDIR)/simulator.c -o sim -lm
 
 raytracer/minrt.s: $(RESULT) raytracer/minrt.ml
 	./$(RESULT) raytracer/minrt
