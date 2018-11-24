@@ -13,9 +13,10 @@ and inst = (* 命令（仮想命令含む） *)
   | Neg of Id.t
   | Add of Id.t * id_or_imm
   | Sub of Id.t * id_or_imm
-  | Mul of Id.t * Id.t
-  | Div of Id.t * Id.t
+  | Mul of Id.t * id_or_imm
+  | Div of Id.t * id_or_imm
   | SLL of Id.t * id_or_imm
+  | SRL of Id.t * id_or_imm
   | Ld of Id.t * id_or_imm
   | St of Id.t * Id.t * id_or_imm
   | FMv of Id.t
@@ -93,10 +94,9 @@ let fv_id_or_imm = function V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Set(_) | SetL(_) | Restore(_) -> []
   | Mov(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) -> [x]
-  | Add(x, y') | Sub(x, y') | SLL(x, y')
-  | Ld(x, y') | LdDF(x, y') -> x :: fv_id_or_imm y'
+  | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | SLL(x, y')
+  | SRL(x, y') | Ld(x, y') | LdDF(x, y') -> x :: fv_id_or_imm y'
   | St(x, y, z') | StDF(x, y, z') -> x :: y :: fv_id_or_imm z'
-  | Mul(x, y) | Div(x, y)
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) ->
   (* | IfGE(x, y, e1, e2) -> *)

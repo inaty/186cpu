@@ -1,5 +1,12 @@
 open Asm
 
+let power_of_two n = ((n land (n - 1)) = 0)
+
+let log2 n =
+  let rec loop b i =
+    if (n land b) = 0 then loop (b lsl 1) (i + 1) else i in
+  loop 1 0
+
 (* 命令列に対する12bit即値最適化 *)
 (* レジスタの中身が12bitまでの即値だった場合はそこをC(i)にする *)
 let rec g imms insts =
@@ -21,7 +28,14 @@ and g' imms (inst, pos) =
     match inst with
     | Add(x, V(y)) when M.mem y imms -> Add(x, C(M.find y imms))
     | Add(x, V(y)) when M.mem x imms -> Add(y, C(M.find x imms))
+    (* Sub, xでも何らかの処理ができそう *)
     | Sub(x, V(y)) when M.mem y imms -> Sub(x, C(M.find y imms))
+    | Mul(x, V(y)) when M.mem y imms ->
+        let i = M.find y imms in
+        if power_of_two i then SLL(x, C(log2 i)) else inst
+    | Div(x, V(y)) when M.mem y imms ->
+        let i = M.find y imms in
+        if power_of_two i then SRL(x, C(log2 i)) else inst
     (* 本当は桁数チェックしないとまずいが多分大丈夫 *)
     | SLL(x, V(y)) when M.mem y imms -> SLL(x, C(M.find y imms))
     | Ld(x, V(y)) when M.mem y imms -> Ld(x, C(M.find y imms))

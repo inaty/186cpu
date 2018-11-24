@@ -22,6 +22,10 @@ let rec g env (e, sp) =
       (Int(findi x env + findi y env), sp)
   | Sub(x, y) when memi x env && memi y env ->
       (Int(findi x env - findi y env), sp)
+  | Mul(x, y) when memi x env && memi y env ->
+      (Int(findi x env * findi y env), sp)
+  | Div(x, y) when memi x env && memi y env ->
+      (Int(findi x env / findi y env), sp)
   | FNeg(x) when memf x env ->
       (Float(-.(findf x env)), sp)
   | FAdd(x, y) when memf x env && memf y env ->

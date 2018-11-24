@@ -136,12 +136,14 @@ and g' dest cont regenv (inst, sp) =
       (Ans(Add(find x Type.Int regenv, find' y' regenv), sp), regenv)
   | Sub(x, y') ->
       (Ans(Sub(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | Mul(x, y) ->
-      (Ans(Mul(find x Type.Int regenv, find y Type.Int regenv), sp), regenv)
-  | Div(x, y) ->
-      (Ans(Div(find x Type.Int regenv, find y Type.Int regenv), sp), regenv)
+  | Mul(x, y') ->
+      (Ans(Mul(find x Type.Int regenv, find' y' regenv), sp), regenv)
+  | Div(x, y') ->
+      (Ans(Div(find x Type.Int regenv, find' y' regenv), sp), regenv)
   | SLL(x, y') ->
       (Ans(SLL(find x Type.Int regenv, find' y' regenv), sp), regenv)
+  | SRL(x, y') ->
+      (Ans(SRL(find x Type.Int regenv, find' y' regenv), sp), regenv)
   | Ld(x, y') ->
       (Ans(Ld(find x Type.Int regenv, find' y' regenv), sp), regenv)
   | St(x, y, z') ->

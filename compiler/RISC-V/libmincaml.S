@@ -601,158 +601,100 @@ min_caml_create_float_array_loop:
 	addi	ap, ap, 4
 	blt	ap, t0, min_caml_create_float_array_loop
 	ret
-min_caml_print_int_reverced_array.74:
-	lw	a3, a21, 8 ! 0
-	lw	a4, a21, 4 ! 0
-	div	a5, a0, a4 ! 8
-	mul	a4, a5, a4 ! 9
-	sub	a0, a0, a4 ! 9
-	slli	a4, a2, 2 ! 10
-	add	t0, a1, a4 ! 10
-	sw	t0, a0, 0 ! 10
-	addi	a0, a2, 1 ! 11
-	bne	a5, a3, be_else.132
-	ret ! 12
-be_else.132:
-	mv	a2, a0
-	mv	a0, a5
-	lw	a20, a21, 0
-	jalr	zero, a20, 0
-min_caml_print_int_reverce.46:
-	lw	a4, a21, 4 ! 0
-	blt	a1, a4, bge_else.133
-	slli	a4, a1, 2 ! 18
-	add	t0, a0, a4 ! 18
-	lw	a4, t0, 0 ! 18
-	slli	a5, a3, 2 ! 18
-	add	t0, a2, a5 ! 18
-	sw	t0, a4, 0 ! 18
-	addi	a1, a1, -1 ! 19
-	addi	a3, a3, 1 ! 19
-	lw	a20, a21, 0
-	jalr	zero, a20, 0
-bge_else.133:
-	ret ! 16
-min_caml_print_int_body.52:
-	lw	a2, a21, 8 ! 0
-	lw	a3, a21, 4 ! 0
-	blt	a1, a2, bge_else.135
-	ret ! 26
-bge_else.135:
-	slli	a2, a1, 2 ! 24
-	add	t0, a0, a2 ! 24
-	lw	a2, t0, 0 ! 24
-	addi	a2, a2, 48 ! 24
+min_caml_print_int_mul10.27:
+	slli	a1, a0, 3 ! 1
+	slli	a0, a0, 1 ! 1
+	add	a0, a1, a0 ! 1
+	ret ! 1
+min_caml_print_int_loop.53:
+	lw	a2, a21, 4 ! 0
+	addi	a3, a0, 1 ! 4
+	bne	a3, a1, min_caml_print_int_be_else.82
+	ret ! 4
+min_caml_print_int_be_else.82:
+	add	a3, a0, a1 ! 5
+	srli	a3, a3, 1 ! 5
 	sw	sp, a0, 0 ! 0
-	sw	sp, a21, 4 ! 0
+	sw	sp, a1, 4 ! 0
 	sw	sp, a3, 8 ! 0
-	sw	sp, a1, 12 ! 0
-	mv	a0, a2
-	sw	sp, ra, 20
-	addi	sp, sp, 24
-	jal	min_caml_print_char
-	addi	sp, sp, -24
-	lw	ra, sp, 20
-	lw	a0, sp, 8 ! 0
-	lw	a1, sp, 12 ! 0
-	add	a1, a1, a0 ! 25
-	lw	a0, sp, 0 ! 0
-	lw	a21, sp, 4 ! 0
-	lw	a20, a21, 0
-	jalr	zero, a20, 0
-min_caml_print_int:
-	li	a1, 0 ! 2
-	bne	a0, a1, be_else.137
-	li	a0, 48 ! 2
-	j	min_caml_print_char
-be_else.137:
-	sw	sp, a1, 0 ! 0
-	blt	a1, a0, bge_else.138
-	li	a2, 45 ! 4
-	sw	sp, a0, 4 ! 0
-	mv	a0, a2
-	sw	sp, ra, 12
-	addi	sp, sp, 16
-	jal	min_caml_print_char
-	addi	sp, sp, -16
-	lw	ra, sp, 12
-	lw	a0, sp, 4 ! 0
-	neg	a0, a0 ! 4
-	j	bge_cont.139
-bge_else.138:
-bge_cont.139:
-	li	a1, 10 ! 5
-	lw	a2, sp, 0 ! 0
-	sw	sp, a0, 8 ! 0
-	sw	sp, a1, 12 ! 0
-	mv	a0, a1
-	mv	a1, a2
-	sw	sp, ra, 20
-	addi	sp, sp, 24
-	jal	min_caml_create_array
-	addi	sp, sp, -24
-	lw	ra, sp, 20
-	mv	a1, a0
-	mv	a21, hp ! 6
-	addi	hp, hp, 16 ! 6
-	li	a0, min_caml_print_int_reverced_array.74 ! 6
-	sw	a21, a0, 0 ! 6
-	lw	a2, sp, 0 ! 0
-	sw	a21, a2, 8 ! 6
-	lw	a0, sp, 12 ! 0
-	sw	a21, a0, 4 ! 6
-	lw	a3, sp, 8 ! 0
-	sw	sp, a1, 16 ! 0
+	sw	sp, a21, 12 ! 0
+	sw	sp, a2, 16 ! 0
 	mv	a0, a3
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	lw	a20, a21, 0
-	jalr	ra, a20, 0
+	jal	min_caml_print_int_mul10.27
 	addi	sp, sp, -24
 	lw	ra, sp, 20
-	lw	a1, sp, 12 ! 0
-	lw	a2, sp, 0 ! 0
-	sw	sp, a0, 20 ! 0
-	mv	a0, a1
-	mv	a1, a2
-	sw	sp, ra, 28
-	addi	sp, sp, 32
-	jal	min_caml_create_array
-	addi	sp, sp, -32
-	lw	ra, sp, 28
-	mv	a2, a0
-	mv	a21, hp ! 15
-	addi	hp, hp, 8 ! 15
-	li	a0, min_caml_print_int_reverce.46 ! 15
-	sw	a21, a0, 0 ! 15
-	lw	a3, sp, 0 ! 0
-	sw	a21, a3, 4 ! 15
-	li	a0, 1 ! 21
-	lw	a1, sp, 20 ! 0
-	addi	a4, a1, -1 ! 21
-	lw	a5, sp, 16 ! 0
-	sw	sp, a2, 24 ! 0
-	sw	sp, a0, 28 ! 0
-	mv	a1, a4
-	mv	a0, a5
-	sw	sp, ra, 36
-	addi	sp, sp, 40
-	lw	a20, a21, 0
-	jalr	ra, a20, 0
-	addi	sp, sp, -40
-	lw	ra, sp, 36
-	mv	a21, hp ! 22
-	addi	hp, hp, 16 ! 22
-	li	a0, min_caml_print_int_body.52 ! 22
-	sw	a21, a0, 0 ! 22
-	lw	a0, sp, 20 ! 0
-	sw	a21, a0, 8 ! 22
-	lw	a0, sp, 28 ! 0
-	sw	a21, a0, 4 ! 22
-	lw	a0, sp, 24 ! 0
-	lw	a1, sp, 0 ! 0
+	lw	a1, sp, 16 ! 0
+	blt	a1, a0, min_caml_print_int_bge_else.83
+	lw	a0, sp, 8 ! 0
+	lw	a1, sp, 4 ! 0
+	lw	a21, sp, 12 ! 0
 	lw	a20, a21, 0
 	jalr	zero, a20, 0
+min_caml_print_int_bge_else.83:
+	lw	a0, sp, 0 ! 0
+	lw	a1, sp, 8 ! 0
+	lw	a21, sp, 12 ! 0
+	lw	a20, a21, 0
+	jalr	zero, a20, 0
+min_caml_print_int_div10.29:
+	mv	a21, hp ! 3
+	addi	hp, hp, 8 ! 3
+	li	a1, min_caml_print_int_loop.53 ! 3
+	sw	a21, a1, 0 ! 3
+	sw	a21, a0, 4 ! 3
+	li	a0, 0 ! 7
+	li	a1, 100000000 ! 7
+	lw	a20, a21, 0
+	jalr	zero, a20, 0
+min_caml_print_int_inner.31:
+	li	a1, 0 ! 9
+	bne	a0, a1, min_caml_print_int_be_else.84
+	ret ! 9
+min_caml_print_int_be_else.84:
+	sw	sp, a0, 0 ! 0
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	min_caml_print_int_div10.29
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	slli	a1, a0, 3 ! 11
+	slli	a2, a0, 1 ! 11
+	add	a1, a1, a2 ! 11
+	lw	a2, sp, 0 ! 0
+	sub	a1, a2, a1 ! 11
+	sw	sp, a1, 4 ! 0
+	sw	sp, ra, 8
+	addi	sp, sp, 12
+	jal	min_caml_print_int_inner.31
+	addi	sp, sp, -12
+	lw	ra, sp, 8
+	lw	a0, sp, 4 ! 0
+	addi	a0, a0, 48 ! 12
+	j	min_caml_print_char
+min_caml_print_int:
+	li	a1, 0 ! 14
+	bne	a0, a1, min_caml_print_int_be_else.86
+	li	a0, 48 ! 14
+	j	min_caml_print_char
+min_caml_print_int_be_else.86:
+	li	a1, 0 ! 16
+	blt	a1, a0, min_caml_print_int_bge_else.87
+	li	a1, 45 ! 16
+	sw	sp, a0, 0 ! 0
+	mv	a0, a1
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	min_caml_print_char
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	lw	a0, sp, 0 ! 0
+	neg	a0, a0 ! 16
+	j	min_caml_print_int_bge_cont.88
+min_caml_print_int_bge_else.87:
+min_caml_print_int_bge_cont.88:
+	j	min_caml_print_int_inner.31
 min_caml_print_newline:
 	li	t0, 10
 	out	zero, t0, 0

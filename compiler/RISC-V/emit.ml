@@ -76,16 +76,22 @@ and g' oc (dest, inst) sp =
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Sub(rs1, V(rs2)) ->
       Printf.fprintf oc "\tsub\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  | NonTail(rd), Mul(rs1, rs2) ->
+  | NonTail(rd), Mul(rs1, V(rs2)) ->
       Printf.fprintf oc "\tmul\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
-  | NonTail(rd), Div(rs1, rs2) ->
+  | NonTail(rd), Mul(rs1, C(imm)) -> failwith "emit g' mul"
+  | NonTail(rd), Div(rs1, V(rs2)) ->
       Printf.fprintf oc "\tdiv\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), Div(rs1, C(imm)) -> failwith "emit g' div"
   | NonTail(rd), Sub(rs1, C(imm)) ->
       Printf.fprintf oc "\taddi\t%s, %s, %d ! %d\n" rd rs1 ~-imm lnum
   | NonTail(rd), SLL(rs1, V(rs2)) ->
       Printf.fprintf oc "\tsll\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
   | NonTail(rd), SLL(rs1, C(imm)) ->
       Printf.fprintf oc "\tslli\t%s, %s, %d ! %d\n" rd rs1 imm lnum
+  | NonTail(rd), SRL(rs1, V(rs2)) ->
+      Printf.fprintf oc "\tsrl\t%s, %s, %s ! %d\n" rd rs1 rs2 lnum
+  | NonTail(rd), SRL(rs1, C(imm)) ->
+      Printf.fprintf oc "\tsrli\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Ld(rs1, C(imm)) ->
       Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n" rd rs1 imm lnum
   | NonTail(rd), Ld(rs1, V(rs2)) ->
@@ -280,6 +286,12 @@ let h oc {name = Id.L(x); args = _; fargs = _; body = insts; ret = _} =
 
 let f oc (Prog(float_table, fundefs, insts)) =
   Format.eprintf "generating assembly...@.";
+  Printf.fprintf oc "\tli\ta0, %d\n" (100 * 1024);
+  Printf.fprintf oc "\tmv\tsp, a0\n" ;
+  Printf.fprintf oc "\tli\ta0, %d\n" (200 * 1024);
+  Printf.fprintf oc "\tmv\thp, a0\n" ;
+  Printf.fprintf oc "\tli\ta0, %d\n" (1200 * 1024);
+  Printf.fprintf oc "\tmv\tap, a0\n" ;
   Printf.fprintf oc "\tj\tmin_caml_start\n";
   List.iter
     (fun (Id.L(x), d) ->
