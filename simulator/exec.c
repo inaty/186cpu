@@ -1,10 +1,11 @@
+#include <assert.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
 #include<math.h>
 #include"bin.h"
-#define KIZAMI 1000000
+#define KIZAMI 1024
 void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,long long int* jc,long long int*mmap){
 	char input;
 	int opecode,imm,rs2,rs1,rd,funct3,tmp;
@@ -49,7 +50,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 
 				if ((flag&4)==4)
 					printf("入力モード,rg[%d]<=%d",rs2,rg[rs2]);
-			
+
 		}else{
 			//出力mode
 			char c=(char)(rg[rs1]&0x000000ff);
@@ -174,7 +175,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}
 		}
 		else {
-			printf("error\n");
+			assert(0);
 		}
 	}
 
@@ -219,7 +220,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			rg[rd]=mem[(imm+(int)rg[rs1])/4]&0xffff;
 		}
 		else {
-			printf("error\n");
+			assert(0);
 		}
 		*pc=*pc+1;
 
@@ -252,7 +253,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			mmap[((imm+(int)rg[rs1])/4)/KIZAMI]++;
 		}
 		else{
-			printf("error\n");
+			assert(0);
 		}
 		*pc=*pc+1;
 }
@@ -306,8 +307,16 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				printf("*pc[%d],slli\n",*pc);
 			rg[rd]=rg[rs1]<<(int)(imm&0b11111);
 		}
+		//srli
+		else if(funct3==0b101){
+			if((flag&4)==4)
+				printf("*pc[%d],slli\n",*pc);
+			rg[rd]=rg[rs1]>>(int)(imm&0b11111);
+		}
 		else{
-			printf("error\n");
+			printf("illegal instruction in line %d\n", *pc + 1);
+			printf("%s\n", int2bin(command[*pc]));
+			assert(0);
 		}
 		*pc=*pc+1;
 }
@@ -334,12 +343,14 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//mul
 		else if((funct3==0b000)&&(imm==0b0000001)){
+		printf("mul\n");
 		if ((flag&4)==4)
 			printf("*pc[%d],mul\n",*pc);
 			rg[rd]=(int)rg[rs1]*(int)rg[rs2];
 		}
 		//div
 		else if((funct3==0b100)&&(imm==0b0000001)){
+		printf("div\n");
 		if ((flag&4)==4)
 			printf("*pc[%d],div\n",*pc);
 			rg[rd]=(int)rg[rs1]/(int)rg[rs2];
@@ -351,11 +362,11 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			rg[rd]=rg[rs1]<<(int)rg[rs2];
 		}
 		//slt
-		else if(funct3==0b010&&imm==0){
-		if ((flag&4)==4)
-			printf("*pc[%d],slt\n",*pc);
-			rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
-		}
+		// else if(funct3==0b010&&imm==0){
+		// if ((flag&4)==4)
+		// 	printf("*pc[%d],slt\n",*pc);
+		// 	rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
+		// }
 		//sltu
 		else if(funct3==0b011&imm==0){
 		if ((flag&4)==4)
@@ -368,19 +379,19 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],xor\n",*pc);
 			rg[rd]=rg[rs1] ^ rg[rs2];
 		}
-		//sll
-		else if((funct3==0b001)&&(imm==0b0100000)){
+		//srl
+		else if((funct3==0b101)&&(imm==0b0000000)){
 		if ((flag&4)==4)
-			printf("*pc[%d],sll\n",*pc);
-			rg[rd]=rg[rs1]<<(int)rg[rs2];
+			printf("*pc[%d],srl\n",*pc);
+			rg[rd]=rg[rs1]>>(int)rg[rs2];
 		}
-		//sra
-		else if((funct3==0b001)&&(imm==0b0100000)){
-		if ((flag&4)==4)
-			printf("*pc[%d],sra\n",*pc);
-			tmp=rg[rs1];
-			rg[rd]=tmp>>(int)rg[rs2];
-		}
+		// //sra
+		// else if((funct3==0b001)&&(imm==0b0100000)){
+		// if ((flag&4)==4)
+		// 	printf("*pc[%d],sra\n",*pc);
+		// 	tmp=rg[rs1];
+		// 	rg[rd]=tmp>>(int)rg[rs2];
+		// }
 		//or
 		else if(funct3==0b110){
 		if ((flag&4)==4)
@@ -394,7 +405,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			rg[rd]=rg[rs1] & rg[rs2];
 		}
 		else{
-			printf("error\n");
+			assert(0);
 		}
 		*pc=*pc+1;
 	}
@@ -492,7 +503,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			unsigned int i3;
 			i3=(i1&0x7fffffff)|((i1&0x80000000)^(i2&0x80000000));
 			frg[rd]=*((float*)&i3);
-		
+
 		}
 		//fcvt.w.s
 		else if((imm==0b1100000)&&(rs2==0)){
@@ -503,7 +514,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else if(funct3==0b010) {
 			rg[rd]=(unsigned int)( floorf (frg[rs1]));
 			}else{
-				printf("error\n");
+				assert(0);
 			}
 
 		}
@@ -556,7 +567,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			frg[rd]=atanf(frg[rs1]);
 		}
 		else{
-			printf("error\n");
+			assert(0);
 		}
 	*pc=*pc+1;
 	}
@@ -567,7 +578,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			//printf("print_float:%1.2f\n",frg[rs1]);
 			*pc=*pc +1;
 		}
-			
+
 	//例外処理
 	else {
 		printf("command[%d]に命令セットにないcodeが含まれているよ!\n",*pc);

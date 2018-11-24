@@ -5,9 +5,9 @@
 #include<math.h>
 #include"exec.h"
 #include"bin.h"
-#define SIZE 2147483644
+#define SIZE (2400 * 1024)
 #define INPUT 1000000000//10億
-#define KIZAMI 1000000
+#define KIZAMI 1024
 
 //入力が２進数の時 -b をつける　
 //ファイルの名前をつけたいときは-f [ファイル名]
@@ -25,7 +25,7 @@ int main(int argc , char* argv[]){
 		int opt,length=0;
 		unsigned int *mem;
 		long long int *mmap;
-		unsigned int rg[32]={0,0,400000000,800000000,1200000000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		unsigned int rg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		float frg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     opterr = 0;
 		command=(unsigned int*)malloc((sizeof (unsigned int))*INPUT);
@@ -135,10 +135,12 @@ int main(int argc , char* argv[]){
 
 		if ((flag&8)==8){
 			printf("jumpcounter=%lld\n",jc);
-				for (int i=0;i<400;i++){
-					printf("memory map%d*%d->%lld\n",i,KIZAMI,mmap[i]);
+				for (int i = 0; i < SIZE/KIZAMI; i++) {
+					if (mmap[i] != 0) {
+						printf("memory map %d*%d*4B -> %lld\n", i, KIZAMI, mmap[i]);
+					}
 				}
 		}
-		fprintf(stderr, "cnt = %ld\n", cnt);
+		fprintf(stderr, "cnt = %lld\n", cnt);
   return 0;
 }

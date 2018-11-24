@@ -1,3 +1,9 @@
+	li	a0, 102400
+	mv	sp, a0
+	li	a0, 204800
+	mv	hp, a0
+	li	a0, 1228800
+	mv	ap, a0
 	j	min_caml_start
 l.14569:
 	float	128.00000000000
@@ -6997,8 +7003,7 @@ be_cont.18324:
 be_else.18325:
 	lw	a0, sp, 64 ! 0
 	lw	a0, a0, 0 ! 1711
-	li	a1, 4 ! 1711
-	mul	a0, a0, a1 ! 1711
+	slli	a0, a0, 2 ! 1711
 	lw	a1, sp, 60 ! 0
 	lw	a1, a1, 0 ! 1711
 	add	a0, a0, a1 ! 1711
@@ -7422,9 +7427,8 @@ be_cont.18348:
 	jalr	ra, a20, 0
 	addi	sp, sp, -180
 	lw	ra, sp, 176
-	li	a0, 4 ! 1747
-	lw	a1, sp, 152 ! 0
-	mul	a0, a1, a0 ! 1747
+	lw	a0, sp, 152 ! 0
+	slli	a0, a0, 2 ! 1747
 	lw	a1, sp, 68 ! 0
 	lw	a1, a1, 0 ! 1747
 	add	a0, a0, a1 ! 1747
@@ -12675,8 +12679,7 @@ setup_rect_reflection.2941:
 	lw	a5, a21, 12 ! 0
 	lw	a6, a21, 8 ! 0
 	lw	a7, a21, 4 ! 0
-	li	a8, 4 ! 2330
-	mul	a0, a0, a8 ! 2330
+	slli	a0, a0, 2 ! 2330
 	lw	a8, a4, 0 ! 2331
 	li	a9, l.12811 ! 2332
 	flw	fa0, a9, 0 ! 2332
@@ -13110,8 +13113,7 @@ setup_surface_reflection.2944:
 	lw	a5, a21, 12 ! 0
 	lw	a6, a21, 8 ! 0
 	lw	a7, a21, 4 ! 0
-	li	a8, 4 ! 2344
-	mul	a0, a0, a8 ! 2344
+	slli	a0, a0, 2 ! 2344
 	addi	a0, a0, 1 ! 2344
 	lw	a8, a4, 0 ! 2345
 	li	a9, l.12811 ! 2346
@@ -13323,11 +13325,9 @@ rt.2949:
 	sw	a5, a0, 0 ! 2382
 	sw	a5, a1, 4 ! 2383
 	sw	sp, a17, 20 ! 0
-	li	a17, 2 ! 2384
-	div	a17, a0, a17 ! 2384
+	srli	a17, a0, 1 ! 2384
 	sw	a13, a17, 0 ! 2384
-	li	a17, 2 ! 2385
-	div	a1, a1, a17 ! 2385
+	srli	a1, a1, 1 ! 2385
 	sw	a13, a1, 4 ! 2385
 	li	a1, l.14569 ! 2386
 	flw	fa0, a1, 0 ! 2386
