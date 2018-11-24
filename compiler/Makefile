@@ -69,11 +69,12 @@ mytest.s mytest.ss mytest.out mytest.res
 sim: ../simulator/exec.c ../simulator/bin.c ../simulator/simulator.c
 	gcc ../simulator/exec.c ../simulator/bin.c ../simulator/simulator.c -o sim -lm
 
-rt.ppm: $(RESULT) sim
+raytracer/minrt.s: $(RESULT) raytracer/minrt.ml
 	./$(RESULT) raytracer/minrt
+rt.ppm: raytracer/minrt.s sim
 	python3 linker.py libmincaml.S raytracer/minrt.s
 	python3 assembler.py raytracer/minrt.ss > raytracer/minrt.out
-	./sim -f raytracer/minrt.out -i raytracer/sld/contest.bin -o raytracer/rt.ppm -b
+	./sim -f raytracer/minrt.out -i raytracer/sld/contest.bin -o raytracer/rt.ppm -b -p
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
@@ -113,7 +114,7 @@ mytest.ss: mytest.s
 mytest.out: mytest.ss
 	python3 assembler.py $< > mytest.out
 mytest.res: mytest.out sim
-	./sim $< -o $@ -b
+	./sim -f $< -i raytracer/sld/contest.bin -o $@ -b
 
 # なんかいらなさそうだったのでコメントアウト
 # min-caml.html: main.mli main.ml id.ml m.ml s.ml \
