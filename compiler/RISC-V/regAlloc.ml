@@ -35,18 +35,21 @@ and target_args src all n = function (* auxiliary function for Call *)
   | y :: ys when src = y -> all.(n) :: target_args src all (n + 1) ys
   | _ :: ys -> target_args src all (n + 1) ys
 
+(*
+Alloc(r)はレジスタrに割り当てることができたという意味
+Spill(y)はレジスタ割り当てできなかったのでいま定義されている変数yを逃がしましょうという意味
+ *)
 type alloc_result =
   | Alloc of Id.t
   | Spill of Id.t
 let rec alloc dest cont regenv x t =
-  (* allocate a register or spill a variable *)
   assert (not (M.mem x regenv));
   let all =
     match t with
-    | Type.Unit -> ["%g0"] (* dummy *)
+    | Type.Unit -> ["zero"] (* dummy *)
     | Type.Float -> allfregs
     | _ -> allregs in
-  if all = ["%g0"] then Alloc("%g0") else (* [XX] ad hoc optimization *)
+  if all = ["zero"] then Alloc("zero") else
   if is_reg x then Alloc(x) else
   let free = fv cont in
   try
@@ -67,13 +70,11 @@ let rec alloc dest cont regenv x t =
     Alloc(r)
   with Not_found ->
     Format.eprintf "register allocation failed for %s@." x;
-    let y = (* ���ι礦�쥸�����ѿ���õ�� *)
-      List.find
-        (fun y ->
-          not (is_reg y) &&
-          try List.mem (M.find y regenv) all
-          with Not_found -> false)
-        (List.rev free) in
+    (* レジスタに割り当てられている変数yを型が合うレジスタの中から探す *)
+    let f y = not (is_reg y)
+              && try List.mem (M.find y regenv) all with Not_found -> false in
+    (* 自由変数（＝いま定義されているので逃がす意味がある変数）の中からyを探す *)
+    let y = List.find f (List.rev free) in
     Format.eprintf "spilling %s from %s@." y (M.find y regenv);
     Spill(y)
 
@@ -93,39 +94,44 @@ let find' x' regenv =
   | V(x) -> V(find x Type.Int regenv)
   | c -> c
 
-(* destは(Id.gentmp Type.Unit, Type.Unit)みたいな(Id.t, Type.t)型である *)
-(* contはAns.Nopなどのinst型式を表す。直後に続くものという意味っぽい *)
-(* destは分岐の行き先で、contは直後の命令っぽい *)
-(* regenvは今まで使ったレジスタ *)
-(* TODO:分岐の際に必ずnopが発生しているがこれはいらない（emitかもしれない） *)
-(* regenvは変数名とレジスタの対応っぽいね *)
-(* 命令列に対してレジスタ割り当てを行い、命令列と(変数、レジスタ)Mを返す *)
+(*
+dest : Id.t * Type.t -> cont : Asm.t -> regenv : ? M.t -> Asm.t
+-> Asm.t * ? M.t
+Asm.t(命令列)に対するレジスタ割り当て
+*)
 let rec g dest cont regenv = function
-  | Ans(inst) -> g'_and_restore dest cont regenv inst
-  | Let((x, t) as xt, let_inst, insts) ->
-      (* xが誰かに覚えられているのは変(reg→regになってしまうので) *)
-      assert (not (M.mem x regenv));
-      (* わからん、謎 *)
-      let cont' = concat insts dest cont in
-      let (e1', regenv1) = g'_and_restore xt cont' regenv let_inst in
+  | Ans(exp) -> g'_and_restore dest cont regenv exp
+  (* let x = exp in e の変数xに割り当てをする *)
+  | Let((x, t) as xt, exp, e) ->
+      assert (not (M.mem x regenv)); (* k正規化済、既に割り当てられているはずはない *)
+      let cont' = concat e dest cont in (* eを後ろに回す *)
+      (* exp内の変数は今のregenvに収まるはずなので、regenvを適用しておく *)
+      let (e1', regenv1) = g'_and_restore xt cont' regenv exp in
+      (* xのぶんのレジスタが余っているか判定 *)
       (match alloc dest cont' regenv1 x t with
-      | Spill(y) ->
-          let r = M.find y regenv1 in
-          let (e2', regenv2) =
-            g dest cont (add x r (M.remove y regenv1)) insts in
+      | Spill(y) -> (* ダメだったら変数yを退避する *)
+          let r = M.find y regenv1 in (* いまyが入っているレジスタ *)
+          (* xをrに入れてyを潰してしまい、その状態で割り当てをする *)
+          let (e2', regenv2) = g dest cont (add x r (M.remove y regenv1)) e in
+          (* yのsaveを発行する *)
           let save =
             try (Save(M.find y regenv, y), Lexing.dummy_pos)
+            (* ここに来る条件はわからない *)
             with Not_found -> (Nop, Lexing.dummy_pos) in
           (seq(save, concat e1' (r, t) e2'), regenv2)
-      | Alloc(r) ->
-          let (e2', regenv2) = g dest cont (add x r regenv1) insts in
+      | Alloc(r) -> (* レジスタrが見つかったら素直にxをrに入れる *)
+          let (e2', regenv2) = g dest cont (add x r regenv1) e in
           (concat e1' (r, t) e2', regenv2))
-and g'_and_restore dest cont regenv inst =
-  (* g'をオリャっと実行し、ダメだったらそいつをrestoreしてもっかいg' *)
-  try g' dest cont regenv inst
+(* g'を実行しつつ、レジスタが（saveされていて）見つからなかった場合はrestoreを挟む *)
+and g'_and_restore dest cont regenv exp =
+  try g' dest cont regenv exp
   with NoReg(x, t) ->
-    g dest cont regenv (Let((x, t), (Restore(x), Lexing.dummy_pos), Ans(inst)))
-(* 命令に対するレジスタ割り当て *)
+    g dest cont regenv (Let((x, t), (Restore(x), Lexing.dummy_pos), Ans(exp)))
+(*
+Asm.expに対するレジスタ割り当て
+regenvとして変数名→レジスタの対応があるので、それを適用するというだけ
+*)
+(* TODO:分岐の際に必ずnopが発生しているがこれはいらない（emitかもしれない） *)
 (* TODO:即値ifに関するものは消していい *)
 and g' dest cont regenv (inst, sp) =
   match inst with

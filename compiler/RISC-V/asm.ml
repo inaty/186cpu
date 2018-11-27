@@ -37,7 +37,7 @@ and inst = (* 命令（仮想命令含む） *)
   (* closure address, integer arguments, and float arguments *)
   | CallCls of Id.t * Id.t list * Id.t list
   | CallDir of Id.l * Id.t list * Id.t list
-  | Save of Id.t * Id.t (* �쥸�����ѿ����ͤ򥹥��å��ѿ�����¸ (caml2html: sparcasm_save) *)
+  | Save of Id.t * Id.t (* Save(r, y) = レジスタrに入っている変数yをスタックに退避 *)
   | Restore of Id.t (* スタックから値を戻す *)
 type fundef =
   { name : Id.l; args : Id.t list; fargs : Id.t list;
@@ -111,10 +111,15 @@ and fv = function
       fv_exp inst @ remove_and_uniq (S.singleton x) (fv e)
 let fv e = remove_and_uniq S.empty (fv e)
 
-(* e1, e2を順次letでやっていくことにしようね *)
+(*
+e1 : Asm.t -> xt : Id.t * Type.t -> e2 : Asm.t
+let x = e1 in e2 にする
+e1がlet式だった場合はlet定義を頭出しする
+e1が let y = exp in e1' -> let y = exp in (let x = e1' in e2)になる
+*)
 let rec concat e1 xt e2 =
   match e1 with
-  | Ans(inst) -> Let(xt, inst, e2)
-  | Let(yt, inst, e1') -> Let(yt, inst, concat e1' xt e2)
+  | Ans(exp) -> Let(xt, exp, e2)
+  | Let(yt, exp, e1') -> Let(yt, exp, concat e1' xt e2)
 
 let align i = i (* (if i mod 8 = 0 then i else i + 4) *)
