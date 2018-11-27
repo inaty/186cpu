@@ -48,7 +48,7 @@ main.mli main.ml
 
 # 要適宜追加
 # ack
-TESTS = print sum-tail gcd sum fib ack even-odd \
+TESTS = float_comp print sum-tail gcd sum fib ack even-odd \
 adder funcomp cls-rec cls-bug cls-bug2 cls-reg-bug \
 shuffle spill spill2 spill3 join-stack join-stack2 join-stack3 \
 join-reg join-reg2 non-tail-if non-tail-if2 \

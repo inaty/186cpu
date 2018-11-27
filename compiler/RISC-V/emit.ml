@@ -125,29 +125,20 @@ and g' oc (dest, inst) sp =
   | NonTail(_), StDF(rs2, rs1, V(rs3)) ->
       Printf.fprintf oc "\tadd\t%s, %s, %s ! %d\n" "t0" rs1 rs3 lnum;
       Printf.fprintf oc "\tfsw\t%s, %s, 0 ! %d\n" "t0" rs2 lnum
-  (* TODO:yに適切な名前をつける *)
-  | NonTail(_), Save(reg, y) when List.mem reg allregs &&
-                                  not (S.mem y !stackset) ->
+  | NonTail(_), Save(r, y) when List.mem r allregs
+                                && not (S.mem y !stackset) ->
       save y; (* スタックセットに記録 *)
-      (* TODO:ここ12bit以内かどうか考えるべき *)
-      Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" reg_sp reg (offset y) lnum
-  (* TODO:yに適切な名前をつける *)
-  | NonTail(_), Save(x, y) when List.mem x allfregs
+      Printf.fprintf oc "\tsw\t%s, %s, %d ! %d\n" reg_sp r (offset y) lnum
+  | NonTail(_), Save(r, y) when List.mem r allfregs
                                 && not (S.mem y !stackset) ->
       savef y;
-      (* TODO:ここ12bit以内かどうか考えるべき *)
-      Printf.fprintf oc "\tfsw\t%s, %s, %d ! %d\n"
-        reg_sp x (offset y) lnum
+      Printf.fprintf oc "\tfsw\t%s, %s, %d ! %d\n" reg_sp r (offset y) lnum
   | NonTail(_), Save(_, y) -> assert (S.mem y !stackset); ()
-  (* TODO:name y *)
-  | NonTail(rd), Restore(y) when List.mem rd allregs ->
-      Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n"
-        rd reg_sp (offset y) lnum
-  (* TODO: name x y *)
+  | NonTail(x), Restore(y) when List.mem x allregs ->
+      Printf.fprintf oc "\tlw\t%s, %s, %d ! %d\n" x reg_sp (offset y) lnum
   | NonTail(x), Restore(y) ->
       assert (List.mem x allfregs);
-      Printf.fprintf oc "\tflw\t%s, %s, %d ! %d\n"
-        x reg_sp (offset y) lnum
+      Printf.fprintf oc "\tflw\t%s, %s, %d ! %d\n" x reg_sp (offset y) lnum
   | Tail, (Nop | St _ | StDF _ | Save _ as inst) ->
       (* nontailだったことにして命令をやり、ret *)
       g' oc (NonTail(Id.gentmp Type.Unit), inst) sp;
@@ -173,14 +164,13 @@ and g' oc (dest, inst) sp =
   | Tail, IfLE(reg1, reg2, insts1, insts2) ->
       g'_tail_if oc reg2 reg1 insts1 insts2 "bge" "blt"
   (* TODO:fix *)
-  | Tail, IfFEq(reg1, reg2, e1, e2) ->
-      Printf.fprintf oc "\tfcmpd\t%s, %s\n" reg1 reg2;
-      Printf.fprintf oc "\tnop\n";
-      g'_tail_if oc reg1 reg2 e1 e2 "fbe" "fbne"
-  | Tail, IfFLE(reg1, reg2, e1, e2) ->
-      Printf.fprintf oc "\tfcmpd\t%s, %s\n" reg1 reg2;
-      Printf.fprintf oc "\tnop\n";
-      g'_tail_if oc reg1 reg2 e1 e2 "fble" "fbg"
+  | Tail, IfFEq(x, y, e1, e2) ->
+      Printf.fprintf oc "\tfeq.s\tt0, %s, %s\n" x y;
+      g' oc (Tail, IfEq("zero", "t0", e2, e1)) sp
+  | Tail, IfFLE(x, y, e1, e2) ->
+      (* x <= y -> e1 なので not (y < x) -> e1 *)
+      Printf.fprintf oc "\tflt.s\tt0, %s, %s\n" y x;
+      g' oc (Tail, IfEq("zero", "t0", e1, e2)) sp
   (* TODO:fixend *)
   | NonTail(rd), IfEq(rs1, rs2, insts1, insts2) ->
       g'_non_tail_if oc (NonTail(rd)) rs1 rs2 insts1 insts2 "be" "bne"
