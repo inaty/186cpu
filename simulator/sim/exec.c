@@ -185,11 +185,11 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else{
 				*pc=*pc+1;
 			}
+		cntodr[11]++;
 		}
 		else {
 			assert(0);
 		}
-		cntodr[11]++;
 	}
 
 //load系命令
@@ -373,7 +373,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//mul
 		else if((funct3==0b000)&&(imm==0b0000001)){
-		printf("mul\n");
+		//printf("mul\n");
 		if ((flag&4)==4)
 			printf("*pc[%d],mul\n",*pc);
 			rg[rd]=(int)rg[rs1]*(int)rg[rs2];
@@ -381,7 +381,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//div
 		else if((funct3==0b100)&&(imm==0b0000001)){
-		printf("div\n");
+		//printf("div\n");
 		if ((flag&4)==4)
 			printf("*pc[%d],div\n",*pc);
 			rg[rd]=(int)rg[rs1]/(int)rg[rs2];

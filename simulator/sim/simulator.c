@@ -13,7 +13,7 @@
 //ファイルの名前をつけたいときは-f [ファイル名]
 char* odrlst[58]=
 {"in","out","lui","auipc","jal","jalr","beq","bne","blt","bge",
-"bltu","bgeu","lb","lh","lu","lbu","lhu","sb","sh","sw",
+"bltu","bgeu","lb","lh","lw","lbu","lhu","sb","sh","sw",
 "addi","slti","sltiu","xori","ori","andi","slli","srli","add","sub",
 "mul","div","sll","sltu","xor","srl","or","and","flw","fsw",
 "fadd.s","fsub.s","fmul.s","fdiv.s","fsqrt.s","fsgnj.s","fsgnjn.s","fsgnjx.s","fcvt.w.s","feq.d",
