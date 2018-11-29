@@ -32,7 +32,8 @@ let pp_id_or_imm = function
 let p_of_exp = function
   | Nop(p) | Li(_, p) | LiL(_, p) | Mv(_, p) | Neg(_, p) | Add(_, _, p)
   | Sub(_, _, p) | Mul(_, _, p) | Div(_, _, p) | SLL(_, _, p)
-  | SRL(_, _, p) | Lw(_, _, p) | Sw(_, _, _, p) | FMv(_, p) | FNeg(_, p)
+  | SRL(_, _, p) | Lw(_, _, p) | Sw(_, _, _, p) | FMv(_, p)
+  | FAbs(_, p) | FNeg(_, p)
   | FAdd(_, _, p) | FSub(_, _, p) | FMul(_, _, p) | FDiv(_, _, p)
   | FLw(_, _, p) | FSw(_, _, _, p) | IfEq(_, _, _, _, p) | IfLE(_, _, _, _, p)
   | IfFEq(_, _, _, _, p) | IfFLE(_, _, _, _, p) | CallCls(_, _, _, p)
@@ -111,6 +112,8 @@ and g' oc (dest, exp) =
   | NonTail(rd), FMv(rs, _) when rd = rs -> ()
   | NonTail(rd), FMv(rs, _) ->
       fprintf oc "\tfmv.s\t%s, %s ! %s\n" rd rs pinfo;
+  | NonTail(rd), FAbs(rs, _) ->
+      fprintf oc "\tfabs.s\t%s, %s ! %s\n" rd rs pinfo;
   | NonTail(rd), FNeg(rs, _) ->
       fprintf oc "\tfneg.s\t%s, %s ! %s\n" rd rs pinfo;
   | NonTail(rd), FAdd(rs1, rs2, _) ->
@@ -156,7 +159,7 @@ and g' oc (dest, exp) =
       (* return valueをa0レジスタに入れてret *)
       g' oc (NonTail(regs.(0)), exp);
       fprintf oc "\tret ! %s\n" pinfo;
-  | Tail, (FMv _ | FNeg _ | FAdd _ | FSub _
+  | Tail, (FMv _ | FAbs _ | FNeg _ | FAdd _ | FSub _
            | FMul _ | FDiv _ | FLw _ as exp) ->
       g' oc (NonTail(fregs.(0)), exp);
       fprintf oc "\tret ! %s\n" pinfo;
@@ -282,12 +285,9 @@ let h oc {name = Id.L(x); args = _; fargs = _; body = insts; ret = _} =
 
 let f oc (Prog(float_table, fundefs, insts)) =
   Format.eprintf "generating assembly...@.";
-  Printf.fprintf oc "\tli\ta0, %d\n" (100 * 1024);
-  Printf.fprintf oc "\tmv\tsp, a0\n" ;
-  Printf.fprintf oc "\tli\ta0, %d\n" (200 * 1024);
-  Printf.fprintf oc "\tmv\thp, a0\n" ;
-  Printf.fprintf oc "\tli\ta0, %d\n" (1200 * 1024);
-  Printf.fprintf oc "\tmv\tap, a0\n" ;
+  Printf.fprintf oc "\tli\tsp, %d\n" (100 * 1024);
+  Printf.fprintf oc "\tli\thp, %d\n" (200 * 1024);
+  Printf.fprintf oc "\tli\tap, %d\n" (1200 * 1024);
   Printf.fprintf oc "\tj\tmin_caml_start\n";
   List.iter
     (fun (Id.L(x), d) ->

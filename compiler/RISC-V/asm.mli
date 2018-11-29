@@ -20,6 +20,7 @@ and exp = (* 命令（仮想命令含む） *)
   | Lw of Id.t * id_or_imm * p
   | Sw of Id.t * Id.t * id_or_imm * p
   | FMv of Id.t * p
+  | FAbs of Id.t * p
   | FNeg of Id.t * p
   | FAdd of Id.t * Id.t * p
   | FSub of Id.t * Id.t * p

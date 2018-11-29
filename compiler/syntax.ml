@@ -12,6 +12,7 @@ type t =
   | Sub of t * t * p
   | Mul of t * t * p
   | Div of t * t * p
+  | FAbs of t * p
   | FNeg of t * p
   | FAdd of t * t * p
   | FSub of t * t * p
@@ -34,6 +35,7 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 let position_of_syntax = function
   | Unit(p) | Bool(_, p) | Int(_, p) | Float(_, p) | Not(_, p) | Neg(_, p)
   | Add(_, _, p) | Sub(_, _, p) | Mul(_, _, p) | Div(_, _, p)
+  | FAbs(_, p)
   | FNeg(_, p) | FAdd(_, _, p) | FSub(_, _, p) | FMul(_, _, p) | FDiv(_, _, p)
   | Eq(_, _, p) | LE(_, _, p) | If(_, _, _, p) | Let(_, _, _, p) | Var(_, p)
   | LetRec(_, _, p) | App(_, _, p) | Tuple(_, p) | LetTuple(_, _, _, p)
@@ -68,6 +70,7 @@ let print_syntax exp =
         printf "DIV\n";
         print_syntax_sub exp1 (indent + 2);
         print_syntax_sub exp2 (indent + 2);
+    | FAbs(e, _) -> printf "FNEG\n"; print_syntax_sub e (indent + 2)
     | FNeg(exp ,_) -> printf "FNEG\n"; print_syntax_sub exp (indent + 2)
     | FAdd(exp1, exp2 ,_) ->
         printf "FADD\n";

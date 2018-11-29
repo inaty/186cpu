@@ -24,9 +24,9 @@
 !min_caml_fsqr:
 !	fmul.s	fa0, fa0, fa0, rne
 !	ret
-min_caml_fabs:
-	fsgnjx.s	fa0, fa0, fa0
-	ret
+!min_caml_fabs:
+!	fsgnjx.s	fa0, fa0, fa0
+!	ret
 min_caml_fneg:
 	fsgnjn.s	fa0, fa0, fa0
 	ret
@@ -155,12 +155,9 @@ min_caml_cos_kernel_sin.82:
 	fsub.s	fa0, fa0, fa1, rne ! 26-26
 	ret ! 26-26
 min_caml_sin:
+	fabs.s	fa1, fa0 ! 29-29
 	fsw	sp, fa0, 0 ! 0-0
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	min_caml_fabs
-	addi	sp, sp, -8
-	lw	ra, sp, 4
+	fmv.s	fa0, fa1
 	sw	sp, ra, 4
 	addi	sp, sp, 8
 	jal	min_caml_cos_reduction_2pi.78
@@ -233,17 +230,13 @@ min_caml_cos_beq_else.282:
 	lw	ra, sp, 8
 min_caml_cos_beq_cont.283:
 	flw	fa1, sp, 4 ! 0-0
-	fsgnj.s	fa0, fa0, fa1 ! 39-39
+	fsgnj.s	fa0, fa0, fa1, rne ! 39-39
 	ret ! 39-39
 min_caml_cos:
 	li	a0, min_caml_cos_l.205 ! 41-41
 	flw	fa1, a0, 0 ! 41-41
+	fabs.s	fa0, fa0 ! 42-42
 	fsw	sp, fa1, 0 ! 0-0
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	min_caml_fabs
-	addi	sp, sp, -8
-	lw	ra, sp, 4
 	sw	sp, ra, 4
 	addi	sp, sp, 8
 	jal	min_caml_cos_reduction_2pi.78
@@ -317,7 +310,7 @@ min_caml_cos_beq_else.288:
 	lw	ra, sp, 8
 min_caml_cos_beq_cont.289:
 	flw	fa1, sp, 4 ! 0-0
-	fsgnj.s	fa0, fa0, fa1 ! 57-57
+	fsgnj.s	fa0, fa0, fa1, rne ! 57-57
 	ret ! 57-57
 min_caml_atan_l.110:
 	float	0.10000000000
@@ -377,16 +370,13 @@ min_caml_atan_min_caml_atan_kernel_atan.41:
 	fadd.s	fa0, fa0, fa1, rne ! 12-13
 	ret ! 12-13
 min_caml_atan:
-	fsw	sp, fa0, 0 ! 0-0
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	min_caml_fabs
-	addi	sp, sp, -8
-	lw	ra, sp, 4
+	fabs.s	fa1, fa0 ! 3-3
 	li	a0, min_caml_atan_l.98 ! 15-15
-	flw	fa1, a0, 0 ! 15-15
-	flt.s	t0, fa1, fa0 ! 15-26
-	bne	zero, t0, min_caml_atan_beq_else.116 ! 15-26
+	flw	fa2, a0, 0 ! 15-15
+	flt.s	t0, fa2, fa1 ! 15-26
+	bne	zero, t0, min_caml_atan_beq_else.118 ! 15-26
+	fsw	sp, fa0, 0 ! 0-0
+	fmv.s	fa0, fa1
 	sw	sp, ra, 4
 	addi	sp, sp, 8
 	jal	min_caml_atan_min_caml_atan_kernel_atan.41
@@ -395,21 +385,23 @@ min_caml_atan:
 	flw	fa1, sp, 0 ! 0-0
 	fsgnj.s	fa0, fa0, fa1 ! 17-17
 	ret ! 17-17
-min_caml_atan_beq_else.116:
+min_caml_atan_beq_else.118:
 	li	a0, min_caml_atan_l.100 ! 21-21
-	flw	fa1, a0, 0 ! 21-21
-	flt.s	t0, fa1, fa0 ! 21-26
-	bne	zero, t0, min_caml_atan_beq_else.117 ! 21-26
+	flw	fa2, a0, 0 ! 21-21
+	flt.s	t0, fa2, fa1 ! 21-26
+	bne	zero, t0, min_caml_atan_beq_else.119 ! 21-26
 	li	a0, min_caml_atan_l.102 ! 22-22
-	flw	fa1, a0, 0 ! 22-22
-	li	a0, min_caml_atan_l.104 ! 22-22
 	flw	fa2, a0, 0 ! 22-22
-	fsub.s	fa2, fa0, fa2, rne ! 22-22
 	li	a0, min_caml_atan_l.104 ! 22-22
 	flw	fa3, a0, 0 ! 22-22
-	fadd.s	fa0, fa0, fa3, rne ! 22-22
-	fdiv.s	fa0, fa2, fa0, rne ! 22-22
-	fsw	sp, fa1, 4 ! 0-0
+	fsub.s	fa3, fa1, fa3, rne ! 22-22
+	li	a0, min_caml_atan_l.104 ! 22-22
+	flw	fa4, a0, 0 ! 22-22
+	fadd.s	fa1, fa1, fa4, rne ! 22-22
+	fdiv.s	fa1, fa3, fa1, rne ! 22-22
+	fsw	sp, fa0, 0 ! 0-0
+	fsw	sp, fa2, 4 ! 0-0
+	fmv.s	fa0, fa1
 	sw	sp, ra, 8
 	addi	sp, sp, 12
 	jal	min_caml_atan_min_caml_atan_kernel_atan.41
@@ -420,13 +412,15 @@ min_caml_atan_beq_else.116:
 	flw	fa1, sp, 0 ! 0-0
 	fsgnj.s	fa0, fa0, fa1 ! 23-23
 	ret ! 23-23
-min_caml_atan_beq_else.117:
+min_caml_atan_beq_else.119:
 	li	a0, min_caml_atan_l.107 ! 25-25
-	flw	fa1, a0, 0 ! 25-25
-	li	a0, min_caml_atan_l.104 ! 25-25
 	flw	fa2, a0, 0 ! 25-25
-	fdiv.s	fa0, fa2, fa0, rne ! 25-25
-	fsw	sp, fa1, 8 ! 0-0
+	li	a0, min_caml_atan_l.104 ! 25-25
+	flw	fa3, a0, 0 ! 25-25
+	fdiv.s	fa1, fa3, fa1, rne ! 25-25
+	fsw	sp, fa0, 0 ! 0-0
+	fsw	sp, fa2, 8 ! 0-0
+	fmv.s	fa0, fa1
 	sw	sp, ra, 12
 	addi	sp, sp, 16
 	jal	min_caml_atan_min_caml_atan_kernel_atan.41

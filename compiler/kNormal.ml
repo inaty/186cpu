@@ -10,6 +10,7 @@ type t =
   | Sub of Id.t * Id.t * p
   | Mul of Id.t * Id.t * p
   | Div of Id.t * Id.t * p
+  | FAbs of Id.t * p
   | FNeg of Id.t * p
   | FAdd of Id.t * Id.t * p
   | FSub of Id.t * Id.t * p
@@ -33,7 +34,7 @@ let dp = (Lexing.dummy_pos, Lexing.dummy_pos)
 
 let rec fv = function
   | Unit(_) | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x, _) | FNeg(x, _) -> S.singleton x
+  | Neg(x, _) | FAbs(x, _) | FNeg(x, _) -> S.singleton x
   | Add(x, y, _) | Sub(x, y, _) | Mul(x, y, _) | Div(x, y, _)
   | FAdd(x, y, _) | FSub(x, y, _) | FMul(x, y, _) | FDiv(x, y, _)
   | Get(x, y, _) ->
@@ -89,6 +90,9 @@ let rec g env = function
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> (Div(x, y, p), Type.Int)))
+  | Syntax.FAbs(e, p) ->
+      insert_let (g env e)
+        (fun x -> (FAbs(x, p), Type.Float))
   | Syntax.FNeg(e, p) ->
       insert_let (g env e)
         (fun x -> (FNeg(x, p), Type.Float))
@@ -241,6 +245,7 @@ let rec print_kNormal_sub exp indent =
   | Sub(var1, var2, _) -> eprintf "SUB %s %s\n" var1 var2;
   | Mul(var1, var2, _) -> eprintf "MUL %s %s\n" var1 var2;
   | Div(var1, var2, _) -> eprintf "DIV %s %s\n" var1 var2;
+  | FAbs(x, _) -> eprintf "FNEG %s\n" x
   | FNeg(var, _) -> eprintf "FNEG %s\n" var
   | FAdd(var1, var2, _) -> eprintf "FADD %s %s\n" var1 var2;
   | FSub(var1, var2, _) -> eprintf "FSUB %s %s\n" var1 var2;

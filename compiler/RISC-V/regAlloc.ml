@@ -162,6 +162,7 @@ and g' dest cont regenv = function
               find y Type.Int regenv,
               find' z' regenv, p)), regenv)
   | FMv(x, p) -> (Ans(FMv(find x Type.Float regenv, p)), regenv)
+  | FAbs(x, p) -> (Ans(FAbs(find x Type.Float regenv, p)), regenv)
   | FNeg(x, p) -> (Ans(FNeg(find x Type.Float regenv, p)), regenv)
   | FAdd(x, y, p) ->
     (Ans(FAdd(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)

@@ -52,6 +52,7 @@ let rec g env = function
   | Closure.Sub(x, y, p) -> Ans(Sub(x, V(y), p))
   | Closure.Mul(x, y, p) -> Ans(Mul(x, V(y), p))
   | Closure.Div(x, y, p) -> Ans(Div(x, V(y), p))
+  | Closure.FAbs(x, p) -> Ans(FAbs(x, p))
   | Closure.FNeg(x, p) -> Ans(FNeg(x, p))
   | Closure.FAdd(x, y, p) -> Ans(FAdd(x, y, p))
   | Closure.FSub(x, y, p) -> Ans(FSub(x, y, p))

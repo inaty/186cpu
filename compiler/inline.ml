@@ -1,6 +1,6 @@
 open KNormal
 
-let threshold = ref 45
+let threshold = ref 50
 
 let rec size =
   function

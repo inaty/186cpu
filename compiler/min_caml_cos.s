@@ -110,12 +110,9 @@ min_caml_cos_kernel_sin.82:
 	fsub.s	fa0, fa0, fa1, rne ! 26-26
 	ret ! 26-26
 min_caml_cos_sin.84:
+	fabs.s	fa1, fa0 ! 29-29
 	fsw	sp, fa0, 0 ! 0-0
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	min_caml_fabs
-	addi	sp, sp, -8
-	lw	ra, sp, 4
+	fmv.s	fa0, fa1
 	sw	sp, ra, 4
 	addi	sp, sp, 8
 	jal	min_caml_cos_reduction_2pi.78
@@ -188,17 +185,13 @@ min_caml_cos_beq_else.282:
 	lw	ra, sp, 8
 min_caml_cos_beq_cont.283:
 	flw	fa1, sp, 4 ! 0-0
-	fsgnj.s	fa0, fa0, fa1 ! 39-39
+	fsgnj.s	fa0, fa0, fa1, rne ! 39-39
 	ret ! 39-39
 min_caml_cos_cos.86:
 	li	a0, min_caml_cos_l.205 ! 41-41
 	flw	fa1, a0, 0 ! 41-41
+	fabs.s	fa0, fa0 ! 42-42
 	fsw	sp, fa1, 0 ! 0-0
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	min_caml_fabs
-	addi	sp, sp, -8
-	lw	ra, sp, 4
 	sw	sp, ra, 4
 	addi	sp, sp, 8
 	jal	min_caml_cos_reduction_2pi.78
@@ -272,5 +265,5 @@ min_caml_cos_beq_else.288:
 	lw	ra, sp, 8
 min_caml_cos_beq_cont.289:
 	flw	fa1, sp, 4 ! 0-0
-	fsgnj.s	fa0, fa0, fa1 ! 57-57
+	fsgnj.s	fa0, fa0, fa1, rne ! 57-57
 	ret ! 57-57

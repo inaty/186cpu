@@ -12,6 +12,7 @@ let rec g env = function
   | Sub(x, y, p) -> Sub(find x env, find y env, p)
   | Mul(x, y, p) -> Mul(find x env, find y env, p)
   | Div(x, y, p) -> Div(find x env, find y env, p)
+  | FAbs(x, p) -> FAbs(find x env, p)
   | FNeg(x, p) -> FNeg(find x env, p)
   | FAdd(x, y, p) -> FAdd(find x env, find y env, p)
   | FSub(x, y, p) -> FSub(find x env, find y env, p)

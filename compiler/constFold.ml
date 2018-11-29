@@ -28,6 +28,7 @@ let rec g env = function
       Int(findi x env * findi y env, p)
   | Div(x, y, p) when memi x env && memi y env ->
       Int(findi x env / findi y env, p)
+  | FAbs(x, p) when memf x env -> Float(abs_float (findf x env), p)
   | FNeg(x, p) when memf x env -> Float(-.(findf x env), p)
   | FAdd(x, y, p) when memf x env && memf y env ->
       Float(findf x env +. findf y env, p)

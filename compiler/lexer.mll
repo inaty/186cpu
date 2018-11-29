@@ -89,6 +89,8 @@ rule token = parse
     { FHALF }
 | "fsqr"
     { FSQR }
+| "fabs"
+    { FABS }
 | '.'
     { DOT }
 | "<-"

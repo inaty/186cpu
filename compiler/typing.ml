@@ -28,6 +28,7 @@ let rec deref_term = function
   | Div(e1, e2, p) -> Div(deref_term e1, deref_term e2, p)
   | Eq(e1, e2, p) -> Eq(deref_term e1, deref_term e2, p)
   | LE(e1, e2, p) -> LE(deref_term e1, deref_term e2, p)
+  | FAbs(e, p) -> FAbs(deref_term e, p)
   | FNeg(e, p) -> FNeg(deref_term e, p)
   | FAdd(e1, e2, p) -> FAdd(deref_term e1, deref_term e2, p)
   | FSub(e1, e2, p) -> FSub(deref_term e1, deref_term e2, p)
@@ -106,7 +107,7 @@ let rec g env e =
         unify Type.Int (g env e1) e1;
         unify Type.Int (g env e2) e2;
         Type.Int
-    | FNeg(e, p) ->
+    | FAbs(e, p) | FNeg(e, p) ->
         unify Type.Float (g env e) e;
         Type.Float
     | FAdd(e1, e2, p) | FSub(e1, e2, p) | FMul(e1, e2, p) | FDiv(e1, e2, p) ->

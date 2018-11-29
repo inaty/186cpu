@@ -39,6 +39,7 @@ let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 %token FISZERO
 %token FHALF
 %token FSQR
+%token FABS
 %token DOT
 %token LESS_MINUS
 %token SEMICOLON
@@ -172,6 +173,9 @@ exp:
     { let x = Id.genid "fsqr" in
       let p = pos () in
       Let((x, Type.Float), $2, FMul(Var(x, p), Var(x, p), p), p) }
+| FABS simple_exp
+    %prec prec_app
+    { FAbs($2, pos ()) }
 | error
     { let sp, ep = pos () in
       let open Lexing in

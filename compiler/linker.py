@@ -90,6 +90,9 @@ def replace_pseudo1(line, labels_addrs):
     elif opcode == "fmv.s":
         rd, rs = operands
         return [opformat("fsgnj.s", [rd, rs, rs])]
+    elif opcode == "fabs.s":
+        rd, rs = operands
+        return [opformat("fsgnjx.s", [rd, rs, rs])]
     elif opcode == "fneg.s":
         rd, rs = operands
         return [opformat("fsgnjn.s", [rd, rs, rs])]

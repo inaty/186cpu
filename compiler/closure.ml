@@ -11,6 +11,7 @@ type t =
   | Sub of Id.t * Id.t * p
   | Mul of Id.t * Id.t * p
   | Div of Id.t * Id.t * p
+  | FAbs of Id.t * p
   | FNeg of Id.t * p
   | FAdd of Id.t * Id.t * p
   | FSub of Id.t * Id.t * p
@@ -36,7 +37,7 @@ type prog = Prog of fundef list * t
 
 let rec fv = function
   | Unit(_) | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x, _) | FNeg(x, _) -> S.singleton x
+  | Neg(x, _) | FAbs(x, _) | FNeg(x, _) -> S.singleton x
   | Add(x, y, _) | Sub(x, y, _) | Mul(x, y, _) | Div(x, y, _) | FAdd(x, y, _)
   | FSub(x, y, _) | FMul(x, y, _) | FDiv(x, y, _) | Get(x, y, _) ->
       S.of_list [x; y]
@@ -67,6 +68,7 @@ let rec g env known = function
   | KNormal.Sub(x, y, p) -> Sub(x, y, p)
   | KNormal.Mul(x, y, p) -> Mul(x, y, p)
   | KNormal.Div(x, y, p) -> Div(x, y, p)
+  | KNormal.FAbs(x, p) -> FAbs(x, p)
   | KNormal.FNeg(x, p) -> FNeg(x, p)
   | KNormal.FAdd(x, y, p) -> FAdd(x, y, p)
   | KNormal.FSub(x, y, p) -> FSub(x, y, p)
@@ -153,6 +155,7 @@ let rec print_closure_t_sub exp indent =
   | Sub(var1, var2, _) -> eprintf "SUB %s %s\n" var1 var2;
   | Mul(var1, var2, _) -> eprintf "MUL %s %s\n" var1 var2;
   | Div(var1, var2, _) -> eprintf "DIV %s %s\n" var1 var2;
+  | FAbs(x, _) -> eprintf "FNEG %s\n" x
   | FNeg(var, _) -> eprintf "FNEG %s\n" var
   | FAdd(var1, var2, _) -> eprintf "FADD %s %s\n" var1 var2;
   | FSub(var1, var2, _) -> eprintf "FSUB %s %s\n" var1 var2;
