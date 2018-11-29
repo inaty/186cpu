@@ -91,6 +91,8 @@ rule token = parse
     { FSQR }
 | "fabs"
     { FABS }
+| "fneg"
+    { FNEG }
 | '.'
     { DOT }
 | "<-"

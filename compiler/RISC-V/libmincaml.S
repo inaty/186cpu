@@ -27,9 +27,9 @@
 !min_caml_fabs:
 !	fsgnjx.s	fa0, fa0, fa0
 !	ret
-min_caml_fneg:
-	fsgnjn.s	fa0, fa0, fa0
-	ret
+!min_caml_fneg:
+!	fsgnjn.s	fa0, fa0, fa0
+!	ret
 min_caml_sqrt:
 	fsqrt.s	fa0, fa0, rne
 	ret

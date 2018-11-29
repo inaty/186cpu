@@ -40,6 +40,8 @@ let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 %token FHALF
 %token FSQR
 %token FABS
+%token FNEG
+/* adhoc series end */
 %token DOT
 %token LESS_MINUS
 %token SEMICOLON
@@ -176,6 +178,9 @@ exp:
 | FABS simple_exp
     %prec prec_app
     { FAbs($2, pos ()) }
+| FNEG simple_exp
+    %prec prec_app
+    { FNeg($2, pos ()) }
 | error
     { let sp, ep = pos () in
       let open Lexing in
