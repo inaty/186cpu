@@ -59,7 +59,7 @@ int main(int argc , char* argv[]){
 		int opt,length=0;
 		unsigned int *mem;
 		long long int *mmap;
-		long long int cntodr[100];
+		long long int cntodr[100] = {0};
 		unsigned int rg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		float frg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     opterr = 0;
@@ -180,7 +180,7 @@ int main(int argc , char* argv[]){
 		int *rank;
 		rank=make_rank(cntodr,58);
 		for(int i=0;i<58;i++){
-		printf("%s->%lld\n",odrlst[rank[i]],cntodr[rank[i]]);
+		printf("%15s ->%12lld\n",odrlst[rank[i]],cntodr[rank[i]]);
 		}
 
   return 0;
