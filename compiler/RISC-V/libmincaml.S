@@ -4,26 +4,26 @@
 !min_caml_fless:
 !	flt.s	a0, fa0, fa1
 !	ret
-min_caml_fispos:
-	fcvt.s.w	ft0, zero, rne
-	flt.s	a0, ft0, fa0
-	ret
-min_caml_fisneg:
-	fcvt.s.w	ft0, zero, rne
-	flt.s	a0, fa0, ft0
-	ret
-min_caml_fiszero:
-	fcvt.s.w	ft0, zero, rne
-	feq.s	a0, fa0, ft0
-	ret
-min_caml_fhalf:
-	li	x31, min_caml_fhalf_float_0.5
-	flw	ft0, x31, 0
-	fmul.s	fa0, fa0, ft0, rne
-	ret
-min_caml_fsqr:
-	fmul.s	fa0, fa0, fa0, rne
-	ret
+!min_caml_fispos:
+!	fcvt.s.w	ft0, zero, rne
+!	flt.s	a0, ft0, fa0
+!	ret
+!min_caml_fisneg:
+!	fcvt.s.w	ft0, zero, rne
+!	flt.s	a0, fa0, ft0
+!	ret
+!min_caml_fiszero:
+!	fcvt.s.w	ft0, zero, rne
+!	feq.s	a0, fa0, ft0
+!	ret
+!min_caml_fhalf:
+!	li	x31, min_caml_fhalf_float_0.5
+!	flw	ft0, x31, 0
+!	fmul.s	fa0, fa0, ft0, rne
+!	ret
+!min_caml_fsqr:
+!	fmul.s	fa0, fa0, fa0, rne
+!	ret
 min_caml_fabs:
 	fsgnjx.s	fa0, fa0, fa0
 	ret

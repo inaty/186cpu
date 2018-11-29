@@ -173,7 +173,7 @@ and g' oc (dest, exp) =
       (* TODO:bltしか使えないのでこうなっているが、逆なのでキモい *)
       g'_tail_if oc rs2 rs1 e1 e2 "bge" "blt" pinfo
   | Tail, IfFEq(rs1, rs2, e1, e2, p) ->
-      fprintf oc "\tfeq.s\t%s, %s, %s\n ! %s" "t0" rs1 rs2 pinfo;
+      fprintf oc "\tfeq.s\t%s, %s, %s ! %s\n" "t0" rs1 rs2 pinfo;
       g' oc (Tail, IfEq("zero", "t0", e2, e1, p))
   | Tail, IfFLE(rs1, rs2, e1, e2, p) ->
       fprintf oc "\tflt.s\t%s, %s, %s ! %s\n" "t0" rs1 rs2 pinfo;
@@ -184,7 +184,7 @@ and g' oc (dest, exp) =
       (* TODO:bltしか使えないのでこうなっているが、逆なのでキモい *)
       g'_non_tail_if oc (NonTail(rd)) rs2 rs1 e1 e2 "bge" "blt" pinfo
   | NonTail(rd), IfFEq(rs1, rs2, e1, e2, p) ->
-      fprintf oc "\tfeq.s\t%s, %s, %s\n ! %s" "t0" rs1 rs2 pinfo;
+      fprintf oc "\tfeq.s\t%s, %s, %s ! %s\n" "t0" rs1 rs2 pinfo;
       g' oc (NonTail(rd), IfEq("zero", "t0", e2, e1, p))
   | NonTail(rd), IfFLE(rs1, rs2, e1, e2, p) ->
       fprintf oc "\tflt.s\t%s, %s, %s ! %s\n" "t0" rs1 rs2 pinfo;

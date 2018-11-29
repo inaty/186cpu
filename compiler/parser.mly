@@ -34,6 +34,11 @@ let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 /* adhoc series */
 %token FEQUAL
 %token FLESS
+%token FISPOS
+%token FISNEG
+%token FISZERO
+%token FHALF
+%token FSQR
 %token DOT
 %token LESS_MINUS
 %token SEMICOLON
@@ -150,6 +155,23 @@ exp:
 | FLESS simple_exp simple_exp
     %prec prec_app
     { Not(LE($3, $2, pos ()), pos ()) }
+| FISPOS simple_exp
+    %prec prec_app
+    { Not(LE($2, Float(0.0, pos ()), pos ()), pos ()) }
+| FISNEG simple_exp
+    %prec prec_app
+    { Not(LE(Float(0.0, pos ()), $2, pos ()), pos ()) }
+| FISZERO simple_exp
+    %prec prec_app
+    { Eq($2, Float(0.0, pos ()), pos ()) }
+| FHALF simple_exp
+    %prec prec_app
+    { FMul($2, Float(0.5, pos ()), pos ()) }
+| FSQR simple_exp
+    %prec prec_app
+    { let x = Id.genid "fsqr" in
+      let p = pos () in
+      Let((x, Type.Float), $2, FMul(Var(x, p), Var(x, p), p), p) }
 | error
     { let sp, ep = pos () in
       let open Lexing in

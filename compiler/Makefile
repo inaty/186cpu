@@ -73,7 +73,7 @@ sim: $(SIMDIR)/exec.c $(SIMDIR)/bin.c $(SIMDIR)/simulator.c
 
 raytracer/minrt.s: $(RESULT) raytracer/minrt.ml
 	./$(RESULT) raytracer/minrt
-rt.ppm: raytracer/minrt.s sim
+rt.ppm: libmincaml.S raytracer/minrt.s sim
 	python3 linker.py libmincaml.S raytracer/minrt.s
 	python3 assembler.py raytracer/minrt.ss > raytracer/minrt.out
 	./sim -f raytracer/minrt.out -i raytracer/sld/contest.bin -o raytracer/rt.ppm -b -p

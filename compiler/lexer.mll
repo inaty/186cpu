@@ -79,6 +79,16 @@ rule token = parse
     { FEQUAL }
 | "fless"
     { FLESS }
+| "fispos"
+    { FISPOS }
+| "fisneg"
+    { FISNEG }
+| "fiszero"
+    { FISZERO }
+| "fhalf"
+    { FHALF }
+| "fsqr"
+    { FSQR }
 | '.'
     { DOT }
 | "<-"

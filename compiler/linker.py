@@ -44,7 +44,7 @@ def replace_pseudo1(line, labels_addrs):
     try:
         opcode, operands = line.strip("\t\n").split("\t")
     except ValueError:
-        assert False, line.strip("\t\n").split("\t")
+        assert False, line
     operands = operands.split(", ")
     if opcode == "li":
         rd, op2 = operands
