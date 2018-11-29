@@ -35,13 +35,14 @@ $(RESULT): debug-code top
 clean:: nobackup
 
 # 要適宜追加
+# cse.mli cse.ml を外した(alphaとbetaの間？)
+# lambdaLifting.mli lambdaLifting.ml \も外した(closureとasmの間)
+# tupleFlatten.mli tupleFlatten.ml tupleElim.mli tupleElim.ml \も外した
 SOURCES = float.c type.ml id.ml m.ml s.ml \
 syntax.ml parser.mly lexer.mll typing.mli typing.ml kNormal.mli kNormal.ml \
-alpha.mli alpha.ml cse.mli cse.ml beta.mli beta.ml assoc.mli assoc.ml \
+alpha.mli alpha.ml beta.mli beta.ml assoc.mli assoc.ml \
 inline.mli inline.ml constFold.mli constFold.ml elim.mli elim.ml \
-lambdaLifting.mli lambdaLifting.ml \
 closure.mli closure.ml \
-tupleFlatten.mli tupleFlatten.ml tupleElim.mli tupleElim.ml \
 asm.mli asm.ml virtual.mli virtual.ml \
 simm.mli simm.ml regAlloc.mli regAlloc.ml emit.mli emit.ml \
 main.mli main.ml

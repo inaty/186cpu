@@ -1,49 +1,50 @@
 type id_or_imm = (* V = variable, C = constant *)
   | V of Id.t
   | C of int
-type insts = (* 命令の列 *)
-  | Ans of inst_pos (* 値を返すなにか *)
-  | Let of (Id.t * Type.t) * inst_pos * insts
-and inst_pos = inst * Lexing.position
-and inst = (* 命令（仮想命令含む） *)
-  | Nop
-  | Set of int (* レジスタ←即値、RISC-Vだとli（仮想命令）だけど変えなくていいか *)
-  | SetL of Id.l (* わからんけどlabelの場所を返す操作っぽい *)
-  | Mov of Id.t (* 名前mvに変えてもいいかも *)
-  | Neg of Id.t
-  | Add of Id.t * id_or_imm
-  | Sub of Id.t * id_or_imm
-  | Mul of Id.t * id_or_imm
-  | Div of Id.t * id_or_imm
-  | SLL of Id.t * id_or_imm
-  | SRL of Id.t * id_or_imm
-  | Ld of Id.t * id_or_imm
-  | St of Id.t * Id.t * id_or_imm
-  | FMv of Id.t
-  | FNeg of Id.t
-  | FAdd of Id.t * Id.t
-  | FSub of Id.t * Id.t
-  | FMul of Id.t * Id.t
-  | FDiv of Id.t * Id.t
-  | LdDF of Id.t * id_or_imm (* わからんけどラベルから値を引き出す操作っぽい *)
-  | StDF of Id.t * Id.t * id_or_imm (* stのdoubleword float（？） *)
+type p = Lexing.position * Lexing.position
+type t = (* 命令の列 *)
+  | Ans of exp
+  | Let of (Id.t * Type.t) * exp * t
+and exp = (* 命令（仮想命令含む） *)
+  | Nop of p
+  | Li of int * p
+  | LiL of Id.l * p
+  | Mv of Id.t * p
+  | Neg of Id.t * p
+  | Add of Id.t * id_or_imm * p
+  | Sub of Id.t * id_or_imm * p
+  | Mul of Id.t * id_or_imm * p
+  | Div of Id.t * id_or_imm * p
+  | SLL of Id.t * id_or_imm * p
+  | SRL of Id.t * id_or_imm * p
+  | Lw of Id.t * id_or_imm * p
+  | Sw of Id.t * Id.t * id_or_imm * p (* Sw(x, y, z') means M[x + z'] <- y *)
+  | FMv of Id.t * p
+  | FNeg of Id.t * p
+  | FAdd of Id.t * Id.t * p
+  | FSub of Id.t * Id.t * p
+  | FMul of Id.t * Id.t * p
+  | FDiv of Id.t * Id.t * p
+  | FLw of Id.t * id_or_imm * p
+  | FSw of Id.t * Id.t * id_or_imm * p (* FSw(x, y, z') means M[x + z'] <- y *)
   (* virtual instructions *)
-  (* 変更(op2をid_or_immからId.tに) *)
-  | IfEq of Id.t * Id.t * insts * insts
-  | IfLE of Id.t * Id.t * insts * insts
-  (* | IfGE of Id.t * Id.t * insts * insts (* �����оΤǤϤʤ��Τ�ɬ�� *) *)
-  | IfFEq of Id.t * Id.t * insts * insts
-  | IfFLE of Id.t * Id.t * insts * insts
+  | IfEq of Id.t * Id.t * t * t * p
+  | IfLE of Id.t * Id.t * t * t * p
+  | IfFEq of Id.t * Id.t * t * t * p
+  | IfFLE of Id.t * Id.t * t * t * p
   (* closure address, integer arguments, and float arguments *)
-  | CallCls of Id.t * Id.t list * Id.t list
-  | CallDir of Id.l * Id.t list * Id.t list
-  | Save of Id.t * Id.t (* Save(r, y) = レジスタrに入っている変数yをスタックに退避 *)
-  | Restore of Id.t (* スタックから値を戻す *)
+  | CallCls of Id.t * Id.t list * Id.t list * p
+  | CallDir of Id.l * Id.t list * Id.t list * p
+  (* Save(r, y) = レジスタrに入っている変数yをスタックに退避 *)
+  | Save of Id.t * Id.t * p
+  | Restore of Id.t * p (* スタックから値を戻す *)
 type fundef =
   { name : Id.l; args : Id.t list; fargs : Id.t list;
-    body : insts; ret : Type.t }
+    body : t; ret : Type.t }
 (* プログラム = (float_table, 関数リスト, 命令列) *)
-type prog = Prog of (Id.l * float) list * fundef list * insts
+type prog = Prog of (Id.l * float) list * fundef list * t
+
+let dp = (Lexing.dummy_pos, Lexing.dummy_pos)
 
 let fletd(x, e1, e2) = Let((x, Type.Float), e1, e2)
 let seq(e1, e2) = Let((Id.gentmp Type.Unit, Type.Unit), e1, e2)
@@ -89,33 +90,35 @@ let rec remove_and_uniq xs = function
   | x :: ys when S.mem x xs -> remove_and_uniq xs ys
   | x :: ys -> x :: remove_and_uniq (S.add x xs) ys
 
-(* free variables in the order of use (for spilling) (caml2html: sparcasm_fv) *)
-let fv_id_or_imm = function V(x) -> [x] | _ -> []
+(* free variables in the order of use (for spilling) *)
+let fv_id_or_imm = function V(x) -> [x] | C(_) -> []
 let rec fv_exp = function
-  | Nop | Set(_) | SetL(_) | Restore(_) -> []
-  | Mov(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) -> [x]
-  | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | SLL(x, y')
-  | SRL(x, y') | Ld(x, y') | LdDF(x, y') -> x :: fv_id_or_imm y'
-  | St(x, y, z') | StDF(x, y, z') -> x :: y :: fv_id_or_imm z'
-  | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
-  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) ->
-  (* | IfGE(x, y, e1, e2) -> *)
+  | Nop(_) | Li(_) | LiL(_) | Restore(_) -> []
+  | Mv(x, _) | Neg(x, _) | FMv(x, _) | FNeg(x, _) | Save(x, _, _) -> [x]
+  | Add(x, y', _) | Sub(x, y', _) | Mul(x, y', _) | Div(x, y', _)
+  | SLL(x, y', _) | SRL(x, y', _) | Lw(x, y', _) | FLw(x, y', _) ->
+      x :: fv_id_or_imm y'
+  | Sw(x, y, z', _) | FSw(x, y, z', _) -> x :: y :: fv_id_or_imm z'
+  | FAdd(x, y, _) | FSub(x, y, _) | FMul(x, y, _) | FDiv(x, y, _) -> [x; y]
+  | IfEq(x, y, e1, e2, _) | IfLE(x, y, e1, e2, _) ->
       x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)
-  | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) ->
+  | IfFEq(x, y, e1, e2, _) | IfFLE(x, y, e1, e2, _) ->
       x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2)
-  | CallCls(x, ys, zs) -> x :: ys @ zs
-  | CallDir(_, ys, zs) -> ys @ zs
+  | CallCls(x, ys, zs, _) -> x :: ys @ zs
+  | CallDir(_, ys, zs, _) -> ys @ zs
 and fv = function
-  | Ans(inst, _) -> fv_exp inst
-  | Let((x, t), (inst, _), e) ->
-      fv_exp inst @ remove_and_uniq (S.singleton x) (fv e)
+  | Ans(exp) -> fv_exp exp
+  | Let((x, t), exp, e) ->
+      fv_exp exp @ remove_and_uniq (S.singleton x) (fv e)
 let fv e = remove_and_uniq S.empty (fv e)
 
 (*
-e1 : Asm.t -> xt : Id.t * Type.t -> e2 : Asm.t
-let x = e1 in e2 にする
-e1がlet式だった場合はlet定義を頭出しする
-e1が let y = exp in e1' -> let y = exp in (let x = e1' in e2)になる
+e1 : Asm.t
+xt : Id.t * Type.t
+e2 : Asm.t
+let x = e1 in e2 への変換
+e1がlet式だった場合はe1内のlet定義を頭出しする
+つまりe1が let y = exp in e1' なら let y = exp in (let x = e1' in e2)になる
 *)
 let rec concat e1 xt e2 =
   match e1 with

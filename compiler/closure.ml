@@ -1,124 +1,128 @@
 open Printf
 
 type closure = { entry : Id.l; actual_fv : Id.t list }
-type t = exp * Lexing.position
-and exp =
-  | Unit
-  | Int of int
-  | Float of float
-  | Neg of Id.t
-  | Add of Id.t * Id.t
-  | Sub of Id.t * Id.t
-  | Mul of Id.t * Id.t
-  | Div of Id.t * Id.t
-  | FNeg of Id.t
-  | FAdd of Id.t * Id.t
-  | FSub of Id.t * Id.t
-  | FMul of Id.t * Id.t
-  | FDiv of Id.t * Id.t
-  | IfEq of Id.t * Id.t * t * t
-  | IfLE of Id.t * Id.t * t * t
-  | Let of (Id.t * Type.t) * t * t
-  | Var of Id.t
-  | MakeCls of (Id.t * Type.t) * closure * t
-  | AppCls of Id.t * Id.t list
-  | AppDir of Id.l * Id.t list
-  | Tuple of Id.t list
-  | LetTuple of (Id.t * Type.t) list * Id.t * t
-  | Get of Id.t * Id.t
-  | Put of Id.t * Id.t * Id.t
-  | ExtArray of Id.l
+type p = Lexing.position * Lexing.position
+type t =
+  | Unit of p
+  | Int of int * p
+  | Float of float * p
+  | Neg of Id.t * p
+  | Add of Id.t * Id.t * p
+  | Sub of Id.t * Id.t * p
+  | Mul of Id.t * Id.t * p
+  | Div of Id.t * Id.t * p
+  | FNeg of Id.t * p
+  | FAdd of Id.t * Id.t * p
+  | FSub of Id.t * Id.t * p
+  | FMul of Id.t * Id.t * p
+  | FDiv of Id.t * Id.t * p
+  | IfEq of Id.t * Id.t * t * t * p
+  | IfLE of Id.t * Id.t * t * t * p
+  | Let of (Id.t * Type.t) * t * t * p
+  | Var of Id.t * p
+  | MakeCls of (Id.t * Type.t) * closure * t * p
+  | AppCls of Id.t * Id.t list * p
+  | AppDir of Id.l * Id.t list * p
+  | Tuple of Id.t list * p
+  | LetTuple of (Id.t * Type.t) list * Id.t * t * p
+  | Get of Id.t * Id.t * p
+  | Put of Id.t * Id.t * Id.t * p
+  | ExtArray of Id.l * p
 type fundef = { name : Id.l * Type.t;
                 args : (Id.t * Type.t) list;
                 formal_fv : (Id.t * Type.t) list;
                 body : t }
 type prog = Prog of fundef list * t
 
-let rec fv (e, _) =
-  match e with
-  | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x) | FNeg(x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y) | FAdd(x, y)
-  | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
-  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) ->
+let rec fv = function
+  | Unit(_) | Int(_) | Float(_) | ExtArray(_) -> S.empty
+  | Neg(x, _) | FNeg(x, _) -> S.singleton x
+  | Add(x, y, _) | Sub(x, y, _) | Mul(x, y, _) | Div(x, y, _) | FAdd(x, y, _)
+  | FSub(x, y, _) | FMul(x, y, _) | FDiv(x, y, _) | Get(x, y, _) ->
+      S.of_list [x; y]
+  | IfEq(x, y, e1, e2, _) | IfLE(x, y, e1, e2, _) ->
       S.add x (S.add y (S.union (fv e1) (fv e2)))
-  | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
-  | Var(x) -> S.singleton x
-  | MakeCls((x, t), { entry = l; actual_fv = ys }, e) ->
+  | Let((x, t), e1, e2, _) -> S.union (fv e1) (S.remove x (fv e2))
+  | Var(x, _) -> S.singleton x
+  | MakeCls((x, t), { entry = l; actual_fv = ys }, e, _) ->
       S.remove x (S.union (S.of_list ys) (fv e))
-  | AppCls(x, ys) -> S.of_list (x :: ys)
-  | AppDir(_, xs) | Tuple(xs) -> S.of_list xs
-  | LetTuple(xts, y, e) ->
+  | AppCls(x, ys, _) -> S.of_list (x :: ys)
+  | AppDir(_, xs, _) | Tuple(xs, _) -> S.of_list xs
+  | LetTuple(xts, y, e, _) ->
       S.add y (S.diff (fv e) (S.of_list (List.map fst xts)))
-  | Put(x, y, z) -> S.of_list [x; y; z]
+  | Put(x, y, z, _) -> S.of_list [x; y; z]
 
 let toplevel : fundef list ref = ref []
 
-let rec g env known (e, sp) =
-  let sp' = ref sp in
-  let e' =
-    match e with
-    | KNormal.Unit -> Unit
-    | KNormal.Int(i) -> Int(i)
-    | KNormal.Float(d) -> Float(d)
-    | KNormal.Neg(x) -> Neg(x)
-    | KNormal.Add(x, y) -> Add(x, y)
-    | KNormal.Sub(x, y) -> Sub(x, y)
-    | KNormal.Mul(x, y) -> Mul(x, y)
-    | KNormal.Div(x, y) -> Div(x, y)
-    | KNormal.FNeg(x) -> FNeg(x)
-    | KNormal.FAdd(x, y) -> FAdd(x, y)
-    | KNormal.FSub(x, y) -> FSub(x, y)
-    | KNormal.FMul(x, y) -> FMul(x, y)
-    | KNormal.FDiv(x, y) -> FDiv(x, y)
-    | KNormal.IfEq(x, y, e1, e2) -> IfEq(x, y, g env known e1, g env known e2)
-    | KNormal.IfLE(x, y, e1, e2) -> IfLE(x, y, g env known e1, g env known e2)
-    | KNormal.Let((x, t), e1, e2) ->
-        Let((x, t), g env known e1, g (M.add x t env) known e2)
-    | KNormal.Var(x) -> Var(x)
-    | KNormal.LetRec({KNormal.name = (x, t);
-                      KNormal.args = yts;
-                      KNormal.body = e1}, e2) ->
-        let toplevel_backup = !toplevel in
-        let env' = M.add x t env in
-        let known' = S.add x known in
-        let e1' = g (M.add_list yts env') known' e1 in
-        let zs = S.diff (fv e1') (S.of_list (List.map fst yts)) in
-        let known', e1' =
-          if S.is_empty zs then known', e1' else
-          (Format.eprintf "free variable(s) %s found in function %s@." (Id.pp_list (S.elements zs)) x;
-           Format.eprintf "function %s cannot be directly applied in fact@." x;
-           toplevel := toplevel_backup;
-           let e1' = g (M.add_list yts env') known e1 in
-           known, e1') in
-        let zs = S.elements
-                   (S.diff (fv e1')
-                   (S.add x (S.of_list (List.map fst yts)))) in
-        let zts = List.map (fun z -> (z, M.find z env')) zs in
-        toplevel := {name = (Id.L(x), t);
-                     args = yts;
-                     formal_fv = zts;
-                     body = e1' } :: !toplevel;
-        let e2' = g env' known' e2 in
-        if S.mem x (fv e2') then
-          MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2')
-        else
-          (Format.eprintf "eliminating closure(s) %s@." x;
-           sp' := snd e2';
-           fst e2')
-    | KNormal.App(x, ys) when S.mem x known ->
-        Format.eprintf "directly applying %s@." x;
-        AppDir(Id.L(x), ys)
-    | KNormal.App(f, xs) -> AppCls(f, xs)
-    | KNormal.Tuple(xs) -> Tuple(xs)
-    | KNormal.LetTuple(xts, y, e) ->
-        LetTuple(xts, y, g (M.add_list xts env) known e)
-    | KNormal.Get(x, y) -> Get(x, y)
-    | KNormal.Put(x, y, z) -> Put(x, y, z)
-    | KNormal.ExtArray(x) -> ExtArray(Id.L(x))
-    (* 外部関数適用は全部　min_caml_ がついてcallされる（ここ重要っぽい） *)
-    | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys) in
-  (e', !sp')
+(*
+envは型環境
+known : Id.t S は自由変数のないクロージャ
+ *)
+let rec g env known = function
+  | KNormal.Unit(p) -> Unit(p)
+  | KNormal.Int(i, p) -> Int(i, p)
+  | KNormal.Float(d, p) -> Float(d, p)
+  | KNormal.Neg(x, p) -> Neg(x, p)
+  | KNormal.Add(x, y, p) -> Add(x, y, p)
+  | KNormal.Sub(x, y, p) -> Sub(x, y, p)
+  | KNormal.Mul(x, y, p) -> Mul(x, y, p)
+  | KNormal.Div(x, y, p) -> Div(x, y, p)
+  | KNormal.FNeg(x, p) -> FNeg(x, p)
+  | KNormal.FAdd(x, y, p) -> FAdd(x, y, p)
+  | KNormal.FSub(x, y, p) -> FSub(x, y, p)
+  | KNormal.FMul(x, y, p) -> FMul(x, y, p)
+  | KNormal.FDiv(x, y, p) -> FDiv(x, y, p)
+  | KNormal.IfEq(x, y, e1, e2, p) ->
+      IfEq(x, y, g env known e1, g env known e2, p)
+  | KNormal.IfLE(x, y, e1, e2, p) ->
+      IfLE(x, y, g env known e1, g env known e2, p)
+  | KNormal.Let((x, t), e1, e2, p) ->
+      Let((x, t), g env known e1, g (M.add x t env) known e2, p)
+  | KNormal.Var(x, p) -> Var(x, p)
+  | KNormal.LetRec({KNormal.name = (x, t);
+                    KNormal.args = yts;
+                    KNormal.body = e1}, e2, p) ->
+      (* xが自由変数なしと仮定して試す *)
+      let toplevel_backup = !toplevel in
+      let env' = M.add x t env in
+      let known' = S.add x known in
+      let e1' = g (M.add_list yts env') known' e1 in
+      (* 確認、関数本体e1'から引数を除いたものをzsとする *)
+      let zs = S.diff (fv e1') (S.of_list (List.map fst yts)) in
+      let known', e1' =
+        if S.is_empty zs then known', e1' else
+        (* 自由変数が残ってたらダメ *)
+        (Format.eprintf "free variable(s) %s found in function %s@." (Id.pp_list (S.elements zs)) x;
+         Format.eprintf "function %s cannot be directly applied in fact@." x;
+         toplevel := toplevel_backup;
+         let e1' = g (M.add_list yts env') known e1 in
+         known, e1') in
+      (* 必要な自由変数 *)
+      let zs =
+        S.elements
+          (S.diff (fv e1') (S.add x (S.of_list (List.map fst yts)))) in
+      let zts = List.map (fun z -> (z, M.find z env')) zs in
+      toplevel := {name = (Id.L(x), t);
+                   args = yts;
+                   formal_fv = zts;
+                   body = e1' } :: !toplevel;
+      let e2' = g env' known' e2 in
+      (* 直接適用の場合はfvに引っかからないので、xが変数として出現しているか検査できる *)
+      if S.mem x (fv e2') then
+        MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2', p)
+      else
+        (Format.eprintf "eliminating closure(s) %s@." x; e2')
+  | KNormal.App(x, ys, p) when S.mem x known ->
+      Format.eprintf "directly applying %s@." x;
+      AppDir(Id.L(x), ys, p)
+  | KNormal.App(f, xs, p) -> AppCls(f, xs, p)
+  | KNormal.Tuple(xs, p) -> Tuple(xs, p)
+  | KNormal.LetTuple(xts, y, e, p) ->
+      LetTuple(xts, y, g (M.add_list xts env) known e, p)
+  | KNormal.Get(x, y, p) -> Get(x, y, p)
+  | KNormal.Put(x, y, z, p) -> Put(x, y, z, p)
+  | KNormal.ExtArray(x, p) -> ExtArray(Id.L(x), p)
+  | KNormal.ExtFunApp(x, ys, p) -> AppDir(Id.L("min_caml_" ^ x), ys, p)
 
 let f e =
   toplevel := [];
@@ -138,37 +142,37 @@ let rec string_of_id_type_list id_type_list =
       "(" ^ id ^ ", " ^ (Type.string_of_type typ) ^ ") " ^
        (string_of_id_type_list id_type_list)
 
-let rec print_closure_t_sub (exp, _) indent =
+let rec print_closure_t_sub exp indent =
   print_space indent;
   match exp with
-  | Unit -> eprintf "UNIT\n"
-  | Int(i) -> eprintf "INT %d\n" i
-  | Float(f) -> eprintf "FLOAT %f\n" f
-  | Neg(var) -> eprintf "NEG %s\n" var
-  | Add(var1, var2) -> eprintf "ADD %s %s\n" var1 var2;
-  | Sub(var1, var2) -> eprintf "SUB %s %s\n" var1 var2;
-  | Mul(var1, var2) -> eprintf "MUL %s %s\n" var1 var2;
-  | Div(var1, var2) -> eprintf "DIV %s %s\n" var1 var2;
-  | FNeg(var) -> eprintf "FNEG %s\n" var
-  | FAdd(var1, var2) -> eprintf "FADD %s %s\n" var1 var2;
-  | FSub(var1, var2) -> eprintf "FSUB %s %s\n" var1 var2;
-  | FMul(var1, var2) -> eprintf "FMUL %s %s\n" var1 var2;
-  | FDiv(var1, var2) -> eprintf "FDIV %s %s\n" var1 var2;
-  | IfEq(var1, var2, exp1, exp2) ->
+  | Unit(_) -> eprintf "UNIT\n"
+  | Int(i, _) -> eprintf "INT %d\n" i
+  | Float(f, _) -> eprintf "FLOAT %f\n" f
+  | Neg(var, _) -> eprintf "NEG %s\n" var
+  | Add(var1, var2, _) -> eprintf "ADD %s %s\n" var1 var2;
+  | Sub(var1, var2, _) -> eprintf "SUB %s %s\n" var1 var2;
+  | Mul(var1, var2, _) -> eprintf "MUL %s %s\n" var1 var2;
+  | Div(var1, var2, _) -> eprintf "DIV %s %s\n" var1 var2;
+  | FNeg(var, _) -> eprintf "FNEG %s\n" var
+  | FAdd(var1, var2, _) -> eprintf "FADD %s %s\n" var1 var2;
+  | FSub(var1, var2, _) -> eprintf "FSUB %s %s\n" var1 var2;
+  | FMul(var1, var2, _) -> eprintf "FMUL %s %s\n" var1 var2;
+  | FDiv(var1, var2, _) -> eprintf "FDIV %s %s\n" var1 var2;
+  | IfEq(var1, var2, exp1, exp2, _) ->
       eprintf "IFEQ %s %s\n" var1 var2;
       print_closure_t_sub exp1 (indent + 2);
       print_closure_t_sub exp2 (indent + 2)
-  | IfLE(var1, var2, exp1, exp2) ->
+  | IfLE(var1, var2, exp1, exp2, _) ->
       eprintf "IFLE %s %s\n" var1 var2;
       print_closure_t_sub exp1 (indent + 2);
       print_closure_t_sub exp2 (indent + 2)
-  | Let((var, typ), exp1, exp2) ->
+  | Let((var, typ), exp1, exp2, _) ->
       eprintf "LET %s (TYPE %s)\n" var (Type.string_of_type typ);
       print_closure_t_sub exp1 (indent + 2);
       print_space indent; eprintf "IN\n";
       print_closure_t_sub exp2 (indent + 2)
-  | Var(var) -> eprintf "VAR %s\n" var
-  | MakeCls((f, t), {entry = Id.L(lf); actual_fv = fvs}, cl_t) ->
+  | Var(var, _) -> eprintf "VAR %s\n" var
+  | MakeCls((f, t), {entry = Id.L(lf); actual_fv = fvs}, cl_t, _) ->
       eprintf "MAKECLS %s (TYPE %s ENTRY %s FV %s)\n"
         f
         (Type.string_of_type t)
@@ -176,16 +180,16 @@ let rec print_closure_t_sub (exp, _) indent =
         (Id.pp_list fvs);
       print_space indent; eprintf "IN\n";
       print_closure_t_sub cl_t (indent + 2)
-  | AppCls(f, args) -> eprintf "APPCLS %s %s\n" f (Id.pp_list args)
-  | AppDir(Id.L(lf), args) -> eprintf "APPDIR %s %s\n" lf (Id.pp_list args)
-  | Tuple(vars) -> eprintf "TUPLE %s\n" (Id.pp_list vars)
-  | LetTuple(vars, var, exp) ->
+  | AppCls(f, args, _) -> eprintf "APPCLS %s %s\n" f (Id.pp_list args)
+  | AppDir(Id.L(lf), args, _) -> eprintf "APPDIR %s %s\n" lf (Id.pp_list args)
+  | Tuple(vars, _) -> eprintf "TUPLE %s\n" (Id.pp_list vars)
+  | LetTuple(vars, var, exp, _) ->
       eprintf "LETTUPLE (%s) %s\n" (string_of_id_type_list vars) var;
       print_space indent; eprintf "IN\n";
       print_closure_t_sub exp (indent + 2)
-  | Get(var1, var2) -> eprintf "GET %s %s\n" var1 var2
-  | Put(var1, var2, var3) -> eprintf "PUT %s %s %s\n" var1 var2 var3
-  | ExtArray(Id.L(la)) -> eprintf "EXTARRAY %s\n" la
+  | Get(var1, var2, _) -> eprintf "GET %s %s\n" var1 var2
+  | Put(var1, var2, var3, _) -> eprintf "PUT %s %s %s\n" var1 var2 var3
+  | ExtArray(Id.L(la), _) -> eprintf "EXTARRAY %s\n" la
 
 let print_closure_t cl_t = print_closure_t_sub cl_t 0
 
