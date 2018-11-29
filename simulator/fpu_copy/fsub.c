@@ -21,7 +21,7 @@ void print(unsigned int a){
 	printf("\n");
 	return;
 }
-unsigned int fadd(unsigned int x1,unsigned int x2){
+unsigned int fsub(unsigned int x1,unsigned int x2){
 	unsigned int y;
 	unsigned int ovf;
   unsigned int s1;
@@ -34,20 +34,20 @@ unsigned int fadd(unsigned int x1,unsigned int x2){
    s1 = get(x1,31,31);
    e1 = get(x1,30,23);
    m1 = get(x1,22,0);
-   s2 = get(x2,31,31);
+   s2 = get(~x2,31,31);
    e2 = get(x2,30,23);
    m2 = get(x2,22,0);
 
   unsigned int m1a;
   unsigned int m2a;
 
-   m1a = (e1 == 0) ? get(m1,22,0) : get(m1|(1<<23),23,0);
-   m2a = (e2 == 0) ? get(m2,22,0) : get(m2|(1<<23),23,0);
+   m1a = (e1 == 0) ? m1 : m1|(1<<23);
+   m2a = (e2 == 0) ? m2 : m2|(1<<23);
   unsigned int e1a;
   unsigned int e2a;
 
-   e1a = (e1 == 0) ? 0xff : e1&0xff;
-   e2a = (e2 == 0) ? 0xff : e2&0xff;
+   e1a = (e1 == 0) ? 0xff : e1;
+   e2a = (e2 == 0) ? 0xff : e2;
 
   unsigned int e2ai;
 
@@ -55,7 +55,7 @@ unsigned int fadd(unsigned int x1,unsigned int x2){
 
   unsigned int te;
 
-   te = get(e1a + e2ai,7,0);
+   te = e1a + e2ai;
 
   unsigned int  ce;
   unsigned int  tde;
@@ -88,8 +88,9 @@ unsigned int fadd(unsigned int x1,unsigned int x2){
   unsigned long int  mie;
   unsigned long int  mia;
 
-   mie = (unsigned long int)mi<<31;
+   mie = mi<<31;
    mia = mie >> de;
+
   unsigned int  tstck;
 
    tstck = (get(mia,28,0)==0)?0:1;
@@ -108,6 +109,7 @@ unsigned int fadd(unsigned int x1,unsigned int x2){
    myd = (get(mye,26,26) == 1) ? ((esi == 0xff) ?(1<<25) : (mye >> 1) ) : mye;
    stck = (get(mye,26,26) == 1) ? (tstck | get(mye,0,0)) : tstck;
    ovf1 = (get(mye,26,26) == 1) ? ((esi == 0xff) ? 1 : 0 ) : 0;
+
   unsigned int se=26;
 
 	for (int i=0;i<26;i++){
@@ -122,9 +124,10 @@ unsigned int fadd(unsigned int x1,unsigned int x2){
 
   unsigned int  eyr;
   unsigned int  myf;
-	unsigned int eyfu = *(unsigned int*)(&eyf);
+
+	unsigned int eyfu = *(int*)(&eyf);
    eyr = (eyf > 0) ? get(eyfu,7,0) : 0;
-   myf = (eyf > 0) ? (myd  << se) : (myd << (get(get(eyd,4,0)-0x1f,4,0)));
+   myf = (eyf > 0) ? (myd  << se) : (myd << (get(eyd,4,0)-0x1f));
 
   unsigned int myr;
 
@@ -161,62 +164,14 @@ unsigned int fadd(unsigned int x1,unsigned int x2){
 	     ((e1 == 255 && e2 ==255 && s1 == s2) ? {s1,8'd255,23'b0} :
 	     ((e1 == 255 && e2 ==255) ? {1'b1,8'd255,1'b1,22'b0} : {sy,ey,my} ))))); */
 
+/*
    y = (e1 == 0xff) ? ((e2 == 0xff) ? ( (nzm2==1)? (s2<<31)|(0xff<<23)|(1<<22)|get(m2,21,0) : 
 	 ((nzm1==1)? (s1<<31)|(0xff<<23)|(1<<22)|get(m1,21,0) : 
 	 ((s1==s2)? (s1<<31)|(0xff<<23):
 	 (1<<31)|(0xff<<23)|(1<<22) ) ) ): 
 	 ((s1<<31)|(0xff<<23)|(nzm1<<22)|get(m1,21,0))) : 
 	 ((e2 == 0xff) ? ((s2<<31)|(0xff<<23)|(nzm2<<22)|get(m2,21,0)) : ((sy<<31)|(ey<<23)|get(my,22,0)));
-	 //y= ((sy<<31)|(ey<<23)|get(my,22,0));
-	 //本気のdebug
-if(ovf>=(1<<1)) printf("ovf");
-if(s1>=(1<<1)) printf("s1");
-if(e1>=(1<<8)) printf("e1");
-if(m1>=(1<<23)) printf("m1");
-if(s2>=(1<<1)) printf("s2");
-if(e2>=(1<<8)) printf("e2");
-if(m2>=(1<<23)) printf("m2");
-if(m1a>=(1<<25)) printf("m1a");
-if(m2a>=(1<<25)) printf("m2a");
-if(e1a>=(1<<8)) printf("e1a");
-if(e2a>=(1<<8)) printf("e2a");
-if(e2ai>=(1<<8)) printf("e2ai");
-if(te>=(1<<9)) printf("te");
-if(ce>=(1<<1)) printf("ce");
-if(tde>=(1<<8)) printf("tde");
-if(tecalc>=(1<<9)) printf("tecalc");
-if(terev>=(1<<9)) printf("terev");
-if(de>=(1<<5)) printf("de");
-if(sel>=(1<<1)) printf("sel");
-if(ms>=(1<<25)) printf("ms");
-if(mi>=(1<<25)) printf("mi");
-if(es>=(1<<8)) printf("es");
-if(ei>=(1<<8)) printf("ei");
-if(ss>=(1<<1)) printf("ss");
-if(mie>=((unsigned long int)1<<56)) printf("mie");
-if(mia>=((unsigned long int)1<<56)) printf("mia");
-if(tstck>=(1<<1)) printf("tstck");
-if(mye>=(1<<27)) printf("mye");
-if(esi>=(1<<8)) printf("esi");
-if(eyd>=(1<<8)) printf("eyd");
-if(myd>=(1<<27)) printf("myd");
-if(stck>=(1<<1)) printf("stck");
-if(ovf1>=(1<<1)) printf("ovf1");
-if(se>=(1<<5)) printf("se");
-if(eyf>=(1<<9)) printf("eyf");
-if(eyr>=(1<<8)) printf("eyr");
-if(myf>=(1<<27)) printf("myf");
-if(myr>=(1<<25)) printf("myr");
-if(eyri>=(1<<8)) printf("eyri");
-if(ey>=(1<<8)) printf("ey");
-if(my>=(1<<23)) printf("my");
-if(sy>=(1<<1)) printf("sy");
-if(ovf2>=(1<<1)) printf("ovf2");
-if(nzm1>=(1<<1)) printf("nzm1");
-if(nzm2>=(1<<1)) printf("nzm2");
-printf("\n");
-
-
-
+	 */
+	 y= ((sy<<31)|(ey<<23)|get(my,22,0));
 	return y;
 }

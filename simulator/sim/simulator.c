@@ -11,6 +11,40 @@
 
 //入力が２進数の時 -b をつける　
 //ファイルの名前をつけたいときは-f [ファイル名]
+char* odrlst[58]=
+{"in","out","lui","auipc","jal","jalr","beq","bne","blt","bge",
+"bltu","bgeu","lb","lh","lu","lbu","lhu","sb","sh","sw",
+"addi","slti","sltiu","xori","ori","andi","slli","srli","add","sub",
+"mul","div","sll","sltu","xor","srl","or","and","flw","fsw",
+"fadd.s","fsub.s","fmul.s","fdiv.s","fsqrt.s","fsgnj.s","fsgnjn.s","fsgnjx.s","fcvt.w.s","feq.d",
+"flt.d","fle.d","fcvt.s.w","fmv.w.x","fcos.s","fsin.s","fatan.s","print float"};
+
+int* make_rank(long long int* u,int size){
+	int * rank;
+	int k;
+	rank=(int*)malloc(sizeof(int)*size);
+	for (int i=0;i<size;i++){
+		rank[i]=size;
+	}
+
+	for (int i=0;i<size;i++){
+		k=0;
+		while(rank[k]!=size){
+			if (u[rank[k]] < u[i]){
+				break;
+			}
+			k++;
+		}
+		for (int j=k;j<size-1;j++){
+			rank[k-j+size-1]=rank[k-j+size-2];
+		}
+		rank[k]=i;
+	}
+	return rank;
+}
+
+
+
 int main(int argc , char* argv[]){
 		FILE *fp,*fpi,*fpo;
 		char cmd[34];
@@ -25,6 +59,7 @@ int main(int argc , char* argv[]){
 		int opt,length=0;
 		unsigned int *mem;
 		long long int *mmap;
+		long long int cntodr[100];
 		unsigned int rg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		float frg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     opterr = 0;
@@ -110,7 +145,7 @@ int main(int argc , char* argv[]){
     while (command[pc]!=0){
 			++cnt;
 			counter[pc]++;
-			exec(rg,frg,flag,command,mem,&pc,fpi,fpo,&jc,mmap);
+			exec(rg,frg,flag,command,mem,&pc,fpi,fpo,&jc,mmap,cntodr);
     }
 		fclose(fpi);
 		fclose(fpo);
@@ -142,5 +177,11 @@ int main(int argc , char* argv[]){
 				}
 		}
 		fprintf(stderr, "cnt = %lld\n", cnt);
+		int *rank;
+		rank=make_rank(cntodr,58);
+		for(int i=0;i<58;i++){
+		printf("%s->%lld\n",odrlst[rank[i]],cntodr[rank[i]]);
+		}
+
   return 0;
 }

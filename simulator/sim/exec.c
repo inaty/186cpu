@@ -6,7 +6,7 @@
 #include<math.h>
 #include"bin.h"
 #define KIZAMI 1024
-void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,long long int* jc,long long int*mmap){
+void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,long long int* jc,long long int*mmap,long long int *cntodr){
 	char input;
 	int opecode,imm,rs2,rs1,rd,funct3,tmp;
 				rg[0]=0;//ゼロレジスタ初期化
@@ -43,6 +43,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			//入力mode
 			fread(&input,sizeof(input),1,fpi);
 			rg[rs2]=(rg[rs2]&0xffffff00)|(input&0x000000ff);
+			cntodr[0]++;
 			if((command[*pc]&(1<<14))==0){
 					//最上bit埋め
 					//rg[rs2]=rg[rs2]|((0xffffff00)*(rg[rs2]>>7));
@@ -55,6 +56,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			//出力mode
 			char c=(char)(rg[rs1]&0x000000ff);
 			fwrite (&c,sizeof(char),1,fpo);
+			cntodr[1]++;
 		}
 		*pc=*pc+1;
 	}
@@ -65,6 +67,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		rg[rd]=imm;
 		if ((flag&4)==4)
 			printf("*pc[%d],lui\n",*pc);
+		cntodr[2]++;
 		*pc=*pc+1;
 	}
 //auipc
@@ -74,6 +77,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		rg[rd]=imm+4*(*pc);
 		if ((flag&4)==4)
 			printf("*pc[%d],aui*pc\n",*pc);
+		cntodr[3]++;
 	}
 //jal
 	 else if (opecode==0b1101111){
@@ -86,6 +90,8 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		//printf("imm=%d,%s\n",imm,int2bin(imm));
 		*pc=*pc + imm;
 		*jc=*jc+1;
+		cntodr[4]++;
+
 	 }
 //jalr命令
 	else if ((opecode==0b1100111)&&(funct3==0b000)){
@@ -98,6 +104,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		printf("*pc[%d],jalr:*pc<-%d,imm=%d,rs1=%d\n",*pc,(imm+rg[rs1])/4,imm,rs1);
 		*pc=(imm+(int)rg[rs1])/4;
 		*jc=*jc+1;
+		cntodr[5]++;
 	}
 
 //branch系命令
@@ -118,6 +125,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else{
 				*pc=*pc+1;
 			}
+		cntodr[6]++;
 		}
 		//bne
 		else if (funct3 == 0b001) {
@@ -129,6 +137,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else{
 				*pc=*pc+1;
 			}
+		cntodr[7]++;
 		}
 		//blt
 		else if (funct3 == 0b100) {
@@ -140,6 +149,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else{
 				*pc=*pc+1;
 			}
+		cntodr[8]++;
 		}
 		//bge
 		else if (funct3 == 0b101) {
@@ -151,6 +161,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else{
 				*pc=*pc+1;
 			}
+		cntodr[9]++;
 		}
 		//bltu
 		else if (funct3 == 0b110) {
@@ -162,6 +173,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else{
 				*pc=*pc+1;
 			}
+		cntodr[10]++;
 		}
 		//bgeu
 		else if (funct3 == 0b111) {
@@ -177,6 +189,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		else {
 			assert(0);
 		}
+		cntodr[11]++;
 	}
 
 //load系命令
@@ -192,12 +205,14 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],lb\n",*pc);
 			rg[rd]=(mem[(imm+(int)rg[rs1])/4]&0x7f)-(mem[(imm+(int)rg[rs1])/4]&0x80);
+			cntodr[12]++;
 		}
 		//lh
 		else if(funct3==0b001){
 		if ((flag&4)==4)
 			printf("*pc[%d],lh\n",*pc);
 			rg[rd]=(mem[(imm+(int)rg[rs1])/4]&0x7fff)-(mem[(imm+(int)rg[rs1])/4]&0x8000);
+			cntodr[13]++;
 		}
 		//lw
 		else if(funct3==0b010){
@@ -205,19 +220,21 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],lw,mem[%d]loaded\n",*pc,(imm+rg[rs1])/4);
 			rg[rd]=mem[(imm+(int)rg[rs1])/4];
 			mmap[(imm+(int)rg[rs1]/4)/KIZAMI]++;
-
+			cntodr[14]++;
 		}
 		//lbu
 		else if(funct3==0b100){
 		if ((flag&4)==4)
 			printf("*pc[%d],lbu\n",*pc);
 			rg[rd]=mem[(imm+(int)rg[rs1])/4]&0xff;
+			cntodr[15]++;
 		}
 		//lhu
 		else if(funct3==0b101){
 		if ((flag&4)==4)
 			printf("*pc[%d],lhu\n",*pc);
 			rg[rd]=mem[(imm+(int)rg[rs1])/4]&0xffff;
+			cntodr[16]++;
 		}
 		else {
 			assert(0);
@@ -238,12 +255,14 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],sb\n",*pc);
 			mem[(imm+(int)rg[rs1])/4]=rg[rs2]&0xff;
+			cntodr[17]++;
 		}
 		//sh
 		else if(funct3==0b001){
 		if ((flag&4)==4)
 			printf("*pc[%d],sh\n",*pc);
 			mem[(imm+(int)rg[rs1])/4]=rg[rs2]&0xffff;
+			cntodr[18]++;
 		}
 		//sw
 		else if(funct3==0b010){
@@ -251,6 +270,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],sw,mem[%d]changed\n",*pc,(imm+rg[rs1])/4);
 			mem[(imm+(int)rg[rs1])/4]=rg[rs2];
 			mmap[((imm+(int)rg[rs1])/4)/KIZAMI]++;
+			cntodr[19]++;
 		}
 		else{
 			assert(0);
@@ -270,48 +290,56 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],addi\n",*pc);
 			rg[rd]=(int)rg[rs1]+imm;
+			cntodr[20]++;
 		}
 		//slti
 		else if(funct3==0b010){
 		if ((flag&4)==4)
 			printf("*pc[%d],slti\n",*pc);
 			rg[rd]=((int)rg[rs1]<imm) ? 1:0;
+			cntodr[21]++;
 		}
 		//sltiu
 		else if(funct3==0b011){
 		if ((flag&4)==4)
 			printf("*pc[%d],sltiu\n",*pc);
 			rg[rd]=(rg[rs1]<imm) ? 1:0;
+			cntodr[22]++;
 		}
 		//xori
 		else if(funct3==0b100){
 		if ((flag&4)==4)
 			printf("*pc[%d],xori\n",*pc);
 			rg[rd]=rg[rs1]^imm;
+			cntodr[23]++;
 		}
 		//ori
 		else if(funct3==0b110){
 		if ((flag&4)==4)
 			printf("*pc[%d],ori\n",*pc);
 			rg[rd]=rg[rs1]|imm;
+			cntodr[24]++;
 		}
 		//andi
 		else if(funct3==0b111){
 		if ((flag&4)==4)
 			printf("*pc[%d],andi\n",*pc);
 			rg[rd]=rg[rs1] & imm;
+			cntodr[25]++;
 		}
 		//slli
 		else if(funct3==0b001){
 			if((flag&4)==4)
 				printf("*pc[%d],slli\n",*pc);
 			rg[rd]=rg[rs1]<<(int)(imm&0b11111);
+			cntodr[26]++;
 		}
 		//srli
 		else if(funct3==0b101){
 			if((flag&4)==4)
 				printf("*pc[%d],slli\n",*pc);
 			rg[rd]=rg[rs1]>>(int)(imm&0b11111);
+			cntodr[27]++;
 		}
 		else{
 			printf("illegal instruction in line %d\n", *pc + 1);
@@ -334,12 +362,14 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],add\n",*pc);
 			rg[rd]=(int)rg[rs1]+(int)rg[rs2];
+			cntodr[28]++;
 		}
 		//sub
 		else if((funct3==0b000)&&(imm==0b0100000)){
 		if ((flag&4)==4)
 			printf("*pc[%d],sub\n",*pc);
 			rg[rd]=(int)rg[rs1]-(int)rg[rs2];
+			cntodr[29]++;
 		}
 		//mul
 		else if((funct3==0b000)&&(imm==0b0000001)){
@@ -347,6 +377,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],mul\n",*pc);
 			rg[rd]=(int)rg[rs1]*(int)rg[rs2];
+			cntodr[30]++;
 		}
 		//div
 		else if((funct3==0b100)&&(imm==0b0000001)){
@@ -354,12 +385,14 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],div\n",*pc);
 			rg[rd]=(int)rg[rs1]/(int)rg[rs2];
+			cntodr[31]++;
 		}
 		//sll
 		else if(funct3==0b001&&imm==0){
 		if ((flag&4)==4)
 			printf("*pc[%d],sll\n",*pc);
 			rg[rd]=rg[rs1]<<(int)rg[rs2];
+			cntodr[32]++;
 		}
 		//slt
 		// else if(funct3==0b010&&imm==0){
@@ -372,18 +405,21 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],sltu\n",*pc);
 			rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
+			cntodr[33]++;
 		}
 		//xor
 		else if(funct3==0b100&&imm==0){
 		if ((flag&4)==4)
 			printf("*pc[%d],xor\n",*pc);
 			rg[rd]=rg[rs1] ^ rg[rs2];
+			cntodr[34]++;
 		}
 		//srl
 		else if((funct3==0b101)&&(imm==0b0000000)){
 		if ((flag&4)==4)
 			printf("*pc[%d],srl\n",*pc);
 			rg[rd]=rg[rs1]>>(int)rg[rs2];
+			cntodr[35]++;
 		}
 		// //sra
 		// else if((funct3==0b001)&&(imm==0b0100000)){
@@ -397,12 +433,14 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],or\n",*pc);
 			rg[rd]=rg[rs1] | rg[rs2];
+			cntodr[36]++;
 		}
 		//and
 		else if(funct3==0b111){
 		if ((flag&4)==4)
 			printf("*pc[%d],and\n",*pc);
 			rg[rd]=rg[rs1] & rg[rs2];
+			cntodr[37]++;
 		}
 		else{
 			assert(0);
@@ -420,6 +458,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			frg[rd]=*((float*)&mem[(imm+(int)rg[rs1])/4]);
 			mmap[(imm+(int)(rg[rs1])/4)/KIZAMI]++;
 			*pc=*pc+1;
+			cntodr[38]++;
 			}
 	//fsw
 	else if ((opecode==0b0100111)&&(funct3==0b010)){
@@ -434,6 +473,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("memには%dが入ったよ\n",mem[(imm+(int)rg[rs1])/4]);
 			*pc=*pc+1;
+			cntodr[39]++;
 	}
 	//float 演算
 	else if (opecode==0b1010011){
@@ -449,30 +489,35 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],fadd.s\n",*pc);
 			frg[rd]=frg[rs1]+frg[rs2];
+			cntodr[40]++;
 		}
 		//fsub.s
 		else if(imm==4){
 		if ((flag&4)==4)
 			printf("*pc[%d],fsub.s\n",*pc);
 			frg[rd]=frg[rs1]-frg[rs2];
+			cntodr[41]++;
 		}
 		//fmul.s
 		else if(imm==8){
 		if ((flag&4)==4)
 			printf("*pc[%d],fmul.s\n",*pc);
 			frg[rd]=frg[rs1]*frg[rs2];
+			cntodr[42]++;
 		}
 		//fdiv.s
 		else if(imm==12){
 		if ((flag&4)==4)
 			printf("*pc[%d],fdiv.s\n",*pc);
 			frg[rd]=frg[rs1]/frg[rs2];
+			cntodr[43]++;
 		}
 		//fsqrt.s
 		else if((imm==0b0101100)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fsqrt.s\n",*pc);
 			frg[rd]=sqrtf(frg[rs1]);
+			cntodr[44]++;
 		}
 		//fsgnj.s
 		else if((imm==0b0010000)&&(funct3==0)){
@@ -483,6 +528,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			unsigned int i3;
 			i3=(i1&0x7fffffff)|(i2&0x80000000);
 			frg[rd]=*((float*)&i3);
+			cntodr[45]++;
 		}
 		//fsgnjn.s
 		else if((imm==0b0010000)&&(funct3==1)){
@@ -493,6 +539,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			unsigned int i3;
 			i3=(i1&0x7fffffff)|(0x80000000^(i2&0x80000000));
 			frg[rd]=*((float*)&i3);
+			cntodr[46]++;
 		}
 		//fsgnjx.s
 		else if((imm==0b0010000)&&(funct3==2)){
@@ -503,6 +550,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			unsigned int i3;
 			i3=(i1&0x7fffffff)|((i1&0x80000000)^(i2&0x80000000));
 			frg[rd]=*((float*)&i3);
+			cntodr[47]++;
 
 		}
 		//fcvt.w.s
@@ -516,6 +564,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			}else{
 				assert(0);
 			}
+			cntodr[48]++;
 
 		}
 		//feq.d
@@ -523,48 +572,56 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		if ((flag&4)==4)
 			printf("*pc[%d],feq.s\n",*pc);
 			rg[rd]=(frg[rs1]==frg[rs2])?1:0;
+			cntodr[49]++;
 		}
 		//flt.d
 		else if((imm==0b1010000)&&(funct3==1)){
 		if ((flag&4)==4)
 			printf("*pc[%d],flt.s\n",*pc);
 			rg[rd]=(frg[rs1]<frg[rs2])?1:0;
+			cntodr[50]++;
 		}
 		//fle.d
 		else if((imm==0b1010000)&&(funct3==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fle.s\n",*pc);
 			rg[rd]=(frg[rs1]<=frg[rs2])?1:0;
+			cntodr[51]++;
 		}
 		//fcvt.s.w
 		else if((imm==0b1101000)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fcvt.s.w\n",*pc);
 			frg[rd]=(float)((int)rg[rs1]);
+			cntodr[52]++;
 		}
 		//fmv.w.x
 		else if((imm==0b1111000)&&(funct3==0)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fmv.w.x\n",*pc);
 			frg[rd]=*((float*)&rg[rs1]);
+			cntodr[53]++;
 		}
 		//fcos.s
 		else if((imm==0b1100001)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fcos.s\n",*pc);
 			frg[rd]=cosf(frg[rs1]);
+			cntodr[54]++;
 		}
 		//fsin.s
 		else if((imm==0b1100001)&&(rs2==1)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fsin.s\n",*pc);
 			frg[rd]=sinf(frg[rs1]);
+			cntodr[55]++;
 		}
 		//fatan.s
 		else if((imm==0b1101001)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fatan.s\n",*pc);
 			frg[rd]=atanf(frg[rs1]);
+			cntodr[56]++;
 		}
 		else{
 			assert(0);
@@ -577,6 +634,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			fwrite (&frg[rs1],sizeof(float),1,fpo);
 			//printf("print_float:%1.2f\n",frg[rs1]);
 			*pc=*pc +1;
+			cntodr[57]++;
 		}
 
 	//例外処理

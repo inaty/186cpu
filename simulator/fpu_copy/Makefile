@@ -1,4 +1,4 @@
-all: fadd.c main.c
-	gcc -o test fadd.c main.c
+all: fadd.c fmul.c main.c
+	gcc -o test fadd.c fmul.c main.c
 clean:
 	rm test
