@@ -1,9 +1,9 @@
-min_caml_fequal:
-	feq.s	a0, fa0, fa1
-	ret
-min_caml_fless:
-	flt.s	a0, fa0, fa1
-	ret
+!min_caml_fequal:
+!	feq.s	a0, fa0, fa1
+!	ret
+!min_caml_fless:
+!	flt.s	a0, fa0, fa1
+!	ret
 min_caml_fispos:
 	fcvt.s.w	ft0, zero, rne
 	flt.s	a0, ft0, fa0
@@ -43,540 +43,400 @@ min_caml_int_of_float:
 min_caml_float_of_int:
 	fcvt.s.w	fa0, a0, rne
 	ret
-min_caml_l.276:
-	float	0.25000000000
-min_caml_l.260:
+min_caml_cos_l.262:
+	float	0.10000000000
+min_caml_cos_l.238:
+	float	0.78539815000
+min_caml_cos_l.229:
+	float	1.57079630000
+min_caml_cos_l.223:
 	float	-1.00000000000
-min_caml_l.254:
-	float	0.00019587841
-min_caml_l.252:
-	float	0.00833282400
-min_caml_l.250:
-	float	0.16666668000
-min_caml_l.248:
-	float	0.00136950680
-min_caml_l.246:
-	float	0.04166368000
-min_caml_l.243:
-	float	1.00000000000
-min_caml_l.236:
-	float	0.50000000000
-min_caml_l.233:
+min_caml_cos_l.218:
 	float	3.14159260000
-min_caml_l.231:
+min_caml_cos_l.216:
+	float	0.00019587841
+min_caml_cos_l.214:
+	float	0.00833282400
+min_caml_cos_l.212:
+	float	0.16666668000
+min_caml_cos_l.210:
+	float	0.00136950680
+min_caml_cos_l.208:
+	float	0.04166368000
+min_caml_cos_l.205:
+	float	1.00000000000
+min_caml_cos_l.199:
+	float	0.50000000000
+min_caml_cos_l.197:
+	float	6.28318520000
+min_caml_cos_l.195:
 	float	2.00000000000
-min_caml_cos_loop1.209:
-	flw	fa1, a21, 4 ! 0
-	sw	sp, a21, 0 ! 0
-	fsw	sp, fa0, 8 ! 0
-	fmv.s	fa26, fa1
-	fmv.s	fa1, fa0
-	fmv.s	fa0, fa26
-	sw	sp, ra, 16
-	addi	sp, sp, 20
-	jal	min_caml_fless
-	addi	sp, sp, -20
-	lw	ra, sp, 16
-	li	a1, 0 ! 5
-	bne	a0, a1, min_caml_cos_be_else.328
-	li	a0, min_caml_l.231 ! 5
-	flw	fa0, a0, 0 ! 5
-	flw	fa1, sp, 8 ! 0
-	fmul.s	fa0, fa1, fa0, rne ! 5
-	lw	a21, sp, 0 ! 0
+min_caml_cos_loop1.179:
+	flw	fa1, a21, 4 ! 0-0
+	flt.s	t0, fa0, fa1 ! 5-5
+	bne	zero, t0, min_caml_cos_beq_else.275 ! 5-5
+	ret ! 5-5
+min_caml_cos_beq_else.275:
+	li	a0, min_caml_cos_l.195 ! 5-5
+	flw	fa1, a0, 0 ! 5-5
+	fmul.s	fa0, fa0, fa1, rne ! 5-5
 	lw	a20, a21, 0
 	jalr	zero, a20, 0
-min_caml_cos_be_else.328:
-	flw	fa0, sp, 8 ! 0
-	ret ! 5
-min_caml_cos_loop2.212:
-	li	a0, min_caml_l.233 ! 9
-	flw	fa2, a0, 0 ! 9
-	li	a0, min_caml_l.231 ! 9
-	flw	fa3, a0, 0 ! 9
-	fmul.s	fa2, fa2, fa3, rne ! 9
-	fsw	sp, fa1, 0 ! 0
-	fsw	sp, fa0, 8 ! 0
-	fmv.s	fa1, fa2
-	sw	sp, ra, 16
-	addi	sp, sp, 20
-	jal	min_caml_fless
-	addi	sp, sp, -20
-	lw	ra, sp, 16
-	li	a1, 0 ! 9
-	bne	a0, a1, min_caml_cos_be_else.329
-	flw	fa0, sp, 8 ! 0
-	flw	fa1, sp, 0 ! 0
-	sw	sp, ra, 16
-	addi	sp, sp, 20
-	jal	min_caml_fless
-	addi	sp, sp, -20
-	lw	ra, sp, 16
-	li	a1, 0 ! 13
-	bne	a0, a1, min_caml_cos_be_else.330
-	flw	fa1, sp, 0 ! 0
-	flw	fa0, sp, 8 ! 0
-	fsub.s	fa0, fa0, fa1, rne ! 13
-	j	min_caml_cos_loop2.212
-min_caml_cos_be_else.330:
-	li	a0, min_caml_l.236 ! 13
-	flw	fa0, a0, 0 ! 13
-	flw	fa1, sp, 0 ! 0
-	fmul.s	fa1, fa1, fa0, rne ! 13
-	flw	fa0, sp, 8 ! 0
-	j	min_caml_cos_loop2.212
-min_caml_cos_be_else.329:
-	flw	fa0, sp, 8 ! 0
-	ret ! 10
-min_caml_cos_reduction_2pi.96:
-	li	a0, min_caml_l.233 ! 2
-	flw	fa1, a0, 0 ! 2
-	li	a0, min_caml_l.231 ! 2
-	flw	fa2, a0, 0 ! 2
-	fmul.s	fa1, fa1, fa2, rne ! 2
-	mv	a21, hp ! 3
-	addi	hp, hp, 8 ! 3
-	li	a0, min_caml_cos_loop1.209 ! 3
-	sw	a21, a0, 0 ! 3
-	fsw	a21, fa0, 4 ! 3
-	fsw	sp, fa0, 0 ! 0
+min_caml_cos_loop2.182:
+	li	a0, min_caml_cos_l.197 ! 9-9
+	flw	fa2, a0, 0 ! 9-9
+	flt.s	t0, fa2, fa0 ! 9-14
+	bne	zero, t0, min_caml_cos_beq_else.276 ! 9-14
+	ret ! 10-10
+min_caml_cos_beq_else.276:
+	flt.s	t0, fa1, fa0 ! 13-13
+	bne	zero, t0, min_caml_cos_beq_else.277 ! 13-13
+	li	a0, min_caml_cos_l.199 ! 13-13
+	flw	fa2, a0, 0 ! 13-13
+	fmul.s	fa1, fa1, fa2, rne ! 13-13
+	j	min_caml_cos_loop2.182
+min_caml_cos_beq_else.277:
+	fsub.s	fa0, fa0, fa1, rne ! 13-13
+	j	min_caml_cos_loop2.182
+min_caml_cos_reduction_2pi.78:
+	li	a0, min_caml_cos_l.197 ! 2-2
+	flw	fa1, a0, 0 ! 2-2
+	mv	a21, hp ! 3-15
+	addi	hp, hp, 8 ! 3-15
+	li	a0, min_caml_cos_loop1.179 ! 3-15
+	sw	a21, a0, 0 ! 3-15
+	fsw	a21, fa0, 4 ! 3-15
+	fsw	sp, fa0, 0 ! 0-0
 	fmv.s	fa0, fa1
-	sw	sp, ra, 8
-	addi	sp, sp, 12
+	sw	sp, ra, 4
+	addi	sp, sp, 8
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -12
-	lw	ra, sp, 8
+	addi	sp, sp, -8
+	lw	ra, sp, 4
 	fmv.s	fa1, fa0
-	flw	fa0, sp, 0 ! 0
-	j	min_caml_cos_loop2.212
-min_caml_cos_kernel_cos.98:
-	fmul.s	fa0, fa0, fa0, rne ! 17
-	fmul.s	fa1, fa0, fa0, rne ! 18
-	fmul.s	fa2, fa0, fa1, rne ! 19
-	li	a0, min_caml_l.243 ! 20
-	flw	fa3, a0, 0 ! 20
-	li	a0, min_caml_l.236 ! 20
-	flw	fa4, a0, 0 ! 20
-	fmul.s	fa0, fa4, fa0, rne ! 20
-	fsub.s	fa0, fa3, fa0, rne ! 20
-	li	a0, min_caml_l.246 ! 20
-	flw	fa3, a0, 0 ! 20
-	fmul.s	fa1, fa3, fa1, rne ! 20
-	fadd.s	fa0, fa0, fa1, rne ! 20
-	li	a0, min_caml_l.248 ! 20
-	flw	fa1, a0, 0 ! 20
-	fmul.s	fa1, fa1, fa2, rne ! 20
-	fsub.s	fa0, fa0, fa1, rne ! 20
-	ret ! 20
-min_caml_cos_kernel_sin.100:
-	fmul.s	fa1, fa0, fa0, rne ! 22
-	fmul.s	fa2, fa0, fa1, rne ! 23
-	fmul.s	fa3, fa2, fa1, rne ! 24
-	fmul.s	fa1, fa3, fa1, rne ! 25
-	li	a0, min_caml_l.250 ! 26
-	flw	fa4, a0, 0 ! 26
-	fmul.s	fa2, fa4, fa2, rne ! 26
-	fsub.s	fa0, fa0, fa2, rne ! 26
-	li	a0, min_caml_l.252 ! 26
-	flw	fa2, a0, 0 ! 26
-	fmul.s	fa2, fa2, fa3, rne ! 26
-	fadd.s	fa0, fa0, fa2, rne ! 26
-	li	a0, min_caml_l.254 ! 26
-	flw	fa2, a0, 0 ! 26
-	fmul.s	fa1, fa2, fa1, rne ! 26
-	fsub.s	fa0, fa0, fa1, rne ! 26
-	ret ! 26
+	flw	fa0, sp, 0 ! 0-0
+	j	min_caml_cos_loop2.182
+min_caml_cos_kernel_cos.80:
+	fmul.s	fa0, fa0, fa0, rne ! 17-17
+	fmul.s	fa1, fa0, fa0, rne ! 18-18
+	fmul.s	fa2, fa0, fa1, rne ! 19-19
+	li	a0, min_caml_cos_l.205 ! 20-20
+	flw	fa3, a0, 0 ! 20-20
+	li	a0, min_caml_cos_l.199 ! 20-20
+	flw	fa4, a0, 0 ! 20-20
+	fmul.s	fa0, fa4, fa0, rne ! 20-20
+	fsub.s	fa0, fa3, fa0, rne ! 20-20
+	li	a0, min_caml_cos_l.208 ! 20-20
+	flw	fa3, a0, 0 ! 20-20
+	fmul.s	fa1, fa3, fa1, rne ! 20-20
+	fadd.s	fa0, fa0, fa1, rne ! 20-20
+	li	a0, min_caml_cos_l.210 ! 20-20
+	flw	fa1, a0, 0 ! 20-20
+	fmul.s	fa1, fa1, fa2, rne ! 20-20
+	fsub.s	fa0, fa0, fa1, rne ! 20-20
+	ret ! 20-20
+min_caml_cos_kernel_sin.82:
+	fmul.s	fa1, fa0, fa0, rne ! 22-22
+	fmul.s	fa2, fa0, fa1, rne ! 23-23
+	fmul.s	fa3, fa2, fa1, rne ! 24-24
+	fmul.s	fa1, fa3, fa1, rne ! 25-25
+	li	a0, min_caml_cos_l.212 ! 26-26
+	flw	fa4, a0, 0 ! 26-26
+	fmul.s	fa2, fa4, fa2, rne ! 26-26
+	fsub.s	fa0, fa0, fa2, rne ! 26-26
+	li	a0, min_caml_cos_l.214 ! 26-26
+	flw	fa2, a0, 0 ! 26-26
+	fmul.s	fa2, fa2, fa3, rne ! 26-26
+	fadd.s	fa0, fa0, fa2, rne ! 26-26
+	li	a0, min_caml_cos_l.216 ! 26-26
+	flw	fa2, a0, 0 ! 26-26
+	fmul.s	fa1, fa2, fa1, rne ! 26-26
+	fsub.s	fa0, fa0, fa1, rne ! 26-26
+	ret ! 26-26
 min_caml_sin:
-	fmv.s	fa1, fa0 ! 28
-	fsw	sp, fa1, 0 ! 0
-	sw	sp, ra, 8
-	addi	sp, sp, 12
+	fsw	sp, fa0, 0 ! 0-0
+	sw	sp, ra, 4
+	addi	sp, sp, 8
 	jal	min_caml_fabs
-	addi	sp, sp, -12
-	lw	ra, sp, 8
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	min_caml_cos_reduction_2pi.78
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	li	a0, min_caml_cos_l.218 ! 32-32
+	flw	fa1, a0, 0 ! 32-32
+	flt.s	t0, fa1, fa0 ! 32-32
+	bne	zero, t0, min_caml_cos_beq_else.278 ! 32-32
+	mv	a0, hp ! 32-32
+	addi	hp, hp, 8 ! 32-32
+	fsw	a0, fa0, 4 ! 32-32
+	flw	fa0, sp, 0 ! 0-0
+	fsw	a0, fa0, 0 ! 32-32
+	j	min_caml_cos_beq_cont.279
+min_caml_cos_beq_else.278:
+	li	a0, min_caml_cos_l.223 ! 32-32
+	flw	fa1, a0, 0 ! 32-32
+	flw	fa2, sp, 0 ! 0-0
+	fmul.s	fa1, fa2, fa1, rne ! 32-32
+	li	a0, min_caml_cos_l.218 ! 32-32
+	flw	fa2, a0, 0 ! 32-32
+	fsub.s	fa0, fa0, fa2, rne ! 32-32
+	mv	a0, hp ! 32-32
+	addi	hp, hp, 8 ! 32-32
+	fsw	a0, fa0, 4 ! 32-32
+	fsw	a0, fa1, 0 ! 32-32
+min_caml_cos_beq_cont.279:
+	flw	fa0, a0, 4 ! 31-39
+	flw	fa1, a0, 0 ! 31-39
+	li	a0, min_caml_cos_l.229 ! 34-34
+	flw	fa2, a0, 0 ! 34-34
+	flt.s	t0, fa2, fa0 ! 34-34
+	bne	zero, t0, min_caml_cos_beq_else.280 ! 34-34
+	mv	a0, hp ! 34-34
+	addi	hp, hp, 8 ! 34-34
+	fsw	a0, fa0, 4 ! 34-34
+	fsw	a0, fa1, 0 ! 34-34
+	j	min_caml_cos_beq_cont.281
+min_caml_cos_beq_else.280:
+	li	a0, min_caml_cos_l.218 ! 34-34
+	flw	fa2, a0, 0 ! 34-34
+	fsub.s	fa0, fa2, fa0, rne ! 34-34
+	mv	a0, hp ! 34-34
+	addi	hp, hp, 8 ! 34-34
+	fsw	a0, fa0, 4 ! 34-34
+	fsw	a0, fa1, 0 ! 34-34
+min_caml_cos_beq_cont.281:
+	flw	fa0, a0, 4 ! 33-39
+	flw	fa1, a0, 0 ! 33-39
+	li	a0, min_caml_cos_l.238 ! 36-36
+	flw	fa2, a0, 0 ! 36-36
+	fsw	sp, fa1, 4 ! 0-0
+	flt.s	t0, fa0, fa2 ! 36-38
+	bne	zero, t0, min_caml_cos_beq_else.282 ! 36-38
+	li	a0, min_caml_cos_l.229 ! 37-37
+	flw	fa2, a0, 0 ! 37-37
+	fsub.s	fa0, fa2, fa0, rne ! 37-37
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	min_caml_cos_reduction_2pi.96
+	jal	min_caml_cos_kernel_cos.80
 	addi	sp, sp, -12
 	lw	ra, sp, 8
-	li	a0, min_caml_l.233 ! 32
-	flw	fa1, a0, 0 ! 32
-	fsw	sp, fa0, 8 ! 0
-	sw	sp, ra, 16
-	addi	sp, sp, 20
-	jal	min_caml_fless
-	addi	sp, sp, -20
-	lw	ra, sp, 16
-	li	a1, 0 ! 32
-	bne	a0, a1, min_caml_cos_be_else.331
-	li	a0, min_caml_l.260 ! 32
-	flw	fa0, a0, 0 ! 32
-	flw	fa1, sp, 0 ! 0
-	fmul.s	fa0, fa1, fa0, rne ! 32
-	li	a0, min_caml_l.233 ! 32
-	flw	fa1, a0, 0 ! 32
-	flw	fa2, sp, 8 ! 0
-	fsub.s	fa1, fa2, fa1, rne ! 32
-	mv	a0, hp ! 32
-	addi	hp, hp, 8 ! 32
-	fsw	a0, fa1, 4 ! 32
-	fsw	a0, fa0, 0 ! 32
-	j	min_caml_cos_be_cont.332
-min_caml_cos_be_else.331:
-	mv	a0, hp ! 32
-	addi	hp, hp, 8 ! 32
-	flw	fa0, sp, 8 ! 0
-	fsw	a0, fa0, 4 ! 32
-	flw	fa0, sp, 0 ! 0
-	fsw	a0, fa0, 0 ! 32
-min_caml_cos_be_cont.332:
-	flw	fa0, a0, 4 ! 31
-	flw	fa1, a0, 0 ! 31
-	li	a0, min_caml_l.233 ! 34
-	flw	fa2, a0, 0 ! 34
-	li	a0, min_caml_l.236 ! 34
-	flw	fa3, a0, 0 ! 34
-	fmul.s	fa2, fa2, fa3, rne ! 34
-	fsw	sp, fa1, 16 ! 0
-	fsw	sp, fa0, 24 ! 0
-	fmv.s	fa1, fa2
-	sw	sp, ra, 32
-	addi	sp, sp, 36
-	jal	min_caml_fless
-	addi	sp, sp, -36
-	lw	ra, sp, 32
-	li	a1, 0 ! 34
-	bne	a0, a1, min_caml_cos_be_else.333
-	li	a0, min_caml_l.233 ! 34
-	flw	fa0, a0, 0 ! 34
-	flw	fa1, sp, 24 ! 0
-	fsub.s	fa0, fa0, fa1, rne ! 34
-	mv	a0, hp ! 34
-	addi	hp, hp, 8 ! 34
-	fsw	a0, fa0, 4 ! 34
-	flw	fa0, sp, 16 ! 0
-	fsw	a0, fa0, 0 ! 34
-	j	min_caml_cos_be_cont.334
-min_caml_cos_be_else.333:
-	mv	a0, hp ! 34
-	addi	hp, hp, 8 ! 34
-	flw	fa0, sp, 24 ! 0
-	fsw	a0, fa0, 4 ! 34
-	flw	fa0, sp, 16 ! 0
-	fsw	a0, fa0, 0 ! 34
-min_caml_cos_be_cont.334:
-	flw	fa1, a0, 4 ! 33
-	flw	fa0, a0, 0 ! 33
-	li	a0, min_caml_l.233 ! 36
-	flw	fa2, a0, 0 ! 36
-	li	a0, min_caml_l.276 ! 36
-	flw	fa3, a0, 0 ! 36
-	fmul.s	fa2, fa2, fa3, rne ! 36
-	fsw	sp, fa0, 32 ! 0
-	fsw	sp, fa1, 40 ! 0
-	fmv.s	fa0, fa2
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	min_caml_fless
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	li	a1, 0 ! 36
-	bne	a0, a1, min_caml_cos_be_else.335
-	flw	fa0, sp, 40 ! 0
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	min_caml_cos_kernel_sin.100
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	j	min_caml_cos_be_cont.336
-min_caml_cos_be_else.335:
-	li	a0, min_caml_l.233 ! 37
-	flw	fa0, a0, 0 ! 37
-	li	a0, min_caml_l.236 ! 37
-	flw	fa1, a0, 0 ! 37
-	fmul.s	fa0, fa0, fa1, rne ! 37
-	flw	fa1, sp, 40 ! 0
-	fsub.s	fa0, fa0, fa1, rne ! 37
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	min_caml_cos_kernel_cos.98
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-min_caml_cos_be_cont.336:
-	flw	fa1, sp, 32 ! 0
-	fsgnj.s	fa0, fa0, fa1
-	ret
+	j	min_caml_cos_beq_cont.283
+min_caml_cos_beq_else.282:
+	sw	sp, ra, 8
+	addi	sp, sp, 12
+	jal	min_caml_cos_kernel_sin.82
+	addi	sp, sp, -12
+	lw	ra, sp, 8
+min_caml_cos_beq_cont.283:
+	flw	fa1, sp, 4 ! 0-0
+	fsgnj.s	fa0, fa0, fa1 ! 39-39
+	ret ! 39-39
 min_caml_cos:
-	li	a0, min_caml_l.243 ! 41
-	flw	fa1, a0, 0 ! 41
-	fsw	sp, fa1, 0 ! 0
-	sw	sp, ra, 8
-	addi	sp, sp, 12
+	li	a0, min_caml_cos_l.205 ! 41-41
+	flw	fa1, a0, 0 ! 41-41
+	fsw	sp, fa1, 0 ! 0-0
+	sw	sp, ra, 4
+	addi	sp, sp, 8
 	jal	min_caml_fabs
-	addi	sp, sp, -12
-	lw	ra, sp, 8
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	min_caml_cos_reduction_2pi.78
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	li	a0, min_caml_cos_l.218 ! 46-46
+	flw	fa1, a0, 0 ! 46-46
+	flt.s	t0, fa1, fa0 ! 46-46
+	bne	zero, t0, min_caml_cos_beq_else.284 ! 46-46
+	mv	a0, hp ! 46-46
+	addi	hp, hp, 8 ! 46-46
+	fsw	a0, fa0, 4 ! 46-46
+	flw	fa0, sp, 0 ! 0-0
+	fsw	a0, fa0, 0 ! 46-46
+	j	min_caml_cos_beq_cont.285
+min_caml_cos_beq_else.284:
+	li	a0, min_caml_cos_l.223 ! 46-46
+	flw	fa1, a0, 0 ! 46-46
+	li	a0, min_caml_cos_l.218 ! 46-46
+	flw	fa2, a0, 0 ! 46-46
+	fsub.s	fa0, fa0, fa2, rne ! 46-46
+	mv	a0, hp ! 46-46
+	addi	hp, hp, 8 ! 46-46
+	fsw	a0, fa0, 4 ! 46-46
+	fsw	a0, fa1, 0 ! 46-46
+min_caml_cos_beq_cont.285:
+	flw	fa0, a0, 4 ! 44-57
+	flw	fa1, a0, 0 ! 44-57
+	li	a0, min_caml_cos_l.229 ! 49-49
+	flw	fa2, a0, 0 ! 49-49
+	flt.s	t0, fa2, fa0 ! 49-51
+	bne	zero, t0, min_caml_cos_beq_else.286 ! 49-51
+	mv	a0, hp ! 50-50
+	addi	hp, hp, 8 ! 50-50
+	fsw	a0, fa0, 4 ! 50-50
+	fsw	a0, fa1, 0 ! 50-50
+	j	min_caml_cos_beq_cont.287
+min_caml_cos_beq_else.286:
+	li	a0, min_caml_cos_l.223 ! 51-51
+	flw	fa2, a0, 0 ! 51-51
+	fmul.s	fa1, fa1, fa2, rne ! 51-51
+	li	a0, min_caml_cos_l.218 ! 51-51
+	flw	fa2, a0, 0 ! 51-51
+	fsub.s	fa0, fa2, fa0, rne ! 51-51
+	mv	a0, hp ! 51-51
+	addi	hp, hp, 8 ! 51-51
+	fsw	a0, fa0, 4 ! 51-51
+	fsw	a0, fa1, 0 ! 51-51
+min_caml_cos_beq_cont.287:
+	flw	fa0, a0, 4 ! 47-57
+	flw	fa1, a0, 0 ! 47-57
+	li	a0, min_caml_cos_l.238 ! 54-54
+	flw	fa2, a0, 0 ! 54-54
+	fsw	sp, fa1, 4 ! 0-0
+	flt.s	t0, fa0, fa2 ! 54-56
+	bne	zero, t0, min_caml_cos_beq_else.288 ! 54-56
+	li	a0, min_caml_cos_l.229 ! 55-55
+	flw	fa2, a0, 0 ! 55-55
+	fsub.s	fa0, fa2, fa0, rne ! 55-55
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	min_caml_cos_reduction_2pi.96
+	jal	min_caml_cos_kernel_sin.82
 	addi	sp, sp, -12
 	lw	ra, sp, 8
-	li	a0, min_caml_l.233 ! 46
-	flw	fa1, a0, 0 ! 46
-	fsw	sp, fa0, 8 ! 0
-	sw	sp, ra, 16
-	addi	sp, sp, 20
-	jal	min_caml_fless
-	addi	sp, sp, -20
-	lw	ra, sp, 16
-	li	a1, 0 ! 46
-	bne	a0, a1, min_caml_cos_be_else.337
-	li	a0, min_caml_l.260 ! 46
-	flw	fa0, a0, 0 ! 46
-	flw	fa1, sp, 0 ! 0
-	fmul.s	fa0, fa1, fa0, rne ! 46
-	li	a0, min_caml_l.233 ! 46
-	flw	fa1, a0, 0 ! 46
-	flw	fa2, sp, 8 ! 0
-	fsub.s	fa1, fa2, fa1, rne ! 46
-	mv	a0, hp ! 46
-	addi	hp, hp, 8 ! 46
-	fsw	a0, fa1, 4 ! 46
-	fsw	a0, fa0, 0 ! 46
-	j	min_caml_cos_be_cont.338
-min_caml_cos_be_else.337:
-	mv	a0, hp ! 46
-	addi	hp, hp, 8 ! 46
-	flw	fa0, sp, 8 ! 0
-	fsw	a0, fa0, 4 ! 46
-	flw	fa0, sp, 0 ! 0
-	fsw	a0, fa0, 0 ! 46
-min_caml_cos_be_cont.338:
-	flw	fa0, a0, 4 ! 44
-	flw	fa1, a0, 0 ! 44
-	li	a0, min_caml_l.233 ! 49
-	flw	fa2, a0, 0 ! 49
-	li	a0, min_caml_l.236 ! 49
-	flw	fa3, a0, 0 ! 49
-	fmul.s	fa2, fa2, fa3, rne ! 49
-	fsw	sp, fa0, 16 ! 0
-	fsw	sp, fa1, 24 ! 0
-	fmv.s	fa1, fa2
-	sw	sp, ra, 32
-	addi	sp, sp, 36
-	jal	min_caml_fless
-	addi	sp, sp, -36
-	lw	ra, sp, 32
-	li	a1, 0 ! 49
-	bne	a0, a1, min_caml_cos_be_else.339
-	li	a0, min_caml_l.260 ! 51
-	flw	fa0, a0, 0 ! 51
-	flw	fa1, sp, 24 ! 0
-	fmul.s	fa0, fa1, fa0, rne ! 51
-	li	a0, min_caml_l.233 ! 51
-	flw	fa1, a0, 0 ! 51
-	flw	fa2, sp, 16 ! 0
-	fsub.s	fa1, fa1, fa2, rne ! 51
-	mv	a0, hp ! 51
-	addi	hp, hp, 8 ! 51
-	fsw	a0, fa1, 4 ! 51
-	fsw	a0, fa0, 0 ! 51
-	j	min_caml_cos_be_cont.340
-min_caml_cos_be_else.339:
-	mv	a0, hp ! 50
-	addi	hp, hp, 8 ! 50
-	flw	fa0, sp, 16 ! 0
-	fsw	a0, fa0, 4 ! 50
-	flw	fa0, sp, 24 ! 0
-	fsw	a0, fa0, 0 ! 50
-min_caml_cos_be_cont.340:
-	flw	fa1, a0, 4 ! 47
-	flw	fa0, a0, 0 ! 47
-	li	a0, min_caml_l.233 ! 54
-	flw	fa2, a0, 0 ! 54
-	li	a0, min_caml_l.276 ! 54
-	flw	fa3, a0, 0 ! 54
-	fmul.s	fa2, fa2, fa3, rne ! 54
-	fsw	sp, fa0, 32 ! 0
-	fsw	sp, fa1, 40 ! 0
-	fmv.s	fa0, fa2
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	min_caml_fless
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	li	a1, 0 ! 54
-	bne	a0, a1, min_caml_cos_be_else.341
-	flw	fa0, sp, 40 ! 0
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	min_caml_cos_kernel_cos.98
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	j	min_caml_cos_be_cont.342
-min_caml_cos_be_else.341:
-	li	a0, min_caml_l.233 ! 55
-	flw	fa0, a0, 0 ! 55
-	li	a0, min_caml_l.236 ! 55
-	flw	fa1, a0, 0 ! 55
-	fmul.s	fa0, fa0, fa1, rne ! 55
-	flw	fa1, sp, 40 ! 0
-	fsub.s	fa0, fa0, fa1, rne ! 55
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	min_caml_cos_kernel_sin.100
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-min_caml_cos_be_cont.342:
-	flw	fa1, sp, 32 ! 0
-	fsgnj.s	fa0, fa0, fa1
-	ret
-min_caml_atan_l.120:
-	float	0.10000000000
-min_caml_atan_l.117:
-	float	2.00000000000
-min_caml_atan_l.114:
-	float	1.00000000000
-min_caml_atan_l.112:
-	float	4.00000000000
+	j	min_caml_cos_beq_cont.289
+min_caml_cos_beq_else.288:
+	sw	sp, ra, 8
+	addi	sp, sp, 12
+	jal	min_caml_cos_kernel_cos.80
+	addi	sp, sp, -12
+	lw	ra, sp, 8
+min_caml_cos_beq_cont.289:
+	flw	fa1, sp, 4 ! 0-0
+	fsgnj.s	fa0, fa0, fa1 ! 57-57
+	ret ! 57-57
 min_caml_atan_l.110:
-	float	2.43750000000
-min_caml_atan_l.108:
-	float	3.14159260000
-min_caml_atan_l.106:
-	float	0.43750000000
+	float	0.10000000000
+min_caml_atan_l.107:
+	float	1.57079630000
 min_caml_atan_l.104:
-	float	0.60035485000
+	float	1.00000000000
 min_caml_atan_l.102:
-	float	-0.08976446000
+	float	0.78539815000
 min_caml_atan_l.100:
-	float	0.11111110400
+	float	2.43750000000
 min_caml_atan_l.98:
-	float	-0.14285714200
+	float	0.43750000000
 min_caml_atan_l.96:
-	float	0.20000000000
+	float	0.60035485000
 min_caml_atan_l.94:
+	float	-0.08976446000
+min_caml_atan_l.92:
+	float	0.11111110400
+min_caml_atan_l.90:
+	float	-0.14285714200
+min_caml_atan_l.88:
+	float	0.20000000000
+min_caml_atan_l.86:
 	float	-0.33333330000
-min_caml_atan_kernel_atan.45:
-	fmul.s	fa1, fa0, fa0, rne ! 5
-	fmul.s	fa2, fa0, fa1, rne ! 6
-	fmul.s	fa3, fa2, fa1, rne ! 7
-	fmul.s	fa4, fa3, fa1, rne ! 8
-	fmul.s	fa5, fa4, fa1, rne ! 9
-	fmul.s	fa6, fa5, fa1, rne ! 10
-	fmul.s	fa1, fa6, fa1, rne ! 11
-	li	a0, min_caml_atan_l.94 ! 12
-	flw	fa7, a0, 0 ! 12
-	fmul.s	fa2, fa7, fa2, rne ! 12
-	fadd.s	fa0, fa0, fa2, rne ! 12
-	li	a0, min_caml_atan_l.96 ! 12
-	flw	fa2, a0, 0 ! 12
-	fmul.s	fa2, fa2, fa3, rne ! 12
-	fadd.s	fa0, fa0, fa2, rne ! 12
-	li	a0, min_caml_atan_l.98 ! 12
-	flw	fa2, a0, 0 ! 12
-	fmul.s	fa2, fa2, fa4, rne ! 12
-	fadd.s	fa0, fa0, fa2, rne ! 12
-	li	a0, min_caml_atan_l.100 ! 13
-	flw	fa2, a0, 0 ! 13
-	fmul.s	fa2, fa2, fa5, rne ! 13
-	fadd.s	fa0, fa0, fa2, rne ! 12
-	li	a0, min_caml_atan_l.102 ! 13
-	flw	fa2, a0, 0 ! 13
-	fmul.s	fa2, fa2, fa6, rne ! 13
-	fadd.s	fa0, fa0, fa2, rne ! 12
-	li	a0, min_caml_atan_l.104 ! 13
-	flw	fa2, a0, 0 ! 13
-	fmul.s	fa1, fa2, fa1, rne ! 13
-	fadd.s	fa0, fa0, fa1, rne ! 12
-	ret ! 12
+min_caml_atan_min_caml_atan_kernel_atan.41:
+	fmul.s	fa1, fa0, fa0, rne ! 5-5
+	fmul.s	fa2, fa0, fa1, rne ! 6-6
+	fmul.s	fa3, fa2, fa1, rne ! 7-7
+	fmul.s	fa4, fa3, fa1, rne ! 8-8
+	fmul.s	fa5, fa4, fa1, rne ! 9-9
+	fmul.s	fa6, fa5, fa1, rne ! 10-10
+	fmul.s	fa1, fa6, fa1, rne ! 11-11
+	li	a0, min_caml_atan_l.86 ! 12-12
+	flw	fa7, a0, 0 ! 12-12
+	fmul.s	fa2, fa7, fa2, rne ! 12-12
+	fadd.s	fa0, fa0, fa2, rne ! 12-12
+	li	a0, min_caml_atan_l.88 ! 12-12
+	flw	fa2, a0, 0 ! 12-12
+	fmul.s	fa2, fa2, fa3, rne ! 12-12
+	fadd.s	fa0, fa0, fa2, rne ! 12-12
+	li	a0, min_caml_atan_l.90 ! 12-12
+	flw	fa2, a0, 0 ! 12-12
+	fmul.s	fa2, fa2, fa4, rne ! 12-12
+	fadd.s	fa0, fa0, fa2, rne ! 12-12
+	li	a0, min_caml_atan_l.92 ! 13-13
+	flw	fa2, a0, 0 ! 13-13
+	fmul.s	fa2, fa2, fa5, rne ! 13-13
+	fadd.s	fa0, fa0, fa2, rne ! 12-13
+	li	a0, min_caml_atan_l.94 ! 13-13
+	flw	fa2, a0, 0 ! 13-13
+	fmul.s	fa2, fa2, fa6, rne ! 13-13
+	fadd.s	fa0, fa0, fa2, rne ! 12-13
+	li	a0, min_caml_atan_l.96 ! 13-13
+	flw	fa2, a0, 0 ! 13-13
+	fmul.s	fa1, fa2, fa1, rne ! 13-13
+	fadd.s	fa0, fa0, fa1, rne ! 12-13
+	ret ! 12-13
 min_caml_atan:
-	fmv.s	fa1, fa0 ! 2
-	fsw	sp, fa1, 0 ! 0
+	fsw	sp, fa0, 0 ! 0-0
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	min_caml_fabs
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	li	a0, min_caml_atan_l.98 ! 15-15
+	flw	fa1, a0, 0 ! 15-15
+	flt.s	t0, fa1, fa0 ! 15-26
+	bne	zero, t0, min_caml_atan_beq_else.116 ! 15-26
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	min_caml_atan_min_caml_atan_kernel_atan.41
+	addi	sp, sp, -8
+	lw	ra, sp, 4
+	flw	fa1, sp, 0 ! 0-0
+	fsgnj.s	fa0, fa0, fa1 ! 17-17
+	ret ! 17-17
+min_caml_atan_beq_else.116:
+	li	a0, min_caml_atan_l.100 ! 21-21
+	flw	fa1, a0, 0 ! 21-21
+	flt.s	t0, fa1, fa0 ! 21-26
+	bne	zero, t0, min_caml_atan_beq_else.117 ! 21-26
+	li	a0, min_caml_atan_l.102 ! 22-22
+	flw	fa1, a0, 0 ! 22-22
+	li	a0, min_caml_atan_l.104 ! 22-22
+	flw	fa2, a0, 0 ! 22-22
+	fsub.s	fa2, fa0, fa2, rne ! 22-22
+	li	a0, min_caml_atan_l.104 ! 22-22
+	flw	fa3, a0, 0 ! 22-22
+	fadd.s	fa0, fa0, fa3, rne ! 22-22
+	fdiv.s	fa0, fa2, fa0, rne ! 22-22
+	fsw	sp, fa1, 4 ! 0-0
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	min_caml_fabs
+	jal	min_caml_atan_min_caml_atan_kernel_atan.41
 	addi	sp, sp, -12
 	lw	ra, sp, 8
-	li	a0, min_caml_atan_l.106 ! 15
-	flw	fa1, a0, 0 ! 15
-	fsw	sp, fa0, 8 ! 0
-	sw	sp, ra, 16
-	addi	sp, sp, 20
-	jal	min_caml_fless
-	addi	sp, sp, -20
-	lw	ra, sp, 16
-	li	a1, 0 ! 15
-	bne	a0, a1, min_caml_atan_be_else.129
-	li	a0, min_caml_atan_l.108 ! 19
-	flw	fa0, a0, 0 ! 19
-	li	a0, min_caml_atan_l.110 ! 21
-	flw	fa1, a0, 0 ! 21
-	flw	fa2, sp, 8 ! 0
-	fsw	sp, fa0, 16 ! 0
-	fmv.s	fa0, fa2
-	sw	sp, ra, 24
-	addi	sp, sp, 28
-	jal	min_caml_fless
-	addi	sp, sp, -28
-	lw	ra, sp, 24
-	li	a1, 0 ! 21
-	bne	a0, a1, min_caml_atan_be_else.130
-	li	a0, min_caml_atan_l.117 ! 25
-	flw	fa0, a0, 0 ! 25
-	flw	fa1, sp, 16 ! 0
-	fdiv.s	fa0, fa1, fa0, rne ! 25
-	li	a0, min_caml_atan_l.114 ! 25
-	flw	fa1, a0, 0 ! 25
-	flw	fa2, sp, 8 ! 0
-	fdiv.s	fa1, fa1, fa2, rne ! 25
-	fsw	sp, fa0, 24 ! 0
-	fmv.s	fa0, fa1
-	sw	sp, ra, 32
-	addi	sp, sp, 36
-	jal	min_caml_atan_kernel_atan.45
-	addi	sp, sp, -36
-	lw	ra, sp, 32
-	flw	fa1, sp, 24 ! 0
-	fsub.s	fa0, fa1, fa0, rne ! 25
-	flw	fa1, sp, 0 ! 0
-	fsgnj.s	fa0, fa0, fa1
-	ret
-min_caml_atan_be_else.130:
-	li	a0, min_caml_atan_l.112 ! 22
-	flw	fa0, a0, 0 ! 22
-	flw	fa1, sp, 16 ! 0
-	fdiv.s	fa0, fa1, fa0, rne ! 22
-	li	a0, min_caml_atan_l.114 ! 22
-	flw	fa1, a0, 0 ! 22
-	flw	fa2, sp, 8 ! 0
-	fsub.s	fa1, fa2, fa1, rne ! 22
-	li	a0, min_caml_atan_l.114 ! 22
-	flw	fa3, a0, 0 ! 22
-	fadd.s	fa2, fa2, fa3, rne ! 22
-	fdiv.s	fa1, fa1, fa2, rne ! 22
-	fsw	sp, fa0, 32 ! 0
-	fmv.s	fa0, fa1
-	sw	sp, ra, 40
-	addi	sp, sp, 44
-	jal	min_caml_atan_kernel_atan.45
-	addi	sp, sp, -44
-	lw	ra, sp, 40
-	flw	fa1, sp, 32 ! 0
-	fadd.s	fa0, fa1, fa0, rne ! 22
-	flw	fa1, sp, 0 ! 0
-	fsgnj.s	fa0, fa0, fa1
-	ret
-min_caml_atan_be_else.129:
-	flw	fa0, sp, 8 ! 0
-	sw	sp, ra, 40
-	addi	sp, sp, 44
-	jal	min_caml_atan_kernel_atan.45
-	addi	sp, sp, -44
-	lw	ra, sp, 40
-	flw	fa1, sp, 0 ! 0
-	fsgnj.s	fa0, fa0, fa1
-	ret
+	flw	fa1, sp, 4 ! 0-0
+	fadd.s	fa0, fa1, fa0, rne ! 22-22
+	flw	fa1, sp, 0 ! 0-0
+	fsgnj.s	fa0, fa0, fa1 ! 23-23
+	ret ! 23-23
+min_caml_atan_beq_else.117:
+	li	a0, min_caml_atan_l.107 ! 25-25
+	flw	fa1, a0, 0 ! 25-25
+	li	a0, min_caml_atan_l.104 ! 25-25
+	flw	fa2, a0, 0 ! 25-25
+	fdiv.s	fa0, fa2, fa0, rne ! 25-25
+	fsw	sp, fa1, 8 ! 0-0
+	sw	sp, ra, 12
+	addi	sp, sp, 16
+	jal	min_caml_atan_min_caml_atan_kernel_atan.41
+	addi	sp, sp, -16
+	lw	ra, sp, 12
+	flw	fa1, sp, 8 ! 0-0
+	fsub.s	fa0, fa1, fa0, rne ! 25-25
+	flw	fa1, sp, 0 ! 0-0
+	fsgnj.s	fa0, fa0, fa1, rne ! 26-26
+	ret ! 26-26
 min_caml_print_char:
 	out	zero, a0, 0
 	ret

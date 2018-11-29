@@ -623,19 +623,21 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			frg[rd]=atanf(frg[rs1]);
 			cntodr[56]++;
 		}
+		//print_float
+		else if (imm==0b1101001){
+				rs1 = (command[*pc]>>15) & 0b11111;
+				printf("%.12f\n", frg[rs1]);
+				//printf("print_float:%1.2f\n",frg[rs1]);
+				*pc=*pc +1;
+				cntodr[57]++;
+			}
 		else{
+			printf("illegal instruction in line %d\n", *pc + 1);
+			printf("%s\n", int2bin(command[*pc]));
 			assert(0);
 		}
 	*pc=*pc+1;
 	}
-	//print_float
-	else if (opecode==0b1101011){
-			rs1 = (command[*pc]>>15) & 0b11111;
-			fwrite (&frg[rs1],sizeof(float),1,fpo);
-			//printf("print_float:%1.2f\n",frg[rs1]);
-			*pc=*pc +1;
-			cntodr[57]++;
-		}
 
 	//例外処理
 	else {

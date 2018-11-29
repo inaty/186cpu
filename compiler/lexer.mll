@@ -75,6 +75,10 @@ rule token = parse
     { IDENT(Id.gentmp Type.Unit) }
 | "Array.create" | "Array.make" | "create_array"
     { ARRAY_CREATE }
+| "fequal"
+    { FEQUAL }
+| "fless"
+    { FLESS }
 | '.'
     { DOT }
 | "<-"

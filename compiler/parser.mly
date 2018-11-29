@@ -31,6 +31,9 @@ let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 %token REC
 %token COMMA
 %token ARRAY_CREATE
+/* adhoc series */
+%token FEQUAL
+%token FLESS
 %token DOT
 %token LESS_MINUS
 %token SEMICOLON
@@ -141,6 +144,12 @@ exp:
 | ARRAY_CREATE simple_exp simple_exp
     %prec prec_app
     { Array($2, $3, pos ()) }
+| FEQUAL simple_exp simple_exp
+    %prec prec_app
+    { Eq($2, $3, pos ()) }
+| FLESS simple_exp simple_exp
+    %prec prec_app
+    { Not(LE($3, $2, pos ()), pos ()) }
 | error
     { let sp, ep = pos () in
       let open Lexing in
