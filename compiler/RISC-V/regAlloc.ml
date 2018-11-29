@@ -1,32 +1,36 @@
 open Asm
 
-let rec target' src (dest, t) (inst, pos) =
-  match inst with
-  | Mov(x) when x = src && is_reg dest ->
+(* srcは割り当て元 *)
+let rec target' src (dest, t) = function
+  | Mv(x, _) when x = src && is_reg dest ->
       assert (t <> Type.Unit);
       assert (t <> Type.Float);
       false, [dest]
-  | FMv(x) when x = src && is_reg dest ->
+  | FMv(x, _) when x = src && is_reg dest ->
       assert (t = Type.Float);
       false, [dest]
-  | IfEq(_, _, e1, e2) | IfLE(_, _, e1, e2)
-  | IfFEq(_, _, e1, e2) | IfFLE(_, _, e1, e2) ->
-  (* | IfGE(_, _, e1, e2) *)
+  | IfEq(_, _, e1, e2, _) | IfLE(_, _, e1, e2, _)
+  | IfFEq(_, _, e1, e2, _) | IfFLE(_, _, e1, e2, _) ->
       let c1, rs1 = target src (dest, t) e1 in
       let c2, rs2 = target src (dest, t) e2 in
       c1 && c2, rs1 @ rs2
-  | CallCls(x, ys, zs) ->
+  | CallCls(x, ys, zs, _) ->
       true, (target_args src regs 0 ys @
              target_args src fregs 0 zs @
-             if x = src then [reg_cl] else [])
-  | CallDir(_, ys, zs) ->
+             if x = src then [reg_cl] else []) (* TODO:ここわからん *)
+  | CallDir(_, ys, zs, _) ->
       true, (target_args src regs 0 ys @
              target_args src fregs 0 zs)
   | _ -> false, []
+(*
+(c, prefer)を返す
+cはCallがあったかどうか
+preferは割り当てるレジスタとして好ましいレジスタ
+ *)
 and target src dest = function
-  | Ans(inst) -> target' src dest inst
-  | Let(xt, inst, e) ->
-      let c1, rs1 = target' src xt inst in
+  | Ans(exp) -> target' src dest exp
+  | Let(xt, exp, e) ->
+      let c1, rs1 = target' src xt exp in
       if c1 then true, rs1 else
       let c2, rs2 = target src dest e in
       c2, rs1 @ rs2
@@ -95,7 +99,9 @@ let find' x' regenv =
   | c -> c
 
 (*
-dest : Id.t * Type.t -> cont : Asm.t -> regenv : ? M.t -> Asm.t
+dest : Id.t * Type.t
+cont : Asm.t
+regenv : ? M.t -> Asm.t
 -> Asm.t * ? M.t
 Asm.t(命令列)に対するレジスタ割り当て
 *)
@@ -115,9 +121,9 @@ let rec g dest cont regenv = function
           let (e2', regenv2) = g dest cont (add x r (M.remove y regenv1)) e in
           (* yのsaveを発行する *)
           let save =
-            try (Save(M.find y regenv, y), Lexing.dummy_pos)
+            try Save(M.find y regenv, y, dp)
             (* ここに来る条件はわからない *)
-            with Not_found -> (Nop, Lexing.dummy_pos) in
+            with Not_found -> Nop(dp) in
           (seq(save, concat e1' (r, t) e2'), regenv2)
       | Alloc(r) -> (* レジスタrが見つかったら素直にxをrに入れる *)
           let (e2', regenv2) = g dest cont (add x r regenv1) e in
@@ -126,97 +132,93 @@ let rec g dest cont regenv = function
 and g'_and_restore dest cont regenv exp =
   try g' dest cont regenv exp
   with NoReg(x, t) ->
-    g dest cont regenv (Let((x, t), (Restore(x), Lexing.dummy_pos), Ans(exp)))
+    g dest cont regenv (Let((x, t), Restore(x, dp), Ans(exp)))
 (*
 Asm.expに対するレジスタ割り当て
 regenvとして変数名→レジスタの対応があるので、それを適用するというだけ
 *)
 (* TODO:分岐の際に必ずnopが発生しているがこれはいらない（emitかもしれない） *)
 (* TODO:即値ifに関するものは消していい *)
-and g' dest cont regenv (inst, sp) =
-  match inst with
-  | Nop | Set _ | SetL _ | Restore _ -> (Ans(inst, sp), regenv)
-  | Mov(x) -> (Ans(Mov(find x Type.Int regenv), sp), regenv)
-  | Neg(x) -> (Ans(Neg(find x Type.Int regenv), sp), regenv)
-  | Add(x, y') ->
-      (Ans(Add(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | Sub(x, y') ->
-      (Ans(Sub(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | Mul(x, y') ->
-      (Ans(Mul(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | Div(x, y') ->
-      (Ans(Div(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | SLL(x, y') ->
-      (Ans(SLL(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | SRL(x, y') ->
-      (Ans(SRL(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | Ld(x, y') ->
-      (Ans(Ld(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | St(x, y, z') ->
-      (Ans(St(find x Type.Int regenv,
+and g' dest cont regenv = function
+  | Nop(_) | Li(_) | LiL(_) | Restore(_) as exp -> (Ans(exp), regenv)
+  | Mv(x, p) -> (Ans(Mv(find x Type.Int regenv, p)), regenv)
+  | Neg(x, p) -> (Ans(Neg(find x Type.Int regenv, p)), regenv)
+  | Add(x, y', p) ->
+      (Ans(Add(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | Sub(x, y', p) ->
+      (Ans(Sub(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | Mul(x, y', p) ->
+      (Ans(Mul(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | Div(x, y', p) ->
+      (Ans(Div(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | SLL(x, y', p) ->
+      (Ans(SLL(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | SRL(x, y', p) ->
+      (Ans(SRL(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | Lw(x, y', p) ->
+      (Ans(Lw(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | Sw(x, y, z', p) ->
+      (Ans(Sw(find x Type.Int regenv,
               find y Type.Int regenv,
-              find' z' regenv), sp), regenv)
-  | FMv(x) -> (Ans(FMv(find x Type.Float regenv), sp), regenv)
-  | FNeg(x) -> (Ans(FNeg(find x Type.Float regenv), sp), regenv)
-  | FAdd(x, y) ->
-    (Ans(FAdd(find x Type.Float regenv, find y Type.Float regenv), sp), regenv)
-  | FSub(x, y) ->
-    (Ans(FSub(find x Type.Float regenv, find y Type.Float regenv), sp), regenv)
-  | FMul(x, y) ->
-    (Ans(FMul(find x Type.Float regenv, find y Type.Float regenv), sp), regenv)
-  | FDiv(x, y) ->
-    (Ans(FDiv(find x Type.Float regenv, find y Type.Float regenv), sp), regenv)
-  | LdDF(x, y') ->
-      (Ans(LdDF(find x Type.Int regenv, find' y' regenv), sp), regenv)
-  | StDF(x, y, z') ->
-      (Ans(StDF(find x Type.Float regenv,
-                find y Type.Int regenv,
-                find' z' regenv), sp), regenv)
-  (* y'が即値である可能性がなくなったので、そこを削除 *)
-  | IfEq(x, y, e1, e2) as inst ->
+              find' z' regenv, p)), regenv)
+  | FMv(x, p) -> (Ans(FMv(find x Type.Float regenv, p)), regenv)
+  | FNeg(x, p) -> (Ans(FNeg(find x Type.Float regenv, p)), regenv)
+  | FAdd(x, y, p) ->
+    (Ans(FAdd(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)
+  | FSub(x, y, p) ->
+    (Ans(FSub(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)
+  | FMul(x, y, p) ->
+    (Ans(FMul(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)
+  | FDiv(x, y, p) ->
+    (Ans(FDiv(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)
+  | FLw(x, y', p) ->
+      (Ans(FLw(find x Type.Int regenv, find' y' regenv, p)), regenv)
+  | FSw(x, y, z', p) ->
+      (Ans(FSw(find x Type.Int regenv,
+               find y Type.Float regenv,
+               find' z' regenv, p)), regenv)
+  | IfEq(x, y, e1, e2, p) as exp ->
       let constr e1' e2' =
-        IfEq(find x Type.Int regenv, find y Type.Int regenv, e1', e2') in
-      g'_if dest cont regenv inst constr e1 e2
-  | IfLE(x, y, e1, e2) as inst ->
+        IfEq(find x Type.Int regenv, find y Type.Int regenv, e1', e2', p) in
+      g'_if dest cont regenv exp constr e1 e2
+  | IfLE(x, y, e1, e2, p) as exp ->
       let constr e1' e2' =
-        IfLE(find x Type.Int regenv, find y Type.Int regenv, e1', e2') in
-      g'_if dest cont regenv inst constr e1 e2
-  (* | IfGE(x, y, e1, e2) as inst ->
+        IfLE(find x Type.Int regenv, find y Type.Int regenv, e1', e2', p) in
+      g'_if dest cont regenv exp constr e1 e2
+  | IfFEq(x, y, e1, e2, p) as exp ->
       let constr e1' e2' =
-        IfGE(find x Type.Int regenv, find y Type.Int regenv, e1', e2') in
-      g'_if dest cont regenv inst constr e1 e2 *)
-  | IfFEq(x, y, e1, e2) as inst ->
+        IfFEq(find x Type.Float regenv, find y Type.Float regenv,
+              e1', e2', p) in
+      g'_if dest cont regenv exp constr e1 e2
+  | IfFLE(x, y, e1, e2, p) as exp ->
       let constr e1' e2' =
-        IfFEq(find x Type.Float regenv, find y Type.Float regenv, e1', e2') in
-      g'_if dest cont regenv inst constr e1 e2
-  | IfFLE(x, y, e1, e2) as inst ->
-      let constr e1' e2' =
-        IfFLE(find x Type.Float regenv, find y Type.Float regenv, e1', e2') in
-      g'_if dest cont regenv inst constr e1 e2
-  | CallCls(x, ys, zs) as inst ->
-      if List.length ys > Array.length regs - 2 || List.length zs > Array.length fregs - 1 then
-        failwith (Format.sprintf
-                    "cannot allocate registers for arugments to %s"
-                    x)
-      else
-        g'_call
-          dest
-          cont
-          regenv
-          inst
-          (fun ys zs -> CallCls(find x Type.Int regenv, ys, zs))
-          ys
-          zs
-  | CallDir(Id.L(x), ys, zs) as inst ->
-      if List.length ys > Array.length regs - 1 || List.length zs > Array.length fregs - 1 then
+        IfFLE(find x Type.Float regenv, find y Type.Float regenv,
+              e1', e2', p) in
+      g'_if dest cont regenv exp constr e1 e2
+  | CallCls(x, ys, zs, p) as exp ->
+      let toomany =
+        List.length ys > Array.length regs - 2
+        || List.length zs > Array.length fregs - 1 in
+      if toomany then
         failwith
           (Format.sprintf "cannot allocate registers for arugments to %s" x)
       else
-        g'_call dest cont regenv inst (fun ys zs -> CallDir(Id.L(x), ys, zs)) ys zs
-  | Save(x, y) -> assert false
+        let constr ys zs = CallCls(find x Type.Int regenv, ys, zs, p) in
+        g'_call dest cont regenv exp constr ys zs
+  | CallDir(Id.L(x), ys, zs, p) as exp ->
+      let toomany =
+        List.length ys > Array.length regs - 1
+        || List.length zs > Array.length fregs - 1 in
+      if toomany then
+        failwith
+          (Format.sprintf "cannot allocate registers for arugments to %s" x)
+      else
+        let constr ys zs = CallDir(Id.L(x), ys, zs, p) in
+        g'_call dest cont regenv exp constr ys zs
+  | Save(x, y, p) -> failwith "regalloc.h"
 (* ifにレジスタを割り当てる *)
 (* inst捨ててる？ *)
-and g'_if dest cont regenv inst constr e1 e2 =
+and g'_if dest cont regenv exp constr e1 e2 =
   (* 分岐先2つにレジスタを割り当てる *)
   let (e1', regenv1) = g dest cont regenv e1 in
   let (e2', regenv2) = g dest cont regenv e2 in
@@ -235,12 +237,10 @@ and g'_if dest cont regenv inst constr e1 e2 =
       (fv cont) in
   (* 共通していない変数は退避する *)
   (List.fold_left
-     (fun insts x ->
-       if x = fst dest || not (M.mem x regenv) || M.mem x regenv' then
-         insts
-       else
-         seq((Save(M.find x regenv, x), Lexing.dummy_pos), insts))
-     (Ans(constr e1' e2', Lexing.dummy_pos))
+     (fun e x ->
+       if x = fst dest || not (M.mem x regenv) || M.mem x regenv' then e
+       else seq(Save(M.find x regenv, x, dp), e))
+     (Ans(constr e1' e2'))
      (fv cont),
    regenv')
 (* inst捨ててる？ *)
@@ -250,58 +250,44 @@ and g'_call dest cont regenv inst constr ys zs =
        (* dest使っているところ *)
        (* 関数呼出しとかの移動先のことか？ *)
        if x = fst dest || not (M.mem x regenv) then e else
-       seq((Save(M.find x regenv, x), Lexing.dummy_pos), e))
-    (Ans((constr
-            (List.map (fun y -> find y Type.Int regenv) ys)
-            (List.map (fun z -> find z Type.Float regenv) zs)),
-          Lexing.dummy_pos))
+       seq(Save(M.find x regenv, x, dp), e))
+     (Ans(constr
+           (List.map (fun y -> find y Type.Int regenv) ys)
+           (List.map (fun z -> find z Type.Float regenv) zs)))
      (fv cont)),
    M.empty)
 
-(* 関数→レジスタ割り当てされた関数 *)
-let h { name = Id.L(x); args = ys; fargs = zs; body = insts; ret = t } =
-  (* regenv(Id.tとstring(レジスタ)を対応させたM)を大きくしていく *)
-  (* 関数名とreg_clとの対応を追加 *)
+let h { name = Id.L(x); args = ys; fargs = zs; body = e; ret = t } =
   let regenv = M.add x reg_cl M.empty in
-  (* 整数引数とレジスタとの対応を追加 *)
   let (i, arg_regs, regenv) =
     List.fold_left
       (fun (i, arg_regs, regenv) y ->
-        (* 自由レジスタの先頭から取っていく *)
         let r = regs.(i) in
         (i + 1,
          arg_regs @ [r],
-         (assert (not (is_reg y)); (* なんのassertかわからん *)
-          M.add y r regenv)))
+         (assert (not (is_reg y)); M.add y r regenv)))
       (0, [], regenv)
       ys in
-  (* 浮動小数点数引数とレジスタとの対応を追加 *)
   let (d, farg_regs, regenv) =
     List.fold_left
       (fun (d, farg_regs, regenv) z ->
         let fr = fregs.(d) in
         (d + 1,
          farg_regs @ [fr],
-         (assert (not (is_reg z)); (* なんのassertかわからん *)
-          M.add z fr regenv)))
+         (assert (not (is_reg z)); M.add z fr regenv)))
       (0, [], regenv)
       zs in
-  (* 返り値レジスタ *)
   let a =
     match t with
     | Type.Unit -> Id.gentmp Type.Unit
     | Type.Float -> fregs.(0)
     | _ -> regs.(0) in
-  let (insts', regenv') = g (a, t) (Ans(Mov(a), Lexing.dummy_pos)) regenv insts in
-  { name = Id.L(x); args = arg_regs; fargs = farg_regs;
-    body = insts'; ret = t }
+  let (e', regenv') = g (a, t) (Ans(Mv(a, dp))) regenv e in
+  { name = Id.L(x); args = arg_regs; fargs = farg_regs; body = e'; ret = t }
 
-(* プログラム→レジスタ割り当てされたプログラム *)
-let f (Prog(float_table, fundefs, insts)) =
+let f (Prog(float_table, fundefs, e)) =
   Format.eprintf "register allocation: may take some time (up to a few minutes, depending on the size of functions)@.";
-  (* 関数定義にレジスタを割り当てる *)
   let fundefs' = List.map h fundefs in
-  (* 命令列にレジスタを割り当てる *)
-  let insts', regenv' =
-    g (Id.gentmp Type.Unit, Type.Unit) (Ans(Nop, Lexing.dummy_pos)) M.empty insts in
-  Prog(float_table, fundefs', insts')
+  let e', regenv' =
+    g (Id.gentmp Type.Unit, Type.Unit) (Ans(Nop(Asm.dp))) M.empty e in
+  Prog(float_table, fundefs', e')

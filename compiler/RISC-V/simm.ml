@@ -1,6 +1,6 @@
 open Asm
 
-let power_of_two n = ((n land (n - 1)) = 0)
+let power_of_two n = (n > 0) && ((n land (n - 1)) = 0)
 
 let log2 n =
   let rec loop b i =
@@ -8,51 +8,41 @@ let log2 n =
   loop 1 0
 
 (* 命令列に対する12bit即値最適化 *)
-(* レジスタの中身が12bitまでの即値だった場合はそこをC(i)にする *)
-let rec g imms insts =
-  match insts with
-  | Ans(inst_pos) -> Ans(g' imms inst_pos)
-  | Let((x, t), (Set(i), sp), insts) when ~-2048 <= i && i < 2048 ->
-      let insts' = g (M.add x i imms) insts in
-      (* それでもxが残ってたら代入を残す、xが消えてたら代入は消す *)
-      if List.mem x (fv insts') then
-        Let((x, t), (Set(i), sp), insts')
-      else
-        insts'
-  | Let(xt, (SLL(y, C(i)), sp), e) when M.mem y imms -> (* for array access *)
-      g imms (Let(xt, (Set((M.find y imms) lsl i), sp), e))
-  | Let(xt, inst, e) -> Let(xt, g' imms inst, g imms e)
+let rec g imms = function
+  | Ans(exp) -> Ans(g' imms exp)
+  | Let((x, t), Li(i, p), e) when ~-2048 <= i && i < 2048 ->
+      let e' = g (M.add x i imms) e in
+      if List.mem x (fv e') then Let((x, t), Li(i, p), e') else e'
+  | Let(xt, SLL(y, C(i), p), e) when M.mem y imms -> (* for array access *)
+      g imms (Let(xt, Li((M.find y imms) lsl i, p), e))
+  | Let(xt, exp, e) -> Let(xt, g' imms exp, g imms e)
 (* 命令に対する12bit即値最適化 *)
-and g' imms (inst, pos) =
-  let inst =
-    match inst with
-    | Add(x, V(y)) when M.mem y imms -> Add(x, C(M.find y imms))
-    | Add(x, V(y)) when M.mem x imms -> Add(y, C(M.find x imms))
-    (* Sub, xでも何らかの処理ができそう *)
-    | Sub(x, V(y)) when M.mem y imms -> Sub(x, C(M.find y imms))
-    | Mul(x, V(y)) when M.mem y imms ->
-        let i = M.find y imms in
-        if power_of_two i then SLL(x, C(log2 i)) else inst
-    | Div(x, V(y)) when M.mem y imms ->
-        let i = M.find y imms in
-        if power_of_two i then SRL(x, C(log2 i)) else inst
-    (* 本当は桁数チェックしないとまずいが多分大丈夫 *)
-    | SLL(x, V(y)) when M.mem y imms -> SLL(x, C(M.find y imms))
-    | Ld(x, V(y)) when M.mem y imms -> Ld(x, C(M.find y imms))
-    | St(x, y, V(z)) when M.mem z imms -> St(x, y, C(M.find z imms))
-    | LdDF(x, V(y)) when M.mem y imms -> LdDF(x, C(M.find y imms))
-    | StDF(x, y, V(z)) when M.mem z imms -> StDF(x, y, C(M.find z imms))
-    (* 分岐系の命令への即値反映を全部削除 *)
-    | IfEq(x, y', e1, e2) -> IfEq(x, y', g imms e1, g imms e2)
-    | IfLE(x, y', e1, e2) -> IfLE(x, y', g imms e1, g imms e2)
-    (* | IfGE(x, y', e1, e2) -> IfGE(x, y', g imms e1, g imms e2) *)
-    | IfFEq(x, y, e1, e2) -> IfFEq(x, y, g imms e1, g imms e2)
-    | IfFLE(x, y, e1, e2) -> IfFLE(x, y, g imms e1, g imms e2)
-    | inst -> inst in
-  (inst, pos)
+and g' imms = function
+  | Add(x, V(y), p) when M.mem y imms -> Add(x, C(M.find y imms), p)
+  | Add(x, V(y), p) when M.mem x imms -> Add(y, C(M.find x imms), p)
+  | Sub(x, V(y), p) when M.mem y imms && M.find y imms <> ~-2048 ->
+      Add(x, C(~-(M.find y imms)), p)
+  (* 12bitに収まらないけど2の累乗な即値 には対応できない *)
+  | Mul(x, V(y), p) when M.mem y imms && power_of_two (M.find y imms) ->
+      SLL(x, C(log2 (M.find y imms)), p)
+  | Mul(x, V(y), p) when M.mem x imms && power_of_two (M.find x imms) ->
+      SLL(y, C(log2 (M.find x imms)), p)
+  | Div(x, V(y), p) when M.mem y imms && power_of_two (M.find y imms) ->
+      SRL(x, C(log2 (M.find y imms)), p)
+  | SLL(x, V(y), p) when M.mem y imms && (M.find y imms) < 32 ->
+      SLL(x, C(M.find y imms), p)
+  | Lw(x, V(y), p) when M.mem y imms -> Lw(x, C(M.find y imms), p)
+  | Sw(x, y, V(z), p) when M.mem z imms -> Sw(x, y, C(M.find z imms), p)
+  | FLw(x, V(y), p) when M.mem y imms -> FLw(x, C(M.find y imms), p)
+  | FSw(x, y, V(z), p) when M.mem z imms -> FSw(x, y, C(M.find z imms), p)
+  | IfEq(x, y, e1, e2, p) -> IfEq(x, y, g imms e1, g imms e2, p)
+  | IfLE(x, y, e1, e2, p) -> IfLE(x, y, g imms e1, g imms e2, p)
+  | IfFEq(x, y, e1, e2, p) -> IfFEq(x, y, g imms e1, g imms e2, p)
+  | IfFLE(x, y, e1, e2, p) -> IfFLE(x, y, g imms e1, g imms e2, p)
+  | exp -> exp
 
-let h {name = l; args = xs; fargs = ys; body = insts; ret = t} =
-  {name = l; args = xs; fargs = ys; body = g M.empty insts; ret = t}
+let h {name = l; args = xs; fargs = ys; body = e; ret = t} =
+  {name = l; args = xs; fargs = ys; body = g M.empty e; ret = t}
 
-let f (Prog(float_table, fundefs, insts)) =
-  Prog(float_table, List.map h fundefs, g M.empty insts)
+let f (Prog(float_table, fundefs, e)) =
+  Prog(float_table, List.map h fundefs, g M.empty e)
