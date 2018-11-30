@@ -30,6 +30,8 @@ let rec g env = function
       Int(findi x env / findi y env, p)
   | FAbs(x, p) when memf x env -> Float(abs_float (findf x env), p)
   | FNeg(x, p) when memf x env -> Float(-.(findf x env), p)
+  | FSqrt(x, p) when memf x env -> Float(sqrt (findf x env), p)
+  | FFloor(x, p) when memf x env -> Float(floor (findf x env), p)
   | FAdd(x, y, p) when memf x env && memf y env ->
       Float(findf x env +. findf y env, p)
   | FSub(x, y, p) when memf x env && memf y env ->
@@ -38,6 +40,8 @@ let rec g env = function
       Float(findf x env *. findf y env, p)
   | FDiv(x, y, p) when memf x env && memf y env ->
       Float(findf x env /. findf y env, p)
+  | FtoI(x, p) when memf x env -> Int(int_of_float (findf x env), p)
+  | ItoF(x, p) when memi x env -> Float(float_of_int (findi x env), p)
   | IfEq(x, y, e1, e2, _) when memi x env && memi y env ->
       if findi x env = findi y env then g env e1 else g env e2
   | IfEq(x, y, e1, e2, _) when memf x env && memf y env ->

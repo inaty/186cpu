@@ -30,10 +30,14 @@ let rec deref_term = function
   | LE(e1, e2, p) -> LE(deref_term e1, deref_term e2, p)
   | FAbs(e, p) -> FAbs(deref_term e, p)
   | FNeg(e, p) -> FNeg(deref_term e, p)
+  | FSqrt(e, p) -> FSqrt(deref_term e, p)
+  | FFloor(e, p) -> FFloor(deref_term e, p)
   | FAdd(e1, e2, p) -> FAdd(deref_term e1, deref_term e2, p)
   | FSub(e1, e2, p) -> FSub(deref_term e1, deref_term e2, p)
   | FMul(e1, e2, p) -> FMul(deref_term e1, deref_term e2, p)
   | FDiv(e1, e2, p) -> FDiv(deref_term e1, deref_term e2, p)
+  | FtoI(e, p) -> FtoI(deref_term e, p)
+  | ItoF(e, p) -> ItoF(deref_term e, p)
   | If(e1, e2, e3, p) -> If(deref_term e1, deref_term e2, deref_term e3, p)
   | Let(xt, e1, e2, p) -> Let(deref_id_typ xt, deref_term e1, deref_term e2, p)
   | LetRec({ name = xt; args = yts; body = e1 }, e2, p) ->
@@ -107,12 +111,18 @@ let rec g env e =
         unify Type.Int (g env e1) e1;
         unify Type.Int (g env e2) e2;
         Type.Int
-    | FAbs(e, p) | FNeg(e, p) ->
+    | FAbs(e, p) | FNeg(e, p) | FSqrt(e, p) | FFloor(e, p) ->
         unify Type.Float (g env e) e;
         Type.Float
     | FAdd(e1, e2, p) | FSub(e1, e2, p) | FMul(e1, e2, p) | FDiv(e1, e2, p) ->
         unify Type.Float (g env e1) e1;
         unify Type.Float (g env e2) e2;
+        Type.Float
+    | FtoI(e, p) ->
+        unify Type.Float (g env e) e;
+        Type.Int
+    | ItoF(e, p) ->
+        unify Type.Int (g env e) e;
         Type.Float
     | Eq(e1, e2, p) | LE(e1, e2, p) ->
         unify (g env e1) (g env e2) e2;

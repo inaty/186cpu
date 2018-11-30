@@ -12,10 +12,14 @@ type t =
   | Div of Id.t * Id.t * p
   | FAbs of Id.t * p
   | FNeg of Id.t * p
+  | FSqrt of Id.t * p
+  | FFloor of Id.t * p
   | FAdd of Id.t * Id.t * p
   | FSub of Id.t * Id.t * p
   | FMul of Id.t * Id.t * p
   | FDiv of Id.t * Id.t * p
+  | FtoI of Id.t * p
+  | ItoF of Id.t * p
   | IfEq of Id.t * Id.t * t * t * p
   | IfLE of Id.t * Id.t * t * t * p
   | Let of (Id.t * Type.t) * t * t * p
@@ -34,7 +38,9 @@ let dp = (Lexing.dummy_pos, Lexing.dummy_pos)
 
 let rec fv = function
   | Unit(_) | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x, _) | FAbs(x, _) | FNeg(x, _) -> S.singleton x
+  | Neg(x, _) | FAbs(x, _) | FNeg(x, _) | FSqrt(x, _) | FFloor(x, _)
+  | FtoI(x, _) | ItoF(x, _) ->
+      S.singleton x
   | Add(x, y, _) | Sub(x, y, _) | Mul(x, y, _) | Div(x, y, _)
   | FAdd(x, y, _) | FSub(x, y, _) | FMul(x, y, _) | FDiv(x, y, _)
   | Get(x, y, _) ->
@@ -96,6 +102,12 @@ let rec g env = function
   | Syntax.FNeg(e, p) ->
       insert_let (g env e)
         (fun x -> (FNeg(x, p), Type.Float))
+  | Syntax.FSqrt(e, p) ->
+      insert_let (g env e)
+        (fun x -> (FSqrt(x, p), Type.Float))
+  | Syntax.FFloor(e, p) ->
+      insert_let (g env e)
+        (fun x -> (FFloor(x, p), Type.Float))
   | Syntax.FAdd(e1, e2, p) ->
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
@@ -112,6 +124,12 @@ let rec g env = function
       insert_let (g env e1)
         (fun x -> insert_let (g env e2)
             (fun y -> (FDiv(x, y, p), Type.Float)))
+  | Syntax.FtoI(e, p) ->
+      insert_let (g env e)
+        (fun x -> (FtoI(x, p), Type.Int))
+  | Syntax.ItoF(e, p) ->
+      insert_let (g env e)
+        (fun x -> (ItoF(x, p), Type.Float))
   | Syntax.Eq _ | Syntax.LE _ as cmp ->
       let p = Syntax.position_of_syntax cmp in
       g env (Syntax.If(cmp, Syntax.Bool(true, p), Syntax.Bool(false, p), p))
@@ -245,12 +263,16 @@ let rec print_kNormal_sub exp indent =
   | Sub(var1, var2, _) -> eprintf "SUB %s %s\n" var1 var2;
   | Mul(var1, var2, _) -> eprintf "MUL %s %s\n" var1 var2;
   | Div(var1, var2, _) -> eprintf "DIV %s %s\n" var1 var2;
-  | FAbs(x, _) -> eprintf "FNEG %s\n" x
+  | FAbs(x, _) -> eprintf "FABS %s\n" x
   | FNeg(var, _) -> eprintf "FNEG %s\n" var
+  | FSqrt(x, _) -> eprintf "FSQRT %s\n" x
+  | FFloor(x, _) -> eprintf "FFLOOR %s\n" x
   | FAdd(var1, var2, _) -> eprintf "FADD %s %s\n" var1 var2;
   | FSub(var1, var2, _) -> eprintf "FSUB %s %s\n" var1 var2;
   | FMul(var1, var2, _) -> eprintf "FMUL %s %s\n" var1 var2;
   | FDiv(var1, var2, _) -> eprintf "FDIV %s %s\n" var1 var2;
+  | FtoI(x, _) -> eprintf "FTOI %s\n" x
+  | ItoF(x, _) -> eprintf "ITOF %s\n" x
   | IfEq(var1, var2, exp1, exp2, _) ->
       eprintf "IFEQ %s %s\n" var1 var2;
       print_kNormal_sub exp1 (indent + 2);

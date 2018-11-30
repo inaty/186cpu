@@ -41,6 +41,10 @@ let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 %token FSQR
 %token FABS
 %token FNEG
+%token SQRT
+%token FLOOR
+%token INT_OF_FLOAT
+%token FLOAT_OF_INT
 /* adhoc series end */
 %token DOT
 %token LESS_MINUS
@@ -181,6 +185,18 @@ exp:
 | FNEG simple_exp
     %prec prec_app
     { FNeg($2, pos ()) }
+| SQRT simple_exp
+    %prec prec_app
+    { FSqrt($2, pos ()) }
+| FLOOR simple_exp
+    %prec prec_app
+    { FFloor($2, pos ()) }
+| INT_OF_FLOAT simple_exp
+    %prec prec_app
+    { FtoI($2, pos ()) }
+| FLOAT_OF_INT simple_exp
+    %prec prec_app
+    { ItoF($2, pos ()) }
 | error
     { let sp, ep = pos () in
       let open Lexing in

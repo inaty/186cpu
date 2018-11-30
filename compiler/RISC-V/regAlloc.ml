@@ -164,6 +164,8 @@ and g' dest cont regenv = function
   | FMv(x, p) -> (Ans(FMv(find x Type.Float regenv, p)), regenv)
   | FAbs(x, p) -> (Ans(FAbs(find x Type.Float regenv, p)), regenv)
   | FNeg(x, p) -> (Ans(FNeg(find x Type.Float regenv, p)), regenv)
+  | FSqrt(x, p) -> (Ans(FSqrt(find x Type.Float regenv, p)), regenv)
+  | FFloor(x, p) -> (Ans(FFloor(find x Type.Float regenv, p)), regenv)
   | FAdd(x, y, p) ->
     (Ans(FAdd(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)
   | FSub(x, y, p) ->
@@ -172,6 +174,8 @@ and g' dest cont regenv = function
     (Ans(FMul(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)
   | FDiv(x, y, p) ->
     (Ans(FDiv(find x Type.Float regenv, find y Type.Float regenv, p)), regenv)
+  | FtoI(x, p) -> (Ans(FtoI(find x Type.Float regenv, p)), regenv)
+  | ItoF(x, p) -> (Ans(ItoF(find x Type.Int regenv, p)), regenv)
   | FLw(x, y', p) ->
       (Ans(FLw(find x Type.Int regenv, find' y' regenv, p)), regenv)
   | FSw(x, y, z', p) ->

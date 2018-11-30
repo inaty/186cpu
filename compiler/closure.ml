@@ -13,10 +13,14 @@ type t =
   | Div of Id.t * Id.t * p
   | FAbs of Id.t * p
   | FNeg of Id.t * p
+  | FSqrt of Id.t * p
+  | FFloor of Id.t * p
   | FAdd of Id.t * Id.t * p
   | FSub of Id.t * Id.t * p
   | FMul of Id.t * Id.t * p
   | FDiv of Id.t * Id.t * p
+  | FtoI of Id.t * p
+  | ItoF of Id.t * p
   | IfEq of Id.t * Id.t * t * t * p
   | IfLE of Id.t * Id.t * t * t * p
   | Let of (Id.t * Type.t) * t * t * p
@@ -37,7 +41,9 @@ type prog = Prog of fundef list * t
 
 let rec fv = function
   | Unit(_) | Int(_) | Float(_) | ExtArray(_) -> S.empty
-  | Neg(x, _) | FAbs(x, _) | FNeg(x, _) -> S.singleton x
+  | Neg(x, _) | FAbs(x, _) | FNeg(x, _) | FSqrt(x, _) | FFloor(x, _)
+  | FtoI(x, _) | ItoF(x, _)
+      -> S.singleton x
   | Add(x, y, _) | Sub(x, y, _) | Mul(x, y, _) | Div(x, y, _) | FAdd(x, y, _)
   | FSub(x, y, _) | FMul(x, y, _) | FDiv(x, y, _) | Get(x, y, _) ->
       S.of_list [x; y]
@@ -70,10 +76,14 @@ let rec g env known = function
   | KNormal.Div(x, y, p) -> Div(x, y, p)
   | KNormal.FAbs(x, p) -> FAbs(x, p)
   | KNormal.FNeg(x, p) -> FNeg(x, p)
+  | KNormal.FSqrt(x, p) -> FSqrt(x, p)
+  | KNormal.FFloor(x, p) -> FFloor(x, p)
   | KNormal.FAdd(x, y, p) -> FAdd(x, y, p)
   | KNormal.FSub(x, y, p) -> FSub(x, y, p)
   | KNormal.FMul(x, y, p) -> FMul(x, y, p)
   | KNormal.FDiv(x, y, p) -> FDiv(x, y, p)
+  | KNormal.FtoI(x, p) -> FtoI(x, p)
+  | KNormal.ItoF(x, p) -> ItoF(x, p)
   | KNormal.IfEq(x, y, e1, e2, p) ->
       IfEq(x, y, g env known e1, g env known e2, p)
   | KNormal.IfLE(x, y, e1, e2, p) ->
@@ -155,12 +165,16 @@ let rec print_closure_t_sub exp indent =
   | Sub(var1, var2, _) -> eprintf "SUB %s %s\n" var1 var2;
   | Mul(var1, var2, _) -> eprintf "MUL %s %s\n" var1 var2;
   | Div(var1, var2, _) -> eprintf "DIV %s %s\n" var1 var2;
-  | FAbs(x, _) -> eprintf "FNEG %s\n" x
+  | FAbs(x, _) -> eprintf "FABS %s\n" x
   | FNeg(var, _) -> eprintf "FNEG %s\n" var
+  | FSqrt(x, _) -> eprintf "FSQRT %s\n" x
+  | FFloor(x, _) -> eprintf "FFLOOR %s\n" x
   | FAdd(var1, var2, _) -> eprintf "FADD %s %s\n" var1 var2;
   | FSub(var1, var2, _) -> eprintf "FSUB %s %s\n" var1 var2;
   | FMul(var1, var2, _) -> eprintf "FMUL %s %s\n" var1 var2;
   | FDiv(var1, var2, _) -> eprintf "FDIV %s %s\n" var1 var2;
+  | FtoI(x, _) -> eprintf "FTOI %s\n" x
+  | ItoF(x, _) -> eprintf "ITOF %s\n" x
   | IfEq(var1, var2, exp1, exp2, _) ->
       eprintf "IFEQ %s %s\n" var1 var2;
       print_closure_t_sub exp1 (indent + 2);

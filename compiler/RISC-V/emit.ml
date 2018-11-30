@@ -33,8 +33,9 @@ let p_of_exp = function
   | Nop(p) | Li(_, p) | LiL(_, p) | Mv(_, p) | Neg(_, p) | Add(_, _, p)
   | Sub(_, _, p) | Mul(_, _, p) | Div(_, _, p) | SLL(_, _, p)
   | SRL(_, _, p) | Lw(_, _, p) | Sw(_, _, _, p) | FMv(_, p)
-  | FAbs(_, p) | FNeg(_, p)
+  | FAbs(_, p) | FNeg(_, p) | FSqrt(_, p) | FFloor(_, p)
   | FAdd(_, _, p) | FSub(_, _, p) | FMul(_, _, p) | FDiv(_, _, p)
+  | FtoI(_, p) | ItoF(_, p)
   | FLw(_, _, p) | FSw(_, _, _, p) | IfEq(_, _, _, _, p) | IfLE(_, _, _, _, p)
   | IfFEq(_, _, _, _, p) | IfFLE(_, _, _, _, p) | CallCls(_, _, _, p)
   | CallDir(_, _, _, p) | Save(_, _, p) | Restore(_, p) -> p
@@ -100,13 +101,13 @@ and g' oc (dest, exp) =
   | NonTail(rd), Lw(rs1, C(imm), _) ->
       fprintf oc "\tlw\t%s, %s, %d ! %s\n" rd rs1 imm pinfo
   | NonTail(rd), Lw(rs1, V(rs2), _) ->
-      Format.eprintf "lw M[rs1+rs2]@.";
+      (* Format.eprintf "lw M[rs1 + rs2]@."; *)
       fprintf oc "\tadd\t%s, %s, %s ! %s\n" "t0" rs1 rs2 pinfo;
       fprintf oc "\tlw\t%s, %s, 0 ! %s\n" rd "t0" pinfo
   | NonTail(_), Sw(rs1, rs2, C(imm), _) ->
       fprintf oc "\tsw\t%s, %s, %d ! %s\n" rs1 rs2 imm pinfo
   | NonTail(_), Sw(rs1, rs2, V(rs3), _) ->
-      Format.eprintf "sw M[rs1 + rs3]@.";
+      (* Format.eprintf "sw M[rs1 + rs3]@."; *)
       fprintf oc "\tadd\t%s, %s, %s ! %s\n" "t0" rs1 rs3 pinfo;
       fprintf oc "\tsw\t%s, %s, 0 ! %s\n" "t0" rs2 pinfo
   | NonTail(rd), FMv(rs, _) when rd = rs -> ()
@@ -116,6 +117,11 @@ and g' oc (dest, exp) =
       fprintf oc "\tfabs.s\t%s, %s ! %s\n" rd rs pinfo;
   | NonTail(rd), FNeg(rs, _) ->
       fprintf oc "\tfneg.s\t%s, %s ! %s\n" rd rs pinfo;
+  | NonTail(rd), FSqrt(rs, _) ->
+      fprintf oc "\tfsqrt.s\t%s, %s, rne ! %s\n" rd rs pinfo;
+  | NonTail(rd), FFloor(rs, _) ->
+      fprintf oc "\tfcvt.w.s\t%s, %s, rdn ! %s\n" "t0" rs pinfo;
+      fprintf oc "\tfcvt.s.w\t%s, %s, rne ! %s\n" rd "t0" pinfo;
   | NonTail(rd), FAdd(rs1, rs2, _) ->
       fprintf oc "\tfadd.s\t%s, %s, %s, rne ! %s\n" rd rs1 rs2 pinfo
   | NonTail(rd), FSub(rs1, rs2, _) ->
@@ -124,16 +130,20 @@ and g' oc (dest, exp) =
       fprintf oc "\tfmul.s\t%s, %s, %s, rne ! %s\n" rd rs1 rs2 pinfo
   | NonTail(rd), FDiv(rs1, rs2, _) ->
       fprintf oc "\tfdiv.s\t%s, %s, %s, rne ! %s\n" rd rs1 rs2 pinfo
+  | NonTail(rd), FtoI(rs, _) ->
+      fprintf oc "\tfcvt.w.s\t%s, %s, rtz ! %s\n" rd rs pinfo;
+  | NonTail(rd), ItoF(rs, _) ->
+      fprintf oc "\tfcvt.s.w\t%s, %s, rne ! %s\n" rd rs pinfo;
   | NonTail(rd), FLw(rs1, C(imm), _) ->
       fprintf oc "\tflw\t%s, %s, %d ! %s\n" rd rs1 imm pinfo
   | NonTail(rd), FLw(rs1, V(rs2), _) ->
-      Format.eprintf "flw M[rs1+rs2]@.";
+      (* Format.eprintf "flw M[rs1 +r s2]@."; *)
       fprintf oc "\tadd\t%s, %s, %s ! %s\n" "t0" rs1 rs2 pinfo;
       fprintf oc "\tflw\t%s, %s, 0 ! %s\n" rd "t0" pinfo
   | NonTail(_), FSw(rs1, rs2, C(imm), _) ->
       fprintf oc "\tfsw\t%s, %s, %d ! %s\n" rs1 rs2 imm pinfo
   | NonTail(_), FSw(rs1, rs2, V(rs3), _) ->
-      Format.eprintf "sw M[rs1 + rs3]@.";
+      (* Format.eprintf "sw M[rs1 + rs3]@."; *)
       fprintf oc "\tadd\t%s, %s, %s ! %s\n" "t0" rs1 rs3 pinfo;
       fprintf oc "\tfsw\t%s, %s, 0 ! %s\n" "t0" rs2 pinfo
   | NonTail(_), Save(r, y, _) when List.mem r allregs
@@ -155,12 +165,12 @@ and g' oc (dest, exp) =
       g' oc (NonTail("zero"), exp);
       fprintf oc "\tret ! %s\n" pinfo;
   | Tail, (Li _ | LiL _ | Mv _ | Neg _ | Add _ | Sub _
-          | Mul _ | Div _ | SLL _ | SRL _ | Lw _ as exp) ->
+          | Mul _ | Div _ | SLL _ | SRL _ | Lw _ | FtoI _ as exp) ->
       (* return valueをa0レジスタに入れてret *)
       g' oc (NonTail(regs.(0)), exp);
       fprintf oc "\tret ! %s\n" pinfo;
-  | Tail, (FMv _ | FAbs _ | FNeg _ | FAdd _ | FSub _
-           | FMul _ | FDiv _ | FLw _ as exp) ->
+  | Tail, (FMv _ | FAbs _ | FNeg _ | FSqrt _ | FFloor _ | FAdd _ | FSub _
+           | FMul _ | FDiv _ | FLw _ | ItoF _ as exp) ->
       g' oc (NonTail(fregs.(0)), exp);
       fprintf oc "\tret ! %s\n" pinfo;
   | Tail, (Restore(x, _) as exp) ->

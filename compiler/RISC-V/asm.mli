@@ -22,10 +22,14 @@ and exp = (* 命令（仮想命令含む） *)
   | FMv of Id.t * p
   | FAbs of Id.t * p
   | FNeg of Id.t * p
+  | FSqrt of Id.t * p
+  | FFloor of Id.t * p
   | FAdd of Id.t * Id.t * p
   | FSub of Id.t * Id.t * p
   | FMul of Id.t * Id.t * p
   | FDiv of Id.t * Id.t * p
+  | FtoI of Id.t * p
+  | ItoF of Id.t * p
   | FLw of Id.t * id_or_imm * p
   | FSw of Id.t * Id.t * id_or_imm * p
   (* virtual instructions *)

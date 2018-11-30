@@ -14,10 +14,14 @@ type t =
   | Div of t * t * p
   | FAbs of t * p
   | FNeg of t * p
+  | FSqrt of t * p
+  | FFloor of t * p
   | FAdd of t * t * p
   | FSub of t * t * p
   | FMul of t * t * p
   | FDiv of t * t * p
+  | FtoI of t * p
+  | ItoF of t * p
   | Eq of t * t * p
   | LE of t * t * p
   | If of t * t * t * p
@@ -35,8 +39,9 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 let position_of_syntax = function
   | Unit(p) | Bool(_, p) | Int(_, p) | Float(_, p) | Not(_, p) | Neg(_, p)
   | Add(_, _, p) | Sub(_, _, p) | Mul(_, _, p) | Div(_, _, p)
-  | FAbs(_, p)
-  | FNeg(_, p) | FAdd(_, _, p) | FSub(_, _, p) | FMul(_, _, p) | FDiv(_, _, p)
+  | FAbs(_, p) | FNeg(_, p) | FSqrt(_, p) | FFloor(_, p)
+  | FAdd(_, _, p) | FSub(_, _, p) | FMul(_, _, p) | FDiv(_, _, p)
+  | FtoI(_, p) | ItoF(_, p)
   | Eq(_, _, p) | LE(_, _, p) | If(_, _, _, p) | Let(_, _, _, p) | Var(_, p)
   | LetRec(_, _, p) | App(_, _, p) | Tuple(_, p) | LetTuple(_, _, _, p)
   | Array(_, _, p) | Get(_, _, p) | Put(_, _, _, p) ->
@@ -70,8 +75,10 @@ let print_syntax exp =
         printf "DIV\n";
         print_syntax_sub exp1 (indent + 2);
         print_syntax_sub exp2 (indent + 2);
-    | FAbs(e, _) -> printf "FNEG\n"; print_syntax_sub e (indent + 2)
+    | FAbs(e, _) -> printf "FABS\n"; print_syntax_sub e (indent + 2)
     | FNeg(exp ,_) -> printf "FNEG\n"; print_syntax_sub exp (indent + 2)
+    | FSqrt(e, _) -> printf "FSQRT\n"; print_syntax_sub e (indent + 2)
+    | FFloor(e, _) -> printf "FFloor\n"; print_syntax_sub e (indent + 2)
     | FAdd(exp1, exp2 ,_) ->
         printf "FADD\n";
         print_syntax_sub exp1 (indent + 2);
@@ -88,6 +95,8 @@ let print_syntax exp =
         printf "FDIV\n";
         print_syntax_sub exp1 (indent + 2);
         print_syntax_sub exp2 (indent + 2);
+    | FtoI(e, _) -> printf "FTOI\n"; print_syntax_sub e (indent + 2)
+    | ItoF(e, _) -> printf "ITOF\n"; print_syntax_sub e (indent + 2)
     | Eq(exp1, exp2 ,_) ->
         printf "EQ\n";
         print_syntax_sub exp1 (indent + 2);

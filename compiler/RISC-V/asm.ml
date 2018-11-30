@@ -22,10 +22,14 @@ and exp = (* 命令（仮想命令含む） *)
   | FMv of Id.t * p
   | FAbs of Id.t * p
   | FNeg of Id.t * p
+  | FSqrt of Id.t * p
+  | FFloor of Id.t * p
   | FAdd of Id.t * Id.t * p
   | FSub of Id.t * Id.t * p
   | FMul of Id.t * Id.t * p
   | FDiv of Id.t * Id.t * p
+  | FtoI of Id.t * p
+  | ItoF of Id.t * p
   | FLw of Id.t * id_or_imm * p
   | FSw of Id.t * Id.t * id_or_imm * p (* FSw(x, y, z') means M[x + z'] <- y *)
   (* virtual instructions *)
@@ -95,8 +99,8 @@ let rec remove_and_uniq xs = function
 let fv_id_or_imm = function V(x) -> [x] | C(_) -> []
 let rec fv_exp = function
   | Nop(_) | Li(_) | LiL(_) | Restore(_) -> []
-  | Mv(x, _) | Neg(x, _) | FMv(x, _) | FAbs(x, _) | FNeg(x, _)
-  | Save(x, _, _) -> [x]
+  | Mv(x, _) | Neg(x, _) | FMv(x, _) | FAbs(x, _) | FNeg(x, _) | FSqrt(x, _)
+  | FFloor(x, _) | FtoI(x, _) | ItoF(x, _) | Save(x, _, _) -> [x]
   | Add(x, y', _) | Sub(x, y', _) | Mul(x, y', _) | Div(x, y', _)
   | SLL(x, y', _) | SRL(x, y', _) | Lw(x, y', _) | FLw(x, y', _) ->
       x :: fv_id_or_imm y'

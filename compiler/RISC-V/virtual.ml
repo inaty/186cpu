@@ -54,10 +54,14 @@ let rec g env = function
   | Closure.Div(x, y, p) -> Ans(Div(x, V(y), p))
   | Closure.FAbs(x, p) -> Ans(FAbs(x, p))
   | Closure.FNeg(x, p) -> Ans(FNeg(x, p))
+  | Closure.FSqrt(x, p) -> Ans(FSqrt(x, p))
+  | Closure.FFloor(x, p) -> Ans(FFloor(x, p))
   | Closure.FAdd(x, y, p) -> Ans(FAdd(x, y, p))
   | Closure.FSub(x, y, p) -> Ans(FSub(x, y, p))
   | Closure.FMul(x, y, p) -> Ans(FMul(x, y, p))
   | Closure.FDiv(x, y, p) -> Ans(FDiv(x, y, p))
+  | Closure.FtoI(x, p) -> Ans(FtoI(x, p))
+  | Closure.ItoF(x, p) -> Ans(ItoF(x, p))
   | Closure.IfEq(x, y, e1, e2, p) ->
       (match M.find x env with
       | Type.Bool | Type.Int -> Ans(IfEq(x, y, g env e1, g env e2, p))

@@ -93,6 +93,14 @@ rule token = parse
     { FABS }
 | "fneg"
     { FNEG }
+| "sqrt"
+    { SQRT }
+| "floor"
+    { FLOOR }
+| "int_of_float"
+    { INT_OF_FLOAT }
+| "float_of_int"
+    { FLOAT_OF_INT }
 | '.'
     { DOT }
 | "<-"

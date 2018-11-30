@@ -4,7 +4,7 @@
 	addi	hp, hp, 0
 	lui	ap, 1228800
 	addi	ap, ap, 0
-	jal	zero, 48152
+	jal	zero, 47320
 	float	128.00000000000
 	float	0.90000000000
 	float	0.20000000000
@@ -45,35 +45,27 @@
 	flw	fa1, a0, 8
 	fmul.s	fa1, fa1, fa1, rne
 	fadd.s	fa0, fa0, fa1, rne
-	sw	sp, a0, 0
-	sw	sp, a1, 4
-	sw	sp, ra, 8
-	addi	sp, sp, 12
-	jal	ra, 52272
-	addi	sp, sp, -12
-	lw	ra, sp, 8
-	lui	a0, 0
-	addi	a0, a0, 152
-	flw	fa1, a0, 0
+	fsqrt.s	fa0, fa0, rne
+	lui	a2, 0
+	addi	a2, a2, 152
+	flw	fa1, a2, 0
 	feq.s	t0, fa0, fa1
-	bne	zero, t0, 56
-	addi	a0, zero, 0
-	lw	a1, sp, 4
-	bne	a1, a0, 24
-	lui	a0, 0
-	addi	a0, a0, 144
-	flw	fa1, a0, 0
+	bne	zero, t0, 52
+	addi	a2, zero, 0
+	bne	a1, a2, 24
+	lui	a1, 0
+	addi	a1, a1, 144
+	flw	fa1, a1, 0
 	fdiv.s	fa0, fa1, fa0, rne
 	jal	zero, 20
-	lui	a0, 0
-	addi	a0, a0, 148
-	flw	fa1, a0, 0
+	lui	a1, 0
+	addi	a1, a1, 148
+	flw	fa1, a1, 0
 	fdiv.s	fa0, fa1, fa0, rne
 	jal	zero, 16
-	lui	a0, 0
-	addi	a0, a0, 144
-	flw	fa0, a0, 0
-	lw	a0, sp, 0
+	lui	a1, 0
+	addi	a1, a1, 144
+	flw	fa0, a1, 0
 	flw	fa1, a0, 0
 	fmul.s	fa1, fa1, fa0, rne
 	fsw	a0, fa1, 0
@@ -115,28 +107,28 @@
 	sw	sp, a4, 16
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 54016
+	jal	ra, 53172
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	lw	a0, sp, 16
 	fsw	a0, fa0, 0
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 53988
+	jal	ra, 53144
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	lw	a0, sp, 16
 	fsw	a0, fa0, 4
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 53960
+	jal	ra, 53116
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	lw	a0, sp, 16
 	fsw	a0, fa0, 8
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 53932
+	jal	ra, 53088
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	lui	a0, 0
@@ -146,7 +138,7 @@
 	fsw	sp, fa0, 20
 	sw	sp, ra, 24
 	addi	sp, sp, 28
-	jal	ra, 52636
+	jal	ra, 51800
 	addi	sp, sp, -28
 	lw	ra, sp, 24
 	flw	fa1, sp, 20
@@ -154,13 +146,13 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 52292
+	jal	ra, 51456
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	fsw	sp, fa0, 28
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 53836
+	jal	ra, 52992
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	lui	a0, 0
@@ -170,7 +162,7 @@
 	fsw	sp, fa0, 32
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 52540
+	jal	ra, 51704
 	addi	sp, sp, -40
 	lw	ra, sp, 36
 	flw	fa1, sp, 32
@@ -178,7 +170,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, 52196
+	jal	ra, 51360
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	flw	fa1, sp, 24
@@ -240,12 +232,12 @@
 	sw	sp, a0, 4
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 53484
+	jal	ra, 52640
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 53496
+	jal	ra, 52652
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	lui	a0, 0
@@ -255,7 +247,7 @@
 	fsw	sp, fa0, 8
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 51888
+	jal	ra, 51052
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	fsgnjn.s	fa0, fa0, fa0
@@ -263,7 +255,7 @@
 	fsw	a0, fa0, 4
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 53424
+	jal	ra, 52580
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	lui	a0, 0
@@ -275,7 +267,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 52120
+	jal	ra, 51284
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	flw	fa1, sp, 12
@@ -283,7 +275,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 51776
+	jal	ra, 50940
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	flw	fa1, sp, 16
@@ -293,7 +285,7 @@
 	flw	fa0, sp, 12
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 52048
+	jal	ra, 51212
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	flw	fa1, sp, 16
@@ -302,7 +294,7 @@
 	fsw	a0, fa0, 8
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 53268
+	jal	ra, 52424
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	lw	a0, sp, 0
@@ -313,7 +305,7 @@
 	sw	sp, a1, 4
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 51968
+	jal	ra, 51132
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	lw	a0, sp, 4
@@ -322,7 +314,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 51620
+	jal	ra, 50784
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	lw	a0, sp, 4
@@ -331,7 +323,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 51896
+	jal	ra, 51060
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	lw	a0, sp, 4
@@ -340,7 +332,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 51548
+	jal	ra, 50712
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	lw	a0, sp, 4
@@ -349,7 +341,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 24
 	addi	sp, sp, 28
-	jal	ra, 51824
+	jal	ra, 50988
 	addi	sp, sp, -28
 	lw	ra, sp, 24
 	lw	a0, sp, 4
@@ -358,7 +350,7 @@
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 51476
+	jal	ra, 50640
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	flw	fa1, sp, 24
@@ -464,7 +456,7 @@
 	sw	sp, a0, 4
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 52588
+	jal	ra, 51744
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	addi	a1, zero, -1
@@ -474,19 +466,19 @@
 	sw	sp, a0, 8
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 52548
+	jal	ra, 51704
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	sw	sp, a0, 12
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 52524
+	jal	ra, 51680
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	sw	sp, a0, 16
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 52500
+	jal	ra, 51656
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	addi	a1, zero, 3
@@ -497,27 +489,27 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 24
 	addi	sp, sp, 28
-	jal	ra, 52068
+	jal	ra, 51232
 	addi	sp, sp, -28
 	lw	ra, sp, 24
 	sw	sp, a0, 24
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 52464
+	jal	ra, 51620
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	lw	a0, sp, 24
 	fsw	a0, fa0, 0
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 52436
+	jal	ra, 51592
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	lw	a0, sp, 24
 	fsw	a0, fa0, 4
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 52408
+	jal	ra, 51564
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	lw	a0, sp, 24
@@ -529,27 +521,27 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 51940
+	jal	ra, 51104
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	sw	sp, a0, 28
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 52336
+	jal	ra, 51492
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	lw	a0, sp, 28
 	fsw	a0, fa0, 0
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 52308
+	jal	ra, 51464
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	lw	a0, sp, 28
 	fsw	a0, fa0, 4
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 52280
+	jal	ra, 51436
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	lw	a0, sp, 28
@@ -560,7 +552,7 @@
 	fsw	sp, fa0, 32
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 52236
+	jal	ra, 51392
 	addi	sp, sp, -40
 	lw	ra, sp, 36
 	flw	fa1, sp, 32
@@ -577,20 +569,20 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, 51748
+	jal	ra, 50912
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	sw	sp, a0, 40
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, 52144
+	jal	ra, 51300
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	lw	a0, sp, 40
 	fsw	a0, fa0, 0
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, 52116
+	jal	ra, 51272
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	lw	a0, sp, 40
@@ -602,27 +594,27 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, 51648
+	jal	ra, 50812
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	sw	sp, a0, 44
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 52044
+	jal	ra, 51200
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	lw	a0, sp, 44
 	fsw	a0, fa0, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 52016
+	jal	ra, 51172
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	lw	a0, sp, 44
 	fsw	a0, fa0, 4
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 51988
+	jal	ra, 51144
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	lw	a0, sp, 44
@@ -634,7 +626,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 51520
+	jal	ra, 50684
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	addi	a1, zero, 0
@@ -644,7 +636,7 @@
 	sw	sp, a0, 48
 	sw	sp, ra, 52
 	addi	sp, sp, 56
-	jal	ra, 51900
+	jal	ra, 51056
 	addi	sp, sp, -56
 	lw	ra, sp, 52
 	lui	a0, 0
@@ -655,7 +647,7 @@
 	fsw	a0, fa0, 0
 	sw	sp, ra, 52
 	addi	sp, sp, 56
-	jal	ra, 51856
+	jal	ra, 51012
 	addi	sp, sp, -56
 	lw	ra, sp, 52
 	lui	a0, 0
@@ -666,7 +658,7 @@
 	fsw	a0, fa0, 4
 	sw	sp, ra, 52
 	addi	sp, sp, 56
-	jal	ra, 51812
+	jal	ra, 50968
 	addi	sp, sp, -56
 	lw	ra, sp, 52
 	lui	a0, 0
@@ -690,7 +682,7 @@
 	addi	a0, a3, 0
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, 51296
+	jal	ra, 50460
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	addi	a1, hp, 0
@@ -837,7 +829,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, -3200
+	jal	ra, -3168
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	jal	zero, 4
@@ -941,7 +933,7 @@
 	sw	sp, a0, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 50680
+	jal	ra, 49836
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a1, zero, -1
@@ -949,14 +941,14 @@
 	lw	a0, sp, 0
 	addi	a0, a0, 1
 	addi	a1, zero, -1
-	jal	zero, 50232
+	jal	zero, 49396
 	lw	a1, sp, 0
 	addi	a2, a1, 1
 	sw	sp, a0, 4
 	sw	sp, a2, 8
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 50620
+	jal	ra, 49776
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	addi	a1, zero, -1
@@ -966,7 +958,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 50164
+	jal	ra, 49328
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	jal	zero, 260
@@ -976,7 +968,7 @@
 	sw	sp, a2, 16
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 50540
+	jal	ra, 49696
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	addi	a1, zero, -1
@@ -986,7 +978,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 50084
+	jal	ra, 49248
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	jal	zero, 160
@@ -996,7 +988,7 @@
 	sw	sp, a2, 24
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 50460
+	jal	ra, 49616
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	addi	a1, zero, -1
@@ -1006,7 +998,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 50004
+	jal	ra, 49168
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	jal	zero, 60
@@ -1043,7 +1035,7 @@
 	sw	sp, a0, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 50272
+	jal	ra, 49428
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a1, zero, -1
@@ -1052,7 +1044,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 49820
+	jal	ra, 48984
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a1, a0, 0
@@ -1060,7 +1052,7 @@
 	sw	sp, a0, 4
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 50204
+	jal	ra, 49360
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	addi	a1, zero, -1
@@ -1069,14 +1061,14 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 49752
+	jal	ra, 48916
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	jal	zero, 116
 	sw	sp, a0, 8
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 50140
+	jal	ra, 49296
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	addi	a1, zero, -1
@@ -1085,7 +1077,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 49688
+	jal	ra, 48852
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	jal	zero, 44
@@ -1109,14 +1101,14 @@
 	bne	a0, a2, 16
 	lw	a0, sp, 0
 	addi	a0, a0, 1
-	jal	zero, 49592
+	jal	zero, 48756
 	lw	a0, sp, 0
 	addi	a2, a0, 1
 	sw	sp, a1, 16
 	sw	sp, a2, 20
 	sw	sp, ra, 24
 	addi	sp, sp, 28
-	jal	ra, 49980
+	jal	ra, 49136
 	addi	sp, sp, -28
 	lw	ra, sp, 24
 	addi	a1, zero, -1
@@ -1125,7 +1117,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 24
 	addi	sp, sp, 28
-	jal	ra, 49528
+	jal	ra, 48692
 	addi	sp, sp, -28
 	lw	ra, sp, 24
 	addi	a1, a0, 0
@@ -1133,7 +1125,7 @@
 	sw	sp, a0, 24
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 49912
+	jal	ra, 49068
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	addi	a1, zero, -1
@@ -1142,7 +1134,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 49460
+	jal	ra, 48624
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	jal	zero, 44
@@ -1166,7 +1158,7 @@
 	addi	a0, a0, 1
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 49364
+	jal	ra, 48528
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	jal	zero, 60
@@ -1196,7 +1188,7 @@
 	sw	sp, a0, 8
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 49660
+	jal	ra, 48816
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	addi	a1, zero, -1
@@ -1205,14 +1197,14 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 49208
+	jal	ra, 48372
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	jal	zero, 188
 	sw	sp, a0, 12
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 49596
+	jal	ra, 48752
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	addi	a1, zero, -1
@@ -1221,14 +1213,14 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 49144
+	jal	ra, 48308
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	jal	zero, 116
 	sw	sp, a0, 16
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 49532
+	jal	ra, 48688
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	addi	a1, zero, -1
@@ -1237,7 +1229,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 49080
+	jal	ra, 48244
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	jal	zero, 44
@@ -1268,7 +1260,7 @@
 	sw	sp, a0, 24
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 49372
+	jal	ra, 48528
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	addi	a1, zero, -1
@@ -1277,14 +1269,14 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 48920
+	jal	ra, 48084
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	jal	zero, 116
 	sw	sp, a0, 28
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 49308
+	jal	ra, 48464
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	addi	a1, zero, -1
@@ -1293,7 +1285,7 @@
 	addi	a1, zero, -1
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 48856
+	jal	ra, 48020
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	jal	zero, 44
@@ -1531,7 +1523,7 @@
 	addi	a0, a0, 152
 	flw	fa1, a0, 0
 	feq.s	t0, fa0, fa1
-	bne	zero, t0, 296
+	bne	zero, t0, 268
 	lw	a0, sp, 20
 	flw	fa1, a0, 0
 	flw	fa2, a0, 4
@@ -1583,22 +1575,15 @@
 	addi	a1, a1, 152
 	flw	fa2, a1, 0
 	flt.s	t0, fa0, fa2
-	bne	zero, t0, 80
-	sw	sp, ra, 32
-	addi	sp, sp, 36
-	jal	ra, 46124
-	addi	sp, sp, -36
-	lw	ra, sp, 32
-	lw	a0, sp, 16
+	bne	zero, t0, 52
+	fsqrt.s	fa0, fa0, rne
 	lw	a0, a0, 24
 	addi	a1, zero, 0
 	bne	a0, a1, 12
 	fsgnjn.s	fa0, fa0, fa0
 	jal	zero, 4
-	flw	fa1, sp, 28
 	fsub.s	fa0, fa0, fa1, rne
-	flw	fa1, sp, 24
-	fdiv.s	fa0, fa0, fa1, rne
+	fdiv.s	fa0, fa0, fa3, rne
 	lw	a0, sp, 0
 	fsw	a0, fa0, 0
 	addi	a0, zero, 1
@@ -1850,7 +1835,7 @@
 	addi	a3, a3, 152
 	flw	fa4, a3, 0
 	feq.s	t0, fa3, fa4
-	bne	zero, t0, 280
+	bne	zero, t0, 240
 	flw	fa4, a1, 4
 	fmul.s	fa4, fa4, fa0, rne
 	flw	fa5, a1, 8
@@ -1866,7 +1851,7 @@
 	sw	sp, a0, 16
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, -1748
+	jal	ra, -1720
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	lw	a0, sp, 16
@@ -1887,29 +1872,19 @@
 	addi	a1, a1, 152
 	flw	fa2, a1, 0
 	flt.s	t0, fa0, fa2
-	bne	zero, t0, 124
+	bne	zero, t0, 84
 	lw	a0, a0, 24
 	addi	a1, zero, 0
-	bne	a0, a1, 56
-	sw	sp, ra, 20
-	addi	sp, sp, 24
-	jal	ra, 44896
-	addi	sp, sp, -24
-	lw	ra, sp, 20
-	flw	fa1, sp, 12
+	bne	a0, a1, 36
+	fsqrt.s	fa0, fa0, rne
 	fsub.s	fa0, fa1, fa0, rne
 	lw	a0, sp, 4
 	flw	fa1, a0, 16
 	fmul.s	fa0, fa0, fa1, rne
 	lw	a0, sp, 0
 	fsw	a0, fa0, 0
-	jal	zero, 52
-	sw	sp, ra, 20
-	addi	sp, sp, 24
-	jal	ra, 44844
-	addi	sp, sp, -24
-	lw	ra, sp, 20
-	flw	fa1, sp, 12
+	jal	zero, 32
+	fsqrt.s	fa0, fa0, rne
 	fadd.s	fa0, fa1, fa0, rne
 	lw	a0, sp, 4
 	flw	fa1, a0, 16
@@ -1928,7 +1903,7 @@
 	addi	a4, a4, 152
 	flw	fa4, a4, 0
 	feq.s	t0, fa3, fa4
-	bne	zero, t0, 232
+	bne	zero, t0, 144
 	flw	fa4, a1, 4
 	fmul.s	fa0, fa4, fa0, rne
 	flw	fa4, a1, 8
@@ -1945,43 +1920,21 @@
 	addi	a2, a2, 152
 	flw	fa2, a2, 0
 	flt.s	t0, fa1, fa2
-	bne	zero, t0, 156
+	bne	zero, t0, 68
 	lw	a0, a0, 24
 	addi	a2, zero, 0
-	bne	a0, a2, 72
-	sw	sp, a3, 0
-	sw	sp, a1, 4
-	fsw	sp, fa0, 8
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 12
-	addi	sp, sp, 16
-	jal	ra, 44648
-	addi	sp, sp, -16
-	lw	ra, sp, 12
-	flw	fa1, sp, 8
-	fsub.s	fa0, fa1, fa0, rne
-	lw	a0, sp, 4
-	flw	fa1, a0, 16
+	bne	a0, a2, 28
+	fsqrt.s	fa1, fa1, rne
+	fsub.s	fa0, fa0, fa1, rne
+	flw	fa1, a1, 16
 	fmul.s	fa0, fa0, fa1, rne
-	lw	a0, sp, 0
-	fsw	a0, fa0, 0
-	jal	zero, 68
-	sw	sp, a3, 0
-	sw	sp, a1, 4
-	fsw	sp, fa0, 8
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 12
-	addi	sp, sp, 16
-	jal	ra, 44580
-	addi	sp, sp, -16
-	lw	ra, sp, 12
-	flw	fa1, sp, 8
-	fadd.s	fa0, fa1, fa0, rne
-	lw	a0, sp, 4
-	flw	fa1, a0, 16
+	fsw	a3, fa0, 0
+	jal	zero, 24
+	fsqrt.s	fa1, fa1, rne
+	fadd.s	fa0, fa0, fa1, rne
+	flw	fa1, a1, 16
 	fmul.s	fa0, fa0, fa1, rne
-	lw	a0, sp, 0
-	fsw	a0, fa0, 0
+	fsw	a3, fa0, 0
 	addi	a0, zero, 1
 	jalr	zero, ra, 0
 	addi	a0, zero, 0
@@ -2043,7 +1996,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 45884
+	jal	ra, 45204
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	lw	a1, sp, 4
@@ -2189,7 +2142,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 45300
+	jal	ra, 44620
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	lw	a1, sp, 4
@@ -2248,7 +2201,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 45064
+	jal	ra, 44384
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	lw	a1, sp, 4
@@ -2260,7 +2213,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, -3324
+	jal	ra, -3168
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	lw	a0, sp, 4
@@ -2523,7 +2476,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, -4376
+	jal	ra, -4220
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	addi	a0, zero, 3
@@ -2626,7 +2579,7 @@
 	sw	sp, a0, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, -4788
+	jal	ra, -4632
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a0, sp, 0
@@ -2768,7 +2721,7 @@
 	fsgnj.s	fa0, fa3, fa3
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, -5356
+	jal	ra, -5200
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	lw	a0, sp, 28
@@ -5158,7 +5111,7 @@
 	addi	a20, a1, 0
 	addi	a1, a0, 0
 	addi	a0, a20, 0
-	jal	zero, -20484
+	jal	zero, -20296
 	lw	a2, a21, 12
 	lw	a3, a21, 8
 	lw	a21, a21, 4
@@ -5232,7 +5185,7 @@
 	flw	fa0, a4, 8
 	fsw	a2, fa0, 8
 	addi	a4, zero, 1
-	bne	a3, a4, 360
+	bne	a3, a4, 280
 	flw	fa0, a1, 0
 	lw	a3, a0, 20
 	flw	fa1, a3, 0
@@ -5241,65 +5194,46 @@
 	addi	a3, a3, 64
 	flw	fa1, a3, 0
 	fmul.s	fa1, fa0, fa1, rne
-	sw	sp, a2, 0
-	sw	sp, a0, 4
-	sw	sp, a1, 8
-	fsw	sp, fa0, 12
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 16
-	addi	sp, sp, 20
-	jal	ra, 31484
-	addi	sp, sp, -20
-	lw	ra, sp, 16
-	lui	a0, 0
-	addi	a0, a0, 60
-	flw	fa1, a0, 0
-	fmul.s	fa0, fa0, fa1, rne
-	lui	a0, 0
-	addi	a0, a0, 72
-	flw	fa1, a0, 0
-	flw	fa2, sp, 12
-	fsub.s	fa0, fa2, fa0, rne
-	flt.s	t0, fa1, fa0
-	bne	zero, t0, 12
-	addi	a0, zero, 1
-	jal	zero, 8
-	addi	a0, zero, 0
-	lw	a1, sp, 8
-	flw	fa0, a1, 8
-	lw	a1, sp, 4
-	lw	a1, a1, 20
-	flw	fa1, a1, 8
+	fcvt.w.s	t0, fa1, rdn
+	fcvt.s.w	fa1, t0, rne
+	lui	a3, 0
+	addi	a3, a3, 60
+	flw	fa2, a3, 0
+	fmul.s	fa1, fa1, fa2, rne
+	lui	a3, 0
+	addi	a3, a3, 72
+	flw	fa2, a3, 0
 	fsub.s	fa0, fa0, fa1, rne
-	lui	a1, 0
-	addi	a1, a1, 64
-	flw	fa1, a1, 0
+	flt.s	t0, fa2, fa0
+	bne	zero, t0, 12
+	addi	a3, zero, 1
+	jal	zero, 8
+	addi	a3, zero, 0
+	flw	fa0, a1, 8
+	lw	a0, a0, 20
+	flw	fa1, a0, 8
+	fsub.s	fa0, fa0, fa1, rne
+	lui	a0, 0
+	addi	a0, a0, 64
+	flw	fa1, a0, 0
 	fmul.s	fa1, fa0, fa1, rne
-	sw	sp, a0, 16
-	fsw	sp, fa0, 20
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 24
-	addi	sp, sp, 28
-	jal	ra, 31356
-	addi	sp, sp, -28
-	lw	ra, sp, 24
+	fcvt.w.s	t0, fa1, rdn
+	fcvt.s.w	fa1, t0, rne
 	lui	a0, 0
 	addi	a0, a0, 60
-	flw	fa1, a0, 0
-	fmul.s	fa0, fa0, fa1, rne
+	flw	fa2, a0, 0
+	fmul.s	fa1, fa1, fa2, rne
 	lui	a0, 0
 	addi	a0, a0, 72
-	flw	fa1, a0, 0
-	flw	fa2, sp, 20
-	fsub.s	fa0, fa2, fa0, rne
-	flt.s	t0, fa1, fa0
+	flw	fa2, a0, 0
+	fsub.s	fa0, fa0, fa1, rne
+	flt.s	t0, fa2, fa0
 	bne	zero, t0, 12
 	addi	a0, zero, 1
 	jal	zero, 8
 	addi	a0, zero, 0
 	addi	a1, zero, 0
-	lw	a2, sp, 16
-	bne	a2, a1, 44
+	bne	a3, a1, 44
 	addi	a1, zero, 0
 	bne	a0, a1, 20
 	lui	a0, 0
@@ -5319,8 +5253,7 @@
 	lui	a0, 0
 	addi	a0, a0, 80
 	flw	fa0, a0, 0
-	lw	a0, sp, 0
-	fsw	a0, fa0, 4
+	fsw	a2, fa0, 4
 	jalr	zero, ra, 0
 	addi	a4, zero, 2
 	bne	a3, a4, 116
@@ -5330,11 +5263,11 @@
 	flw	fa1, a0, 0
 	fmul.s	fa0, fa0, fa1, rne
 	sw	sp, a2, 0
-	sw	sp, ra, 24
-	addi	sp, sp, 28
-	jal	ra, 31580
-	addi	sp, sp, -28
-	lw	ra, sp, 24
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	ra, 30980
+	addi	sp, sp, -8
+	lw	ra, sp, 4
 	fmul.s	fa0, fa0, fa0, rne
 	lui	a0, 0
 	addi	a0, a0, 80
@@ -5353,7 +5286,7 @@
 	fsw	a0, fa0, 4
 	jalr	zero, ra, 0
 	addi	a4, zero, 3
-	bne	a3, a4, 224
+	bne	a3, a4, 188
 	flw	fa0, a1, 0
 	lw	a3, a0, 20
 	flw	fa1, a3, 0
@@ -5365,33 +5298,24 @@
 	fmul.s	fa0, fa0, fa0, rne
 	fmul.s	fa1, fa1, fa1, rne
 	fadd.s	fa0, fa0, fa1, rne
-	sw	sp, a2, 0
-	sw	sp, ra, 24
-	addi	sp, sp, 28
-	jal	ra, 30996
-	addi	sp, sp, -28
-	lw	ra, sp, 24
+	fsqrt.s	fa0, fa0, rne
 	lui	a0, 0
 	addi	a0, a0, 72
 	flw	fa1, a0, 0
 	fdiv.s	fa0, fa0, fa1, rne
-	fsw	sp, fa0, 24
-	sw	sp, ra, 28
-	addi	sp, sp, 32
-	jal	ra, 30964
-	addi	sp, sp, -32
-	lw	ra, sp, 28
-	flw	fa1, sp, 24
-	fsub.s	fa0, fa1, fa0, rne
+	fcvt.w.s	t0, fa0, rdn
+	fcvt.s.w	fa1, t0, rne
+	fsub.s	fa0, fa0, fa1, rne
 	lui	a0, 0
 	addi	a0, a0, 88
 	flw	fa1, a0, 0
 	fmul.s	fa0, fa0, fa1, rne
-	sw	sp, ra, 28
-	addi	sp, sp, 32
-	jal	ra, 31664
-	addi	sp, sp, -32
-	lw	ra, sp, 28
+	sw	sp, a2, 0
+	sw	sp, ra, 4
+	addi	sp, sp, 8
+	jal	ra, 31100
+	addi	sp, sp, -8
+	lw	ra, sp, 4
 	fmul.s	fa0, fa0, fa0, rne
 	lui	a0, 0
 	addi	a0, a0, 80
@@ -5410,65 +5334,47 @@
 	fsw	a0, fa0, 8
 	jalr	zero, ra, 0
 	addi	a4, zero, 4
-	bne	a3, a4, 652
+	bne	a3, a4, 516
 	flw	fa0, a1, 0
 	lw	a3, a0, 20
 	flw	fa1, a3, 0
 	fsub.s	fa0, fa0, fa1, rne
 	lw	a3, a0, 16
 	flw	fa1, a3, 0
-	sw	sp, a2, 0
-	sw	sp, a0, 4
-	sw	sp, a1, 8
-	fsw	sp, fa0, 28
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 32
-	addi	sp, sp, 36
-	jal	ra, 30772
-	addi	sp, sp, -36
-	lw	ra, sp, 32
-	flw	fa1, sp, 28
-	fmul.s	fa0, fa1, fa0, rne
-	lw	a0, sp, 8
-	flw	fa1, a0, 8
-	lw	a1, sp, 4
-	lw	a2, a1, 20
-	flw	fa2, a2, 8
+	fsqrt.s	fa1, fa1, rne
+	fmul.s	fa0, fa0, fa1, rne
+	flw	fa1, a1, 8
+	lw	a3, a0, 20
+	flw	fa2, a3, 8
 	fsub.s	fa1, fa1, fa2, rne
-	lw	a2, a1, 16
-	flw	fa2, a2, 8
-	fsw	sp, fa0, 32
-	fsw	sp, fa1, 36
-	fsgnj.s	fa0, fa2, fa2
-	sw	sp, ra, 40
-	addi	sp, sp, 44
-	jal	ra, 30700
-	addi	sp, sp, -44
-	lw	ra, sp, 40
-	flw	fa1, sp, 36
-	fmul.s	fa0, fa1, fa0, rne
-	flw	fa1, sp, 32
-	fmul.s	fa2, fa1, fa1, rne
-	fmul.s	fa3, fa0, fa0, rne
+	lw	a3, a0, 16
+	flw	fa2, a3, 8
+	fsqrt.s	fa2, fa2, rne
+	fmul.s	fa1, fa1, fa2, rne
+	fmul.s	fa2, fa0, fa0, rne
+	fmul.s	fa3, fa1, fa1, rne
 	fadd.s	fa2, fa2, fa3, rne
-	lui	a0, 0
-	addi	a0, a0, 100
-	flw	fa3, a0, 0
-	fsgnjx.s	fa4, fa1, fa1
-	fsw	sp, fa2, 40
+	lui	a3, 0
+	addi	a3, a3, 100
+	flw	fa3, a3, 0
+	fsgnjx.s	fa4, fa0, fa0
+	sw	sp, a2, 0
+	fsw	sp, fa2, 4
+	sw	sp, a0, 8
+	sw	sp, a1, 12
 	flt.s	t0, fa3, fa4
 	bne	zero, t0, 20
-	lui	a0, 0
-	addi	a0, a0, 96
-	flw	fa0, a0, 0
+	lui	a3, 0
+	addi	a3, a3, 96
+	flw	fa0, a3, 0
 	jal	zero, 64
-	fdiv.s	fa0, fa0, fa1, rne
+	fdiv.s	fa0, fa1, fa0, rne
 	fsgnjx.s	fa0, fa0, fa0
-	sw	sp, ra, 44
-	addi	sp, sp, 48
-	jal	ra, 31884
-	addi	sp, sp, -48
-	lw	ra, sp, 44
+	sw	sp, ra, 16
+	addi	sp, sp, 20
+	jal	ra, 31392
+	addi	sp, sp, -20
+	lw	ra, sp, 16
 	lui	a0, 0
 	addi	a0, a0, 92
 	flw	fa1, a0, 0
@@ -5477,50 +5383,39 @@
 	addi	a0, a0, 88
 	flw	fa1, a0, 0
 	fdiv.s	fa0, fa0, fa1, rne
-	fsw	sp, fa0, 44
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	ra, 30556
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	flw	fa1, sp, 44
-	fsub.s	fa0, fa1, fa0, rne
-	lw	a0, sp, 8
+	fcvt.w.s	t0, fa0, rdn
+	fcvt.s.w	fa1, t0, rne
+	fsub.s	fa0, fa0, fa1, rne
+	lw	a0, sp, 12
 	flw	fa1, a0, 4
-	lw	a0, sp, 4
+	lw	a0, sp, 8
 	lw	a1, a0, 20
 	flw	fa2, a1, 4
 	fsub.s	fa1, fa1, fa2, rne
 	lw	a0, a0, 16
 	flw	fa2, a0, 4
-	fsw	sp, fa0, 48
-	fsw	sp, fa1, 52
-	fsgnj.s	fa0, fa2, fa2
-	sw	sp, ra, 56
-	addi	sp, sp, 60
-	jal	ra, 30476
-	addi	sp, sp, -60
-	lw	ra, sp, 56
-	flw	fa1, sp, 52
-	fmul.s	fa0, fa1, fa0, rne
+	fsqrt.s	fa2, fa2, rne
+	fmul.s	fa1, fa1, fa2, rne
 	lui	a0, 0
 	addi	a0, a0, 100
-	flw	fa1, a0, 0
-	flw	fa2, sp, 40
-	fsgnjx.s	fa3, fa2, fa2
-	flt.s	t0, fa1, fa3
+	flw	fa2, a0, 0
+	flw	fa3, sp, 4
+	fsgnjx.s	fa4, fa3, fa3
+	fsw	sp, fa0, 16
+	flt.s	t0, fa2, fa4
 	bne	zero, t0, 20
 	lui	a0, 0
 	addi	a0, a0, 96
 	flw	fa0, a0, 0
-	jal	zero, 64
-	fdiv.s	fa0, fa0, fa2, rne
-	fsgnjx.s	fa0, fa0, fa0
-	sw	sp, ra, 56
-	addi	sp, sp, 60
-	jal	ra, 31676
-	addi	sp, sp, -60
-	lw	ra, sp, 56
+	jal	zero, 68
+	fdiv.s	fa1, fa1, fa3, rne
+	fsgnjx.s	fa1, fa1, fa1
+	fsgnj.s	fa0, fa1, fa1
+	sw	sp, ra, 20
+	addi	sp, sp, 24
+	jal	ra, 31228
+	addi	sp, sp, -24
+	lw	ra, sp, 20
 	lui	a0, 0
 	addi	a0, a0, 92
 	flw	fa1, a0, 0
@@ -5529,21 +5424,16 @@
 	addi	a0, a0, 88
 	flw	fa1, a0, 0
 	fdiv.s	fa0, fa0, fa1, rne
-	fsw	sp, fa0, 56
-	sw	sp, ra, 60
-	addi	sp, sp, 64
-	jal	ra, 30348
-	addi	sp, sp, -64
-	lw	ra, sp, 60
-	flw	fa1, sp, 56
-	fsub.s	fa0, fa1, fa0, rne
+	fcvt.w.s	t0, fa0, rdn
+	fcvt.s.w	fa1, t0, rne
+	fsub.s	fa0, fa0, fa1, rne
 	lui	a0, 0
 	addi	a0, a0, 84
 	flw	fa1, a0, 0
 	lui	a0, 0
 	addi	a0, a0, 124
 	flw	fa2, a0, 0
-	flw	fa3, sp, 48
+	flw	fa3, sp, 16
 	fsub.s	fa2, fa2, fa3, rne
 	fmul.s	fa2, fa2, fa2, rne
 	fsub.s	fa1, fa1, fa2, rne
@@ -7475,7 +7365,7 @@
 	lw	a1, t0, 0
 	lw	a0, sp, 4
 	lw	a2, sp, 0
-	jal	zero, -29564
+	jal	zero, -29156
 	lw	a5, a21, 8
 	lw	a6, a21, 4
 	slli	a7, a0, 2
@@ -7578,7 +7468,7 @@
 	lw	a1, t0, 0
 	addi	a2, a6, 0
 	addi	a0, a5, 0
-	jal	zero, -29976
+	jal	zero, -29568
 	lw	a2, a21, 16
 	lw	a3, a21, 12
 	lw	a4, a21, 8
@@ -7647,7 +7537,7 @@
 	addi	a2, a3, 0
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, -30252
+	jal	ra, -29844
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	lw	a0, sp, 12
@@ -7928,64 +7818,54 @@
 	jalr	zero, ra, 0
 	lw	a0, a21, 4
 	flw	fa0, a0, 0
-	sw	sp, a0, 0
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	ra, 20764
-	addi	sp, sp, -8
-	lw	ra, sp, 4
-	addi	a1, zero, 255
-	blt	a1, a0, 24
+	fcvt.w.s	a1, fa0, rtz
+	addi	a2, zero, 255
+	blt	a2, a1, 24
+	addi	a2, zero, 0
+	blt	a1, a2, 8
+	jal	zero, 8
 	addi	a1, zero, 0
-	blt	a0, a1, 8
 	jal	zero, 8
-	addi	a0, zero, 0
-	jal	zero, 8
-	addi	a0, zero, 255
+	addi	a1, zero, 255
+	sw	sp, a0, 0
+	addi	a0, a1, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 22576
+	jal	ra, 22160
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a0, zero, 32
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 22212
+	jal	ra, 21796
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a0, sp, 0
 	flw	fa0, a0, 4
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	ra, 20660
-	addi	sp, sp, -8
-	lw	ra, sp, 4
-	addi	a1, zero, 255
-	blt	a1, a0, 24
+	fcvt.w.s	a1, fa0, rtz
+	addi	a2, zero, 255
+	blt	a2, a1, 24
+	addi	a2, zero, 0
+	blt	a1, a2, 8
+	jal	zero, 8
 	addi	a1, zero, 0
-	blt	a0, a1, 8
 	jal	zero, 8
-	addi	a0, zero, 0
-	jal	zero, 8
-	addi	a0, zero, 255
+	addi	a1, zero, 255
+	addi	a0, a1, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 22472
+	jal	ra, 22068
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a0, zero, 32
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 22108
+	jal	ra, 21704
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a0, sp, 0
 	flw	fa0, a0, 8
-	sw	sp, ra, 4
-	addi	sp, sp, 8
-	jal	ra, 20556
-	addi	sp, sp, -8
-	lw	ra, sp, 4
+	fcvt.w.s	a0, fa0, rtz
 	addi	a1, zero, 255
 	blt	a1, a0, 24
 	addi	a1, zero, 0
@@ -7996,11 +7876,11 @@
 	addi	a0, zero, 255
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 22368
+	jal	ra, 21980
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a0, zero, 10
-	jal	zero, 22012
+	jal	zero, 21624
 	lw	a2, a21, 28
 	lw	a3, a21, 24
 	lw	a4, a21, 20
@@ -8255,76 +8135,62 @@
 	lw	a17, a21, 8
 	lw	a18, a21, 4
 	addi	a19, zero, 0
-	blt	a1, a19, 1052
+	blt	a1, a19, 996
 	flw	fa3, a10, 0
 	lw	a10, a16, 0
 	sub	a10, a1, a10
-	sw	sp, a21, 0
-	sw	sp, a13, 4
-	sw	sp, a15, 8
-	sw	sp, a5, 12
-	sw	sp, a8, 16
-	sw	sp, a14, 20
-	sw	sp, a6, 24
-	sw	sp, a17, 28
-	sw	sp, a18, 32
-	sw	sp, a2, 36
-	sw	sp, a4, 40
-	sw	sp, a0, 44
-	sw	sp, a1, 48
-	sw	sp, a7, 52
-	sw	sp, a3, 56
-	sw	sp, a11, 60
-	fsw	sp, fa2, 64
-	fsw	sp, fa1, 68
-	sw	sp, a12, 72
-	fsw	sp, fa0, 76
-	sw	sp, a9, 80
-	fsw	sp, fa3, 84
-	addi	a0, a10, 0
-	sw	sp, ra, 88
-	addi	sp, sp, 92
-	jal	ra, 19360
-	addi	sp, sp, -92
-	lw	ra, sp, 88
-	flw	fa1, sp, 84
-	fmul.s	fa0, fa1, fa0, rne
-	lw	a0, sp, 80
-	flw	fa1, a0, 0
-	fmul.s	fa1, fa0, fa1, rne
-	flw	fa2, sp, 76
-	fadd.s	fa1, fa1, fa2, rne
-	lw	a1, sp, 72
-	fsw	a1, fa1, 0
-	flw	fa1, a0, 4
-	fmul.s	fa1, fa0, fa1, rne
-	flw	fa3, sp, 68
-	fadd.s	fa1, fa1, fa3, rne
-	fsw	a1, fa1, 4
-	flw	fa1, a0, 8
-	fmul.s	fa0, fa0, fa1, rne
-	flw	fa1, sp, 64
-	fadd.s	fa0, fa0, fa1, rne
-	fsw	a1, fa0, 8
-	addi	a0, zero, 0
-	addi	a20, a1, 0
-	addi	a1, a0, 0
-	addi	a0, a20, 0
-	sw	sp, ra, 88
-	addi	sp, sp, 92
-	jal	ra, -33100
-	addi	sp, sp, -92
-	lw	ra, sp, 88
+	fcvt.s.w	fa4, a10, rne
+	fmul.s	fa3, fa3, fa4, rne
+	flw	fa4, a9, 0
+	fmul.s	fa4, fa3, fa4, rne
+	fadd.s	fa4, fa4, fa0, rne
+	fsw	a12, fa4, 0
+	flw	fa4, a9, 4
+	fmul.s	fa4, fa3, fa4, rne
+	fadd.s	fa4, fa4, fa1, rne
+	fsw	a12, fa4, 4
+	flw	fa4, a9, 8
+	fmul.s	fa3, fa3, fa4, rne
+	fadd.s	fa3, fa3, fa2, rne
+	fsw	a12, fa3, 8
+	addi	a9, zero, 0
+	fsw	sp, fa2, 0
+	fsw	sp, fa1, 4
+	fsw	sp, fa0, 8
+	sw	sp, a21, 12
+	sw	sp, a13, 16
+	sw	sp, a15, 20
+	sw	sp, a5, 24
+	sw	sp, a8, 28
+	sw	sp, a14, 32
+	sw	sp, a6, 36
+	sw	sp, a17, 40
+	sw	sp, a18, 44
+	sw	sp, a2, 48
+	sw	sp, a12, 52
+	sw	sp, a4, 56
+	sw	sp, a0, 60
+	sw	sp, a1, 64
+	sw	sp, a7, 68
+	sw	sp, a3, 72
+	sw	sp, a11, 76
+	addi	a1, a9, 0
+	addi	a0, a12, 0
+	sw	sp, ra, 80
+	addi	sp, sp, 84
+	jal	ra, -32564
+	addi	sp, sp, -84
+	lw	ra, sp, 80
 	lui	a0, 0
 	addi	a0, a0, 152
 	flw	fa0, a0, 0
-	lw	a0, sp, 60
+	lw	a0, sp, 76
 	fsw	a0, fa0, 0
 	fsw	a0, fa0, 4
 	fsw	a0, fa0, 8
-	lw	a1, sp, 56
+	lw	a1, sp, 72
 	flw	fa0, a1, 0
-	lw	a2, sp, 52
+	lw	a2, sp, 68
 	fsw	a2, fa0, 0
 	flw	fa0, a1, 4
 	fsw	a2, fa0, 4
@@ -8334,32 +8200,32 @@
 	lui	a2, 0
 	addi	a2, a2, 144
 	flw	fa0, a2, 0
-	lw	a2, sp, 48
+	lw	a2, sp, 64
 	slli	a3, a2, 2
-	lw	a4, sp, 44
+	lw	a4, sp, 60
 	add	t0, a4, a3
 	lw	a3, t0, 0
 	lui	a5, 0
 	addi	a5, a5, 152
 	flw	fa1, a5, 0
-	lw	a5, sp, 72
-	lw	a21, sp, 40
+	lw	a5, sp, 52
+	lw	a21, sp, 56
 	addi	a2, a3, 0
 	addi	a0, a1, 0
 	addi	a1, a5, 0
-	sw	sp, ra, 88
-	addi	sp, sp, 92
+	sw	sp, ra, 80
+	addi	sp, sp, 84
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -92
-	lw	ra, sp, 88
-	lw	a0, sp, 48
+	addi	sp, sp, -84
+	lw	ra, sp, 80
+	lw	a0, sp, 64
 	slli	a1, a0, 2
-	lw	a2, sp, 44
+	lw	a2, sp, 60
 	add	t0, a2, a1
 	lw	a1, t0, 0
 	lw	a1, a1, 0
-	lw	a3, sp, 60
+	lw	a3, sp, 76
 	flw	fa0, a3, 0
 	fsw	a1, fa0, 0
 	flw	fa0, a3, 4
@@ -8370,7 +8236,7 @@
 	add	t0, a2, a1
 	lw	a1, t0, 0
 	lw	a1, a1, 24
-	lw	a3, sp, 36
+	lw	a3, sp, 48
 	sw	a1, a3, 0
 	slli	a1, a0, 2
 	add	t0, a2, a1
@@ -8382,7 +8248,7 @@
 	lw	a4, a1, 12
 	lw	a4, a4, 0
 	addi	a5, zero, 0
-	sw	sp, a1, 88
+	sw	sp, a1, 80
 	bne	a4, a5, 8
 	jal	zero, 432
 	lw	a4, a1, 24
@@ -8390,45 +8256,45 @@
 	lui	a5, 0
 	addi	a5, a5, 152
 	flw	fa0, a5, 0
-	lw	a5, sp, 32
+	lw	a5, sp, 44
 	fsw	a5, fa0, 0
 	fsw	a5, fa0, 4
 	fsw	a5, fa0, 8
 	lw	a6, a1, 28
 	lw	a7, a1, 4
 	slli	a4, a4, 2
-	lw	a8, sp, 28
+	lw	a8, sp, 40
 	add	t0, a8, a4
 	lw	a4, t0, 0
 	lw	a6, a6, 0
 	lw	a7, a7, 0
 	flw	fa0, a7, 0
-	lw	a8, sp, 24
+	lw	a8, sp, 36
 	fsw	a8, fa0, 0
 	flw	fa0, a7, 4
 	fsw	a8, fa0, 4
 	flw	fa0, a7, 8
 	fsw	a8, fa0, 8
-	lw	a8, sp, 20
+	lw	a8, sp, 32
 	lw	a8, a8, 0
 	addi	a8, a8, -1
-	lw	a21, sp, 16
-	sw	sp, a7, 92
-	sw	sp, a6, 96
-	sw	sp, a4, 100
+	lw	a21, sp, 28
+	sw	sp, a7, 84
+	sw	sp, a6, 88
+	sw	sp, a4, 92
 	addi	a1, a8, 0
 	addi	a0, a7, 0
-	sw	sp, ra, 104
-	addi	sp, sp, 108
+	sw	sp, ra, 96
+	addi	sp, sp, 100
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -108
-	lw	ra, sp, 104
-	lw	a0, sp, 100
+	addi	sp, sp, -100
+	lw	ra, sp, 96
+	lw	a0, sp, 92
 	lw	a1, a0, 472
 	lw	a1, a1, 0
 	flw	fa0, a1, 0
-	lw	a2, sp, 96
+	lw	a2, sp, 88
 	flw	fa1, a2, 0
 	fmul.s	fa0, fa0, fa1, rne
 	flw	fa1, a1, 4
@@ -8449,43 +8315,43 @@
 	addi	a3, a3, 44
 	flw	fa1, a3, 0
 	fdiv.s	fa0, fa0, fa1, rne
-	lw	a21, sp, 12
+	lw	a21, sp, 24
 	addi	a0, a1, 0
-	sw	sp, ra, 104
-	addi	sp, sp, 108
+	sw	sp, ra, 96
+	addi	sp, sp, 100
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -108
-	lw	ra, sp, 104
+	addi	sp, sp, -100
+	lw	ra, sp, 96
 	jal	zero, 56
 	lw	a1, a0, 472
 	lui	a3, 0
 	addi	a3, a3, 40
 	flw	fa1, a3, 0
 	fdiv.s	fa0, fa0, fa1, rne
-	lw	a21, sp, 12
+	lw	a21, sp, 24
 	addi	a0, a1, 0
-	sw	sp, ra, 104
-	addi	sp, sp, 108
+	sw	sp, ra, 96
+	addi	sp, sp, 100
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -108
-	lw	ra, sp, 104
+	addi	sp, sp, -100
+	lw	ra, sp, 96
 	addi	a3, zero, 116
-	lw	a0, sp, 100
-	lw	a1, sp, 96
-	lw	a2, sp, 92
-	lw	a21, sp, 8
-	sw	sp, ra, 104
-	addi	sp, sp, 108
+	lw	a0, sp, 92
+	lw	a1, sp, 88
+	lw	a2, sp, 84
+	lw	a21, sp, 20
+	sw	sp, ra, 96
+	addi	sp, sp, 100
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -108
-	lw	ra, sp, 104
-	lw	a0, sp, 88
+	addi	sp, sp, -100
+	lw	ra, sp, 96
+	lw	a0, sp, 80
 	lw	a1, a0, 20
 	lw	a1, a1, 0
-	lw	a2, sp, 32
+	lw	a2, sp, 44
 	flw	fa0, a2, 0
 	fsw	a1, fa0, 0
 	flw	fa0, a2, 4
@@ -8493,29 +8359,29 @@
 	flw	fa0, a2, 8
 	fsw	a1, fa0, 8
 	addi	a1, zero, 1
-	lw	a0, sp, 88
-	lw	a21, sp, 4
-	sw	sp, ra, 104
-	addi	sp, sp, 108
+	lw	a0, sp, 80
+	lw	a21, sp, 16
+	sw	sp, ra, 96
+	addi	sp, sp, 100
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -108
-	lw	ra, sp, 104
+	addi	sp, sp, -100
+	lw	ra, sp, 96
 	jal	zero, 4
-	lw	a0, sp, 48
+	lw	a0, sp, 64
 	addi	a1, a0, -1
-	lw	a0, sp, 36
+	lw	a0, sp, 48
 	addi	a0, a0, 1
 	addi	a2, zero, 5
 	blt	a0, a2, 12
 	addi	a2, a0, -5
 	jal	zero, 8
 	addi	a2, a0, 0
-	flw	fa0, sp, 76
-	flw	fa1, sp, 68
-	flw	fa2, sp, 64
-	lw	a0, sp, 44
-	lw	a21, sp, 0
+	flw	fa0, sp, 8
+	flw	fa1, sp, 4
+	flw	fa2, sp, 0
+	lw	a0, sp, 60
+	lw	a21, sp, 12
 	lw	a20, a21, 0
 	jalr	zero, a20, 0
 	jalr	zero, ra, 0
@@ -8528,41 +8394,23 @@
 	flw	fa0, a5, 0
 	lw	a5, a8, 4
 	sub	a1, a1, a5
-	sw	sp, a2, 0
-	sw	sp, a0, 4
-	sw	sp, a6, 8
-	sw	sp, a7, 12
-	sw	sp, a3, 16
-	sw	sp, a4, 20
-	fsw	sp, fa0, 24
-	addi	a0, a1, 0
-	sw	sp, ra, 28
-	addi	sp, sp, 32
-	jal	ra, 18344
-	addi	sp, sp, -32
-	lw	ra, sp, 28
-	flw	fa1, sp, 24
-	fmul.s	fa0, fa1, fa0, rne
-	lw	a0, sp, 20
-	flw	fa1, a0, 0
+	fcvt.s.w	fa1, a1, rne
+	fmul.s	fa0, fa0, fa1, rne
+	flw	fa1, a4, 0
 	fmul.s	fa1, fa0, fa1, rne
-	lw	a1, sp, 16
-	flw	fa2, a1, 0
+	flw	fa2, a3, 0
 	fadd.s	fa1, fa1, fa2, rne
-	flw	fa2, a0, 4
+	flw	fa2, a4, 4
 	fmul.s	fa2, fa0, fa2, rne
-	flw	fa3, a1, 4
+	flw	fa3, a3, 4
 	fadd.s	fa2, fa2, fa3, rne
-	flw	fa3, a0, 8
+	flw	fa3, a4, 8
 	fmul.s	fa0, fa0, fa3, rne
-	flw	fa3, a1, 8
+	flw	fa3, a3, 8
 	fadd.s	fa0, fa0, fa3, rne
-	lw	a0, sp, 12
-	lw	a0, a0, 0
-	addi	a1, a0, -1
-	lw	a0, sp, 4
-	lw	a2, sp, 0
-	lw	a21, sp, 8
+	lw	a1, a7, 0
+	addi	a1, a1, -1
+	addi	a21, a6, 0
 	fsgnj.s	fa26, fa2, fa2
 	fsgnj.s	fa2, fa0, fa0
 	fsgnj.s	fa0, fa1, fa1
@@ -8750,80 +8598,71 @@
 	jal	zero, 4
 	lw	a0, sp, 40
 	flw	fa0, a0, 0
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	ra, 17480
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	addi	a1, zero, 255
-	blt	a1, a0, 24
+	fcvt.w.s	a1, fa0, rtz
+	addi	a2, zero, 255
+	blt	a2, a1, 24
+	addi	a2, zero, 0
+	blt	a1, a2, 8
+	jal	zero, 8
 	addi	a1, zero, 0
-	blt	a0, a1, 8
 	jal	zero, 8
-	addi	a0, zero, 0
-	jal	zero, 8
-	addi	a0, zero, 255
+	addi	a1, zero, 255
+	addi	a0, a1, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 19292
+	jal	ra, 19044
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	addi	a0, zero, 32
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 18928
+	jal	ra, 18680
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	lw	a0, sp, 40
 	flw	fa0, a0, 4
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	ra, 17376
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	addi	a1, zero, 255
-	blt	a1, a0, 24
+	fcvt.w.s	a1, fa0, rtz
+	addi	a2, zero, 255
+	blt	a2, a1, 24
+	addi	a2, zero, 0
+	blt	a1, a2, 8
+	jal	zero, 8
 	addi	a1, zero, 0
-	blt	a0, a1, 8
 	jal	zero, 8
-	addi	a0, zero, 0
-	jal	zero, 8
-	addi	a0, zero, 255
+	addi	a1, zero, 255
+	addi	a0, a1, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 19188
+	jal	ra, 18952
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	addi	a0, zero, 32
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 18824
+	jal	ra, 18588
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	lw	a0, sp, 40
 	flw	fa0, a0, 8
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	ra, 17272
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	addi	a1, zero, 255
-	blt	a1, a0, 24
+	fcvt.w.s	a1, fa0, rtz
+	addi	a2, zero, 255
+	blt	a2, a1, 24
+	addi	a2, zero, 0
+	blt	a1, a2, 8
+	jal	zero, 8
 	addi	a1, zero, 0
-	blt	a0, a1, 8
 	jal	zero, 8
-	addi	a0, zero, 0
-	jal	zero, 8
-	addi	a0, zero, 255
+	addi	a1, zero, 255
+	addi	a0, a1, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 19084
+	jal	ra, 18860
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	addi	a0, zero, 10
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 18720
+	jal	ra, 18496
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	lw	a0, sp, 36
@@ -9091,14 +8930,14 @@
 	flw	fa0, a1, 0
 	sw	sp, ra, 0
 	addi	sp, sp, 4
-	jal	ra, 17692
+	jal	ra, 17468
 	addi	sp, sp, -4
 	lw	ra, sp, 0
 	addi	a1, a0, 0
 	addi	a0, zero, 5
 	sw	sp, ra, 0
 	addi	sp, sp, 4
-	jal	ra, 17636
+	jal	ra, 17412
 	addi	sp, sp, -4
 	lw	ra, sp, 0
 	addi	a1, zero, 3
@@ -9109,7 +8948,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 17620
+	jal	ra, 17396
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a1, sp, 0
@@ -9120,7 +8959,7 @@
 	flw	fa0, a2, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 17576
+	jal	ra, 17352
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a1, sp, 0
@@ -9131,7 +8970,7 @@
 	flw	fa0, a2, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 17532
+	jal	ra, 17308
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a1, sp, 0
@@ -9142,7 +8981,7 @@
 	flw	fa0, a2, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 17488
+	jal	ra, 17264
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lw	a1, sp, 0
@@ -9160,7 +8999,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 17416
+	jal	ra, 17192
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	sw	sp, a0, 8
@@ -9176,7 +9015,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 17324
+	jal	ra, 17100
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	addi	a1, zero, 5
@@ -9186,7 +9025,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 17284
+	jal	ra, 17060
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	sw	sp, a0, 20
@@ -9208,7 +9047,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 17196
+	jal	ra, 16972
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	sw	sp, a0, 32
@@ -9251,7 +9090,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, 17052
+	jal	ra, 16828
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	sw	sp, a0, 40
@@ -9267,7 +9106,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 16960
+	jal	ra, 16736
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	addi	a1, zero, 5
@@ -9277,7 +9116,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 52
 	addi	sp, sp, 56
-	jal	ra, 16920
+	jal	ra, 16696
 	addi	sp, sp, -56
 	lw	ra, sp, 52
 	sw	sp, a0, 52
@@ -9299,7 +9138,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 64
 	addi	sp, sp, 68
-	jal	ra, 16832
+	jal	ra, 16608
 	addi	sp, sp, -68
 	lw	ra, sp, 64
 	sw	sp, a0, 64
@@ -9339,7 +9178,7 @@
 	jalr	zero, ra, 0
 	lw	a3, a21, 4
 	addi	a4, zero, 5
-	blt	a0, a4, 360
+	blt	a0, a4, 300
 	fmul.s	fa2, fa0, fa0, rne
 	fmul.s	fa3, fa1, fa1, rne
 	fadd.s	fa2, fa2, fa3, rne
@@ -9347,308 +9186,275 @@
 	addi	a0, a0, 144
 	flw	fa3, a0, 0
 	fadd.s	fa2, fa2, fa3, rne
-	sw	sp, a2, 0
-	sw	sp, a3, 4
-	sw	sp, a1, 8
-	fsw	sp, fa1, 12
-	fsw	sp, fa0, 16
-	fsgnj.s	fa0, fa2, fa2
-	sw	sp, ra, 20
-	addi	sp, sp, 24
-	jal	ra, 15048
-	addi	sp, sp, -24
-	lw	ra, sp, 20
-	flw	fa1, sp, 16
-	fdiv.s	fa1, fa1, fa0, rne
-	flw	fa2, sp, 12
-	fdiv.s	fa2, fa2, fa0, rne
+	fsqrt.s	fa2, fa2, rne
+	fdiv.s	fa0, fa0, fa2, rne
+	fdiv.s	fa1, fa1, fa2, rne
 	lui	a0, 0
 	addi	a0, a0, 144
 	flw	fa3, a0, 0
-	fdiv.s	fa0, fa3, fa0, rne
-	lw	a0, sp, 8
-	slli	a0, a0, 2
-	lw	a1, sp, 4
-	add	t0, a1, a0
+	fdiv.s	fa2, fa3, fa2, rne
+	slli	a0, a1, 2
+	add	t0, a3, a0
 	lw	a0, t0, 0
-	lw	a1, sp, 0
-	slli	a2, a1, 2
-	add	t0, a0, a2
-	lw	a2, t0, 0
-	lw	a2, a2, 0
-	fsw	a2, fa1, 0
-	fsw	a2, fa2, 4
-	fsw	a2, fa0, 8
-	addi	a2, a1, 40
-	slli	a2, a2, 2
-	add	t0, a0, a2
-	lw	a2, t0, 0
-	lw	a2, a2, 0
-	fsgnjn.s	fa3, fa2, fa2
-	fsw	a2, fa1, 0
-	fsw	a2, fa0, 4
-	fsw	a2, fa3, 8
-	addi	a2, a1, 80
-	slli	a2, a2, 2
-	add	t0, a0, a2
-	lw	a2, t0, 0
-	lw	a2, a2, 0
+	slli	a1, a2, 2
+	add	t0, a0, a1
+	lw	a1, t0, 0
+	lw	a1, a1, 0
+	fsw	a1, fa0, 0
+	fsw	a1, fa1, 4
+	fsw	a1, fa2, 8
+	addi	a1, a2, 40
+	slli	a1, a1, 2
+	add	t0, a0, a1
+	lw	a1, t0, 0
+	lw	a1, a1, 0
 	fsgnjn.s	fa3, fa1, fa1
+	fsw	a1, fa0, 0
+	fsw	a1, fa2, 4
+	fsw	a1, fa3, 8
+	addi	a1, a2, 80
+	slli	a1, a1, 2
+	add	t0, a0, a1
+	lw	a1, t0, 0
+	lw	a1, a1, 0
+	fsgnjn.s	fa3, fa0, fa0
+	fsgnjn.s	fa4, fa1, fa1
+	fsw	a1, fa2, 0
+	fsw	a1, fa3, 4
+	fsw	a1, fa4, 8
+	addi	a1, a2, 1
+	slli	a1, a1, 2
+	add	t0, a0, a1
+	lw	a1, t0, 0
+	lw	a1, a1, 0
+	fsgnjn.s	fa3, fa0, fa0
+	fsgnjn.s	fa4, fa1, fa1
+	fsgnjn.s	fa5, fa2, fa2
+	fsw	a1, fa3, 0
+	fsw	a1, fa4, 4
+	fsw	a1, fa5, 8
+	addi	a1, a2, 41
+	slli	a1, a1, 2
+	add	t0, a0, a1
+	lw	a1, t0, 0
+	lw	a1, a1, 0
+	fsgnjn.s	fa3, fa0, fa0
 	fsgnjn.s	fa4, fa2, fa2
-	fsw	a2, fa0, 0
-	fsw	a2, fa3, 4
-	fsw	a2, fa4, 8
-	addi	a2, a1, 1
-	slli	a2, a2, 2
-	add	t0, a0, a2
-	lw	a2, t0, 0
-	lw	a2, a2, 0
-	fsgnjn.s	fa3, fa1, fa1
-	fsgnjn.s	fa4, fa2, fa2
-	fsgnjn.s	fa5, fa0, fa0
-	fsw	a2, fa3, 0
-	fsw	a2, fa4, 4
-	fsw	a2, fa5, 8
-	addi	a2, a1, 41
-	slli	a2, a2, 2
-	add	t0, a0, a2
-	lw	a2, t0, 0
-	lw	a2, a2, 0
-	fsgnjn.s	fa3, fa1, fa1
-	fsgnjn.s	fa4, fa0, fa0
-	fsw	a2, fa3, 0
-	fsw	a2, fa4, 4
-	fsw	a2, fa2, 8
-	addi	a1, a1, 81
+	fsw	a1, fa3, 0
+	fsw	a1, fa4, 4
+	fsw	a1, fa1, 8
+	addi	a1, a2, 81
 	slli	a1, a1, 2
 	add	t0, a0, a1
 	lw	a0, t0, 0
 	lw	a0, a0, 0
-	fsgnjn.s	fa0, fa0, fa0
-	fsw	a0, fa0, 0
-	fsw	a0, fa1, 4
-	fsw	a0, fa2, 8
+	fsgnjn.s	fa2, fa2, fa2
+	fsw	a0, fa2, 0
+	fsw	a0, fa0, 4
+	fsw	a0, fa1, 8
 	jalr	zero, ra, 0
 	fmul.s	fa0, fa1, fa1, rne
 	lui	a3, 0
 	addi	a3, a3, 48
 	flw	fa1, a3, 0
 	fadd.s	fa0, fa0, fa1, rne
+	fsqrt.s	fa0, fa0, rne
+	lui	a3, 0
+	addi	a3, a3, 144
+	flw	fa1, a3, 0
+	fdiv.s	fa1, fa1, fa0, rne
 	sw	sp, a2, 0
-	sw	sp, a1, 8
-	sw	sp, a21, 20
-	fsw	sp, fa3, 24
-	sw	sp, a0, 28
-	fsw	sp, fa2, 32
+	sw	sp, a1, 4
+	sw	sp, a21, 8
+	fsw	sp, fa3, 12
+	sw	sp, a0, 16
+	fsw	sp, fa0, 20
+	fsw	sp, fa2, 24
+	fsgnj.s	fa0, fa1, fa1
+	sw	sp, ra, 28
+	addi	sp, sp, 32
+	jal	ra, 15788
+	addi	sp, sp, -32
+	lw	ra, sp, 28
+	flw	fa1, sp, 24
+	fmul.s	fa0, fa0, fa1, rne
+	fsw	sp, fa0, 28
+	sw	sp, ra, 32
+	addi	sp, sp, 36
+	jal	ra, 14916
+	addi	sp, sp, -36
+	lw	ra, sp, 32
+	flw	fa1, sp, 28
+	fsw	sp, fa0, 32
+	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 14700
+	jal	ra, 15196
 	addi	sp, sp, -40
 	lw	ra, sp, 36
-	lui	a0, 0
-	addi	a0, a0, 144
-	flw	fa1, a0, 0
-	fdiv.s	fa1, fa1, fa0, rne
-	fsw	sp, fa0, 36
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 40
-	addi	sp, sp, 44
-	jal	ra, 15936
-	addi	sp, sp, -44
-	lw	ra, sp, 40
 	flw	fa1, sp, 32
-	fmul.s	fa0, fa0, fa1, rne
-	fsw	sp, fa0, 40
-	sw	sp, ra, 44
-	addi	sp, sp, 48
-	jal	ra, 15064
-	addi	sp, sp, -48
-	lw	ra, sp, 44
-	flw	fa1, sp, 40
-	fsw	sp, fa0, 44
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 48
-	addi	sp, sp, 52
-	jal	ra, 15344
-	addi	sp, sp, -52
-	lw	ra, sp, 48
-	flw	fa1, sp, 44
 	fdiv.s	fa0, fa1, fa0, rne
-	flw	fa1, sp, 36
+	flw	fa1, sp, 20
 	fmul.s	fa0, fa0, fa1, rne
-	lw	a0, sp, 28
+	lw	a0, sp, 16
 	addi	a0, a0, 1
 	fmul.s	fa1, fa0, fa0, rne
 	lui	a1, 0
 	addi	a1, a1, 48
 	flw	fa2, a1, 0
 	fadd.s	fa1, fa1, fa2, rne
+	fsqrt.s	fa1, fa1, rne
+	lui	a1, 0
+	addi	a1, a1, 144
+	flw	fa2, a1, 0
+	fdiv.s	fa2, fa2, fa1, rne
+	fsw	sp, fa0, 36
+	sw	sp, a0, 40
+	fsw	sp, fa1, 44
+	fsgnj.s	fa0, fa2, fa2
+	sw	sp, ra, 48
+	addi	sp, sp, 52
+	jal	ra, 15624
+	addi	sp, sp, -52
+	lw	ra, sp, 48
+	flw	fa1, sp, 12
+	fmul.s	fa0, fa0, fa1, rne
 	fsw	sp, fa0, 48
-	sw	sp, a0, 52
+	sw	sp, ra, 52
+	addi	sp, sp, 56
+	jal	ra, 14752
+	addi	sp, sp, -56
+	lw	ra, sp, 52
+	flw	fa1, sp, 48
+	fsw	sp, fa0, 52
 	fsgnj.s	fa0, fa1, fa1
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, 14516
+	jal	ra, 15032
 	addi	sp, sp, -60
 	lw	ra, sp, 56
-	lui	a0, 0
-	addi	a0, a0, 144
-	flw	fa1, a0, 0
-	fdiv.s	fa1, fa1, fa0, rne
-	fsw	sp, fa0, 56
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 60
-	addi	sp, sp, 64
-	jal	ra, 15752
-	addi	sp, sp, -64
-	lw	ra, sp, 60
-	flw	fa1, sp, 24
-	fmul.s	fa0, fa0, fa1, rne
-	fsw	sp, fa0, 60
-	sw	sp, ra, 64
-	addi	sp, sp, 68
-	jal	ra, 14880
-	addi	sp, sp, -68
-	lw	ra, sp, 64
-	flw	fa1, sp, 60
-	fsw	sp, fa0, 64
-	fsgnj.s	fa0, fa1, fa1
-	sw	sp, ra, 68
-	addi	sp, sp, 72
-	jal	ra, 15160
-	addi	sp, sp, -72
-	lw	ra, sp, 68
-	flw	fa1, sp, 64
+	flw	fa1, sp, 52
 	fdiv.s	fa0, fa1, fa0, rne
-	flw	fa1, sp, 56
+	flw	fa1, sp, 44
 	fmul.s	fa1, fa0, fa1, rne
-	flw	fa0, sp, 48
-	flw	fa2, sp, 32
-	flw	fa3, sp, 24
-	lw	a0, sp, 52
-	lw	a1, sp, 8
+	flw	fa0, sp, 36
+	flw	fa2, sp, 24
+	flw	fa3, sp, 12
+	lw	a0, sp, 40
+	lw	a1, sp, 4
 	lw	a2, sp, 0
-	lw	a21, sp, 20
+	lw	a21, sp, 8
 	lw	a20, a21, 0
 	jalr	zero, a20, 0
 	lw	a3, a21, 4
 	addi	a4, zero, 0
-	blt	a0, a4, 332
+	blt	a0, a4, 316
+	fcvt.s.w	fa1, a0, rne
+	lui	a4, 0
+	addi	a4, a4, 36
+	flw	fa2, a4, 0
+	fmul.s	fa1, fa1, fa2, rne
+	lui	a4, 0
+	addi	a4, a4, 32
+	flw	fa2, a4, 0
+	fsub.s	fa2, fa1, fa2, rne
+	addi	a4, zero, 0
+	lui	a5, 0
+	addi	a5, a5, 152
+	flw	fa1, a5, 0
+	lui	a5, 0
+	addi	a5, a5, 152
+	flw	fa3, a5, 0
 	sw	sp, a21, 0
-	sw	sp, a0, 4
-	fsw	sp, fa0, 8
-	sw	sp, a2, 12
-	sw	sp, a1, 16
-	sw	sp, a3, 20
-	sw	sp, ra, 24
-	addi	sp, sp, 28
-	jal	ra, 14328
-	addi	sp, sp, -28
-	lw	ra, sp, 24
-	lui	a0, 0
-	addi	a0, a0, 36
-	flw	fa1, a0, 0
-	fmul.s	fa0, fa0, fa1, rne
-	lui	a0, 0
-	addi	a0, a0, 32
-	flw	fa1, a0, 0
-	fsub.s	fa2, fa0, fa1, rne
-	addi	a0, zero, 0
-	lui	a1, 0
-	addi	a1, a1, 152
-	flw	fa0, a1, 0
-	lui	a1, 0
-	addi	a1, a1, 152
-	flw	fa1, a1, 0
-	flw	fa3, sp, 8
-	lw	a1, sp, 16
-	lw	a2, sp, 12
-	lw	a21, sp, 20
+	fsw	sp, fa0, 4
+	sw	sp, a1, 8
+	sw	sp, a3, 12
+	sw	sp, a2, 16
+	sw	sp, a0, 20
+	addi	a0, a4, 0
+	addi	a21, a3, 0
+	fsgnj.s	fa26, fa3, fa3
+	fsgnj.s	fa3, fa0, fa0
+	fsgnj.s	fa0, fa1, fa1
+	fsgnj.s	fa1, fa26, fa26
 	sw	sp, ra, 24
 	addi	sp, sp, 28
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
 	addi	sp, sp, -28
 	lw	ra, sp, 24
-	lw	a0, sp, 4
-	sw	sp, ra, 24
-	addi	sp, sp, 28
-	jal	ra, 14204
-	addi	sp, sp, -28
-	lw	ra, sp, 24
-	lui	a0, 0
-	addi	a0, a0, 36
-	flw	fa1, a0, 0
+	lw	a0, sp, 20
+	fcvt.s.w	fa0, a0, rne
+	lui	a1, 0
+	addi	a1, a1, 36
+	flw	fa1, a1, 0
 	fmul.s	fa0, fa0, fa1, rne
-	lui	a0, 0
-	addi	a0, a0, 48
-	flw	fa1, a0, 0
+	lui	a1, 0
+	addi	a1, a1, 48
+	flw	fa1, a1, 0
 	fadd.s	fa2, fa0, fa1, rne
-	addi	a0, zero, 0
-	lui	a1, 0
-	addi	a1, a1, 152
-	flw	fa0, a1, 0
-	lui	a1, 0
-	addi	a1, a1, 152
-	flw	fa1, a1, 0
-	lw	a1, sp, 12
-	addi	a2, a1, 2
-	flw	fa3, sp, 8
-	lw	a3, sp, 16
-	lw	a21, sp, 20
-	addi	a1, a3, 0
+	addi	a1, zero, 0
+	lui	a2, 0
+	addi	a2, a2, 152
+	flw	fa0, a2, 0
+	lui	a2, 0
+	addi	a2, a2, 152
+	flw	fa1, a2, 0
+	lw	a2, sp, 16
+	addi	a3, a2, 2
+	flw	fa3, sp, 4
+	lw	a4, sp, 8
+	lw	a21, sp, 12
+	addi	a2, a3, 0
+	addi	a0, a1, 0
+	addi	a1, a4, 0
 	sw	sp, ra, 24
 	addi	sp, sp, 28
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
 	addi	sp, sp, -28
 	lw	ra, sp, 24
-	lw	a0, sp, 4
+	lw	a0, sp, 20
 	addi	a0, a0, -1
-	lw	a1, sp, 16
+	lw	a1, sp, 8
 	addi	a1, a1, 1
 	addi	a2, zero, 5
 	blt	a1, a2, 12
 	addi	a1, a1, -5
 	jal	zero, 4
-	flw	fa0, sp, 8
-	lw	a2, sp, 12
+	flw	fa0, sp, 4
+	lw	a2, sp, 16
 	lw	a21, sp, 0
 	lw	a20, a21, 0
 	jalr	zero, a20, 0
 	jalr	zero, ra, 0
 	lw	a3, a21, 4
 	addi	a4, zero, 0
-	blt	a0, a4, 324
+	blt	a0, a4, 284
+	fcvt.s.w	fa0, a0, rne
+	lui	a4, 0
+	addi	a4, a4, 36
+	flw	fa1, a4, 0
+	fmul.s	fa0, fa0, fa1, rne
+	lui	a4, 0
+	addi	a4, a4, 32
+	flw	fa1, a4, 0
+	fsub.s	fa0, fa0, fa1, rne
+	addi	a4, zero, 4
 	sw	sp, a21, 0
-	sw	sp, a0, 4
+	sw	sp, a3, 4
 	sw	sp, a2, 8
 	sw	sp, a1, 12
-	sw	sp, a3, 16
-	sw	sp, ra, 20
-	addi	sp, sp, 24
-	jal	ra, 13988
-	addi	sp, sp, -24
-	lw	ra, sp, 20
-	lui	a0, 0
-	addi	a0, a0, 36
-	flw	fa1, a0, 0
-	fmul.s	fa0, fa0, fa1, rne
-	lui	a0, 0
-	addi	a0, a0, 32
-	flw	fa1, a0, 0
-	fsub.s	fa0, fa0, fa1, rne
-	addi	a0, zero, 4
-	lw	a1, sp, 12
-	lw	a2, sp, 8
-	lw	a21, sp, 16
+	sw	sp, a0, 16
+	addi	a0, a4, 0
+	addi	a21, a3, 0
 	sw	sp, ra, 20
 	addi	sp, sp, 24
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
 	addi	sp, sp, -24
 	lw	ra, sp, 20
-	lw	a0, sp, 4
+	lw	a0, sp, 16
 	addi	a0, a0, -1
 	lw	a1, sp, 12
 	addi	a1, a1, 2
@@ -9659,42 +9465,37 @@
 	lw	a2, sp, 8
 	addi	a2, a2, 4
 	addi	a3, zero, 0
-	blt	a0, a3, 160
-	sw	sp, a0, 20
-	sw	sp, a2, 24
-	sw	sp, a1, 28
-	sw	sp, ra, 32
-	addi	sp, sp, 36
-	jal	ra, 13836
-	addi	sp, sp, -36
-	lw	ra, sp, 32
-	lui	a0, 0
-	addi	a0, a0, 36
-	flw	fa1, a0, 0
+	blt	a0, a3, 140
+	fcvt.s.w	fa0, a0, rne
+	lui	a3, 0
+	addi	a3, a3, 36
+	flw	fa1, a3, 0
 	fmul.s	fa0, fa0, fa1, rne
-	lui	a0, 0
-	addi	a0, a0, 32
-	flw	fa1, a0, 0
+	lui	a3, 0
+	addi	a3, a3, 32
+	flw	fa1, a3, 0
 	fsub.s	fa0, fa0, fa1, rne
-	addi	a0, zero, 4
-	lw	a1, sp, 28
-	lw	a2, sp, 24
-	lw	a21, sp, 16
+	addi	a3, zero, 4
+	lw	a21, sp, 4
+	sw	sp, a2, 20
+	sw	sp, a1, 24
+	sw	sp, a0, 28
+	addi	a0, a3, 0
 	sw	sp, ra, 32
 	addi	sp, sp, 36
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
 	addi	sp, sp, -36
 	lw	ra, sp, 32
-	lw	a0, sp, 20
+	lw	a0, sp, 28
 	addi	a0, a0, -1
-	lw	a1, sp, 28
+	lw	a1, sp, 24
 	addi	a1, a1, 2
 	addi	a2, zero, 5
 	blt	a1, a2, 12
 	addi	a1, a1, -5
 	jal	zero, 4
-	lw	a2, sp, 24
+	lw	a2, sp, 20
 	addi	a2, a2, 4
 	lw	a21, sp, 0
 	lw	a20, a21, 0
@@ -9715,7 +9516,7 @@
 	addi	a0, a3, 0
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 15196
+	jal	ra, 15124
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	addi	a1, a0, 0
@@ -9725,7 +9526,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 15128
+	jal	ra, 15056
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	addi	a1, hp, 0
@@ -9750,7 +9551,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 24
 	addi	sp, sp, 28
-	jal	ra, 15056
+	jal	ra, 14984
 	addi	sp, sp, -28
 	lw	ra, sp, 24
 	addi	a1, a0, 0
@@ -9760,7 +9561,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 14988
+	jal	ra, 14916
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	addi	a1, hp, 0
@@ -9785,7 +9586,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 14916
+	jal	ra, 14844
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	addi	a1, a0, 0
@@ -9795,7 +9596,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 14848
+	jal	ra, 14776
 	addi	sp, sp, -40
 	lw	ra, sp, 36
 	addi	a1, hp, 0
@@ -9820,7 +9621,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, 14776
+	jal	ra, 14704
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	addi	a1, a0, 0
@@ -9829,7 +9630,7 @@
 	sw	sp, a1, 40
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, 14712
+	jal	ra, 14640
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	addi	a1, hp, 0
@@ -9871,7 +9672,7 @@
 	addi	a0, a5, 0
 	sw	sp, ra, 24
 	addi	sp, sp, 28
-	jal	ra, 14572
+	jal	ra, 14500
 	addi	sp, sp, -28
 	lw	ra, sp, 24
 	addi	a1, a0, 0
@@ -9881,7 +9682,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 14504
+	jal	ra, 14432
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	addi	a1, hp, 0
@@ -9892,7 +9693,7 @@
 	lw	a0, sp, 16
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 14460
+	jal	ra, 14388
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	lw	a1, sp, 12
@@ -9911,7 +9712,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 32
 	addi	sp, sp, 36
-	jal	ra, 14412
+	jal	ra, 14340
 	addi	sp, sp, -36
 	lw	ra, sp, 32
 	addi	a1, a0, 0
@@ -9921,7 +9722,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 14344
+	jal	ra, 14272
 	addi	sp, sp, -40
 	lw	ra, sp, 36
 	addi	a1, hp, 0
@@ -9938,7 +9739,7 @@
 	flw	fa0, a2, 0
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 14304
+	jal	ra, 14232
 	addi	sp, sp, -40
 	lw	ra, sp, 36
 	addi	a1, a0, 0
@@ -9948,7 +9749,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, 14236
+	jal	ra, 14164
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	addi	a1, hp, 0
@@ -9965,7 +9766,7 @@
 	flw	fa0, a2, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, 14196
+	jal	ra, 14124
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	addi	a1, a0, 0
@@ -9975,7 +9776,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, 14128
+	jal	ra, 14056
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	addi	a1, hp, 0
@@ -10011,7 +9812,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 52
 	addi	sp, sp, 56
-	jal	ra, 14012
+	jal	ra, 13940
 	addi	sp, sp, -56
 	lw	ra, sp, 52
 	addi	a1, a0, 0
@@ -10021,7 +9822,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, 13944
+	jal	ra, 13872
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	addi	a1, hp, 0
@@ -10032,7 +9833,7 @@
 	lw	a0, sp, 48
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, 13900
+	jal	ra, 13828
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	lw	a1, sp, 44
@@ -10051,7 +9852,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, 13852
+	jal	ra, 13780
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	addi	a1, a0, 0
@@ -10061,7 +9862,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 64
 	addi	sp, sp, 68
-	jal	ra, 13784
+	jal	ra, 13712
 	addi	sp, sp, -68
 	lw	ra, sp, 64
 	addi	a1, hp, 0
@@ -10078,7 +9879,7 @@
 	flw	fa0, a2, 0
 	sw	sp, ra, 64
 	addi	sp, sp, 68
-	jal	ra, 13744
+	jal	ra, 13672
 	addi	sp, sp, -68
 	lw	ra, sp, 64
 	addi	a1, a0, 0
@@ -10087,7 +9888,7 @@
 	sw	sp, a1, 64
 	sw	sp, ra, 68
 	addi	sp, sp, 72
-	jal	ra, 13680
+	jal	ra, 13608
 	addi	sp, sp, -72
 	lw	ra, sp, 68
 	addi	a1, hp, 0
@@ -10171,7 +9972,7 @@
 	addi	a0, a8, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, -32548
+	jal	ra, -31940
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	lw	a1, sp, 36
@@ -10188,7 +9989,7 @@
 	addi	a0, a8, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, -32032
+	jal	ra, -31424
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	lw	a1, sp, 36
@@ -10203,7 +10004,7 @@
 	addi	a0, a8, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, -31856
+	jal	ra, -31248
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	lw	a1, sp, 36
@@ -10272,7 +10073,7 @@
 	addi	a0, a6, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, -32952
+	jal	ra, -32344
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	lw	a1, sp, 56
@@ -10289,7 +10090,7 @@
 	addi	a0, a6, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, -32436
+	jal	ra, -31828
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	lw	a1, sp, 56
@@ -10304,7 +10105,7 @@
 	addi	a0, a6, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, -32260
+	jal	ra, -31652
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	lw	a1, sp, 56
@@ -10370,7 +10171,7 @@
 	addi	a0, a11, 0
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, -33344
+	jal	ra, -32736
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	lw	a1, sp, 40
@@ -10387,7 +10188,7 @@
 	addi	a0, a11, 0
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, -32828
+	jal	ra, -32220
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	lw	a1, sp, 40
@@ -10402,7 +10203,7 @@
 	addi	a0, a11, 0
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, -32652
+	jal	ra, -32044
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	lw	a1, sp, 40
@@ -10457,7 +10258,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, -33692
+	jal	ra, -33084
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	lw	a1, sp, 52
@@ -10474,7 +10275,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, -33176
+	jal	ra, -32568
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	lw	a1, sp, 52
@@ -10489,7 +10290,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, -33000
+	jal	ra, -32392
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	lw	a1, sp, 52
@@ -10562,7 +10363,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 76
 	addi	sp, sp, 80
-	jal	ra, -34112
+	jal	ra, -33504
 	addi	sp, sp, -80
 	lw	ra, sp, 76
 	lw	a1, sp, 72
@@ -10579,7 +10380,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 76
 	addi	sp, sp, 80
-	jal	ra, -33596
+	jal	ra, -32988
 	addi	sp, sp, -80
 	lw	ra, sp, 76
 	lw	a1, sp, 72
@@ -10594,7 +10395,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 76
 	addi	sp, sp, 80
-	jal	ra, -33420
+	jal	ra, -32812
 	addi	sp, sp, -80
 	lw	ra, sp, 76
 	lw	a1, sp, 72
@@ -10653,7 +10454,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 96
 	addi	sp, sp, 100
-	jal	ra, -34476
+	jal	ra, -33868
 	addi	sp, sp, -100
 	lw	ra, sp, 96
 	lw	a1, sp, 92
@@ -10670,7 +10471,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 96
 	addi	sp, sp, 100
-	jal	ra, -33960
+	jal	ra, -33352
 	addi	sp, sp, -100
 	lw	ra, sp, 96
 	lw	a1, sp, 92
@@ -10685,7 +10486,7 @@
 	addi	a0, a7, 0
 	sw	sp, ra, 96
 	addi	sp, sp, 100
-	jal	ra, -33784
+	jal	ra, -33176
 	addi	sp, sp, -100
 	lw	ra, sp, 96
 	lw	a1, sp, 92
@@ -10784,7 +10585,7 @@
 	fsgnj.s	fa0, fa5, fa5
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, 10920
+	jal	ra, 10848
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	addi	a1, a0, 0
@@ -10794,7 +10595,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, 10852
+	jal	ra, 10780
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	addi	a1, hp, 0
@@ -10827,7 +10628,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 72
 	addi	sp, sp, 76
-	jal	ra, -35172
+	jal	ra, -34564
 	addi	sp, sp, -76
 	lw	ra, sp, 72
 	lw	a1, sp, 68
@@ -10844,7 +10645,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 72
 	addi	sp, sp, 76
-	jal	ra, -34656
+	jal	ra, -34048
 	addi	sp, sp, -76
 	lw	ra, sp, 72
 	lw	a1, sp, 68
@@ -10859,7 +10660,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 72
 	addi	sp, sp, 76
-	jal	ra, -34480
+	jal	ra, -33872
 	addi	sp, sp, -76
 	lw	ra, sp, 72
 	lw	a1, sp, 68
@@ -10906,7 +10707,7 @@
 	fsgnj.s	fa0, fa2, fa2
 	sw	sp, ra, 84
 	addi	sp, sp, 88
-	jal	ra, 10432
+	jal	ra, 10360
 	addi	sp, sp, -88
 	lw	ra, sp, 84
 	addi	a1, a0, 0
@@ -10916,7 +10717,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 88
 	addi	sp, sp, 92
-	jal	ra, 10364
+	jal	ra, 10292
 	addi	sp, sp, -92
 	lw	ra, sp, 88
 	addi	a1, hp, 0
@@ -10949,7 +10750,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 100
 	addi	sp, sp, 104
-	jal	ra, -35660
+	jal	ra, -35052
 	addi	sp, sp, -104
 	lw	ra, sp, 100
 	lw	a1, sp, 96
@@ -10966,7 +10767,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 100
 	addi	sp, sp, 104
-	jal	ra, -35144
+	jal	ra, -34536
 	addi	sp, sp, -104
 	lw	ra, sp, 100
 	lw	a1, sp, 96
@@ -10981,7 +10782,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 100
 	addi	sp, sp, 104
-	jal	ra, -34968
+	jal	ra, -34360
 	addi	sp, sp, -104
 	lw	ra, sp, 100
 	lw	a1, sp, 96
@@ -11029,7 +10830,7 @@
 	fsgnj.s	fa0, fa2, fa2
 	sw	sp, ra, 112
 	addi	sp, sp, 116
-	jal	ra, 9940
+	jal	ra, 9868
 	addi	sp, sp, -116
 	lw	ra, sp, 112
 	addi	a1, a0, 0
@@ -11039,7 +10840,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 116
 	addi	sp, sp, 120
-	jal	ra, 9872
+	jal	ra, 9800
 	addi	sp, sp, -120
 	lw	ra, sp, 116
 	addi	a1, hp, 0
@@ -11072,7 +10873,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 128
 	addi	sp, sp, 132
-	jal	ra, -36152
+	jal	ra, -35544
 	addi	sp, sp, -132
 	lw	ra, sp, 128
 	lw	a1, sp, 124
@@ -11089,7 +10890,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 128
 	addi	sp, sp, 132
-	jal	ra, -35636
+	jal	ra, -35028
 	addi	sp, sp, -132
 	lw	ra, sp, 128
 	lw	a1, sp, 124
@@ -11104,7 +10905,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 128
 	addi	sp, sp, 132
-	jal	ra, -35460
+	jal	ra, -34852
 	addi	sp, sp, -132
 	lw	ra, sp, 128
 	lw	a1, sp, 124
@@ -11213,7 +11014,7 @@
 	fsgnj.s	fa0, fa4, fa4
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, 9204
+	jal	ra, 9132
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	addi	a1, a0, 0
@@ -11223,7 +11024,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 9136
+	jal	ra, 9064
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	addi	a1, hp, 0
@@ -11256,7 +11057,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, -36888
+	jal	ra, -36280
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	lw	a1, sp, 56
@@ -11273,7 +11074,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, -36372
+	jal	ra, -35764
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	lw	a1, sp, 56
@@ -11288,7 +11089,7 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, -36196
+	jal	ra, -35588
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	lw	a1, sp, 56
@@ -11363,6 +11164,14 @@
 	lui	a1, 0
 	addi	a1, a1, 28
 	flw	fa0, a1, 0
+	fcvt.s.w	fa1, a0, rne
+	fdiv.s	fa0, fa0, fa1, rne
+	fsw	a6, fa0, 0
+	lw	a0, a5, 0
+	addi	a1, zero, 3
+	lui	a6, 0
+	addi	a6, a6, 152
+	flw	fa0, a6, 0
 	sw	sp, a2, 24
 	sw	sp, a18, 28
 	sw	sp, a20, 32
@@ -11380,446 +11189,429 @@
 	sw	sp, a11, 80
 	sw	sp, a8, 84
 	sw	sp, a5, 88
-	sw	sp, a6, 92
-	fsw	sp, fa0, 96
+	sw	sp, a0, 92
+	addi	a0, a1, 0
+	sw	sp, ra, 96
+	addi	sp, sp, 100
+	jal	ra, 8416
+	addi	sp, sp, -100
+	lw	ra, sp, 96
+	sw	sp, a0, 96
 	sw	sp, ra, 100
 	addi	sp, sp, 104
-	jal	ra, 6960
+	jal	ra, -9100
 	addi	sp, sp, -104
 	lw	ra, sp, 100
-	flw	fa1, sp, 96
-	fdiv.s	fa0, fa1, fa0, rne
-	lw	a0, sp, 92
-	fsw	a0, fa0, 0
-	lw	a0, sp, 88
-	lw	a1, a0, 0
-	addi	a2, zero, 3
-	lui	a3, 0
-	addi	a3, a3, 152
-	flw	fa0, a3, 0
-	sw	sp, a1, 100
-	addi	a0, a2, 0
+	addi	a1, zero, 5
+	addi	a2, zero, 0
+	sw	sp, a0, 100
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 104
 	addi	sp, sp, 108
-	jal	ra, 8452
+	jal	ra, 8324
 	addi	sp, sp, -108
 	lw	ra, sp, 104
+	addi	a1, zero, 5
+	addi	a2, zero, 0
 	sw	sp, a0, 104
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 108
 	addi	sp, sp, 112
-	jal	ra, -9288
+	jal	ra, 8284
 	addi	sp, sp, -112
 	lw	ra, sp, 108
-	addi	a1, zero, 5
-	addi	a2, zero, 0
 	sw	sp, a0, 108
-	addi	a0, a1, 0
-	addi	a1, a2, 0
 	sw	sp, ra, 112
 	addi	sp, sp, 116
-	jal	ra, 8360
+	jal	ra, -9204
 	addi	sp, sp, -116
 	lw	ra, sp, 112
-	addi	a1, zero, 5
-	addi	a2, zero, 0
 	sw	sp, a0, 112
-	addi	a0, a1, 0
-	addi	a1, a2, 0
 	sw	sp, ra, 116
 	addi	sp, sp, 120
-	jal	ra, 8320
+	jal	ra, -9228
 	addi	sp, sp, -120
 	lw	ra, sp, 116
+	addi	a1, zero, 1
+	addi	a2, zero, 0
 	sw	sp, a0, 116
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 120
 	addi	sp, sp, 124
-	jal	ra, -9392
+	jal	ra, 8196
 	addi	sp, sp, -124
 	lw	ra, sp, 120
 	sw	sp, a0, 120
 	sw	sp, ra, 124
 	addi	sp, sp, 128
-	jal	ra, -9416
+	jal	ra, -9292
 	addi	sp, sp, -128
 	lw	ra, sp, 124
-	addi	a1, zero, 1
-	addi	a2, zero, 0
-	sw	sp, a0, 124
-	addi	a0, a1, 0
-	addi	a1, a2, 0
-	sw	sp, ra, 128
-	addi	sp, sp, 132
-	jal	ra, 8232
-	addi	sp, sp, -132
-	lw	ra, sp, 128
-	sw	sp, a0, 128
-	sw	sp, ra, 132
-	addi	sp, sp, 136
-	jal	ra, -9480
-	addi	sp, sp, -136
-	lw	ra, sp, 132
 	addi	a1, hp, 0
 	addi	hp, hp, 32
 	sw	a1, a0, 28
-	lw	a0, sp, 128
-	sw	a1, a0, 24
-	lw	a0, sp, 124
-	sw	a1, a0, 20
 	lw	a0, sp, 120
-	sw	a1, a0, 16
+	sw	a1, a0, 24
 	lw	a0, sp, 116
-	sw	a1, a0, 12
+	sw	a1, a0, 20
 	lw	a0, sp, 112
-	sw	a1, a0, 8
+	sw	a1, a0, 16
 	lw	a0, sp, 108
-	sw	a1, a0, 4
+	sw	a1, a0, 12
 	lw	a0, sp, 104
-	sw	a1, a0, 0
+	sw	a1, a0, 8
 	lw	a0, sp, 100
-	sw	sp, ra, 132
-	addi	sp, sp, 136
-	jal	ra, 8116
-	addi	sp, sp, -136
-	lw	ra, sp, 132
+	sw	a1, a0, 4
+	lw	a0, sp, 96
+	sw	a1, a0, 0
+	lw	a0, sp, 92
+	sw	sp, ra, 124
+	addi	sp, sp, 128
+	jal	ra, 8080
+	addi	sp, sp, -128
+	lw	ra, sp, 124
 	lw	a1, sp, 88
 	lw	a2, a1, 0
 	addi	a2, a2, -2
 	addi	a1, a2, 0
-	sw	sp, ra, 132
-	addi	sp, sp, 136
-	jal	ra, -9352
-	addi	sp, sp, -136
-	lw	ra, sp, 132
+	sw	sp, ra, 124
+	addi	sp, sp, 128
+	jal	ra, -9164
+	addi	sp, sp, -128
+	lw	ra, sp, 124
 	lw	a1, sp, 88
 	lw	a2, a1, 0
 	addi	a3, zero, 3
 	lui	a4, 0
 	addi	a4, a4, 152
 	flw	fa0, a4, 0
-	sw	sp, a0, 132
-	sw	sp, a2, 136
+	sw	sp, a0, 124
+	sw	sp, a2, 128
 	addi	a0, a3, 0
+	sw	sp, ra, 132
+	addi	sp, sp, 136
+	jal	ra, 8016
+	addi	sp, sp, -136
+	lw	ra, sp, 132
+	sw	sp, a0, 132
+	sw	sp, ra, 136
+	addi	sp, sp, 140
+	jal	ra, -9500
+	addi	sp, sp, -140
+	lw	ra, sp, 136
+	addi	a1, zero, 5
+	addi	a2, zero, 0
+	sw	sp, a0, 136
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 140
 	addi	sp, sp, 144
-	jal	ra, 8052
+	jal	ra, 7924
 	addi	sp, sp, -144
 	lw	ra, sp, 140
+	addi	a1, zero, 5
+	addi	a2, zero, 0
 	sw	sp, a0, 140
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 144
 	addi	sp, sp, 148
-	jal	ra, -9688
+	jal	ra, 7884
 	addi	sp, sp, -148
 	lw	ra, sp, 144
-	addi	a1, zero, 5
-	addi	a2, zero, 0
 	sw	sp, a0, 144
-	addi	a0, a1, 0
-	addi	a1, a2, 0
 	sw	sp, ra, 148
 	addi	sp, sp, 152
-	jal	ra, 7960
+	jal	ra, -9604
 	addi	sp, sp, -152
 	lw	ra, sp, 148
-	addi	a1, zero, 5
-	addi	a2, zero, 0
 	sw	sp, a0, 148
-	addi	a0, a1, 0
-	addi	a1, a2, 0
 	sw	sp, ra, 152
 	addi	sp, sp, 156
-	jal	ra, 7920
+	jal	ra, -9628
 	addi	sp, sp, -156
 	lw	ra, sp, 152
+	addi	a1, zero, 1
+	addi	a2, zero, 0
 	sw	sp, a0, 152
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 156
 	addi	sp, sp, 160
-	jal	ra, -9792
+	jal	ra, 7796
 	addi	sp, sp, -160
 	lw	ra, sp, 156
 	sw	sp, a0, 156
 	sw	sp, ra, 160
 	addi	sp, sp, 164
-	jal	ra, -9816
+	jal	ra, -9692
 	addi	sp, sp, -164
 	lw	ra, sp, 160
-	addi	a1, zero, 1
-	addi	a2, zero, 0
-	sw	sp, a0, 160
-	addi	a0, a1, 0
-	addi	a1, a2, 0
-	sw	sp, ra, 164
-	addi	sp, sp, 168
-	jal	ra, 7832
-	addi	sp, sp, -168
-	lw	ra, sp, 164
-	sw	sp, a0, 164
-	sw	sp, ra, 168
-	addi	sp, sp, 172
-	jal	ra, -9880
-	addi	sp, sp, -172
-	lw	ra, sp, 168
 	addi	a1, hp, 0
 	addi	hp, hp, 32
 	sw	a1, a0, 28
-	lw	a0, sp, 164
-	sw	a1, a0, 24
-	lw	a0, sp, 160
-	sw	a1, a0, 20
 	lw	a0, sp, 156
-	sw	a1, a0, 16
+	sw	a1, a0, 24
 	lw	a0, sp, 152
-	sw	a1, a0, 12
+	sw	a1, a0, 20
 	lw	a0, sp, 148
-	sw	a1, a0, 8
+	sw	a1, a0, 16
 	lw	a0, sp, 144
-	sw	a1, a0, 4
+	sw	a1, a0, 12
 	lw	a0, sp, 140
-	sw	a1, a0, 0
+	sw	a1, a0, 8
 	lw	a0, sp, 136
-	sw	sp, ra, 168
-	addi	sp, sp, 172
-	jal	ra, 7716
-	addi	sp, sp, -172
-	lw	ra, sp, 168
+	sw	a1, a0, 4
+	lw	a0, sp, 132
+	sw	a1, a0, 0
+	lw	a0, sp, 128
+	sw	sp, ra, 160
+	addi	sp, sp, 164
+	jal	ra, 7680
+	addi	sp, sp, -164
+	lw	ra, sp, 160
 	lw	a1, sp, 88
 	lw	a2, a1, 0
 	addi	a2, a2, -2
 	addi	a1, a2, 0
-	sw	sp, ra, 168
-	addi	sp, sp, 172
-	jal	ra, -9752
-	addi	sp, sp, -172
-	lw	ra, sp, 168
+	sw	sp, ra, 160
+	addi	sp, sp, 164
+	jal	ra, -9564
+	addi	sp, sp, -164
+	lw	ra, sp, 160
 	lw	a1, sp, 88
 	lw	a2, a1, 0
 	addi	a3, zero, 3
 	lui	a4, 0
 	addi	a4, a4, 152
 	flw	fa0, a4, 0
-	sw	sp, a0, 168
-	sw	sp, a2, 172
+	sw	sp, a0, 160
+	sw	sp, a2, 164
 	addi	a0, a3, 0
+	sw	sp, ra, 168
+	addi	sp, sp, 172
+	jal	ra, 7616
+	addi	sp, sp, -172
+	lw	ra, sp, 168
+	sw	sp, a0, 168
+	sw	sp, ra, 172
+	addi	sp, sp, 176
+	jal	ra, -9900
+	addi	sp, sp, -176
+	lw	ra, sp, 172
+	addi	a1, zero, 5
+	addi	a2, zero, 0
+	sw	sp, a0, 172
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 176
 	addi	sp, sp, 180
-	jal	ra, 7652
+	jal	ra, 7524
 	addi	sp, sp, -180
 	lw	ra, sp, 176
+	addi	a1, zero, 5
+	addi	a2, zero, 0
 	sw	sp, a0, 176
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 180
 	addi	sp, sp, 184
-	jal	ra, -10088
+	jal	ra, 7484
 	addi	sp, sp, -184
 	lw	ra, sp, 180
-	addi	a1, zero, 5
-	addi	a2, zero, 0
 	sw	sp, a0, 180
-	addi	a0, a1, 0
-	addi	a1, a2, 0
 	sw	sp, ra, 184
 	addi	sp, sp, 188
-	jal	ra, 7560
+	jal	ra, -10004
 	addi	sp, sp, -188
 	lw	ra, sp, 184
-	addi	a1, zero, 5
-	addi	a2, zero, 0
 	sw	sp, a0, 184
-	addi	a0, a1, 0
-	addi	a1, a2, 0
 	sw	sp, ra, 188
 	addi	sp, sp, 192
-	jal	ra, 7520
+	jal	ra, -10028
 	addi	sp, sp, -192
 	lw	ra, sp, 188
+	addi	a1, zero, 1
+	addi	a2, zero, 0
 	sw	sp, a0, 188
+	addi	a0, a1, 0
+	addi	a1, a2, 0
 	sw	sp, ra, 192
 	addi	sp, sp, 196
-	jal	ra, -10192
+	jal	ra, 7396
 	addi	sp, sp, -196
 	lw	ra, sp, 192
 	sw	sp, a0, 192
 	sw	sp, ra, 196
 	addi	sp, sp, 200
-	jal	ra, -10216
+	jal	ra, -10092
 	addi	sp, sp, -200
 	lw	ra, sp, 196
-	addi	a1, zero, 1
-	addi	a2, zero, 0
-	sw	sp, a0, 196
-	addi	a0, a1, 0
-	addi	a1, a2, 0
-	sw	sp, ra, 200
-	addi	sp, sp, 204
-	jal	ra, 7432
-	addi	sp, sp, -204
-	lw	ra, sp, 200
-	sw	sp, a0, 200
-	sw	sp, ra, 204
-	addi	sp, sp, 208
-	jal	ra, -10280
-	addi	sp, sp, -208
-	lw	ra, sp, 204
 	addi	a1, hp, 0
 	addi	hp, hp, 32
 	sw	a1, a0, 28
-	lw	a0, sp, 200
-	sw	a1, a0, 24
-	lw	a0, sp, 196
-	sw	a1, a0, 20
 	lw	a0, sp, 192
-	sw	a1, a0, 16
+	sw	a1, a0, 24
 	lw	a0, sp, 188
-	sw	a1, a0, 12
+	sw	a1, a0, 20
 	lw	a0, sp, 184
-	sw	a1, a0, 8
+	sw	a1, a0, 16
 	lw	a0, sp, 180
-	sw	a1, a0, 4
+	sw	a1, a0, 12
 	lw	a0, sp, 176
-	sw	a1, a0, 0
+	sw	a1, a0, 8
 	lw	a0, sp, 172
-	sw	sp, ra, 204
-	addi	sp, sp, 208
-	jal	ra, 7316
-	addi	sp, sp, -208
-	lw	ra, sp, 204
+	sw	a1, a0, 4
+	lw	a0, sp, 168
+	sw	a1, a0, 0
+	lw	a0, sp, 164
+	sw	sp, ra, 196
+	addi	sp, sp, 200
+	jal	ra, 7280
+	addi	sp, sp, -200
+	lw	ra, sp, 196
 	lw	a1, sp, 88
 	lw	a2, a1, 0
 	addi	a2, a2, -2
 	addi	a1, a2, 0
-	sw	sp, ra, 204
-	addi	sp, sp, 208
-	jal	ra, -10152
-	addi	sp, sp, -208
-	lw	ra, sp, 204
+	sw	sp, ra, 196
+	addi	sp, sp, 200
+	jal	ra, -9964
+	addi	sp, sp, -200
+	lw	ra, sp, 196
 	lw	a21, sp, 84
-	sw	sp, a0, 204
-	sw	sp, ra, 208
-	addi	sp, sp, 212
+	sw	sp, a0, 196
+	sw	sp, ra, 200
+	addi	sp, sp, 204
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -212
-	lw	ra, sp, 208
+	addi	sp, sp, -204
+	lw	ra, sp, 200
 	lw	a21, sp, 80
-	sw	sp, ra, 208
-	addi	sp, sp, 212
+	sw	sp, ra, 200
+	addi	sp, sp, 204
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -212
-	lw	ra, sp, 208
+	addi	sp, sp, -204
+	lw	ra, sp, 200
 	addi	a0, zero, 0
 	lw	a21, sp, 76
-	sw	sp, a0, 208
-	sw	sp, ra, 212
-	addi	sp, sp, 216
+	sw	sp, a0, 200
+	sw	sp, ra, 204
+	addi	sp, sp, 208
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a1, zero, 0
 	bne	a0, a1, 20
-	lw	a0, sp, 208
+	lw	a0, sp, 200
 	lw	a1, sp, 72
 	sw	a1, a0, 0
 	jal	zero, 36
 	addi	a0, zero, 1
 	lw	a21, sp, 68
-	sw	sp, ra, 212
-	addi	sp, sp, 216
+	sw	sp, ra, 204
+	addi	sp, sp, 208
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 0
 	lw	a21, sp, 64
-	sw	sp, ra, 212
-	addi	sp, sp, 216
+	sw	sp, ra, 204
+	addi	sp, sp, 208
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 0
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, -42796
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, -41996
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	lw	a1, sp, 60
 	sw	a1, a0, 0
 	addi	a0, zero, 80
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 7024
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 6988
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 51
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 7000
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 6964
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 10
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 6976
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 6940
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	lw	a0, sp, 88
 	lw	a1, a0, 0
 	addi	a0, a1, 0
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 7284
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 7248
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 32
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 6920
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 6884
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	lw	a0, sp, 88
 	lw	a1, a0, 4
 	addi	a0, a1, 0
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 7228
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 7192
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 32
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 6864
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 6828
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 255
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 7180
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 7144
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 10
-	sw	sp, ra, 212
-	addi	sp, sp, 216
-	jal	ra, 6816
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	sw	sp, ra, 204
+	addi	sp, sp, 208
+	jal	ra, 6780
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 4
 	lw	a21, sp, 56
-	sw	sp, ra, 212
-	addi	sp, sp, 216
+	sw	sp, ra, 204
+	addi	sp, sp, 208
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	addi	a0, zero, 9
 	addi	a1, zero, 0
 	addi	a2, zero, 0
 	lw	a21, sp, 52
-	sw	sp, ra, 212
-	addi	sp, sp, 216
+	sw	sp, ra, 204
+	addi	sp, sp, 208
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -216
-	lw	ra, sp, 212
+	addi	sp, sp, -208
+	lw	ra, sp, 204
 	lw	a0, sp, 48
 	lw	a1, a0, 16
 	lw	a2, a1, 476
@@ -11827,7 +11619,7 @@
 	lw	a4, a3, 0
 	addi	a4, a4, -1
 	addi	a5, zero, 0
-	sw	sp, a1, 212
+	sw	sp, a1, 204
 	blt	a4, a5, 268
 	slli	a5, a4, 2
 	lw	a6, sp, 44
@@ -11837,91 +11629,91 @@
 	lw	a8, a2, 0
 	lw	a9, a5, 4
 	addi	a10, zero, 1
-	sw	sp, a2, 216
+	sw	sp, a2, 208
 	bne	a9, a10, 64
-	sw	sp, a7, 220
-	sw	sp, a4, 224
+	sw	sp, a7, 212
+	sw	sp, a4, 216
 	addi	a1, a5, 0
 	addi	a0, a8, 0
-	sw	sp, ra, 228
-	addi	sp, sp, 232
-	jal	ra, -39244
-	addi	sp, sp, -232
-	lw	ra, sp, 228
-	lw	a1, sp, 224
+	sw	sp, ra, 220
+	addi	sp, sp, 224
+	jal	ra, -38600
+	addi	sp, sp, -224
+	lw	ra, sp, 220
+	lw	a1, sp, 216
 	slli	a2, a1, 2
-	lw	a3, sp, 220
+	lw	a3, sp, 212
 	add	t0, a3, a2
 	sw	t0, a0, 0
 	jal	zero, 128
 	addi	a10, zero, 2
 	bne	a9, a10, 64
-	sw	sp, a7, 220
-	sw	sp, a4, 224
+	sw	sp, a7, 212
+	sw	sp, a4, 216
 	addi	a1, a5, 0
 	addi	a0, a8, 0
-	sw	sp, ra, 228
-	addi	sp, sp, 232
-	jal	ra, -38728
-	addi	sp, sp, -232
-	lw	ra, sp, 228
-	lw	a1, sp, 224
+	sw	sp, ra, 220
+	addi	sp, sp, 224
+	jal	ra, -38084
+	addi	sp, sp, -224
+	lw	ra, sp, 220
+	lw	a1, sp, 216
 	slli	a2, a1, 2
-	lw	a3, sp, 220
+	lw	a3, sp, 212
 	add	t0, a3, a2
 	sw	t0, a0, 0
 	jal	zero, 60
-	sw	sp, a7, 220
-	sw	sp, a4, 224
+	sw	sp, a7, 212
+	sw	sp, a4, 216
 	addi	a1, a5, 0
 	addi	a0, a8, 0
-	sw	sp, ra, 228
-	addi	sp, sp, 232
-	jal	ra, -38552
-	addi	sp, sp, -232
-	lw	ra, sp, 228
-	lw	a1, sp, 224
+	sw	sp, ra, 220
+	addi	sp, sp, 224
+	jal	ra, -37908
+	addi	sp, sp, -224
+	lw	ra, sp, 220
+	lw	a1, sp, 216
 	slli	a2, a1, 2
-	lw	a3, sp, 220
+	lw	a3, sp, 212
 	add	t0, a3, a2
 	sw	t0, a0, 0
 	addi	a1, a1, -1
-	lw	a0, sp, 216
+	lw	a0, sp, 208
 	lw	a21, sp, 40
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	jal	zero, 4
 	addi	a1, zero, 118
-	lw	a0, sp, 212
+	lw	a0, sp, 204
 	lw	a21, sp, 36
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	lw	a0, sp, 48
 	lw	a0, a0, 12
 	addi	a1, zero, 119
 	lw	a21, sp, 36
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	addi	a0, zero, 2
 	lw	a21, sp, 32
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	lw	a0, sp, 28
 	flw	fa0, a0, 0
 	lw	a1, sp, 24
@@ -11936,12 +11728,12 @@
 	lw	a2, sp, 20
 	lw	a21, sp, 40
 	addi	a0, a2, 0
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	lw	a0, sp, 72
 	lw	a0, a0, 0
 	addi	a0, a0, -1
@@ -11965,36 +11757,36 @@
 	addi	a3, zero, 1
 	bne	a2, a3, 36
 	lw	a21, sp, 16
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	jal	zero, 44
 	addi	a3, zero, 2
 	bne	a2, a3, 36
 	lw	a21, sp, 12
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	jal	zero, 4
 	jal	zero, 4
 	jal	zero, 4
 	jal	zero, 4
 	addi	a1, zero, 0
 	addi	a2, zero, 0
-	lw	a0, sp, 168
+	lw	a0, sp, 160
 	lw	a21, sp, 8
-	sw	sp, ra, 228
-	addi	sp, sp, 232
+	sw	sp, ra, 220
+	addi	sp, sp, 224
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -232
-	lw	ra, sp, 228
+	addi	sp, sp, -224
+	lw	ra, sp, 220
 	addi	a1, zero, 0
 	addi	a2, zero, 2
 	lw	a0, sp, 88
@@ -12003,50 +11795,50 @@
 	jalr	zero, ra, 0
 	lw	a0, a0, 4
 	addi	a0, a0, -1
-	sw	sp, a1, 228
+	sw	sp, a1, 220
 	blt	a1, a0, 8
 	jal	zero, 48
 	addi	a0, zero, 1
-	lw	a3, sp, 204
+	lw	a3, sp, 196
 	lw	a21, sp, 8
 	addi	a1, a0, 0
 	addi	a0, a3, 0
-	sw	sp, ra, 232
-	addi	sp, sp, 236
+	sw	sp, ra, 224
+	addi	sp, sp, 228
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -236
-	lw	ra, sp, 232
+	addi	sp, sp, -228
+	lw	ra, sp, 224
 	addi	a0, zero, 0
-	lw	a1, sp, 228
-	lw	a2, sp, 132
-	lw	a3, sp, 168
-	lw	a4, sp, 204
+	lw	a1, sp, 220
+	lw	a2, sp, 124
+	lw	a3, sp, 160
+	lw	a4, sp, 196
 	lw	a21, sp, 4
-	sw	sp, ra, 232
-	addi	sp, sp, 236
+	sw	sp, ra, 224
+	addi	sp, sp, 228
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -236
-	lw	ra, sp, 232
+	addi	sp, sp, -228
+	lw	ra, sp, 224
 	addi	a0, zero, 1
 	addi	a4, zero, 4
-	lw	a1, sp, 168
-	lw	a2, sp, 204
-	lw	a3, sp, 132
+	lw	a1, sp, 160
+	lw	a2, sp, 196
+	lw	a3, sp, 124
 	lw	a21, sp, 0
-	sw	sp, ra, 232
-	addi	sp, sp, 236
+	sw	sp, ra, 224
+	addi	sp, sp, 228
 	lw	a20, a21, 0
 	jalr	ra, a20, 0
-	addi	sp, sp, -236
-	lw	ra, sp, 232
+	addi	sp, sp, -228
+	lw	ra, sp, 224
 	jalr	zero, ra, 0
 	addi	a0, zero, 1
 	addi	a1, zero, 0
 	sw	sp, ra, 0
 	addi	sp, sp, 4
-	jal	ra, 5844
+	jal	ra, 5808
 	addi	sp, sp, -4
 	lw	ra, sp, 0
 	addi	a1, zero, 0
@@ -12057,7 +11849,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 5828
+	jal	ra, 5792
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a1, zero, 60
@@ -12085,7 +11877,7 @@
 	addi	a0, a20, 0
 	sw	sp, ra, 4
 	addi	sp, sp, 8
-	jal	ra, 5688
+	jal	ra, 5652
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	addi	a1, zero, 3
@@ -12096,7 +11888,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 8
 	addi	sp, sp, 12
-	jal	ra, 5672
+	jal	ra, 5636
 	addi	sp, sp, -12
 	lw	ra, sp, 8
 	addi	a1, zero, 3
@@ -12107,7 +11899,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 12
 	addi	sp, sp, 16
-	jal	ra, 5628
+	jal	ra, 5592
 	addi	sp, sp, -16
 	lw	ra, sp, 12
 	addi	a1, zero, 3
@@ -12118,7 +11910,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 16
 	addi	sp, sp, 20
-	jal	ra, 5584
+	jal	ra, 5548
 	addi	sp, sp, -20
 	lw	ra, sp, 16
 	addi	a1, zero, 1
@@ -12129,7 +11921,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 20
 	addi	sp, sp, 24
-	jal	ra, 5540
+	jal	ra, 5504
 	addi	sp, sp, -24
 	lw	ra, sp, 20
 	addi	a1, zero, 50
@@ -12141,14 +11933,14 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 5464
+	jal	ra, 5428
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	addi	a1, a0, 0
 	lw	a0, sp, 24
 	sw	sp, ra, 28
 	addi	sp, sp, 32
-	jal	ra, 5436
+	jal	ra, 5400
 	addi	sp, sp, -32
 	lw	ra, sp, 28
 	addi	a1, zero, 1
@@ -12160,14 +11952,14 @@
 	addi	a0, a2, 0
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 5388
+	jal	ra, 5352
 	addi	sp, sp, -40
 	lw	ra, sp, 36
 	addi	a1, a0, 0
 	lw	a0, sp, 32
 	sw	sp, ra, 36
 	addi	sp, sp, 40
-	jal	ra, 5360
+	jal	ra, 5324
 	addi	sp, sp, -40
 	lw	ra, sp, 36
 	addi	a1, zero, 1
@@ -12178,7 +11970,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 40
 	addi	sp, sp, 44
-	jal	ra, 5344
+	jal	ra, 5308
 	addi	sp, sp, -44
 	lw	ra, sp, 40
 	addi	a1, zero, 1
@@ -12188,7 +11980,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 44
 	addi	sp, sp, 48
-	jal	ra, 5276
+	jal	ra, 5240
 	addi	sp, sp, -48
 	lw	ra, sp, 44
 	addi	a1, zero, 1
@@ -12199,7 +11991,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 48
 	addi	sp, sp, 52
-	jal	ra, 5260
+	jal	ra, 5224
 	addi	sp, sp, -52
 	lw	ra, sp, 48
 	addi	a1, zero, 3
@@ -12210,7 +12002,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 52
 	addi	sp, sp, 56
-	jal	ra, 5216
+	jal	ra, 5180
 	addi	sp, sp, -56
 	lw	ra, sp, 52
 	addi	a1, zero, 1
@@ -12220,7 +12012,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 56
 	addi	sp, sp, 60
-	jal	ra, 5148
+	jal	ra, 5112
 	addi	sp, sp, -60
 	lw	ra, sp, 56
 	addi	a1, zero, 3
@@ -12231,7 +12023,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 60
 	addi	sp, sp, 64
-	jal	ra, 5132
+	jal	ra, 5096
 	addi	sp, sp, -64
 	lw	ra, sp, 60
 	addi	a1, zero, 3
@@ -12242,7 +12034,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 64
 	addi	sp, sp, 68
-	jal	ra, 5088
+	jal	ra, 5052
 	addi	sp, sp, -68
 	lw	ra, sp, 64
 	addi	a1, zero, 3
@@ -12253,7 +12045,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 68
 	addi	sp, sp, 72
-	jal	ra, 5044
+	jal	ra, 5008
 	addi	sp, sp, -72
 	lw	ra, sp, 68
 	addi	a1, zero, 3
@@ -12264,7 +12056,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 72
 	addi	sp, sp, 76
-	jal	ra, 5000
+	jal	ra, 4964
 	addi	sp, sp, -76
 	lw	ra, sp, 72
 	addi	a1, zero, 2
@@ -12274,7 +12066,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 76
 	addi	sp, sp, 80
-	jal	ra, 4932
+	jal	ra, 4896
 	addi	sp, sp, -80
 	lw	ra, sp, 76
 	addi	a1, zero, 2
@@ -12284,7 +12076,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 80
 	addi	sp, sp, 84
-	jal	ra, 4892
+	jal	ra, 4856
 	addi	sp, sp, -84
 	lw	ra, sp, 80
 	addi	a1, zero, 1
@@ -12295,7 +12087,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 84
 	addi	sp, sp, 88
-	jal	ra, 4876
+	jal	ra, 4840
 	addi	sp, sp, -88
 	lw	ra, sp, 84
 	addi	a1, zero, 3
@@ -12306,7 +12098,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 88
 	addi	sp, sp, 92
-	jal	ra, 4832
+	jal	ra, 4796
 	addi	sp, sp, -92
 	lw	ra, sp, 88
 	addi	a1, zero, 3
@@ -12317,7 +12109,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 92
 	addi	sp, sp, 96
-	jal	ra, 4788
+	jal	ra, 4752
 	addi	sp, sp, -96
 	lw	ra, sp, 92
 	addi	a1, zero, 3
@@ -12328,7 +12120,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 96
 	addi	sp, sp, 100
-	jal	ra, 4744
+	jal	ra, 4708
 	addi	sp, sp, -100
 	lw	ra, sp, 96
 	addi	a1, zero, 3
@@ -12339,7 +12131,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 100
 	addi	sp, sp, 104
-	jal	ra, 4700
+	jal	ra, 4664
 	addi	sp, sp, -104
 	lw	ra, sp, 100
 	addi	a1, zero, 3
@@ -12350,7 +12142,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 104
 	addi	sp, sp, 108
-	jal	ra, 4656
+	jal	ra, 4620
 	addi	sp, sp, -108
 	lw	ra, sp, 104
 	addi	a1, zero, 3
@@ -12361,7 +12153,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 108
 	addi	sp, sp, 112
-	jal	ra, 4612
+	jal	ra, 4576
 	addi	sp, sp, -112
 	lw	ra, sp, 108
 	addi	a1, zero, 0
@@ -12372,7 +12164,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 112
 	addi	sp, sp, 116
-	jal	ra, 4568
+	jal	ra, 4532
 	addi	sp, sp, -116
 	lw	ra, sp, 112
 	addi	a1, a0, 0
@@ -12380,7 +12172,7 @@
 	sw	sp, a1, 112
 	sw	sp, ra, 116
 	addi	sp, sp, 120
-	jal	ra, 4508
+	jal	ra, 4472
 	addi	sp, sp, -120
 	lw	ra, sp, 116
 	addi	a1, zero, 0
@@ -12395,14 +12187,14 @@
 	addi	a0, a20, 0
 	sw	sp, ra, 116
 	addi	sp, sp, 120
-	jal	ra, 4448
+	jal	ra, 4412
 	addi	sp, sp, -120
 	lw	ra, sp, 116
 	addi	a1, a0, 0
 	addi	a0, zero, 5
 	sw	sp, ra, 116
 	addi	sp, sp, 120
-	jal	ra, 4420
+	jal	ra, 4384
 	addi	sp, sp, -120
 	lw	ra, sp, 116
 	addi	a1, zero, 0
@@ -12413,7 +12205,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 120
 	addi	sp, sp, 124
-	jal	ra, 4404
+	jal	ra, 4368
 	addi	sp, sp, -124
 	lw	ra, sp, 120
 	addi	a1, zero, 3
@@ -12424,7 +12216,7 @@
 	addi	a0, a1, 0
 	sw	sp, ra, 124
 	addi	sp, sp, 128
-	jal	ra, 4360
+	jal	ra, 4324
 	addi	sp, sp, -128
 	lw	ra, sp, 124
 	addi	a1, zero, 60
@@ -12434,7 +12226,7 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 128
 	addi	sp, sp, 132
-	jal	ra, 4292
+	jal	ra, 4256
 	addi	sp, sp, -132
 	lw	ra, sp, 128
 	addi	a1, hp, 0
@@ -12451,7 +12243,7 @@
 	addi	a0, a3, 0
 	sw	sp, ra, 136
 	addi	sp, sp, 140
-	jal	ra, 4252
+	jal	ra, 4216
 	addi	sp, sp, -140
 	lw	ra, sp, 136
 	addi	a1, a0, 0
@@ -12459,7 +12251,7 @@
 	sw	sp, a1, 136
 	sw	sp, ra, 140
 	addi	sp, sp, 144
-	jal	ra, 4192
+	jal	ra, 4156
 	addi	sp, sp, -144
 	lw	ra, sp, 140
 	addi	a1, hp, 0
@@ -12484,7 +12276,7 @@
 	addi	a0, a20, 0
 	sw	sp, ra, 140
 	addi	sp, sp, 144
-	jal	ra, 4092
+	jal	ra, 4056
 	addi	sp, sp, -144
 	lw	ra, sp, 140
 	addi	a1, zero, 1
@@ -12494,13 +12286,13 @@
 	addi	a1, a2, 0
 	sw	sp, ra, 144
 	addi	sp, sp, 148
-	jal	ra, 4052
+	jal	ra, 4016
 	addi	sp, sp, -148
 	lw	ra, sp, 144
 	addi	a1, hp, 0
 	addi	hp, hp, 24
 	lui	a2, 0
-	addi	a2, a2, 420
+	addi	a2, a2, 388
 	sw	a1, a2, 0
 	lw	a2, sp, 12
 	sw	a1, a2, 20
@@ -12515,7 +12307,7 @@
 	addi	a6, hp, 0
 	addi	hp, hp, 12
 	lui	a7, 0
-	addi	a7, a7, 944
+	addi	a7, a7, 912
 	sw	a6, a7, 0
 	lw	a7, sp, 16
 	sw	a6, a7, 8
@@ -12524,14 +12316,14 @@
 	addi	a9, hp, 0
 	addi	hp, hp, 8
 	lui	a10, 0
-	addi	a10, a10, 1844
+	addi	a10, a10, 1812
 	sw	a9, a10, 0
 	lw	a10, sp, 4
 	sw	a9, a10, 4
 	addi	a11, hp, 0
 	addi	hp, hp, 12
 	lui	a12, 4096
-	addi	a12, a12, -672
+	addi	a12, a12, -704
 	sw	a11, a12, 0
 	sw	a11, a9, 8
 	lw	a12, sp, 0
@@ -12539,33 +12331,33 @@
 	addi	a13, hp, 0
 	addi	hp, hp, 8
 	lui	a14, 4096
-	addi	a14, a14, 672
+	addi	a14, a14, 640
 	sw	a13, a14, 0
 	lw	a14, sp, 28
 	sw	a13, a14, 4
 	addi	a15, hp, 0
 	addi	hp, hp, 8
 	lui	a16, 4096
-	addi	a16, a16, 1200
+	addi	a16, a16, 1168
 	sw	a15, a16, 0
 	lw	a16, sp, 40
 	sw	a15, a16, 4
 	addi	a17, hp, 0
 	addi	hp, hp, 8
 	lui	a18, 4096
-	addi	a18, a18, 1496
+	addi	a18, a18, 1464
 	sw	a17, a18, 0
 	sw	a17, a16, 4
 	addi	a18, hp, 0
 	addi	hp, hp, 8
 	lui	a19, 4096
-	addi	a19, a19, 1948
+	addi	a19, a19, 1916
 	sw	a18, a19, 0
 	sw	a18, a16, 4
 	addi	a19, hp, 0
 	addi	hp, hp, 20
 	lui	a20, 8192
-	addi	a20, a20, -1756
+	addi	a20, a20, -1816
 	sw	a19, a20, 0
 	sw	a19, a18, 16
 	sw	a19, a15, 12
@@ -12574,28 +12366,28 @@
 	addi	a20, hp, 0
 	addi	hp, hp, 8
 	lui	a21, 8192
-	addi	a21, a21, -1276
+	addi	a21, a21, -1336
 	sw	a20, a21, 0
 	sw	a20, a16, 4
 	addi	a21, hp, 0
 	addi	hp, hp, 8
 	sw	sp, a13, 144
 	lui	a13, 8192
-	addi	a13, a13, -808
+	addi	a13, a13, -868
 	sw	a21, a13, 0
 	sw	a21, a16, 4
 	addi	a13, hp, 0
 	addi	hp, hp, 8
 	sw	sp, a6, 148
 	lui	a6, 8192
-	addi	a6, a6, -496
+	addi	a6, a6, -596
 	sw	a13, a6, 0
 	sw	a13, a16, 4
 	addi	a6, hp, 0
 	addi	hp, hp, 20
 	sw	sp, a9, 152
 	lui	a9, 8192
-	addi	a9, a9, -232
+	addi	a9, a9, -420
 	sw	a6, a9, 0
 	sw	a6, a13, 16
 	sw	a6, a20, 12
@@ -12605,27 +12397,27 @@
 	addi	hp, hp, 8
 	sw	sp, a11, 156
 	lui	a11, 8192
-	addi	a11, a11, 1204
+	addi	a11, a11, 1016
 	sw	a9, a11, 0
 	sw	a9, a10, 4
 	addi	a11, hp, 0
 	addi	hp, hp, 8
 	sw	sp, a1, 160
 	lui	a1, 8192
-	addi	a1, a1, 1696
+	addi	a1, a1, 1508
 	sw	a11, a1, 0
 	sw	a11, a10, 4
 	addi	a1, hp, 0
 	addi	hp, hp, 8
 	sw	sp, a9, 164
 	lui	a9, 12288
-	addi	a9, a9, -1632
+	addi	a9, a9, -1820
 	sw	a1, a9, 0
 	sw	a1, a10, 4
 	addi	a9, hp, 0
 	addi	hp, hp, 40
 	lui	a4, 12288
-	addi	a4, a4, -904
+	addi	a4, a4, -1092
 	sw	a9, a4, 0
 	lw	a4, sp, 124
 	sw	a9, a4, 36
@@ -12642,14 +12434,14 @@
 	addi	a2, hp, 0
 	addi	hp, hp, 12
 	lui	a8, 12288
-	addi	a8, a8, -152
+	addi	a8, a8, -340
 	sw	a2, a8, 0
 	sw	a2, a9, 8
 	sw	a2, a14, 4
 	addi	a8, hp, 0
 	addi	hp, hp, 44
 	lui	a7, 12288
-	addi	a7, a7, 332
+	addi	a7, a7, 144
 	sw	a8, a7, 0
 	sw	a8, a4, 40
 	sw	a8, a21, 36
@@ -12664,7 +12456,7 @@
 	addi	a2, hp, 0
 	addi	hp, hp, 48
 	lui	a5, 12288
-	addi	a5, a5, 1468
+	addi	a5, a5, 1280
 	sw	a2, a5, 0
 	lw	a5, sp, 48
 	sw	a2, a5, 44
@@ -12684,7 +12476,7 @@
 	addi	a4, hp, 0
 	addi	hp, hp, 12
 	lui	a12, 16384
-	addi	a12, a12, -1636
+	addi	a12, a12, -1824
 	sw	a4, a12, 0
 	sw	a4, a2, 8
 	sw	a4, a14, 4
@@ -12692,7 +12484,7 @@
 	addi	hp, hp, 48
 	sw	sp, a0, 168
 	lui	a0, 16384
-	addi	a0, a0, -1200
+	addi	a0, a0, -1388
 	sw	a12, a0, 0
 	sw	a12, a5, 44
 	sw	a12, a7, 40
@@ -12708,7 +12500,7 @@
 	addi	a0, hp, 0
 	addi	hp, hp, 44
 	lui	a2, 16384
-	addi	a2, a2, 520
+	addi	a2, a2, 332
 	sw	a0, a2, 0
 	sw	a0, a5, 40
 	lw	a2, sp, 92
@@ -12724,14 +12516,14 @@
 	addi	a1, hp, 0
 	addi	hp, hp, 12
 	lui	a4, 16384
-	addi	a4, a4, 1312
+	addi	a4, a4, 1124
 	sw	a1, a4, 0
 	sw	a1, a0, 8
 	sw	a1, a14, 4
 	addi	a4, hp, 0
 	addi	hp, hp, 40
 	lui	a15, 16384
-	addi	a15, a15, 1748
+	addi	a15, a15, 1560
 	sw	a4, a15, 0
 	sw	a4, a5, 36
 	sw	a4, a13, 32
@@ -12745,7 +12537,7 @@
 	addi	a13, hp, 0
 	addi	hp, hp, 36
 	lui	a15, 20480
-	addi	a15, a15, -852
+	addi	a15, a15, -1040
 	sw	a13, a15, 0
 	sw	a13, a4, 32
 	sw	a13, a5, 28
@@ -12759,7 +12551,7 @@
 	addi	a1, hp, 0
 	addi	hp, hp, 12
 	lui	a6, 20480
-	addi	a6, a6, -132
+	addi	a6, a6, -320
 	sw	a1, a6, 0
 	lw	a6, sp, 60
 	sw	a1, a6, 8
@@ -12767,7 +12559,7 @@
 	addi	a14, hp, 0
 	addi	hp, hp, 16
 	lui	a15, 20480
-	addi	a15, a15, 164
+	addi	a15, a15, -24
 	sw	a14, a15, 0
 	sw	a14, a6, 12
 	sw	a14, a9, 8
@@ -12775,14 +12567,14 @@
 	addi	a15, hp, 0
 	addi	hp, hp, 8
 	lui	a16, 20480
-	addi	a16, a16, 408
+	addi	a16, a16, 220
 	sw	a15, a16, 0
 	lw	a16, sp, 64
 	sw	a15, a16, 4
 	addi	a17, hp, 0
 	addi	hp, hp, 44
 	lui	a18, 20480
-	addi	a18, a18, 1824
+	addi	a18, a18, 1384
 	sw	a17, a18, 0
 	sw	a17, a4, 40
 	sw	a17, a5, 36
@@ -12799,7 +12591,7 @@
 	addi	a20, hp, 0
 	addi	hp, hp, 88
 	lui	a19, 24576
-	addi	a19, a19, -1568
+	addi	a19, a19, -2008
 	sw	a20, a19, 0
 	sw	a20, a15, 84
 	sw	a20, a17, 80
@@ -12829,7 +12621,7 @@
 	addi	a12, hp, 0
 	addi	hp, hp, 60
 	lui	a7, 24576
-	addi	a7, a7, 476
+	addi	a7, a7, 36
 	sw	a12, a7, 0
 	sw	a12, a15, 56
 	sw	a12, a4, 52
@@ -12849,7 +12641,7 @@
 	addi	a4, hp, 0
 	addi	hp, hp, 56
 	lui	a5, 24576
-	addi	a5, a5, 1312
+	addi	a5, a5, 872
 	sw	a4, a5, 0
 	sw	a4, a15, 52
 	sw	a4, a12, 48
@@ -12867,7 +12659,7 @@
 	addi	a3, hp, 0
 	addi	hp, hp, 24
 	lui	a5, 28672
-	addi	a5, a5, -1416
+	addi	a5, a5, -1856
 	sw	a3, a5, 0
 	sw	a3, a2, 20
 	sw	a3, a11, 16
@@ -12878,7 +12670,7 @@
 	addi	a6, hp, 0
 	addi	hp, hp, 36
 	lui	a7, 28672
-	addi	a7, a7, -640
+	addi	a7, a7, -1080
 	sw	a6, a7, 0
 	sw	a6, a12, 32
 	sw	a6, a2, 28
@@ -12891,14 +12683,14 @@
 	addi	a7, hp, 0
 	addi	hp, hp, 12
 	lui	a8, 28672
-	addi	a8, a8, 1240
+	addi	a8, a8, 800
 	sw	a7, a8, 0
 	sw	a7, a18, 8
 	sw	a7, a1, 4
 	addi	a8, hp, 0
 	addi	hp, hp, 20
 	lui	a9, 28672
-	addi	a9, a9, 1652
+	addi	a9, a9, 1212
 	sw	a8, a9, 0
 	sw	a8, a3, 16
 	sw	a8, a18, 12
@@ -12906,8 +12698,8 @@
 	sw	a8, a6, 4
 	addi	a3, hp, 0
 	addi	hp, hp, 16
-	lui	a9, 32768
-	addi	a9, a9, -2016
+	lui	a9, 28672
+	addi	a9, a9, 1640
 	sw	a3, a9, 0
 	sw	a3, a8, 12
 	sw	a3, a7, 8
@@ -12915,13 +12707,13 @@
 	addi	a9, hp, 0
 	addi	hp, hp, 8
 	lui	a13, 32768
-	addi	a13, a13, -1056
+	addi	a13, a13, -1496
 	sw	a9, a13, 0
 	sw	a9, a18, 4
 	addi	a13, hp, 0
 	addi	hp, hp, 32
 	lui	a14, 32768
-	addi	a14, a14, -756
+	addi	a14, a14, -1236
 	sw	a13, a14, 0
 	sw	a13, a12, 28
 	sw	a13, a2, 24
@@ -12933,7 +12725,7 @@
 	addi	a14, hp, 0
 	addi	hp, hp, 68
 	lui	a15, 32768
-	addi	a15, a15, 192
+	addi	a15, a15, -288
 	sw	a14, a15, 0
 	lw	a15, sp, 12
 	sw	a14, a15, 64
@@ -12960,7 +12752,7 @@
 	addi	a1, hp, 0
 	addi	hp, hp, 28
 	lui	a11, 32768
-	addi	a11, a11, 1316
+	addi	a11, a11, 780
 	sw	a1, a11, 0
 	lw	a11, sp, 104
 	sw	a1, a11, 24
@@ -12974,7 +12766,7 @@
 	addi	a12, hp, 0
 	addi	hp, hp, 32
 	lui	a13, 32768
-	addi	a13, a13, 1516
+	addi	a13, a13, 908
 	sw	a12, a13, 0
 	sw	a12, a9, 28
 	sw	a12, a3, 24
@@ -12986,7 +12778,7 @@
 	addi	a6, hp, 0
 	addi	hp, hp, 32
 	lui	a7, 36864
-	addi	a7, a7, -1216
+	addi	a7, a7, -1860
 	sw	a6, a7, 0
 	sw	a6, a9, 28
 	sw	a6, a3, 24
@@ -12998,31 +12790,31 @@
 	addi	a3, hp, 0
 	addi	hp, hp, 8
 	lui	a7, 36864
-	addi	a7, a7, 492
+	addi	a7, a7, -152
 	sw	a3, a7, 0
 	sw	a3, a5, 4
 	addi	a7, hp, 0
 	addi	hp, hp, 8
 	lui	a8, 36864
-	addi	a8, a8, 1268
+	addi	a8, a8, 528
 	sw	a7, a8, 0
 	sw	a7, a3, 4
 	addi	a3, hp, 0
 	addi	hp, hp, 8
 	lui	a8, 36864
-	addi	a8, a8, 1612
+	addi	a8, a8, 856
 	sw	a3, a8, 0
 	sw	a3, a7, 4
 	addi	a7, hp, 0
 	addi	hp, hp, 8
 	lui	a8, 36864
-	addi	a8, a8, 1948
+	addi	a8, a8, 1152
 	sw	a7, a8, 0
 	sw	a7, a17, 4
 	addi	a8, hp, 0
 	addi	hp, hp, 16
-	lui	a9, 40960
-	addi	a9, a9, -1544
+	lui	a9, 36864
+	addi	a9, a9, 1756
 	sw	a8, a9, 0
 	sw	a8, a17, 12
 	sw	a8, a5, 8
@@ -13030,7 +12822,7 @@
 	addi	a7, hp, 0
 	addi	hp, hp, 16
 	lui	a9, 40960
-	addi	a9, a9, -488
+	addi	a9, a9, -1284
 	sw	a7, a9, 0
 	sw	a7, a10, 12
 	sw	a7, a17, 8
@@ -13039,7 +12831,7 @@
 	addi	a13, hp, 0
 	addi	hp, hp, 24
 	lui	a14, 40960
-	addi	a14, a14, 376
+	addi	a14, a14, -420
 	sw	a13, a14, 0
 	sw	a13, a10, 20
 	sw	a13, a17, 16
@@ -13049,7 +12841,7 @@
 	addi	a14, hp, 0
 	addi	hp, hp, 28
 	lui	a15, 40960
-	addi	a15, a15, 2008
+	addi	a15, a15, 1212
 	sw	a14, a15, 0
 	lw	a15, sp, 140
 	sw	a14, a15, 24
@@ -13062,7 +12854,7 @@
 	addi	a18, hp, 0
 	addi	hp, hp, 28
 	lui	a20, 45056
-	addi	a20, a20, -488
+	addi	a20, a20, -1284
 	sw	a18, a20, 0
 	sw	a18, a15, 24
 	sw	a18, a10, 20
@@ -13073,7 +12865,7 @@
 	addi	a21, hp, 0
 	addi	hp, hp, 104
 	lui	a15, 45056
-	addi	a15, a15, 244
+	addi	a15, a15, -552
 	sw	a21, a15, 0
 	lw	a15, sp, 124
 	sw	a21, a15, 100
@@ -13117,15 +12909,6 @@
 	lw	ra, sp, 172
 	addi	zero, zero, 0
 	fin	0
-	fsqrt.s	fa0, fa0, rne
-	jalr	zero, ra, 0
-	fcvt.w.s	t0, fa0, rdn
-	fcvt.s.w	fa0, t0, rne
-	jalr	zero, ra, 0
-	fcvt.w.s	a0, fa0, rtz
-	jalr	zero, ra, 0
-	fcvt.s.w	fa0, a0, rne
-	jalr	zero, ra, 0
 	float	0.10000000000
 	float	0.78539815000
 	float	1.57079630000
@@ -13145,13 +12928,13 @@
 	bne	zero, t0, 8
 	jalr	zero, ra, 0
 	lui	a0, 53248
-	addi	a0, a0, -684
+	addi	a0, a0, -1552
 	flw	fa1, a0, 0
 	fmul.s	fa0, fa0, fa1, rne
 	lw	a20, a21, 0
 	jalr	zero, a20, 0
 	lui	a0, 53248
-	addi	a0, a0, -688
+	addi	a0, a0, -1556
 	flw	fa2, a0, 0
 	flt.s	t0, fa2, fa0
 	bne	zero, t0, 8
@@ -13159,19 +12942,19 @@
 	flt.s	t0, fa1, fa0
 	bne	zero, t0, 24
 	lui	a0, 53248
-	addi	a0, a0, -692
+	addi	a0, a0, -1560
 	flw	fa2, a0, 0
 	fmul.s	fa1, fa1, fa2, rne
 	jal	zero, -48
 	fsub.s	fa0, fa0, fa1, rne
 	jal	zero, -56
 	lui	a0, 53248
-	addi	a0, a0, -688
+	addi	a0, a0, -1556
 	flw	fa1, a0, 0
 	addi	a21, hp, 0
 	addi	hp, hp, 8
 	lui	a0, 53248
-	addi	a0, a0, -680
+	addi	a0, a0, -1548
 	sw	a21, a0, 0
 	fsw	a21, fa0, 4
 	fsw	sp, fa0, 0
@@ -13189,20 +12972,20 @@
 	fmul.s	fa1, fa0, fa0, rne
 	fmul.s	fa2, fa0, fa1, rne
 	lui	a0, 53248
-	addi	a0, a0, -696
+	addi	a0, a0, -1564
 	flw	fa3, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, -692
+	addi	a0, a0, -1560
 	flw	fa4, a0, 0
 	fmul.s	fa0, fa4, fa0, rne
 	fsub.s	fa0, fa3, fa0, rne
 	lui	a0, 53248
-	addi	a0, a0, -700
+	addi	a0, a0, -1568
 	flw	fa3, a0, 0
 	fmul.s	fa1, fa3, fa1, rne
 	fadd.s	fa0, fa0, fa1, rne
 	lui	a0, 53248
-	addi	a0, a0, -704
+	addi	a0, a0, -1572
 	flw	fa1, a0, 0
 	fmul.s	fa1, fa1, fa2, rne
 	fsub.s	fa0, fa0, fa1, rne
@@ -13212,17 +12995,17 @@
 	fmul.s	fa3, fa2, fa1, rne
 	fmul.s	fa1, fa3, fa1, rne
 	lui	a0, 53248
-	addi	a0, a0, -708
+	addi	a0, a0, -1576
 	flw	fa4, a0, 0
 	fmul.s	fa2, fa4, fa2, rne
 	fsub.s	fa0, fa0, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, -712
+	addi	a0, a0, -1580
 	flw	fa2, a0, 0
 	fmul.s	fa2, fa2, fa3, rne
 	fadd.s	fa0, fa0, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, -716
+	addi	a0, a0, -1584
 	flw	fa2, a0, 0
 	fmul.s	fa1, fa2, fa1, rne
 	fsub.s	fa0, fa0, fa1, rne
@@ -13236,7 +13019,7 @@
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lui	a0, 53248
-	addi	a0, a0, -720
+	addi	a0, a0, -1588
 	flw	fa1, a0, 0
 	flt.s	t0, fa1, fa0
 	bne	zero, t0, 28
@@ -13247,12 +13030,12 @@
 	fsw	a0, fa0, 0
 	jal	zero, 56
 	lui	a0, 53248
-	addi	a0, a0, -724
+	addi	a0, a0, -1592
 	flw	fa1, a0, 0
 	flw	fa2, sp, 0
 	fmul.s	fa1, fa2, fa1, rne
 	lui	a0, 53248
-	addi	a0, a0, -720
+	addi	a0, a0, -1588
 	flw	fa2, a0, 0
 	fsub.s	fa0, fa0, fa2, rne
 	addi	a0, hp, 0
@@ -13262,7 +13045,7 @@
 	flw	fa0, a0, 4
 	flw	fa1, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, -728
+	addi	a0, a0, -1596
 	flw	fa2, a0, 0
 	flt.s	t0, fa2, fa0
 	bne	zero, t0, 24
@@ -13272,7 +13055,7 @@
 	fsw	a0, fa1, 0
 	jal	zero, 36
 	lui	a0, 53248
-	addi	a0, a0, -720
+	addi	a0, a0, -1588
 	flw	fa2, a0, 0
 	fsub.s	fa0, fa2, fa0, rne
 	addi	a0, hp, 0
@@ -13282,13 +13065,13 @@
 	flw	fa0, a0, 4
 	flw	fa1, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, -732
+	addi	a0, a0, -1600
 	flw	fa2, a0, 0
 	fsw	sp, fa1, 4
 	flt.s	t0, fa0, fa2
 	bne	zero, t0, 44
 	lui	a0, 53248
-	addi	a0, a0, -728
+	addi	a0, a0, -1596
 	flw	fa2, a0, 0
 	fsub.s	fa0, fa2, fa0, rne
 	sw	sp, ra, 8
@@ -13306,7 +13089,7 @@
 	fsgnj.s	fa0, fa0, fa1, rne
 	jalr	zero, ra, 0
 	lui	a0, 53248
-	addi	a0, a0, -696
+	addi	a0, a0, -1564
 	flw	fa1, a0, 0
 	fsgnjx.s	fa0, fa0, fa0
 	fsw	sp, fa1, 0
@@ -13316,7 +13099,7 @@
 	addi	sp, sp, -8
 	lw	ra, sp, 4
 	lui	a0, 53248
-	addi	a0, a0, -720
+	addi	a0, a0, -1588
 	flw	fa1, a0, 0
 	flt.s	t0, fa1, fa0
 	bne	zero, t0, 28
@@ -13327,10 +13110,10 @@
 	fsw	a0, fa0, 0
 	jal	zero, 48
 	lui	a0, 53248
-	addi	a0, a0, -724
+	addi	a0, a0, -1592
 	flw	fa1, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, -720
+	addi	a0, a0, -1588
 	flw	fa2, a0, 0
 	fsub.s	fa0, fa0, fa2, rne
 	addi	a0, hp, 0
@@ -13340,7 +13123,7 @@
 	flw	fa0, a0, 4
 	flw	fa1, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, -728
+	addi	a0, a0, -1596
 	flw	fa2, a0, 0
 	flt.s	t0, fa2, fa0
 	bne	zero, t0, 24
@@ -13350,11 +13133,11 @@
 	fsw	a0, fa1, 0
 	jal	zero, 52
 	lui	a0, 53248
-	addi	a0, a0, -724
+	addi	a0, a0, -1592
 	flw	fa2, a0, 0
 	fmul.s	fa1, fa1, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, -720
+	addi	a0, a0, -1588
 	flw	fa2, a0, 0
 	fsub.s	fa0, fa2, fa0, rne
 	addi	a0, hp, 0
@@ -13364,13 +13147,13 @@
 	flw	fa0, a0, 4
 	flw	fa1, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, -732
+	addi	a0, a0, -1600
 	flw	fa2, a0, 0
 	fsw	sp, fa1, 4
 	flt.s	t0, fa0, fa2
 	bne	zero, t0, 44
 	lui	a0, 53248
-	addi	a0, a0, -728
+	addi	a0, a0, -1596
 	flw	fa2, a0, 0
 	fsub.s	fa0, fa2, fa0, rne
 	sw	sp, ra, 8
@@ -13407,39 +13190,39 @@
 	fmul.s	fa6, fa5, fa1, rne
 	fmul.s	fa1, fa6, fa1, rne
 	lui	a0, 53248
-	addi	a0, a0, 352
+	addi	a0, a0, -516
 	flw	fa7, a0, 0
 	fmul.s	fa2, fa7, fa2, rne
 	fadd.s	fa0, fa0, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, 348
+	addi	a0, a0, -520
 	flw	fa2, a0, 0
 	fmul.s	fa2, fa2, fa3, rne
 	fadd.s	fa0, fa0, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, 344
+	addi	a0, a0, -524
 	flw	fa2, a0, 0
 	fmul.s	fa2, fa2, fa4, rne
 	fadd.s	fa0, fa0, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, 340
+	addi	a0, a0, -528
 	flw	fa2, a0, 0
 	fmul.s	fa2, fa2, fa5, rne
 	fadd.s	fa0, fa0, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, 336
+	addi	a0, a0, -532
 	flw	fa2, a0, 0
 	fmul.s	fa2, fa2, fa6, rne
 	fadd.s	fa0, fa0, fa2, rne
 	lui	a0, 53248
-	addi	a0, a0, 332
+	addi	a0, a0, -536
 	flw	fa2, a0, 0
 	fmul.s	fa1, fa2, fa1, rne
 	fadd.s	fa0, fa0, fa1, rne
 	jalr	zero, ra, 0
 	fsgnjx.s	fa1, fa0, fa0
 	lui	a0, 53248
-	addi	a0, a0, 328
+	addi	a0, a0, -540
 	flw	fa2, a0, 0
 	flt.s	t0, fa2, fa1
 	bne	zero, t0, 44
@@ -13454,19 +13237,19 @@
 	fsgnj.s	fa0, fa0, fa1
 	jalr	zero, ra, 0
 	lui	a0, 53248
-	addi	a0, a0, 324
+	addi	a0, a0, -544
 	flw	fa2, a0, 0
 	flt.s	t0, fa2, fa1
 	bne	zero, t0, 104
 	lui	a0, 53248
-	addi	a0, a0, 320
+	addi	a0, a0, -548
 	flw	fa2, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, 316
+	addi	a0, a0, -552
 	flw	fa3, a0, 0
 	fsub.s	fa3, fa1, fa3, rne
 	lui	a0, 53248
-	addi	a0, a0, 316
+	addi	a0, a0, -552
 	flw	fa4, a0, 0
 	fadd.s	fa1, fa1, fa4, rne
 	fdiv.s	fa1, fa3, fa1, rne
@@ -13484,10 +13267,10 @@
 	fsgnj.s	fa0, fa0, fa1
 	jalr	zero, ra, 0
 	lui	a0, 53248
-	addi	a0, a0, 312
+	addi	a0, a0, -556
 	flw	fa2, a0, 0
 	lui	a0, 53248
-	addi	a0, a0, 316
+	addi	a0, a0, -552
 	flw	fa3, a0, 0
 	fdiv.s	fa1, fa3, fa1, rne
 	fsw	sp, fa0, 0
@@ -13557,7 +13340,7 @@
 	addi	a21, hp, 0
 	addi	hp, hp, 8
 	lui	a1, 53248
-	addi	a1, a1, 860
+	addi	a1, a1, -8
 	sw	a21, a1, 0
 	sw	a21, a0, 4
 	addi	a0, zero, 0
@@ -13609,8 +13392,6 @@
 	addi	t0, zero, 10
 	out	zero, t0, 0
 	jalr	zero, ra, 0
-	jal	zero, -1948
-	float	0.5
 	in	a0, zero, 0
 	slli	a0, a0, 8
 	in	a0, zero, 0

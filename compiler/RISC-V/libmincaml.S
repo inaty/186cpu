@@ -30,19 +30,19 @@
 !min_caml_fneg:
 !	fsgnjn.s	fa0, fa0, fa0
 !	ret
-min_caml_sqrt:
-	fsqrt.s	fa0, fa0, rne
-	ret
-min_caml_floor:
-	fcvt.w.s	t0, fa0, rdn
-	fcvt.s.w	fa0, t0, rne
-	ret
-min_caml_int_of_float:
-	fcvt.w.s	a0, fa0, rtz
-	ret
-min_caml_float_of_int:
-	fcvt.s.w	fa0, a0, rne
-	ret
+!min_caml_sqrt:
+!	fsqrt.s	fa0, fa0, rne
+!	ret
+!min_caml_floor:
+!	fcvt.w.s	t0, fa0, rdn
+!	fcvt.s.w	fa0, t0, rne
+!	ret
+!min_caml_int_of_float:
+!	fcvt.w.s	a0, fa0, rtz
+!	ret
+!min_caml_float_of_int:
+!	fcvt.s.w	fa0, a0, rne
+!	ret
 min_caml_cos_l.262:
 	float	0.10000000000
 min_caml_cos_l.238:
@@ -553,10 +553,10 @@ min_caml_print_newline:
 	li	t0, 10
 	out	zero, t0, 0
 	ret
-min_caml_truncate:
-	j	min_caml_int_of_float
-min_caml_fhalf_float_0.5:
-	float	0.5
+!min_caml_truncate:
+!	j	min_caml_int_of_float
+!min_caml_fhalf_float_0.5:
+!	float	0.5
 min_caml_read_int:
 	in	a0, zero, 0
 	slli	a0, a0, 8
