@@ -1,4 +1,4 @@
-open Printf
+open Format
 
 type t = string (* 変数名 *)
 type l = L of string (* ラベル（トップレベル関数やグローバル変数を表すらしい) *)
@@ -27,6 +27,14 @@ let gentmp typ =
   incr counter;
   Printf.sprintf "T%s%d" (id_of_typ typ) !counter
 
+let pr_xt ppf (x, t) = fprintf ppf "(%s, %a)" x Type.pr_t t
+
+let rec pr_xts ppf = function
+  | [] -> fprintf ppf "()"
+  | (x, t) :: [] -> fprintf ppf "(%s, %a)" x Type.pr_t t
+  | (x, t) :: xts -> fprintf ppf "(%s, %a), %a" x Type.pr_t t pr_xts xts
+
+(*
 let string_of_list l string_of =
   let rec sub l =
     match l with
@@ -39,4 +47,4 @@ let string_of_tuple_of_id_type (x, t) =
   sprintf "(%s, %s)" x (Type.string_of_type t)
 
 let string_of_list_of_id_type xts =
-  string_of_list xts string_of_tuple_of_id_type
+  string_of_list xts string_of_tuple_of_id_type *)

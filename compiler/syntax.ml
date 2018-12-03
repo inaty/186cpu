@@ -1,4 +1,4 @@
-open Printf
+open Format
 
 type p = Lexing.position * Lexing.position
 type t =
@@ -47,106 +47,78 @@ let position_of_syntax = function
   | Array(_, _, p) | Get(_, _, p) | Put(_, _, _, p) ->
       p
 
-(* Syntax.expの木構造を見やすく表示、標準出力 *)
-let print_syntax exp =
-  let print_space indent = print_string (String.make indent ' ') in
-  let rec print_syntax_sub exp indent =
-    print_space indent;
-    match exp with
-    | Unit(_) -> printf "UNIT\n"
-    | Bool(b, _) -> printf "BOOL %B\n" b
-    | Int(i ,_) -> printf "INT %d\n" i
-    | Float(f ,_) -> printf "FLOAT %f\n" f
-    | Not(exp ,_) -> printf "NOT\n"; print_syntax_sub exp (indent + 2)
-    | Neg(exp ,_) -> printf "NEG\n"; print_syntax_sub exp (indent + 2)
-    | Add(exp1, exp2 ,_) ->
-        printf "ADD\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | Sub(exp1, exp2 ,_) ->
-        printf "SUB\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | Mul(exp1, exp2 ,_) ->
-        printf "MUL\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | Div(exp1, exp2 ,_) ->
-        printf "DIV\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | FAbs(e, _) -> printf "FABS\n"; print_syntax_sub e (indent + 2)
-    | FNeg(exp ,_) -> printf "FNEG\n"; print_syntax_sub exp (indent + 2)
-    | FSqrt(e, _) -> printf "FSQRT\n"; print_syntax_sub e (indent + 2)
-    | FFloor(e, _) -> printf "FFloor\n"; print_syntax_sub e (indent + 2)
-    | FAdd(exp1, exp2 ,_) ->
-        printf "FADD\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | FSub(exp1, exp2 ,_) ->
-        printf "FSUB\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | FMul(exp1, exp2 ,_) ->
-        printf "FMUL\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | FDiv(exp1, exp2 ,_) ->
-        printf "FDIV\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | FtoI(e, _) -> printf "FTOI\n"; print_syntax_sub e (indent + 2)
-    | ItoF(e, _) -> printf "ITOF\n"; print_syntax_sub e (indent + 2)
-    | Eq(exp1, exp2 ,_) ->
-        printf "EQ\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | LE(exp1, exp2 ,_) ->
-        printf "LE\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-    | If(exp1, exp2, exp3 ,_) ->
-        printf "LE\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-        print_syntax_sub exp3 (indent + 2);
-    | Let((var, typ), exp1, exp2 ,_) ->
-        printf "LET %s (TYPE %s)\n" var (Type.string_of_type typ);
-        print_syntax_sub exp1 (indent + 2);
-        print_space indent; printf "IN\n";
-        print_syntax_sub exp2 (indent + 2)
-    | Var(var ,_) -> printf "VAR %s\n" var
-    | LetRec({name = (fname, ftype); args = fargs; body = fexp}, exp ,_) ->
-        printf "LETREC %s (TYPE %s ARGS %s)\n"
-          fname
-          (Type.string_of_type ftype)
-          (Id.string_of_list_of_id_type fargs);
-        print_syntax_sub fexp (indent + 2);
-        print_space indent; printf "IN\n";
-        print_syntax_sub exp (indent + 2)
-    | App(exp, exps ,_) ->
-        printf "APP\n";
-        print_syntax_sub exp (indent + 2);
-        List.fold_left (fun u e -> print_syntax_sub e (indent + 2)) () exps
-    | Tuple(exps ,_) ->
-        printf "TUPLE\n";
-        List.fold_left (fun u e -> print_syntax_sub e (indent + 2)) () exps
-    | LetTuple(vars, exp1, exp2 ,_) ->
-        printf "LETTUPLE %s\n" (Id.string_of_list_of_id_type vars);
-        print_syntax_sub exp1 (indent + 2);
-        print_space indent; printf "IN\n";
-        print_syntax_sub exp2 (indent + 2)
-    | Array(exp1, exp2 ,_) ->
-        printf "ARRAY\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2)
-    | Get(exp1, exp2 ,_) ->
-        printf "GET\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2)
-    | Put(exp1, exp2, exp3 ,_) ->
-        printf "ARRAY\n";
-        print_syntax_sub exp1 (indent + 2);
-        print_syntax_sub exp2 (indent + 2);
-        print_syntax_sub exp3 (indent + 2) in
-  print_syntax_sub exp 0
+let ename = function
+  | Unit _ -> "Unit"
+  | Bool _ -> "Bool"
+  | Int _ -> "Int"
+  | Float _ -> "Float"
+  | Not _ -> "Not"
+  | Neg _ -> "Neg"
+  | Add _ -> "Add"
+  | Sub _ -> "Sub"
+  | Mul _ -> "Mul"
+  | Div _ -> "Div"
+  | FAbs _ -> "FAbs"
+  | FNeg _ -> "FNeg"
+  | FSqrt _ -> "FSqrt"
+  | FFloor _ -> "FFloor"
+  | FAdd _ -> "FAdd"
+  | FSub _ -> "FSub"
+  | FMul _ -> "FMul"
+  | FDiv _ -> "FDiv"
+  | FtoI _ -> "FtoI"
+  | ItoF _ -> "ItoF"
+  | Eq _ -> "Eq"
+  | LE _ -> "LE"
+  | If _ -> "If"
+  | Let _ -> "Let"
+  | Var _ -> "Var"
+  | LetRec _ -> "LetRec"
+  | App _ -> "App"
+  | Tuple _ -> "Tuple"
+  | LetTuple _ -> "LetTuple"
+  | Array _ -> "Array"
+  | Get _ -> "Get"
+  | Put _ -> "Put"
+
+let rec pr_e ppf e =
+  match e with
+  | Unit (_) -> fprintf ppf "%s" (ename e)
+  | Bool (b, _) -> fprintf ppf "%s %B" (ename e) b
+  | Int(i, _) -> fprintf ppf "%s %d" (ename e) i
+  | Float(f, _) -> fprintf ppf "%s %f" (ename e) f
+  | Not(e1, _) | Neg(e1, _) | FAbs(e1, _) | FNeg(e1, _) | FSqrt(e1, _)
+  | FFloor(e1, _) | FtoI(e1, _) | ItoF(e1, _) ->
+      fprintf ppf "@[<v 2>%s@,%a@]" (ename e) pr_e e1
+  | Add(e1, e2, _) | Sub(e1, e2, _) | Mul(e1, e2, _) | Div(e1, e2, _)
+  | FAdd(e1, e2, _) | FSub(e1, e2, _) | FMul(e1, e2, _) | FDiv(e1, e2, _)
+  | Eq(e1, e2, _) | LE(e1, e2, _) | Array(e1, e2, _) | Get(e1, e2, _) ->
+      fprintf ppf "@[<v 2>%s@,%a@,%a@]" (ename e) pr_e e1 pr_e e2
+  | If(e1, e2, e3, _) ->
+      fprintf ppf "@[<v 2>If@,%a@]" pr_e e1;
+      fprintf ppf "@[<v 2>Then@,%a@]" pr_e e2;
+      fprintf ppf "@[<v 2>Else@,%a@]" pr_e e3
+  | Let(xt, e1, e2, _) ->
+      fprintf ppf "@[<v 2>Let@,%a@,%a@,@]" Id.pr_xt xt pr_e e1;
+      fprintf ppf "@[<v 2>In@,%a@]" pr_e e2
+  | Var(x, _) -> fprintf ppf "Var %s" x
+  | LetRec({name = xt; args = xts; body = e1}, e2, _) ->
+      fprintf ppf "@[<v 2>Fundef";
+      fprintf ppf "@[<v 2>Name@,%a@]" Id.pr_xt xt;
+      fprintf ppf "@[<v 2>Args@,%a@]" Id.pr_xts xts;
+      fprintf ppf "@[<v 2>Body@,%a@]@]" pr_e e1;
+      fprintf ppf "@[<v 2>In@,%a@]" pr_e e2
+  | App(e1, es, _) -> fprintf ppf "@[<v 2>App@,%a@,%a@]" pr_e e1 pr_es es
+  | Tuple(es, _) -> fprintf ppf "@[<v 2>]Tuple@,%a" pr_es es
+  | LetTuple(xts, e1, e2, _) ->
+      fprintf ppf "@[<v 2>LetTuple@,%a@,%a@,@]" Id.pr_xts xts pr_e e1;
+      fprintf ppf "@[<v 2>In@,%a@]" pr_e e2
+  | Put(e1, e2, e3, _) ->
+      fprintf ppf "@[<v 2>%s@,%a@,%a@,%a]" (ename e) pr_e e1 pr_e e2 pr_e e3
+(* boxの中で使う用、各eを@,で区切りながら出力 *)
+and pr_es ppf = function
+  | [] -> fprintf ppf "()"
+  | e :: [] -> fprintf ppf "%a" pr_e e
+  | e :: es -> fprintf ppf "%a@,%a" pr_e e pr_es es
+
+let print_syntax e = eprintf "%a@." pr_e e
