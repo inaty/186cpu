@@ -44,7 +44,7 @@ def replace_pseudo1(line, labels_addrs):
     try:
         opcode, operands = line.strip("\t\n").split("\t")
     except ValueError:
-        assert False, line.strip("\t\n").split("\t")
+        assert False, line
     operands = operands.split(", ")
     if opcode == "li":
         rd, op2 = operands
@@ -90,6 +90,9 @@ def replace_pseudo1(line, labels_addrs):
     elif opcode == "fmv.s":
         rd, rs = operands
         return [opformat("fsgnj.s", [rd, rs, rs])]
+    elif opcode == "fabs.s":
+        rd, rs = operands
+        return [opformat("fsgnjx.s", [rd, rs, rs])]
     elif opcode == "fneg.s":
         rd, rs = operands
         return [opformat("fsgnjn.s", [rd, rs, rs])]

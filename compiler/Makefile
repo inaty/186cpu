@@ -35,20 +35,21 @@ $(RESULT): debug-code top
 clean:: nobackup
 
 # 要適宜追加
+# cse.mli cse.ml を外した(alphaとbetaの間？)
+# lambdaLifting.mli lambdaLifting.ml \も外した(closureとasmの間)
+# tupleFlatten.mli tupleFlatten.ml tupleElim.mli tupleElim.ml \も外した
 SOURCES = float.c type.ml id.ml m.ml s.ml \
 syntax.ml parser.mly lexer.mll typing.mli typing.ml kNormal.mli kNormal.ml \
-alpha.mli alpha.ml cse.mli cse.ml beta.mli beta.ml assoc.mli assoc.ml \
+alpha.mli alpha.ml beta.mli beta.ml assoc.mli assoc.ml \
 inline.mli inline.ml constFold.mli constFold.ml elim.mli elim.ml \
-lambdaLifting.mli lambdaLifting.ml \
 closure.mli closure.ml \
-tupleFlatten.mli tupleFlatten.ml tupleElim.mli tupleElim.ml \
 asm.mli asm.ml virtual.mli virtual.ml \
 simm.mli simm.ml regAlloc.mli regAlloc.ml emit.mli emit.ml \
 main.mli main.ml
 
 # 要適宜追加
 # ack
-TESTS = print sum-tail gcd sum fib ack even-odd \
+TESTS = float_comp print sum-tail gcd sum fib ack even-odd \
 adder funcomp cls-rec cls-bug cls-bug2 cls-reg-bug \
 shuffle spill spill2 spill3 join-stack join-stack2 join-stack3 \
 join-reg join-reg2 non-tail-if non-tail-if2 \
@@ -66,8 +67,16 @@ TRASH = $(TESTS:%=test/%.s) $(TESTS:%=test/%.ss) $(TESTS:%=test/%.out) $(TESTS:%
 mytest.s mytest.ss mytest.out mytest.res
 # $(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
 
-sim: simulator_copy.c
-	gcc simulator_copy.c -o sim -lm
+SIMDIR = ../simulator/sim
+sim: $(SIMDIR)/exec.c $(SIMDIR)/bin.c $(SIMDIR)/simulator.c
+	gcc $(SIMDIR)/exec.c $(SIMDIR)/bin.c $(SIMDIR)/simulator.c -o sim -lm
+
+raytracer/minrt.s: $(RESULT) raytracer/minrt.ml
+	./$(RESULT) raytracer/minrt
+rt.ppm: libmincaml.S raytracer/minrt.s sim
+	python3 linker.py libmincaml.S raytracer/minrt.s
+	python3 assembler.py raytracer/minrt.ss > raytracer/minrt.out
+	./sim -f raytracer/minrt.out -i raytracer/sld/contest.bin -o raytracer/rt.ppm -b -p
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*
@@ -77,7 +86,7 @@ test/%.ss: test/%.s
 test/%.out: test/%.ss
 	python3 assembler.py $< > $@
 test/%.res: test/%.out sim
-	./sim $< -o $@ -b
+	./sim -f $< -i raytracer/sld/contest.bin -o $@ -b
 # ここが普通のocamlで実行する処理、mlはocamlでもmincamlでも走るようになっていてこれはよし
 test/%.ans: test/%.ml
 	ocaml $< > $@
@@ -107,7 +116,7 @@ mytest.ss: mytest.s
 mytest.out: mytest.ss
 	python3 assembler.py $< > mytest.out
 mytest.res: mytest.out sim
-	./sim $< -o $@ -b
+	./sim -f $< -i raytracer/sld/contest.bin -o $@ -b
 
 # なんかいらなさそうだったのでコメントアウト
 # min-caml.html: main.mli main.ml id.ml m.ml s.ml \

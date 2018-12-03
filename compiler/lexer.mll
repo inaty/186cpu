@@ -75,6 +75,32 @@ rule token = parse
     { IDENT(Id.gentmp Type.Unit) }
 | "Array.create" | "Array.make" | "create_array"
     { ARRAY_CREATE }
+| "fequal"
+    { FEQUAL }
+| "fless"
+    { FLESS }
+| "fispos"
+    { FISPOS }
+| "fisneg"
+    { FISNEG }
+| "fiszero"
+    { FISZERO }
+| "fhalf"
+    { FHALF }
+| "fsqr"
+    { FSQR }
+| "fabs"
+    { FABS }
+| "fneg"
+    { FNEG }
+| "sqrt"
+    { SQRT }
+| "floor"
+    { FLOOR }
+| "int_of_float"
+    { INT_OF_FLOAT }
+| "float_of_int"
+    { FLOAT_OF_INT }
 | '.'
     { DOT }
 | "<-"

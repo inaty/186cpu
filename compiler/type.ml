@@ -1,3 +1,5 @@
+open Format
+
 type t =
   | Unit
   | Bool
@@ -11,27 +13,20 @@ type t =
 
 let gentyp () = Var(ref None)
 
-let rec string_of_type typ =
-  match typ with
-  | Unit -> "unit"
-  | Bool -> "bool"
-  | Int -> "int"
-  | Float -> "float"
-  | Fun(types, typ) ->
-      "(fun" ^
-      (List.fold_left (fun s t -> s ^ " " ^ (string_of_type t)) "" types) ^
-      " -> " ^
-      (string_of_type typ) ^
-      ")"
-  | Tuple(types) ->
-      "(tuple" ^
-      (List.fold_left (fun s t -> s ^ " " ^ (string_of_type t)) "" types) ^
-      ")"
-  | Array(typ) -> "(array " ^ (string_of_type typ) ^ ")"
-  | Var(typeref) ->
-      (match !typeref with
-      | Some(typ) -> "(var " ^ (string_of_type typ) ^ ")"
-      | None -> "(var none)")
-  | Toplevel(typeref) -> "toplevel " ^ (string_of_type !typeref)
+let rec pr_ts d ppf = function
+  | [] -> fprintf ppf "()"
+  | t :: [] -> fprintf ppf "%a" pr_t t
+  | t :: ts -> fprintf ppf "%a%s%a" pr_t t d (pr_ts d) ts
+and pr_t ppf = function
+  | Unit -> fprintf ppf "unit"
+  | Bool -> fprintf ppf "bool"
+  | Int -> fprintf ppf "int"
+  | Float -> fprintf ppf "float"
+  | Fun(ts, t) -> fprintf ppf "(%a -> %a)" (pr_ts " -> ") ts pr_t t
+  | Tuple(ts) -> fprintf ppf "(%a)" (pr_ts " * ") ts
+  | Array(t) -> fprintf ppf "%a array" pr_t t
+  | Var({contents = Some(t)}) -> fprintf ppf "var(%a)" pr_t t
+  | Var({contents = None}) -> fprintf ppf "var(none)"
+  | Toplevel({contents = t}) -> fprintf ppf "toplevel(%a)" pr_t t
 
-let print_type typ = Printf.printf "%s\n" (string_of_type typ)
+let string_of_type t = asprintf "%a" pr_t t

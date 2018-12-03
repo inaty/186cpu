@@ -1,8 +1,7 @@
 %{
 open Syntax
 let newtype x = (x, Type.gentyp ())
-let sp () = Parsing.symbol_start_pos ()
-let ep () = Parsing.symbol_end_pos ()
+let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 %}
 
 %token <bool> BOOL
@@ -32,6 +31,21 @@ let ep () = Parsing.symbol_end_pos ()
 %token REC
 %token COMMA
 %token ARRAY_CREATE
+/* adhoc series */
+%token FEQUAL
+%token FLESS
+%token FISPOS
+%token FISNEG
+%token FISZERO
+%token FHALF
+%token FSQR
+%token FABS
+%token FNEG
+%token SQRT
+%token FLOOR
+%token INT_OF_FLOAT
+%token FLOAT_OF_INT
+/* adhoc series end */
 %token DOT
 %token LESS_MINUS
 %token SEMICOLON
@@ -58,97 +72,136 @@ let ep () = Parsing.symbol_end_pos ()
 
 %%
 
-simple_exp:
+simple_exp: /* ()なしで関数の引数になれる式 */
 | LPAREN exp RPAREN
     { $2 }
 | LPAREN RPAREN
-    { (Unit, sp (), ep ()) }
+    { Unit(pos ()) }
 | BOOL
-    { (Bool($1), sp (), ep ()) }
+    { Bool($1, pos ()) }
 | INT
-    { (Int($1), sp (), ep ()) }
+    { Int($1, pos ()) }
 | FLOAT
-    { (Float($1), sp (), ep ()) }
+    { Float($1, pos ()) }
 | IDENT
-    { (Var($1), sp (), ep ()) }
+    { Var($1, pos ()) }
 | simple_exp DOT LPAREN exp RPAREN
-    { (Get($1, $4), sp (), ep ()) }
+    { Get($1, $4, pos ()) }
 
 exp:
 | simple_exp
     { $1 }
 | NOT exp
     %prec prec_app
-    { (Not($2), sp (), ep ()) }
+    { Not($2, pos ()) }
 | MINUS exp
     %prec prec_unary_minus
     { match $2 with
-    | (Float(f), _, _) -> (Float(-.f), sp (), ep ())
-    | e -> (Neg(e), sp (), ep ()) }
+    | Float(f, _) -> Float(-.f, pos ()) (* -1.0などを許す *)
+    | e -> Neg(e, pos ()) }
 | exp PLUS exp
-    { (Add($1, $3), sp (), ep ()) }
+    { Add($1, $3, pos ()) }
 | exp MINUS exp
-    { (Sub($1, $3), sp (), ep ()) }
+    { Sub($1, $3, pos ()) }
 | exp AST exp
-    { (Mul($1, $3), sp (), ep ()) }
+    { Mul($1, $3, pos ()) }
 | exp SLASH exp
-    { (Div($1, $3), sp (), ep ()) }
+    { Div($1, $3, pos ()) }
 | exp EQUAL exp
-    { (Eq($1, $3), sp (), ep ()) }
+    { Eq($1, $3, pos ()) }
 | exp LESS_GREATER exp
-    { (Not(Eq($1, $3), sp(), ep ()), sp (), ep ()) }
+    { Not(Eq($1, $3, pos ()), pos ()) }
 | exp LESS exp
-    { (Not(LE($3, $1), sp(), ep ()), sp (), ep ()) }
+    { Not(LE($3, $1, pos ()), pos ()) }
 | exp GREATER exp
-    { (Not(LE($1, $3), sp(), ep ()), sp (), ep ()) }
+    { Not(LE($1, $3, pos ()), pos ()) }
 | exp LESS_EQUAL exp
-    { (LE($1, $3), sp (), ep ()) }
+    { LE($1, $3, pos ()) }
 | exp GREATER_EQUAL exp
-    { (LE($3, $1), sp (), ep ()) }
+    { LE($3, $1, pos ()) }
 | IF exp THEN exp ELSE exp
     %prec prec_if
-    { (If($2, $4, $6), sp (), ep ()) }
+    { If($2, $4, $6, pos ()) }
 | MINUS_DOT exp
     %prec prec_unary_minus
-    { (FNeg($2), sp (), ep ()) }
+    { FNeg($2, pos ()) }
 | exp PLUS_DOT exp
-    { (FAdd($1, $3), sp (), ep ()) }
+    { FAdd($1, $3, pos ()) }
 | exp MINUS_DOT exp
-    { (FSub($1, $3), sp (), ep ()) }
+    { FSub($1, $3, pos ()) }
 | exp AST_DOT exp
-    { (FMul($1, $3), sp (), ep ()) }
+    { FMul($1, $3, pos ()) }
 | exp SLASH_DOT exp
-    { (FDiv($1, $3), sp (), ep ()) }
+    { FDiv($1, $3, pos ()) }
 | LET IDENT EQUAL exp IN exp
     %prec prec_let
-    { (Let(newtype $2, $4, $6), sp (), ep ()) }
+    { Let(newtype $2, $4, $6, pos ()) }
 | LET REC fundef IN exp
     %prec prec_let
-    { (LetRec($3, $5), sp (), ep ()) }
+    { LetRec($3, $5, pos ()) }
 | simple_exp actual_args
     %prec prec_app
-    { (App($1, $2), sp (), ep ()) }
+    { App($1, $2, pos ()) }
 | elems
     %prec prec_tuple
-    { (Tuple($1), sp (), ep ()) }
+    { Tuple($1, pos ()) }
 | LET LPAREN pat RPAREN EQUAL exp IN exp
-    { (LetTuple($3, $6, $8), sp (), ep ()) }
+    { LetTuple($3, $6, $8, pos ()) }
 | simple_exp DOT LPAREN exp RPAREN LESS_MINUS exp
-    { (Put($1, $4, $7), sp (), ep ()) }
+    { Put($1, $4, $7, pos ()) }
 | exp SEMICOLON exp
-    { (Let((Id.gentmp Type.Unit, Type.Unit), $1, $3), sp (), ep ()) }
+    { Let((Id.gentmp Type.Unit, Type.Unit), $1, $3, pos ()) }
 | exp SEMICOLON
-    { (Let((Id.gentmp Type.Unit, Type.Unit), $1, (Unit, sp (), ep ())),
-       sp (), ep ())}
+    { Let((Id.gentmp Type.Unit, Type.Unit), $1, (Unit(pos ())), pos ()) }
 | ARRAY_CREATE simple_exp simple_exp
     %prec prec_app
-    { (Array($2, $3), sp (), ep ()) }
+    { Array($2, $3, pos ()) }
+| FEQUAL simple_exp simple_exp
+    %prec prec_app
+    { Eq($2, $3, pos ()) }
+| FLESS simple_exp simple_exp
+    %prec prec_app
+    { Not(LE($3, $2, pos ()), pos ()) }
+| FISPOS simple_exp
+    %prec prec_app
+    { Not(LE($2, Float(0.0, pos ()), pos ()), pos ()) }
+| FISNEG simple_exp
+    %prec prec_app
+    { Not(LE(Float(0.0, pos ()), $2, pos ()), pos ()) }
+| FISZERO simple_exp
+    %prec prec_app
+    { Eq($2, Float(0.0, pos ()), pos ()) }
+| FHALF simple_exp
+    %prec prec_app
+    { FMul($2, Float(0.5, pos ()), pos ()) }
+| FSQR simple_exp
+    %prec prec_app
+    { let x = Id.genid "fsqr" in
+      let p = pos () in
+      Let((x, Type.Float), $2, FMul(Var(x, p), Var(x, p), p), p) }
+| FABS simple_exp
+    %prec prec_app
+    { FAbs($2, pos ()) }
+| FNEG simple_exp
+    %prec prec_app
+    { FNeg($2, pos ()) }
+| SQRT simple_exp
+    %prec prec_app
+    { FSqrt($2, pos ()) }
+| FLOOR simple_exp
+    %prec prec_app
+    { FFloor($2, pos ()) }
+| INT_OF_FLOAT simple_exp
+    %prec prec_app
+    { FtoI($2, pos ()) }
+| FLOAT_OF_INT simple_exp
+    %prec prec_app
+    { ItoF($2, pos ()) }
 | error
-    { failwith
-        (let open Lexing in
-         let sp = sp () in
-         let ep = ep () in
-         Printf.sprintf
+    { let sp, ep = pos () in
+      let open Lexing in
+      failwith
+        (Printf.sprintf
            "parse error near line %d-%d, characters %d-%d"
            sp.pos_lnum
            ep.pos_lnum

@@ -14,14 +14,14 @@ let rec min_caml_atan f =
   (* if f < 0.4375 then *)
   if (fless f 0.4375) then
     let f = min_caml_atan_kernel_atan f in
-    asm_fsgnj f sign
+    f -. sign (* hoge *)
   else (
     let pi = 3.1415926 in
     (* if f < 2.4375 then *)
     if fless f 2.4375 then
       let f = (pi /. 4.0) +. (min_caml_atan_kernel_atan ((f -. 1.0) /. (f +. 1.0))) in
-      (asm_fsgnj f sign)
+      f -. sign (* hoge *)
     else
       let f = (pi /. 2.0) -. (min_caml_atan_kernel_atan (1.0 /. f)) in
-      (asm_fsgnj f sign) ) in
+      f -. sign ) in (* hoge *)
 print_float (min_caml_atan 0.1)

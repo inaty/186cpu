@@ -36,7 +36,7 @@ let rec sin f =
     if fless (3.1415926 *. 0.25) f then
       kernel_cos ((3.1415926 *. 0.5) -. f)
     else kernel_sin f in
-  asm_fsgnj f flag in
+  f /. flag in (* hoge *)
 let rec cos f =
   let flag = 1.0 in
   let f = fabs f in
@@ -54,6 +54,6 @@ let rec cos f =
     if fless (3.1415926 *. 0.25) f then
       kernel_sin ((3.1415926 *. 0.5) -. f)
     else kernel_cos f in
-  asm_fsgnj f flag in
+  f /. flag in (* hoge *)
 print_float (cos 0.1); print_newline ();
 print_float (sin 0.1); print_newline ();

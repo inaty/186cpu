@@ -5,12 +5,46 @@
 #include<math.h>
 #include"exec.h"
 #include"bin.h"
-#define SIZE 2147483644
+#define SIZE (2400 * 1024 / 4)
 #define INPUT 1000000000//10億
-#define KIZAMI 1000000
+#define KIZAMI 1024
 
 //入力が２進数の時 -b をつける　
 //ファイルの名前をつけたいときは-f [ファイル名]
+char* odrlst[58]=
+{"in","out","lui","auipc","jal","jalr","beq","bne","blt","bge",
+"bltu","bgeu","lb","lh","lw","lbu","lhu","sb","sh","sw",
+"addi","slti","sltiu","xori","ori","andi","slli","srli","add","sub",
+"mul","div","sll","sltu","xor","srl","or","and","flw","fsw",
+"fadd.s","fsub.s","fmul.s","fdiv.s","fsqrt.s","fsgnj.s","fsgnjn.s","fsgnjx.s","fcvt.w.s","feq.d",
+"flt.d","fle.d","fcvt.s.w","fmv.w.x","fcos.s","fsin.s","fatan.s","print float"};
+
+int* make_rank(long long int* u,int size){
+	int * rank;
+	int k;
+	rank=(int*)malloc(sizeof(int)*size);
+	for (int i=0;i<size;i++){
+		rank[i]=size;
+	}
+
+	for (int i=0;i<size;i++){
+		k=0;
+		while(rank[k]!=size){
+			if (u[rank[k]] < u[i]){
+				break;
+			}
+			k++;
+		}
+		for (int j=k;j<size-1;j++){
+			rank[k-j+size-1]=rank[k-j+size-2];
+		}
+		rank[k]=i;
+	}
+	return rank;
+}
+
+
+
 int main(int argc , char* argv[]){
 		FILE *fp,*fpi,*fpo;
 		char cmd[34];
@@ -25,7 +59,8 @@ int main(int argc , char* argv[]){
 		int opt,length=0;
 		unsigned int *mem;
 		long long int *mmap;
-		unsigned int rg[32]={0,0,400000000,800000000,1200000000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		long long int cntodr[100] = {0};
+		unsigned int rg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		float frg[32]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     opterr = 0;
 		command=(unsigned int*)malloc((sizeof (unsigned int))*INPUT);
@@ -106,9 +141,11 @@ int main(int argc , char* argv[]){
 
 
     int pc=0;//プログラム開始
+    long long int cnt = 0;
     while (command[pc]!=0){
+			++cnt;
 			counter[pc]++;
-			exec(rg,frg,flag,command,mem,&pc,fpi,fpo,&jc,mmap);
+			exec(rg,frg,flag,command,mem,&pc,fpi,fpo,&jc,mmap,cntodr);
     }
 		fclose(fpi);
 		fclose(fpo);
@@ -130,12 +167,21 @@ int main(int argc , char* argv[]){
 					printf("mem[%d]=%u",j,mem[j]);
 				}
 				*/
-				
+
 		if ((flag&8)==8){
 			printf("jumpcounter=%lld\n",jc);
-				for (int i=0;i<400;i++){
-					printf("memory map%d*%d->%lld\n",i,KIZAMI,mmap[i]);
+				for (int i = 0; i < SIZE/KIZAMI; i++) {
+					if (mmap[i] != 0) {
+						printf("memory map %d*%d*4B -> %lld\n", i, KIZAMI, mmap[i]);
+					}
 				}
 		}
+		fprintf(stderr, "cnt = %lld\n", cnt);
+		int *rank;
+		rank=make_rank(cntodr,58);
+		for(int i=0;i<58;i++){
+		printf("%15s ->%12lld\n",odrlst[rank[i]],cntodr[rank[i]]);
+		}
+
   return 0;
 }

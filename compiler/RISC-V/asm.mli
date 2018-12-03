@@ -1,48 +1,58 @@
-type id_or_imm =
+type id_or_imm = (* V = variable, C = constant *)
   | V of Id.t
   | C of int
-type insts =
-  | Ans of inst_pos
-  | Let of (Id.t * Type.t) * inst_pos * insts
-and inst_pos = inst * Lexing.position
-and inst =
-  | Nop
-  | Set of int
-  | SetL of Id.l
-  | Mov of Id.t
-  | Neg of Id.t
-  | Add of Id.t * id_or_imm
-  | Sub of Id.t * id_or_imm
-  | Mul of Id.t * Id.t
-  | Div of Id.t * Id.t
-  | SLL of Id.t * id_or_imm
-  | Ld of Id.t * id_or_imm
-  | St of Id.t * Id.t * id_or_imm
-  | FMv of Id.t
-  | FNeg of Id.t
-  | FAdd of Id.t * Id.t
-  | FSub of Id.t * Id.t
-  | FMul of Id.t * Id.t
-  | FDiv of Id.t * Id.t
-  | LdDF of Id.t * id_or_imm
-  | StDF of Id.t * Id.t * id_or_imm
+type p = Lexing.position * Lexing.position
+type t = (* 命令の列 *)
+  | Ans of exp
+  | Let of (Id.t * Type.t) * exp * t
+and exp = (* 命令（仮想命令含む） *)
+  | Nop of p
+  | Li of int * p
+  | LiL of Id.l * p
+  | Mv of Id.t * p
+  | Neg of Id.t * p
+  | Add of Id.t * id_or_imm * p
+  | Sub of Id.t * id_or_imm * p
+  | Mul of Id.t * id_or_imm * p
+  | Div of Id.t * id_or_imm * p
+  | SLL of Id.t * id_or_imm * p
+  | SRL of Id.t * id_or_imm * p
+  | Lw of Id.t * id_or_imm * p
+  | Sw of Id.t * Id.t * id_or_imm * p
+  | FMv of Id.t * p
+  | FAbs of Id.t * p
+  | FNeg of Id.t * p
+  | FSqrt of Id.t * p
+  | FFloor of Id.t * p
+  | FAdd of Id.t * Id.t * p
+  | FSub of Id.t * Id.t * p
+  | FMul of Id.t * Id.t * p
+  | FDiv of Id.t * Id.t * p
+  | FtoI of Id.t * p
+  | ItoF of Id.t * p
+  | FLw of Id.t * id_or_imm * p
+  | FSw of Id.t * Id.t * id_or_imm * p
   (* virtual instructions *)
-  (* 変更(op2をid_or_immからId.tに) *)
-  | IfEq of Id.t * Id.t * insts * insts
-  | IfLE of Id.t * Id.t * insts * insts
-  (* | IfGE of Id.t * Id.t * insts * insts *)
-  | IfFEq of Id.t * Id.t * insts * insts
-  | IfFLE of Id.t * Id.t * insts * insts
+  | IfEq of Id.t * Id.t * t * t * p
+  | IfLE of Id.t * Id.t * t * t * p
+  | IfFEq of Id.t * Id.t * t * t * p
+  | IfFLE of Id.t * Id.t * t * t * p
   (* closure address, integer arguments, and float arguments *)
-  | CallCls of Id.t * Id.t list * Id.t list
-  | CallDir of Id.l * Id.t list * Id.t list
-  | Save of Id.t * Id.t
-  | Restore of Id.t
-type fundef = { name : Id.l; args : Id.t list; fargs : Id.t list; body : insts; ret : Type.t }
-type prog = Prog of (Id.l * float) list * fundef list * insts
+  | CallCls of Id.t * Id.t list * Id.t list * p
+  | CallDir of Id.l * Id.t list * Id.t list * p
+  (* Save(r, y) = レジスタrに入っている変数yをスタックに退避 *)
+  | Save of Id.t * Id.t * p
+  | Restore of Id.t * p (* スタックから値を戻す *)
+type fundef =
+  { name : Id.l; args : Id.t list; fargs : Id.t list;
+    body : t; ret : Type.t }
+(* プログラム = (float_table, 関数リスト, 命令列) *)
+type prog = Prog of (Id.l * float) list * fundef list * t
 
-val fletd : Id.t * inst_pos * insts -> insts (* shorthand of Let for float *)
-val seq : inst_pos * insts -> insts (* shorthand of Let for unit *)
+val dp : Lexing.position * Lexing.position
+
+val fletd : Id.t * exp * t -> t (* shorthand of Let for float *)
+val seq : exp * t -> t (* shorthand of Let for unit *)
 
 val regs : Id.t array
 val fregs : Id.t array
@@ -57,7 +67,7 @@ val reg_sp : Id.t
 val is_reg : Id.t -> bool
 (* val co_freg : Id.t -> Id.t *)
 
-val fv : insts -> Id.t list
-val concat : insts -> Id.t * Type.t -> insts -> insts
+val fv : t -> Id.t list
+val concat : t -> Id.t * Type.t -> t -> t
 
 val align : int -> int
