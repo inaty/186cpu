@@ -16,8 +16,8 @@ char* odrlst[58]=
 "bltu","bgeu","lb","lh","lw","lbu","lhu","sb","sh","sw",
 "addi","slti","sltiu","xori","ori","andi","slli","srli","add","sub",
 "mul","div","sll","sltu","xor","srl","or","and","flw","fsw",
-"fadd.s","fsub.s","fmul.s","fdiv.s","fsqrt.s","fsgnj.s","fsgnjn.s","fsgnjx.s","fcvt.w.s","feq.d",
-"flt.d","fle.d","fcvt.s.w","fmv.w.x","fcos.s","fsin.s","fatan.s","print float"};
+"fadd.s","fsub.s","fmul.s","fdiv.s","fsqrt.s","fsgnj.s","fsgnjn.s","fsgnjx.s","fcvt.w.s","feq.s",
+"flt.s","fle.s","fcvt.s.w","fmv.w.x","fcos.s","fsin.s","fatan.s","print float"};
 
 int* make_rank(long long int* u,int size){
 	int * rank;
