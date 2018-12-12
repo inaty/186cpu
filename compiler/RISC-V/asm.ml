@@ -132,3 +132,88 @@ let rec concat e1 xt e2 =
   | Let(yt, exp, e1') -> Let(yt, exp, concat e1' xt e2)
 
 let align i = i (* (if i mod 8 = 0 then i else i + 4) *)
+
+open Format
+
+let expname = function
+  | Mv _ -> "Mv"
+  | Neg _ -> "Neg"
+  | Add _ -> "Add"
+  | Sub _ -> "Sub"
+  | Mul _ -> "Mul"
+  | Div _ -> "Div"
+  | SLL _ -> "SLL"
+  | SRL _ -> "SRL"
+  | Lw _ -> "Lw"
+  | FMv _ -> "FMv"
+  | FAbs _ -> "FAbs"
+  | FNeg _ -> "FNeg"
+  | FSqrt _ -> "FSqrt"
+  | FFloor _ -> "FFloor"
+  | FAdd _ -> "FAdd"
+  | FSub _ -> "FSub"
+  | FMul _ -> "FMul"
+  | FDiv _ -> "FDiv"
+  | FtoI _ -> "FtoI"
+  | ItoF _ -> "ItoF"
+  | FLw _ -> "FLw"
+  | FSw _ -> "FSw"
+  | _ -> failwith "Asm.expname"
+
+let pr_id_or_imm ppf = function
+  | V(x) -> fprintf ppf "%s" x
+  | C(i) -> fprintf ppf "%d" i
+
+let rec pr_e ppf = function
+  | Ans(exp) -> fprintf ppf "%a" pr_exp exp
+  | Let((x, t), exp, e) ->
+      begin match exp with
+      | IfEq _ | IfLE _ | IfFEq _ | IfFLE _ ->
+          fprintf ppf "let (%s, %a) =@;<0 2>%a in@,%a"
+            x Type.pr_t t pr_exp exp pr_e e
+      | _ ->
+          fprintf ppf "let (%s, %a) = %a in@,%a" x Type.pr_t t pr_exp exp pr_e e
+      end
+and pr_exp ppf exp =
+  match exp with
+  | Nop _ -> fprintf ppf "nop"
+  | Li(i, _) -> fprintf ppf "Li(%d)" i
+  | LiL(Id.L(l), _) -> fprintf ppf "LiL(%s)" l
+  | Mv(x, _) | Neg(x, _)
+  | FMv(x, _) | FAbs(x, _) | FNeg(x, _) | FSqrt(x, _) | FFloor(x, _)
+  | FtoI(x, _) | ItoF(x, _)
+      -> fprintf ppf "%s(%s)" (expname exp) x
+  | Add(x, y', _) | Sub(x, y', _) | Mul(x, y', _) | Div(x, y', _)
+  | SLL(x, y', _) | SRL(x, y', _) | Lw(x, y', _) | FLw(x, y', _) ->
+      fprintf ppf "%s(%s, %a)" (expname exp) x pr_id_or_imm y'
+  | Sw(x, y, z', _) | FSw(x, y, z', _) ->
+      fprintf ppf "Sw(%s, %s, %a)" x y pr_id_or_imm z'
+  | FAdd(x, y, _) | FSub(x, y, _) | FMul(x, y, _) | FDiv(x, y, _) ->
+      fprintf ppf "%s(%s, %s)" (expname exp) x y
+  | IfEq(x, y, e1, e2, _) ->
+      fprintf ppf "@[<v 2>if %s = %s then@,%a@]@,@[<v 2>else@,%a@]"
+        x y pr_e e1 pr_e e2
+  | IfLE(x, y, e1, e2, _) ->
+      fprintf ppf "@[<v 2>if %s <= %s then@,%a@]@,@[<v 2>else@,%a@]"
+        x y pr_e e1 pr_e e2
+  | IfFEq(x, y, e1, e2, _) ->
+      fprintf ppf "@[<v 2>if %s =. %s then@,%a@]@,@[<v 2>else@,%a@]"
+        x y pr_e e1 pr_e e2
+  | IfFLE(x, y, e1, e2, _) ->
+      fprintf ppf "@[<v 2>if %s <=. %s then@,%a@]@,@[<v 2>else@,%a@]"
+        x y pr_e e1 pr_e e2
+  | CallCls(x, ixs, fxs, _) ->
+      fprintf ppf "CallCls(%s, %s, %s)" x (Id.pp_list ixs) (Id.pp_list fxs)
+  | CallDir(Id.L(l), ixs, fxs, _) ->
+      fprintf ppf "CallDir(%s, %s, %s)" l (Id.pp_list ixs) (Id.pp_list fxs)
+  | _ -> failwith "Asm.pr_exp"
+
+let print_prog prog =
+  match prog with
+  | Prog(float_table, fundefs, e2) ->
+      let print_fundef {name = Id.L(x); args = ixs; fargs = fxs;
+                        body = e1; ret = t} =
+        eprintf "fundef %s@.args %s@.fargs %s@.@[<v 0>%a@]@."
+          x (Id.pp_list ixs) (Id.pp_list fxs) pr_e e1 in
+      List.iter print_fundef fundefs;
+      eprintf "main@.@[<v 0>%a@]@." pr_e e2

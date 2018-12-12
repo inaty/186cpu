@@ -19,22 +19,17 @@ let lexbuf outchan l =
   let knormal = KNormal.f (Typing.f syntax) in
   (* KNormal.print_kNormal knormal; *)
   match (Closure.f (iter !limit (Alpha.f knormal))) with
-  (* match (Closure.f (Alpha.f knormal)) with *)
   (* match (LambdaLifting.f (iter !limit (Alpha.f knormal))) with *)
   | Closure.Prog(fundefs, t) as prog ->
       (* Closure.print_fundefs fundefs;
       Closure.print_closure_t t; *)
       (* let prog = TupleFlatten.f prog in *)
       (* let prog = TupleElim.f (TupleFlatten.f prog) in *)
-      begin match prog with
-      | Closure.Prog(fundefs, t) as prog ->
-          (* Closure.print_fundefs fundefs;
-          Closure.print_closure_t t; *)
-          Emit.f outchan
-            (RegAlloc.f
-              (Simm.f
-                (Virtual.f prog)))
-      end
+      (* Closure.print_fundefs fundefs;
+      Closure.print_closure_t t; *)
+      let prog = (Simm.f (Virtual.f prog)) in
+      Asm.print_prog prog;
+      Emit.f outchan (RegAlloc.f prog)
 
 
 let string s = lexbuf stdout (Lexing.from_string s)
