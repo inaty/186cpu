@@ -28,7 +28,7 @@ let lexbuf outchan l =
       (* Closure.print_fundefs fundefs;
       Closure.print_closure_t t; *)
       let prog = (Simm.f (Virtual.f prog)) in
-      Asm.print_prog prog;
+      (* Asm.print_prog prog; *)
       Emit.f outchan (RegAlloc.f prog)
 
 
