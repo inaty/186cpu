@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-module fle(
+module fle( //s1<s2ならtrue(1)を返す
   input wire [31:0] x1,
   input wire [31:0] x2,
   output wire v);
@@ -40,7 +40,7 @@ module fle(
 
   assign v = (s1 == s2) ? ((s1 == 0) ? ((sel == 0 || (sel == 2 && ce == 0) ? 1 : 0 )) :
                                        ((sel == 1 || (sel == 2 && ce == 1)) ? 1 : 0 ))
-                                        : ((s1 == 0) ? 0 : 1 );
+                                        : ((s1 == 0 && ({e1,m1} != 31'b0 || {e2,m2} != 31'b0)) ? 0 : 1 );
 
 endmodule
 
