@@ -66,7 +66,7 @@ module fmul(
   assign mbs = (eb[9] == 1) ? mb >> ebs : mb;
   
   assign ovf = (eb[9:8] == 2'b01);
-  assign y = (eb[9] == 1) ? ((eb > -23) ? {ss,8'b0,mbs[47:25]} : {ss,31'b0} ) : ((eb[8] == 1) ? {ss,8'd255,31'b0} : {ss,eb[7:0],mbs[47:25]} );
+  assign y = (eb[9] == 1) ? ((eb > -23) ? {ss,8'b0,mbs[47:25]} : {ss,31'b0} ) : ((eb[8] == 1) ? {ss,8'd255,23'b0} : {ss,eb[7:0],mbs[47:25]} );
 //  assign eo = eb[9:0];
 //  assign mo = mbs[47:25];
 endmodule
