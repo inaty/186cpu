@@ -26,14 +26,14 @@ unsigned int fmul(unsigned int x1,unsigned int x2){
   unsigned int  e1a;
   unsigned int  e2a;
 
-   e1a = (e1 == 0) ? 0xff : get(e1,7,0);
-   e2a = (e2 == 0) ? 0xff : get(e2,7,0);
+   e1a = (e1 == 0) ? 0x01 : get(e1,7,0);
+   e2a = (e2 == 0) ? 0x01 : get(e2,7,0);
   
   int  e1b;
   int  e2b;
-
-   e1b = get(get(e1a,7,0) - 127,8,0);
-   e2b = get(get(e2a,7,0) - 127,8,0);
+   e1b = get(e1a,7,0) - 127;
+   e2b = get(e2a,7,0) - 127;
+//printf("e1a=%d,e1b=%d",e1a,e1b);
 
   unsigned int  ss;
   int  ea;
@@ -48,7 +48,7 @@ unsigned int fmul(unsigned int x1,unsigned int x2){
 	//printf("m1a=%u,m2a=%u\n",m1a,m2a);
   unsigned int  se=48;
  for(int i=0;i<48;i++){
-	if(get(myd,47-i,47-i)==1){
+	if(lget(myd,47-i,47-i)==1){
 		se=i;
 		break;
 	}
@@ -60,14 +60,19 @@ unsigned int fmul(unsigned int x1,unsigned int x2){
   int  ebs;
   
    mb = (myd << (se + 1))&0xffffffffffff;//12*4=48bit
-   eb = get(ea - se + 1,9,0);
-   ebs = get(-eb + 1,9,0);
+   eb = ea - se + 1;
+   ebs = -eb + 1;
    mbs = (get(eb,9,9) == 1) ? (mb >> ebs)&0xffffffffffff : mb&0xffffffffffff;
    ovf = (get(eb,9,8) == 1);
    y = (get(eb,9,9) == 1) ? ((eb > -23) ? (ss<<31)|lget(mbs,47,25) : (ss<<31)):
 	 ((get(eb,8,8) == 1) ? (ss<<31)|(0xff<<23) : 
-	 (ss<<31)|(get(eb,7,0)<<23)|get(mbs,47,25));
+	 (ss<<31)|(get(eb,7,0)<<23)|lget(mbs,47,25));
 
+printf("myd=%lu,se=%d,mb=%lu,eb=%d,ebs=%d,mbs=%lu\n",myd,se,mb,eb,ebs,mbs);
+lprint(myd);
+lprint(mb);
+lprint(mbs);
+print(y);
 //本気のdebug
 if(s1>=(1<<1)) printf("s1");
 if(e1>=(1<<8)) printf("e1");
