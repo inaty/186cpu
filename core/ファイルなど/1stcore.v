@@ -1,32 +1,20 @@
 `default_nettype none
 
 module f_core
-  #(parameter ILENGTH = 32,
-    parameter INUM = 1024,
-    parameter IADDLEN = 8)
   (input wire clk,
    input wire rst,
    output wire [31:0] memaddr_a,
    output wire [31:0] w_data_a,
    output wire [3:0] wenable_a,
-   output wire [3:0] wenable_b,
    input wire [31:0] r_data_a,
    output wire en_ab,
    output wire [31:0] memaddr_b,
    output wire [31:0] w_data_b,
-   input wire [31:0] r_data_b,
-   output wire [31:0] iaddr,
-   input wire [31:0] instout,
-   output wire en_inst,
-   /*input wire [1:0] corereadwhere,//
-   input wire corereadok,
-   output wire coreread,
-   input wire [31:0] indoutb,
-   input wire [1:0] corewritewhere,
-   input wire corewriteok,
-   output wire corewrite,
-   output wire [31:0] outdina,
-   output wire [3:0] outwe,*///
+   output wire [3:0] wenable_b,
+   input wire [31:0] instout,//r_data_b
+   //output wire [31:0] iaddr,
+   //input wire [31:0] instout,
+   //output wire en_inst,
 
    output wire [3:0] io_awaddr_wire,
    input wire io_awready,
@@ -76,9 +64,10 @@ module f_core
   reg [2:0] io_state;
 
 
-  reg [12:0] pc;
+  reg [22:0] pc;
   reg [2:0] state;
   reg [31:0] mainreg[31:0];
+  reg [31:0] mainfreg[31:0];
   reg [4:0] opcode;//inst[6:2]
   reg [4:0] rdnum;
   reg [31:0] rs1;
@@ -103,57 +92,72 @@ module f_core
   reg st;
   reg [2:0] opinst;//命令種別判定
   reg is_arith; //これが1ならarith right shiftで計算 (シフト演算) SUB(ADD)
+  reg is_notfill;
+  reg fmv;
+  reg finst;
+  reg flw;
+  reg fsw;
+  reg [4:0] fopinst;
+
+
+  wire [31:0] rs1wire;
+  wire [31:0] rs2wire;
+  wire [31:0] rdwirefadd;
+  wire [31:0] rdwirefsub;
+  wire [31:0] rdwirefmul;
+  wire [31:0] rdwirefdiv;
+  wire [31:0] rdwirefsqrt;
+  wire ovfwire;
+  wire rdwireflt;
+  wire rdwirefeq;
+  wire [31:0] rdwireftoi;
+  wire [31:0] rdwireitof;
+  assign rs1wire=rs1;
+  assign rs2wire=rs2;
+  fadd fadd(rs1wire,rs2wire,rdwirefadd,ovfwire);
+  fsub fsub(rs1wire,rs2wire,rdwirefsub,ovfwire);
+  fmul fmul(rs1wire,rs2wire,rdwirefmul,ovfwire);
+  fdiv fdiv(rs1wire,rs2wire,rdwirefdiv,ovfwire);
+  fsqrt fsqrt(rs1wire,rdwirefsqrt,ovfwire);
+  flt flt(rs1wire,rs2wire,rdwireflt);
+  feq feq(rs1wire,rs2wire,rdwirefeq);
+  ftoi ftoi(rs1wire,opinst[2],rdwireftoi);
+  itof itof(rs1wire,rdwireitof);
 
   reg [31:0] succpc;
   reg [31:0] movepc;
 
   reg [3:0] stenablereg_a;
-  reg [3:0] stenablereg_b;
   reg [31:0] w_data_a_reg;
-  reg [31:0] w_data_b_reg;
 
-  wire [12:0] memaddr_b_wire;
 
-  assign memaddr_a = {19'b0,rs1[14:2]};
-  assign memaddr_b_wire = rs1[14:2]+13'b1;
-  assign memaddr_b = {19'b0,memaddr_b_wire};
+  assign memaddr_a = (ld|st|flw|fsw)?{9'b0,rs1[22:0]}:32'b0;
+  assign memaddr_b = {9'b0,pc};
   assign w_data_a = w_data_a_reg;
-  assign w_data_b = w_data_b_reg;
+  assign w_data_b = /*w_data_b_reg*/32'b0;
   assign wenable_a = stenablereg_a;
-  assign wenable_b = stenablereg_b;
-  assign en_ab = 1'b1;
+  assign wenable_b = /*stenablereg_b*/0;
+  assign en_ab = rst;
 
-  assign en_inst=1'b1;
 
   integer i;
-  assign iaddr = {19'b0,pc};
 
   reg inp;
   reg outp;
-  /*reg corereadreg;
-  reg corewritereg;
-  reg [31:0] outdina_reg;
-  reg [3:0] outwereg;
-  assign coreread=corereadreg;
-  assign corewrite=corewritereg;
-  assign outdina = outdina_reg;
-  assign outwe=outwereg;
-*/
-
+  reg startwait;
 
   always @(posedge clk) begin
 
     stenablereg_a<=0;
-    stenablereg_b<=0;
-    //corereadreg<=0;
 
     if (~rst) begin
       pc <= 0;
-      //corewritereg<=0;
       state <= 0;
       
       for (i=0;i<32;i=i+1)
         mainreg[i]<=0;
+      for (i=0;i<32;i=i+1)
+        mainfreg[i]<=0;
       opcode<=0;
       rdnum<=0;
       rs1<=0;
@@ -165,21 +169,21 @@ module f_core
       brnc<=0;
       opinst<=0;
       is_arith<=0;
+      is_notfill<=0;
       succpc<=0;
       movepc<=0;
       opp<=0;
       ld<=0;
       st<=0;
       stenablereg_a<=0;
-      stenablereg_b<=0;
       w_data_a_reg<=0;
-      w_data_b_reg<=0;
       inp<=0;
       outp<=0;
-      /*corereadreg<=0;
-      corewritereg<=0;
-      outdina_reg<=0;
-      outwereg<=0;*/
+      fmv<=0;
+      finst<=0;
+      flw<=0;
+      fsw<=0;
+      fopinst<=0;
 
       io_awaddr<=0;
       io_awvalid<=0;
@@ -190,16 +194,26 @@ module f_core
       io_arvalid<=0;
       io_araddr<=0;
       io_rready<=0;
-
+      io_state<=0;
       countregtest<=0;
+     
+      startwait<=0;
 
     end else begin
-      countregtest<=countregtest+1;
+      if (instout[6:2]==5'b00010) begin
+        countregtest<=countregtest+1;
+      end else begin
+        countregtest<=0;
+      end
       led1<=countregtest[29];
       led2<=countregtest[26];
       led3<=countregtest[23];
       if (state==0) begin //fetch
         state<=1;
+        if (startwait==0) begin
+          state<=0;
+          startwait<=1;
+        end
 
 
       end
@@ -212,11 +226,17 @@ module f_core
         brnc<=0;
         opp<=0;
         is_arith<=0;
+        is_notfill<=0;
         opinst<=3'b0;
         ld<=0;
         st<=0;
         inp<=0;
         outp<=0;
+        fmv<=0;
+        finst<=0;
+        flw<=0;
+        fsw<=0;
+        fopinst<=0;
 
         //多分このへんのif文は変えたほうがええ
         if (instout[6:2]==5'b01101) begin //LUI(即値をレジスタに 下位12は0)
@@ -226,13 +246,13 @@ module f_core
         end
         if (instout[6:2]==5'b00101) begin //AUIPC  即値+pc
           rs1<={instout[31:12],12'b0};
-          rs2<={24'b0,pc};//pcの長さで変える必要あり
+          rs2<={9'b0,pc};//pcの長さで変える必要あり
           opp<=1;
         end
         if (instout[6:2]==5'b11011) begin //JAL rdに次pc格納 pc+=imm
           pcrs1<={{12{instout[31]}},instout[19:12],instout[20],instout[30:21],1'b0};
-          pcrs2<={24'b0,pc};//pcの長さで変える必要あり
-          rs1<={24'b0,pc};//pcの長さで変える必要あり
+          pcrs2<={9'b0,pc};//pcの長さで変える必要あり
+          rs1<={9'b0,pc};//pcの長さで変える必要あり
           rs2<=32'b100;
           opc<=1;
           opp<=1;
@@ -240,7 +260,7 @@ module f_core
         if (instout[6:2]==5'b11001) begin //JALR rdに次pc格納 pc=rs1+imm
           pcrs1<=mainreg[instout[19:15]];
           pcrs2<={{21{instout[31]}},instout[30:20]};
-          rs1<={24'b0,pc};//pcの長さで変える必要あり
+          rs1<={9'b0,pc};//pcの長さで変える必要あり
           rs2<=32'b100;
           opc<=1;
           opp<=1;
@@ -249,15 +269,15 @@ module f_core
           rs1<=mainreg[instout[19:15]];
           rs2<=mainreg[instout[24:20]];
           pcrs1<={{20{instout[31]}},instout[7],instout[30:25],instout[11:8],1'b0};
-          pcrs2<={24'b0,pc};//pcの長さで変える必要あり
+          pcrs2<={9'b0,pc};//pcの長さで変える必要あり
           opinst<=instout[14:12];
           brnc<=1; //opcを後で評価
         end
         if (instout[6:2]==5'b00100) begin //OP-IMM
           rs1<=mainreg[instout[19:15]];
-          rs2<={{21{instout[31]}},instout[31],instout[30:20]};
+          rs2<={{21{instout[31]}},instout[30:20]};//20では？(それかまとめて21)(直した)
           opinst<=instout[14:12];
-          if (instout[14:12]==101) begin
+          if (instout[14:12]==3'b101) begin
             is_arith<=instout[30];
           end
           opp<=1;
@@ -272,14 +292,23 @@ module f_core
         if(instout[6:2]==5'b00000) begin//LOAD
           rs1<=mainreg[instout[19:15]]+{{21{instout[31]}},instout[30:20]};
           is_arith<=instout[14];
-          opinst<={instout[13:12],~(instout[13]&instout[12])};
+          opinst<={instout[13:12],~(instout[13]|instout[12])};
           ld<=1;
         end
         if(instout[6:2]==5'b01000) begin//STORE
           rs1<=mainreg[instout[19:15]]+{{21{instout[31]}},instout[30:25],instout[11:7]};
           rs2<=mainreg[instout[24:20]];
-          opinst<={instout[13:12],~(instout[13]&instout[12])};
+          opinst<={instout[13:12],~(instout[13]|instout[12])};
           st<=1;
+        end
+        if(instout[6:2]==5'b00001) begin//flw
+          rs1<=mainreg[instout[19:15]]+{{21{instout[31]}},instout[30:20]};
+          flw<=1;
+        end
+        if(instout[6:2]==5'b01001) begin//fsw
+          rs1<=mainreg[instout[19:15]]+{{21{instout[31]}},instout[30:25],instout[11:7]};
+          rs2<=mainfreg[instout[24:20]];
+          fsw<=1;
         end
         if(instout[6:2]==5'b00010) begin//IO このへんのinstoutは変えていきたい
           rs1<=mainreg[instout[19:15]];
@@ -290,23 +319,37 @@ module f_core
           io_state<=0;
           if (instout[12]) begin
             outp<=1;
-            //if (corewriteok) begin
-            //end else begin
-            //end
           end else begin
             is_arith<=instout[14];
-            inp<=1;
-            //if (corereadok) begin
-              //corereadreg<=1;
-            //end else begin
+            //if (instout[13]) begin
+              is_notfill<=1;
             //end
+            inp<=1;
           end
         end
-
+        if(instout[6:2]==5'b10100) begin //F-OPP
+          finst<=1;
+          opinst<={instout[13:12],~(instout[13]|instout[12])}; //flt/feq fsgnj で使う
+            //100->feq xor
+            //010->flt n
+            //001->そのまま
+          fopinst<=instout[31:27];
+          rs2<=mainfreg[instout[24:20]];
+          rs1<=mainfreg[instout[19:15]];
+          if (instout[31:27]==5'b11010||instout[31:27]==5'b11110) begin
+            rs1<=mainreg[instout[19:15]];
+          end
+          if (instout[25]) begin
+            finst<=0;
+          end
+        end
+        if (instout[1:0]!=2'b11) begin
+          state<=1;
+        end
 
       end
       if (state==2) begin //exection
-        state<=4;
+        state<=3;
         succpc<=pc+4;
         movepc<=pcrs1+pcrs2;
         if (opp) begin
@@ -321,10 +364,15 @@ module f_core
             rslt<=rs1<<(rs2[4:0]);
           end
           if (opinst==3'b010) begin //<
-            rslt<=($signed(rs1)<$signed(rs2))?1:0;
+            //rslt<=($signed(rs1)<$signed(rs2))?1:0;
+            if ((rs1[31])^(rs2[31])) begin
+              rslt<={31'b0,rs1[31]};
+            end else begin
+              rslt<={31'b0,(((rs1[30:0])<(rs2[30:0]))?(~rs1[31]):(rs1[31]))};
+            end
           end
           if (opinst==3'b011) begin //< unsigned
-            rslt<=(rs1<rs2)?1:0;
+            rslt<=(rs1<rs2)?32'b1:32'b0;
           end
           if (opinst==3'b100) begin //xor
             rslt<=rs1^rs2;
@@ -351,10 +399,20 @@ module f_core
             opc<=(rs1!=rs2)?1:0;
           end
           if (opinst==3'b100) begin
-            opc<=(($signed(rs1))<($signed(rs2)))?1:0;
+            //opc<=(($signed(rs1))<($signed(rs2)))?1:0;
+            if ((rs1[31])^(rs2[31])) begin
+              opc<=rs1[31];
+            end else begin
+              opc<=((rs1[30:0])<(rs2[30:0]))?(~rs1[31]):(rs1[31]);
+            end
           end
           if (opinst==3'b101) begin
-            opc<=(($signed(rs1))>=($signed(rs2)))?1:0;
+            //opc<=(($signed(rs1))>=($signed(rs2)))?1:0;
+            if ((rs1[31])^(rs2[31])) begin
+              opc<=rs2[31];
+            end else begin
+              opc<=((rs2[30:0])<(rs1[30:0]))?(~rs2[31]):(rs2[31]);
+            end
           end
           if (opinst==3'b110) begin
             opc<=(rs1<rs2)?1:0;
@@ -399,36 +457,25 @@ module f_core
               stenablereg_a<=4'b1100;
             end
             if (rs1[1:0]==2'b11) begin//
-              w_data_a_reg<={rs2[7:0],w_data_a_reg[23:0]};
+              /*w_data_a_reg<={rs2[7:0],w_data_a_reg[23:0]};
               w_data_b_reg<={w_data_b_reg[31:8],rs2[15:8]};
               stenablereg_a<=4'b1000;
-              stenablereg_b<=4'b0001;
+              stenablereg_b<=4'b0001;*/
             end
           end
           if (opinst[2]) begin
-            if (rs1[1:0]==2'b0) begin
-              w_data_a_reg<=rs2;
-              stenablereg_a<=4'b1111;
-            end
-            if (rs1[1:0]==2'b01) begin//
-              w_data_a_reg<={rs2[23:0],w_data_a_reg[7:0]};
-              w_data_b_reg<={w_data_b_reg[31:8],rs2[31:24]};
-              stenablereg_a<=4'b1110;
-              stenablereg_b<=4'b0001;
-            end
-            if (rs1[1:0]==2'b10) begin//
-              w_data_a_reg<={rs2[15:0],w_data_a_reg[15:0]};
-              w_data_b_reg<={w_data_b_reg[31:16],rs2[31:16]};
-              stenablereg_a<=4'b1100;
-              stenablereg_b<=4'b0011;
-            end
-            if (rs1[1:0]==2'b11) begin//
-              w_data_a_reg<={rs2[7:0],w_data_a_reg[23:0]};
-              w_data_b_reg<={w_data_b_reg[31:24],rs2[31:8]};
-              stenablereg_a<=4'b1000;
-              stenablereg_b<=4'b0111;
-            end
+            stenablereg_a<=4'b1111;
+            w_data_a_reg<=rs2;
           end
+
+            
+        end
+        if (flw) begin
+          state<=3;
+        end
+        if (fsw) begin
+          w_data_a_reg<=rs2;
+          stenablereg_a<=4'b1111;
         end
         if (inp) begin
           state<=2;
@@ -462,7 +509,7 @@ module f_core
             if (io_rvalid) begin
               io_rready<=1;//state4でこれをおろす
               rslt<={24'b0,io_rdata[7:0]};
-              state<=4;
+              state<=3;
             end
           end
           //state<=3;
@@ -521,34 +568,35 @@ module f_core
           if (io_state==3'b101) begin
             if (io_bvalid) begin
               io_bready<=1; //これをおろす
-              state<=4;
+              state<=3;
             end
           end
               
-          /*corewritereg<=1;
-          if (corewritewhere[1]) begin
-            if (corewritewhere[0]) begin
-              outdina_reg<={rs1[7:0],outdina_reg[23:0]};
-              outwereg<=4'b1000;
-            end else begin
-              outdina_reg<={outdina_reg[31:24],rs1[7:0],outdina_reg[15:0]};
-              outwereg<=4'b0100;
+        end
+        if (finst) begin //FPU
+          if (fopinst==5'b00100) begin //fsgnj
+            if (opinst[2]) begin //xor
+              rslt<={(rs2[31] ^ rs1[31]),rs1[30:0]};
             end
-          end else begin
-            if (corewritewhere[0]) begin
-              outdina_reg<={outdina_reg[31:16],rs1[7:0],outdina_reg[7:0]};
-              outwereg<=4'b0010;
-            end else begin
-              outdina_reg<={outdina_reg[31:8],rs1[7:0]};
-              outwereg<=4'b0001;
+            if (opinst[1]) begin //n
+              rslt<={(~rs2[31]),rs1[30:0]};
             end
-          end*/
+            if (opinst[0]) begin
+              rslt<={rs2[31],rs1[30:0]};
+            end
+          end
         end
           
 
       end
       if (state==3) begin //memory access
         state<=4;
+        io_rready<=0;
+        io_bready<=0;
+        pc<=succpc;
+        if (opc) begin
+          pc<=movepc;
+        end
       end
       if (state==4) begin //writeback
         state<=0;
@@ -589,7 +637,7 @@ module f_core
                 mainreg[rdnum]<={16'b0,r_data_a[31:16]};
               end
               if (rs1[1:0]==2'b11) begin
-                mainreg[rdnum]<={16'b0,r_data_b[7:0],r_data_a[31:24]};
+                //mainreg[rdnum]<={16'b0,r_data_b[7:0],r_data_a[31:24]};
               end
             end
           end else begin
@@ -618,14 +666,14 @@ module f_core
                 mainreg[rdnum]<={{16{r_data_a[31]}},r_data_a[31:16]};
               end
               if (rs1[1:0]==2'b11) begin
-                mainreg[rdnum]<={{16{r_data_b[7]}},r_data_b[7:0],r_data_a[31:24]};
+                //mainreg[rdnum]<={{16{r_data_b[7]}},r_data_b[7:0],r_data_a[31:24]};
               end
             end
             if (opinst[2]) begin
-              if (rs1[1:0]==2'b0) begin
-                mainreg[rdnum]<=r_data_a[31:0];
-              end
-              if (rs1[1:0]==2'b01) begin
+              //if (rs1[1:0]==2'b0) begin
+              mainreg[rdnum]<=r_data_a[31:0];
+              //end
+              /*if (rs1[1:0]==2'b01) begin
                 mainreg[rdnum]<={r_data_b[7:0],r_data_a[31:8]};
               end
               if (rs1[1:0]==2'b10) begin
@@ -633,24 +681,69 @@ module f_core
               end
               if (rs1[1:0]==2'b11) begin
                 mainreg[rdnum]<={r_data_b[23:0],r_data_a[31:24]};
-              end
+              end*/
             end
           end
         end
+        if (flw) begin
+          mainfreg[rdnum]<=r_data_a[31:0];
+        end
         if (inp) begin
-          if (is_arith) begin
-            mainreg[rdnum]<=rslt;
+          if (is_notfill) begin
+            mainreg[rdnum]<={(mainreg[rdnum][31:8]),rslt[7:0]};
           end else begin
-            mainreg[rdnum]<={{24{rslt[7]}},rslt[7:0]};
+            if (is_arith) begin
+              mainreg[rdnum]<={24'b0,rslt[7:0]};
+            end else begin
+              mainreg[rdnum]<={{24{rslt[7]}},rslt[7:0]};
+            end
           end
         end
-            
+        if (finst) begin
+          if (fopinst==5'b00100) begin //fsgnj
+              mainfreg[rdnum]<=rslt;
+          end 
+          if (fopinst==5'b11110) begin //fmv i2f
+              mainfreg[rdnum]<=rs1;
+          end
+          if (fopinst==5'b11100) begin  //fmv f2i
+              mainreg[rdnum]<=rs1;
+          end
+          if (fopinst==5'b00000) begin //fadd
+              mainfreg[rdnum]<=rdwirefadd;
+          end 
+          if (fopinst==5'b00001) begin //fsub
+              mainfreg[rdnum]<=rdwirefsub;
+          end 
+          if (fopinst==5'b00010) begin //fmul
+              mainfreg[rdnum]<=rdwirefmul;
+          end 
+          if (fopinst==5'b00011) begin //fdiv
+              mainfreg[rdnum]<=rdwirefdiv;
+          end 
+          if (fopinst==5'b01011) begin //fsqrt
+              mainfreg[rdnum]<=rdwirefsqrt;
+          end 
+          if (fopinst==5'b11000) begin //fcvt f2i
+              mainreg[rdnum]<=rdwireftoi;
+          end 
+          if (fopinst==5'b11010) begin //fcvt i2f
+              mainfreg[rdnum]<=rdwireitof;
+          end
+          if (fopinst==5'b10100) begin //flt feq
+            if (opinst[2]) begin //feq
+              mainreg[rdnum]<={31'b0,rdwirefeq};
+            end else begin
+              mainreg[rdnum]<={31'b0,rdwireflt};
+            end
+          end 
+        end
+
         mainreg[0]<=0;
       end
-
     end
-  end
 
+  end
 endmodule
 
 `default_nettype wire
