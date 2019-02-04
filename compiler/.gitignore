@@ -3,11 +3,12 @@
 *.cmx
 *.cmo
 lexer.ml
-min-caml.opt
 parser.ml
 parser.mli
+min-caml
+min-caml.opt
+min-caml.top
 /._d
+/._bcdi
 /._ncdi
-simulator_copy.c
-reportmemo.txt
 sim
