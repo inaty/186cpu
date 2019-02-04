@@ -54,6 +54,7 @@ int main(int argc , char* argv[]){
 		char foname[80];
 		char finame[80];
 		int flag=0;
+		int show_stat=0;
 		int i = 0;
 		long long int jc=0;
 		int opt,length=0;
@@ -71,7 +72,7 @@ int main(int argc , char* argv[]){
 			counter[i]=0;
 		}
 		strcpy(fname,"test.txt");
-		while ((opt = getopt(argc,argv ,"bdpi:o:f:")) !=-1){
+		while ((opt = getopt(argc,argv ,"bdpsi:o:f:")) !=-1){
 				switch (opt){
 						case 'b':
 								flag++;
@@ -81,6 +82,9 @@ int main(int argc , char* argv[]){
 								break;
 						case 'p':
 								flag=flag+8;
+								break;
+						case 's':
+								show_stat=1;
 								break;
 						case 'i':
 								flag=flag+32;
@@ -168,19 +172,21 @@ int main(int argc , char* argv[]){
 				}
 				*/
 
-		if ((flag&8)==8){
-				printf("jumpcounter=%lld\n",jc);
-				for (int i = 0; i < SIZE/KIZAMI; i++) {
-						if (mmap[i] != 0) {
-								printf("memory map %d*%d*4B -> %lld\n", i, KIZAMI, mmap[i]);
+		if (show_stat) {
+				if ((flag&8)==8){
+						printf("jumpcounter=%lld\n",jc);
+						for (int i = 0; i < SIZE/KIZAMI; i++) {
+								if (mmap[i] != 0) {
+										printf("memory map %d*%d*4B -> %lld\n", i, KIZAMI, mmap[i]);
+								}
 						}
 				}
-		}
-		fprintf(stderr, "cnt = %lld\n", cnt);
-		int *rank;
-		rank=make_rank(cntodr,58);
-		for(int i=0;i<58;i++){
-				printf("%15s ->%12lld\n",odrlst[rank[i]],cntodr[rank[i]]);
+				fprintf(stderr, "cnt = %lld\n", cnt);
+				int *rank;
+				rank=make_rank(cntodr,58);
+				for(int i=0;i<58;i++){
+						printf("%15s ->%12lld\n",odrlst[rank[i]],cntodr[rank[i]]);
+				}
 		}
 
 		return 0;
