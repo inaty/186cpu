@@ -5,6 +5,7 @@
 #include<unistd.h>
 #include<math.h>
 #include"bin.h"
+#include"fpu.h"
 #define KIZAMI 1024
 void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned int *mem,int *pc,FILE* fpi,FILE* fpo,long long int* jc,long long int*mmap,long long int *cntodr){
 	char input;
@@ -502,7 +503,11 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		else if(imm==8){
 		if ((flag&4)==4)
 			printf("*pc[%d],fmul.s\n",*pc);
-			frg[rd]=frg[rs1]*frg[rs2];
+			unsigned int a,b,c;
+			a=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs1]));
+			c=fmul(a,b);
+			frg[rd]=*((float*)&(frg[rs1]));
 			cntodr[42]++;
 		}
 		//fdiv.s
@@ -557,42 +562,52 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		else if((imm==0b1100000)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fcvt.w.s\n",*pc);
+			unsigned int a=*((unsigned int*)&(frg[rs1]));
 			if (funct3==0b001){
-			rg[rd]=(unsigned int)frg[rs1];
+			rg[rd]=ftoi(a,0);
 			}else if(funct3==0b010) {
-			rg[rd]=(unsigned int)( floorf (frg[rs1]));
+			rg[rd]=ftoi(a,1);
 			}else{
 				assert(0);
 			}
 			cntodr[48]++;
-
 		}
 		//feq.d
 		else if((imm==0b1010000)&&(funct3==2)){
 		if ((flag&4)==4)
 			printf("*pc[%d],feq.s\n",*pc);
-			rg[rd]=(frg[rs1]==frg[rs2])?1:0;
+			unsigned int a,b;
+			a=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs1]));
+			rg[rd]=feq(a,b);
 			cntodr[49]++;
 		}
 		//flt.d
 		else if((imm==0b1010000)&&(funct3==1)){
 		if ((flag&4)==4)
 			printf("*pc[%d],flt.s\n",*pc);
-			rg[rd]=(frg[rs1]<frg[rs2])?1:0;
+			unsigned int a,b;
+			a=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs1]));
+			rg[rd]=flt(a,b);
 			cntodr[50]++;
 		}
 		//fle.d
 		else if((imm==0b1010000)&&(funct3==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fle.s\n",*pc);
-			rg[rd]=(frg[rs1]<=frg[rs2])?1:0;
+			unsigned int a,b;
+			a=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs1]));
+			rg[rd]=fle(a,b);
 			cntodr[51]++;
 		}
 		//fcvt.s.w
 		else if((imm==0b1101000)&&(rs2==0)){
 		if ((flag&4)==4)
 			printf("*pc[%d],fcvt.s.w\n",*pc);
-			frg[rd]=(float)((int)rg[rs1]);
+			unsigned int a=itof(rg[rs1]);
+			frg[rd]=*((float*)&a);
 			cntodr[52]++;
 		}
 		//fmv.w.x
