@@ -31,7 +31,7 @@ void lprint(unsigned long int a){
 	return;
 }
 
-unsigned int fle(unsigned int x1,unsigned int x2){
+unsigned int flt(unsigned int x1,unsigned int x2){
 	
 	unsigned int v;
   unsigned int s1;
@@ -155,7 +155,7 @@ unsigned int fmul(unsigned int x1,unsigned int x2){
 
 	 return y;
 }
-unsigned int flt(unsigned int x1,unsigned int x2){
+unsigned int fle(unsigned int x1,unsigned int x2){
   unsigned int v;
 
   unsigned int s1;

@@ -505,9 +505,9 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],fmul.s\n",*pc);
 			unsigned int a,b,c;
 			a=*((unsigned int*)&(frg[rs1]));
-			b=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs2]));
 			c=fmul(a,b);
-			frg[rd]=*((float*)&(frg[rs1]));
+			frg[rd]=*((float*)&c);
 			cntodr[42]++;
 		}
 		//fdiv.s
@@ -578,7 +578,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],feq.s\n",*pc);
 			unsigned int a,b;
 			a=*((unsigned int*)&(frg[rs1]));
-			b=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs2]));
 			rg[rd]=feq(a,b);
 			cntodr[49]++;
 		}
@@ -588,7 +588,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],flt.s\n",*pc);
 			unsigned int a,b;
 			a=*((unsigned int*)&(frg[rs1]));
-			b=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs2]));
 			rg[rd]=flt(a,b);
 			cntodr[50]++;
 		}
@@ -598,7 +598,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("*pc[%d],fle.s\n",*pc);
 			unsigned int a,b;
 			a=*((unsigned int*)&(frg[rs1]));
-			b=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs2]));
 			rg[rd]=fle(a,b);
 			cntodr[51]++;
 		}
