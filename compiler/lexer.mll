@@ -99,6 +99,8 @@ rule token = parse
     { FLOOR }
 | "int_of_float"
     { INT_OF_FLOAT }
+| "truncate"
+    { TRUNCATE }
 | "float_of_int"
     { FLOAT_OF_INT }
 | '.'

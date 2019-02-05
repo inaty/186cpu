@@ -31,7 +31,6 @@ let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 %token REC
 %token COMMA
 %token ARRAY_CREATE
-/* adhoc series */
 %token FEQUAL
 %token FLESS
 %token FISPOS
@@ -44,8 +43,8 @@ let pos () = (Parsing.symbol_start_pos (), Parsing.symbol_end_pos ())
 %token SQRT
 %token FLOOR
 %token INT_OF_FLOAT
+%token TRUNCATE
 %token FLOAT_OF_INT
-/* adhoc series end */
 %token DOT
 %token LESS_MINUS
 %token SEMICOLON
@@ -192,6 +191,9 @@ exp:
     %prec prec_app
     { FFloor($2, pos ()) }
 | INT_OF_FLOAT simple_exp
+    %prec prec_app
+    { FtoI($2, pos ()) }
+| TRUNCATE simple_exp
     %prec prec_app
     { FtoI($2, pos ()) }
 | FLOAT_OF_INT simple_exp
