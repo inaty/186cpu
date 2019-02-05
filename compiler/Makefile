@@ -107,7 +107,7 @@ test/%.cmp: test/%.res test/%.ans
 # 	diff $^ > $@
 
 mytest: mytest.res
-	
+	#
 
 mytest.s: $(RESULT) mytest.ml
 	./$(RESULT) mytest
@@ -116,7 +116,7 @@ mytest.ss: mytest.s
 mytest.out: mytest.ss
 	python3 assembler.py $< > mytest.out
 mytest.res: mytest.out sim
-	./sim -f $< -i raytracer/sld/contest.bin -o $@ -b
+	./sim -f $< -i raytracer/sld/contest.bin -o $@ -b -d > mytest.log
 
 # なんかいらなさそうだったのでコメントアウト
 # min-caml.html: main.mli main.ml id.ml m.ml s.ml \

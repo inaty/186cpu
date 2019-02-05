@@ -150,6 +150,7 @@ int main(int argc , char* argv[]){
 				++cnt;
 				counter[pc]++;
 				exec(rg,frg,flag,command,mem,&pc,fpi,fpo,&jc,mmap,cntodr);
+				if ((flag&4)==4) { printf("\n"); }
     }
 		fclose(fpi);
 		fclose(fpo);

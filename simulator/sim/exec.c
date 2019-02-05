@@ -13,22 +13,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 	rg[0]=0;//ゼロレジスタ初期化
 	// printf("cmmand[%d] is %d,bitcode below\n%s\n",*pc,command[*pc],int2bin(command[*pc]));
 	if ((flag&4)==4){
-		for (int j=0;j<32;j++){
-			if (rg[j]!=10000000*j+1000000)
-			printf("rg[%d]=%d",j,rg[j]);
-		}
-		printf("\n");
-		for (int j=0;j<32;j++){
-			if (frg[j]!=0)
-			printf("frg[%d]=%.3f",j,frg[j]);
-		}
-		printf("\n");
-		/*for (int j=0;j<32;j++){
-			if (mem[j]!=0)
-			printf("mem[%d]=%u",j,mem[j]);
-		}
-		*/
-		printf("\n\n");
+		printf("%d:\n", *pc);
 	}
 	opecode = command[*pc] & 0b1111111;
 	funct3 = (command[*pc] >>12) & 0b111;
@@ -38,24 +23,29 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		rs1=(command[*pc]>>15)&0x1f;
 		rs2=(command[*pc]>>7)&0x1f;
 
-		if ((flag&4)==4)
-			printf("*pc[%d],io\n",*pc);
-
 		if((command[*pc]&(1<<12))==0){
 			//入力mode
+			if ((flag&4)==4) {
+				printf("in\tx%d\n", rs2);
+				printf("%d\n", rg[rs2]);
+			}
 			fread(&input,sizeof(input),1,fpi);
 			rg[rs2]=(rg[rs2]&0xffffff00)|(input&0x000000ff);
+			if ((flag&4)==4) { printf("%d\n", rg[rs2]); }
 			cntodr[0]++;
 			if((command[*pc]&(1<<14))==0){
 					//最上bit埋め
 					//rg[rs2]=rg[rs2]|((0xffffff00)*(rg[rs2]>>7));
 			}
-			if ((flag&4)==4)
-				printf("入力モード,rg[%d]<=%d",rs2,rg[rs2]);
 		}else{
 			//出力mode
+			if ((flag&4)==4) {
+				printf("out\tx%d\n", rs1);
+				printf("%d\n", rg[rs1]);
+			}
 			char c=(char)(rg[rs1]&0x000000ff);
 			fwrite (&c,sizeof(char),1,fpo);
+			if ((flag&4)==4) { printf("%d\n", rg[rs1]); }
 			cntodr[1]++;
 		}
 		*pc=*pc+1;
@@ -65,9 +55,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 	else if (opecode==0b0110111){
 		imm=command[*pc]&(0xfffff<<12);
 		rd = (command[*pc]>>7)&0b11111;
+		if ((flag&4)==4) {
+			printf("lui\tx%d, %d\n", rd, imm);
+			printf("%d\n", rg[rd]);
+		}
 		rg[rd]=imm;
-		if ((flag&4)==4)
-			printf("*pc[%d],lui\n",*pc);
+		if ((flag&4)==4) { printf("%d\n",rg[rd]); }
 		cntodr[2]++;
 		*pc=*pc+1;
 	}
@@ -76,9 +69,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 	else if (opecode==0b0010111){
 		imm=command[*pc]&(0xfffff<<12);
 		rd = (command[*pc]>>7)&0b11111;
+		if ((flag&4)==4) {
+			printf("auipc\tx%d, %d\n", rd, imm);
+			printf("%d\n", rg[rd]);
+		}
 		rg[rd]=imm+4*(*pc);
-		if ((flag&4)==4)
-			printf("*pc[%d],aui*pc\n",*pc);
+		if ((flag&4)==4) { printf("%d\n", rg[rd]); }
 		cntodr[3]++;
 	}
 
@@ -87,9 +83,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		imm = -((command[*pc]&(1<<31))>>11)+(((command[*pc]&(0x3ff<<21))>>20)|(command[*pc]&(0xff<<12))|((command[*pc]&(1<<20))>>9));//|(command[*pc]&(1<<31));
 		imm = imm/4;
 		rd = (command[*pc]>>7)&0b11111;
+		if ((flag&4)==4) {
+			printf("jal\tx%d, %d\n", rd, imm);
+			printf("%d\n", rg[rd]);
+		}
 		rg[rd]=4*(*pc+1);
-		if ((flag&4)==4)
-			printf("*pc[%d],jal:*pc<-%d\n",*pc,*pc+imm);
+		if ((flag&4)==4) { printf("%d\n", rg[rd]); }
 		//printf("imm=%d,%s\n",imm,int2bin(imm));
 		*pc=*pc + imm;
 		*jc=*jc+1;
@@ -102,9 +101,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		imm = imm - (imm&0x800)*2;
 		rs1 = (command[*pc]>>15) & 0b11111;
 		rd = (command[*pc]>>7) & 0b11111;
+		if ((flag&4)==4) {
+			printf("jalr\tx%d, x%d, %d\n", rd, rs1, imm);
+			printf("%d, %d\n", rg[rd], rg[rs1]);
+		}
 		rg[rd]=4*(*pc+1);
-		if ((flag&4)==4)
-			printf("*pc[%d],jalr:*pc<-%d,imm=%d,rs1=%d\n",*pc,(imm+rg[rs1])/4,imm,rs1);
+		if ((flag&4)==4) { printf("%d, %d\n", rg[rd], rg[rs1]); }
 		*pc=(imm+(int)rg[rs1])/4;
 		*jc=*jc+1;
 		cntodr[5]++;
@@ -116,13 +118,13 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		rs1 = (command[*pc]&(0x1f<<15))>>15;
 		rs2 = (command[*pc]&(0x1f<<20))>>20;
 		imm=imm/4;
-		if ((flag&4)==4)
-			printf("imm/4=%d,rs1=%d,rs2=%d\n",imm,rs1,rs2);
 
 		//beq
 		if (funct3 == 0b000){
-			if ((flag&4)==4)
-				printf("*pc[%d],beq\n",*pc);
+			if ((flag&4)==4) {
+				printf("beq\tx%d, x%d, %d\n", rs1, rs2, imm);
+				printf("%d, %d\n", rg[rs1], rg[rs2]);
+			}
 			if ((int)rg[rs1] ==(int)rg[rs2]){
 				*pc=*pc+imm;
 				*jc=*jc+1;
@@ -133,8 +135,10 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//bne
 		else if (funct3 == 0b001) {
-			if ((flag&4)==4)
-				printf("*pc[%d],bne,imm/4=%d\n",*pc,imm);
+			if ((flag&4)==4) {
+				printf("bne\tx%d, x%d, %d\n", rs1, rs2, imm);
+				printf("%d, %d\n", rg[rs1], rg[rs2]);
+			}
 			if ((int)rg[rs1] !=(int)rg[rs2]){
 				*pc =*pc+imm;
 				*jc =*jc+1;
@@ -145,8 +149,10 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//blt
 		else if (funct3 == 0b100) {
-			if ((flag&4)==4)
-				printf("*pc[%d],blt\n",*pc);
+			if ((flag&4)==4) {
+				printf("blt\tx%d, x%d, %d\n", rs1, rs2, imm);
+				printf("%d, %d\n", rg[rs1], rg[rs2]);
+			}
 			if ((int)rg[rs1] < (int)rg[rs2]){
 				*pc=*pc+imm;
 				*jc =*jc+1;
@@ -157,8 +163,10 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//bge
 		else if (funct3 == 0b101) {
-			if ((flag&4)==4)
-				printf("*pc[%d],bge\n",*pc);
+			if ((flag&4)==4) {
+				printf("bge\tx%d, x%d, %d\n", rs1, rs2, imm);
+				printf("%d, %d\n", rg[rs1], rg[rs2]);
+			}
 			if (rg[rs1] >= rg[rs2]){
 				*pc =*pc + imm;
 				*jc =*jc+1;
@@ -169,8 +177,10 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//bltu
 		else if (funct3 == 0b110) {
-			if ((flag&4)==4)
-				printf("*pc[%d],bltu\n",*pc);
+			if ((flag&4)==4) {
+				printf("bltu\tx%d, x%d, %d\n", rs1, rs2, imm);
+				printf("%d, %d\n", rg[rs1], rg[rs2]);
+			}
 			if (rg[rs1] < rg[rs2]){
 				*pc=*pc+imm;
 				*jc =*jc+1;
@@ -181,8 +191,10 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//bgeu
 		else if (funct3 == 0b111) {
-		if ((flag&4)==4)
-			printf("*pc[%d],bgeu\n",*pc);
+			if ((flag&4)==4) {
+				printf("bgeu\tx%d, x%d, %d\n", rs1, rs2, imm);
+				printf("%d, %d\n", rg[rs1], rg[rs2]);
+			}
 			if (rg[rs1] >= rg[rs2]){
 					*pc =*pc+imm;
 					*jc =*jc+1;
@@ -202,8 +214,6 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		imm = imm-2*(imm&0x800);
 		rs1 = (command[*pc]>>15) & 0b11111;
 		rd = (command[*pc]>>7) & 0b11111;
-		if ((flag&4)==4)
-			printf("imm=%d,rs1=%d,rd=%d\n",imm,rs1,rd);
 		//lb
 		if(funct3==0b000){
 			if ((flag&4)==4)
@@ -220,9 +230,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//lw
 		else if(funct3==0b010){
-			if ((flag&4)==4)
-				printf("*pc[%d],lw,mem[%d]loaded\n",*pc,(imm+rg[rs1])/4);
+			if ((flag&4)==4) {
+				printf("lw\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], mem[(imm+(int)rg[rs1])/4]);
+			}
 			rg[rd]=mem[(imm+(int)rg[rs1])/4];
+			if ((flag&4)==4) { printf("%d, %d, %d\n", rg[rd], rg[rs1], mem[(imm+(int)rg[rs1])/4]); }
 			mmap[(imm+(int)rg[rs1]/4)/KIZAMI]++;
 			cntodr[14]++;
 		}
@@ -252,8 +265,6 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		imm = imm - (imm&0x800)*2;
 		rs1 = (command[*pc]>>15) & 0b11111;
 		rs2=  (command[*pc]>>20) & 0b11111;
-		if ((flag&4)==4)
-			printf("imm=%d,rs1=%d,rs2=%d\n",imm,rs1,rs2);
 		//sb
 		if(funct3==0b000){
 			if ((flag&4)==4)
@@ -270,9 +281,14 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//sw
 		else if(funct3==0b010){
-			if ((flag&4)==4)
-				printf("*pc[%d],sw,mem[%d]changed\n",*pc,(imm+rg[rs1])/4);
+			if ((flag&4)==4) {
+				printf("sw\tx%d, x%d, %d\n", rs1, rs2, imm);
+				printf("%d, %d, %d\n", rg[rs1], rg[rs2], mem[(imm+(int)rg[rs1])/4]);
+			}
 			mem[(imm+(int)rg[rs1])/4]=rg[rs2];
+			if ((flag&4)==4) {
+				printf("%d, %d, %d\n", rg[rs1], rg[rs2], mem[(imm+(int)rg[rs1])/4]);
+			}
 			mmap[((imm+(int)rg[rs1])/4)/KIZAMI]++;
 			cntodr[19]++;
 		}
@@ -288,61 +304,75 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		imm =imm- 2*(imm &0x800);
 		rs1 = (command[*pc]>>15) & 0b11111;
 		rd = (command[*pc]>>7) & 0b11111;
-		if ((flag&4)==4)
-			printf("imm=%d,rs1=%d,rd=%d\n",imm,rs1,rd);
 		//addi
 		if(funct3==0b000){
-			if ((flag&4)==4)
-				printf("*pc[%d],addi\n",*pc);
+			if ((flag&4)==4) {
+				printf("addi\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=(int)rg[rs1]+imm;
 			cntodr[20]++;
 		}
 		//slti
 		else if(funct3==0b010){
-			if ((flag&4)==4)
-				printf("*pc[%d],slti\n",*pc);
+			if ((flag&4)==4) {
+				printf("slti\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=((int)rg[rs1]<imm) ? 1:0;
 			cntodr[21]++;
 		}
 		//sltiu
 		else if(funct3==0b011){
-			if ((flag&4)==4)
-				printf("*pc[%d],sltiu\n",*pc);
+			if ((flag&4)==4) {
+				printf("sltiu\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=(rg[rs1]<imm) ? 1:0;
 			cntodr[22]++;
 		}
 		//xori
 		else if(funct3==0b100){
-			if ((flag&4)==4)
-				printf("*pc[%d],xori\n",*pc);
+			if ((flag&4)==4) {
+				printf("xori\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=rg[rs1]^imm;
 			cntodr[23]++;
 		}
 		//ori
 		else if(funct3==0b110){
-			if ((flag&4)==4)
-				printf("*pc[%d],ori\n",*pc);
+			if ((flag&4)==4) {
+				printf("ori\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=rg[rs1]|imm;
 			cntodr[24]++;
 		}
 		//andi
 		else if(funct3==0b111){
-			if ((flag&4)==4)
-				printf("*pc[%d],andi\n",*pc);
+			if ((flag&4)==4) {
+				printf("andi\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=rg[rs1] & imm;
 			cntodr[25]++;
 		}
 		//slli
 		else if(funct3==0b001){
-			if((flag&4)==4)
-				printf("*pc[%d],slli\n",*pc);
+			if ((flag&4)==4) {
+				printf("slli\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=rg[rs1]<<(int)(imm&0b11111);
 			cntodr[26]++;
 		}
 		//srli
 		else if(funct3==0b101){
-			if((flag&4)==4)
-				printf("*pc[%d],slli\n",*pc);
+			if ((flag&4)==4) {
+				printf("srli\tx%d, x%d, %d\n", rd, rs1, imm);
+				printf("%d, %d\n", rg[rd], rg[rs1]);
+			}
 			rg[rd]=rg[rs1]>>(int)(imm&0b11111);
 			cntodr[27]++;
 		}
@@ -351,6 +381,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			printf("%s\n", int2bin(command[*pc]));
 			assert(0);
 		}
+		if ((flag&4)==4) { printf("%d, %d\n", rg[rd], rg[rs1]); }
 		*pc=*pc+1;
 	}
 
@@ -360,19 +391,21 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		rs2 = (command[*pc]>>20) & 0b11111;
 		rs1 = (command[*pc]>>15) & 0b11111;
 		rd = (command[*pc]>>7) & 0b11111;
-		if ((flag&4)==4)
-			printf("imm=%d,rs1=%d,rs2=%d,rd=%d\n",imm,rs1,rs2,rd);
 		//add
 		if((funct3==0b000)&&(imm==0b0000000)){
-			if ((flag&4)==4)
-				printf("*pc[%d],add\n",*pc);
+			if ((flag&4)==4) {
+				printf("add\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=(int)rg[rs1]+(int)rg[rs2];
 			cntodr[28]++;
 		}
 		//sub
 		else if((funct3==0b000)&&(imm==0b0100000)){
-			if ((flag&4)==4)
-				printf("*pc[%d],sub\n",*pc);
+			if ((flag&4)==4) {
+				printf("sub\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=(int)rg[rs1]-(int)rg[rs2];
 			cntodr[29]++;
 		}
@@ -394,8 +427,10 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		}
 		//sll
 		else if(funct3==0b001&&imm==0){
-			if ((flag&4)==4)
-				printf("*pc[%d],sll\n",*pc);
+			if ((flag&4)==4) {
+				printf("sll\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=rg[rs1]<<(int)rg[rs2];
 			cntodr[32]++;
 		}
@@ -407,22 +442,28 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		// }
 		//sltu
 		else if(funct3==0b011&imm==0){
-			if ((flag&4)==4)
-				printf("*pc[%d],sltu\n",*pc);
+			if ((flag&4)==4) {
+				printf("sltu\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=(rg[rs1] < rg[rs2]) ? 1:0;
 			cntodr[33]++;
 		}
 		//xor
 		else if(funct3==0b100&&imm==0){
-			if ((flag&4)==4)
-				printf("*pc[%d],xor\n",*pc);
+			if ((flag&4)==4) {
+				printf("xor\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=rg[rs1] ^ rg[rs2];
 			cntodr[34]++;
 		}
 		//srl
 		else if((funct3==0b101)&&(imm==0b0000000)){
-			if ((flag&4)==4)
-				printf("*pc[%d],srl\n",*pc);
+			if ((flag&4)==4) {
+				printf("srl\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=rg[rs1]>>(int)rg[rs2];
 			cntodr[35]++;
 		}
@@ -435,21 +476,26 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		// }
 		//or
 		else if(funct3==0b110){
-			if ((flag&4)==4)
-				printf("*pc[%d],or\n",*pc);
+			if ((flag&4)==4) {
+				printf("or\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=rg[rs1] | rg[rs2];
 			cntodr[36]++;
 		}
 		//and
 		else if(funct3==0b111){
-			if ((flag&4)==4)
-				printf("*pc[%d],and\n",*pc);
+			if ((flag&4)==4) {
+				printf("and\tx%d, x%d, x%d\n", rd, rs1, rs2);
+				printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]);
+			}
 			rg[rd]=rg[rs1] & rg[rs2];
 			cntodr[37]++;
 		}
 		else{
 			assert(0);
 		}
+		if ((flag&4)==4) { printf("%d, %d, %d\n", rg[rd], rg[rs1], rg[rs2]); }
 		*pc=*pc+1;
 	}
 	//flw
@@ -458,9 +504,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		rd = (command[*pc]>>7) & 0b11111;
 		rs1 = (command[*pc]>>15) & 0b11111;
 		imm=imm-(imm&0x800)*2;
-		if ((flag&4)==4)
-			printf("*pc[%d],flw,imm=%d,rd=%d,rs1=%d,mem[%d]=%d\n",*pc,imm,rd,rs1,(imm+(int)rg[rs1])/4,mem[(imm+(int)rg[rs1])/4]);
+		if ((flag&4)==4) {
+			printf("flw\tf%d, x%d, %d\n", rd, rs1, imm);
+			printf("%f, %d, %f\n", frg[rd], rg[rs1], *((float*)&mem[(imm+(int)rg[rs1])/4]));
+		}
 		frg[rd]=*((float*)&mem[(imm+(int)rg[rs1])/4]);
+		if ((flag&4)==4) { printf("%f, %d, %f\n", frg[rd], rg[rs1], *((float*)&mem[(imm+(int)rg[rs1])/4])); }
 		mmap[(imm+(int)(rg[rs1])/4)/KIZAMI]++;
 		*pc=*pc+1;
 		cntodr[38]++;
@@ -471,12 +520,13 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		imm = imm - 2*(imm&0x800);
 		rs1 = (command[*pc]>>15) & 0b11111;
 		rs2 = (command[*pc]>>20) & 0b11111;
-		if ((flag&4)==4)
-			printf("*pc[%d],fsw,imm=%d,rs1=%d,rs2=%d,frg[rs2]=%lf,mem[%d]=%d\n",*pc,imm,rs1,rs2,frg[rs2],(imm+(int)rg[rs1])/4,mem[(imm+(int)rg[rs1])/4]);
+		if ((flag&4)==4) {
+			printf("fsw\tx%d, f%d, %d\n", rs1, rs2, imm);
+			printf("%d, %f, %f\n", rg[rs1], frg[rs2], (float)mem[(imm+(int)rg[rs1])/4]);
+		}
 		mem[(imm+(int)rg[rs1])/4]=*((unsigned int*)(&frg[rs2]));
 		mmap[(imm+(int)(rg[rs1])/4)/KIZAMI]++;
-		if ((flag&4)==4)
-			printf("memには%dが入ったよ\n",mem[(imm+(int)rg[rs1])/4]);
+		if ((flag&4)==4) { printf("%d, %f, %f\n", rg[rs1], frg[rs2], (float)mem[(imm+(int)rg[rs1])/4]); }
 		*pc=*pc+1;
 		cntodr[39]++;
 	}
@@ -486,81 +536,103 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		rs2 = (command[*pc]>>20) & 0b11111;
 		rs1 = (command[*pc]>>15) & 0b11111;
 		rd = (command[*pc]>>7) & 0b11111;
-		if ((flag&4)==4)
-			printf("imm=%d,rs1=%d,rs2=%d,rd=%d\n",imm,rs1,rs2,rd);
-
 		//fadd.s
 		if(imm==0){
-			if ((flag&4)==4)
-				printf("*pc[%d],fadd.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fadd.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
+				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
+			}
 			frg[rd]=frg[rs1]+frg[rs2];
+			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[40]++;
 		}
 		//fsub.s
 		else if(imm==4){
-			if ((flag&4)==4)
-				printf("*pc[%d],fsub.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fsub.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
+				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
+			}
 			frg[rd]=frg[rs1]-frg[rs2];
+			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[41]++;
 		}
 		//fmul.s
 		else if(imm==8){
-			if ((flag&4)==4)
-				printf("*pc[%d],fmul.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fmul.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
+				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
+			}
 			unsigned int a,b,c;
 			a=*((unsigned int*)&(frg[rs1]));
 			b=*((unsigned int*)&(frg[rs1]));
 			c=fmul(a,b);
 			frg[rd]=*((float*)&(frg[rs1]));
+			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[42]++;
 		}
 		//fdiv.s
 		else if(imm==12){
-			if ((flag&4)==4)
-				printf("*pc[%d],fdiv.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fdiv.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
+				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
+			}
 			frg[rd]=frg[rs1]/frg[rs2];
+			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[43]++;
 		}
 		//fsqrt.s
 		else if((imm==0b0101100)&&(rs2==0)){
-			if ((flag&4)==4)
-				printf("*pc[%d],fsqrt.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fsqrt.s\tf%d, f%d\n", rd, rs1);
+				printf("%f, %f\n", frg[rd], frg[rs1]);
+			}
 			frg[rd]=sqrtf(frg[rs1]);
+			if ((flag&4)==4) { printf("%f, %f\n", frg[rd], frg[rs1]); }
 			cntodr[44]++;
 		}
 		//fsgnj.s
 		else if((imm==0b0010000)&&(funct3==0)){
-			if ((flag&4)==4)
-				printf("*pc[%d],fsgnj.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fsgnj.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
+				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
+			}
 			unsigned int i1=*((unsigned int*)&frg[rs1]);
 			unsigned int i2=*((unsigned int*)&frg[rs2]);
 			unsigned int i3;
 			i3=(i1&0x7fffffff)|(i2&0x80000000);
 			frg[rd]=*((float*)&i3);
+			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[45]++;
 		}
 		//fsgnjn.s
 		else if((imm==0b0010000)&&(funct3==1)){
-			if ((flag&4)==4)
-				printf("*pc[%d],fsgnjn.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fsgnjn.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
+				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
+			}
 			unsigned int i1=*((unsigned int*)&frg[rs1]);
 			unsigned int i2=*((unsigned int*)&frg[rs2]);
 			unsigned int i3;
 			i3=(i1&0x7fffffff)|(0x80000000^(i2&0x80000000));
 			frg[rd]=*((float*)&i3);
+			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[46]++;
 		}
 		//fsgnjx.s
 		else if((imm==0b0010000)&&(funct3==2)){
-			if ((flag&4)==4)
-				printf("*pc[%d],fsgnjx.s\n",*pc);
+			if ((flag&4)==4) {
+				printf("fsgnjx.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
+				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
+			}
 			unsigned int i1=*((unsigned int*)&frg[rs1]);
 			unsigned int i2=*((unsigned int*)&frg[rs2]);
 			unsigned int i3;
 			i3=(i1&0x7fffffff)|((i1&0x80000000)^(i2&0x80000000));
 			frg[rd]=*((float*)&i3);
+			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[47]++;
 		}
+		// TODO: add debug info below
 		//fcvt.w.s
 		else if((imm==0b1100000)&&(rs2==0)){
 			if ((flag&4)==4)
