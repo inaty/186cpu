@@ -68,8 +68,8 @@ mytest.s mytest.ss mytest.out mytest.res
 # $(TESTS2:%=test2/%.s) $(TESTS2:%=test2/%.ss) $(TESTS2:%=test2/%.res)  $(TESTS2:%=test2/%.cmp)
 
 SIMDIR = ../simulator/sim
-sim: $(SIMDIR)/exec.c $(SIMDIR)/bin.c $(SIMDIR)/simulator.c
-	gcc $(SIMDIR)/exec.c $(SIMDIR)/bin.c $(SIMDIR)/simulator.c -o sim -lm
+sim: $(SIMDIR)/bin.c $(SIMDIR)/bin.h $(SIMDIR)/exec.c $(SIMDIR)/exec.h $(SIMDIR)/fpu.c $(SIMDIR)/fpu.h $(SIMDIR)/simulator.c
+	gcc $(SIMDIR)/bin.c $(SIMDIR)/fpu.c $(SIMDIR)/exec.c $(SIMDIR)/simulator.c -o sim -lm
 
 raytracer/minrt.s: $(RESULT) raytracer/minrt.ml
 	./$(RESULT) raytracer/minrt
@@ -107,7 +107,7 @@ test/%.cmp: test/%.res test/%.ans
 # 	diff $^ > $@
 
 mytest: mytest.res
-	#
+	
 
 mytest.s: $(RESULT) mytest.ml
 	./$(RESULT) mytest
