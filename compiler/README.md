@@ -486,6 +486,37 @@ min_caml_read_int_ret:
 	ret
 ```
 
+# メモ
+```
+SPARC
+%i7 = Return address, Return address of the subroutine.
+%o7 = Called return address, Return address of the called subroutine.(再帰用？)
+%g0 = zero
+ret Synthetic instruction for: jmpl %i7 + 8, %g0
+retl Synthetic instruction for: jmpl %o7 + 8, %g0
+
+call label30 Store %pc in %o7, and jump to label30
+```  
+
+OCamlMakefileを読んだメモをついでにまとめておこう
+http://www.is.ocha.ac.jp/~asai/MikiBeta/download/tmp/Mikibeta/miki/OCamlMakefile
+make native-codeのとこ、何行かに分けて読む
+$(QUIET)$(MAKE) -r -f $(OCAMLMAKEFILE) $(NCRESULT) \
+quietには@が入っている、makefileでは@がついたコマンドの情報を表示しない
+makeはmakefileの変数、いま実行されているmake。
+特殊なmake使っててかつディレクトリ移動かましたりすると、
+「make」とだけ打つと違うのが出てくる可能性があるのでこうなっている。
+-rは「デフォルトルールを使用しなくなる」。
+-f $(OCAMLMAKEFILE)で「$(OCAMLMAKEFILE)をmakefileとして扱う」。
+$(NCRESULT)は$(RESULT)に$(SUFFIX)をくっつけたもの。
+どうにかしてここで呼ばれたocamlmakefileにも変数情報が伝播しているor自動ルールにより、
+これはそのままターゲットとして機能する。
+REAL_RESULT="$(NCRESULT)" REAL_OCAMLC="$(OCAMLOPT)" make_deps=yes
+ocamlmakefileを走らせる際の引数。
+これが下の方にあるLOW LEVEL RULESのルールに渡されることで実際のコンパイルが走る。
+make_depsはよくわからんけどifdef make_depsでなんか走るらしい、-はエラー無視
+
+
 # こっから下が最終的な公開情報になる予定
 
 # はじめに

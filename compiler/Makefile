@@ -1,36 +1,10 @@
-# OCamlMakefileを読んだメモをついでにまとめておこう
-# http://www.is.ocha.ac.jp/~asai/MikiBeta/download/tmp/Mikibeta/miki/OCamlMakefile
-# make native-codeのとこ、何行かに分けて読む
-#
-# $(QUIET)$(MAKE) -r -f $(OCAMLMAKEFILE) $(NCRESULT) \
-# quietには@が入っている、makefileでは@がついたコマンドの情報を表示しない
-# makeはmakefileの変数、いま実行されているmake。
-# 特殊なmake使っててかつディレクトリ移動かましたりすると、
-# 「make」とだけ打つと違うのが出てくる可能性があるのでこうなっている。
-# -rは「デフォルトルールを使用しなくなる」。
-# -f $(OCAMLMAKEFILE)で「$(OCAMLMAKEFILE)をmakefileとして扱う」。
-# $(NCRESULT)は$(RESULT)に$(SUFFIX)をくっつけたもの。
-# どうにかしてここで呼ばれたocamlmakefileにも変数情報が伝播しているor自動ルールにより、
-# これはそのままターゲットとして機能する。
-#
-# REAL_RESULT="$(NCRESULT)" REAL_OCAMLC="$(OCAMLOPT)" make_deps=yes
-# ocamlmakefileを走らせる際の引数。
-# これが下の方にあるLOW LEVEL RULESのルールに渡されることで実際のコンパイルが走る。
-# make_depsはよくわからんけどifdef make_depsでなんか走るらしい、-はエラー無視
-
 RESULT = min-caml
-# native codeを生成する際のsuffix。
 NCSUFFIX = .opt
 CC = gcc
 CFLAGS = -g -O2 -Wall
-# 警告31（同一名モジュールが2個ある？）を警告しないようにする
 OCAMLLDFLAGS=-warn-error -31
 
-# 普通にmakeするとテストまで走る
-# debug-codeはbyte codeらしい、どうdebugなのかはよくわからない
-# topも何がtopなのかわからん、普通にbcresult(byte code result)ができるように見える
 default: debug-code top $(RESULT) do_test
-# いらなさそうに見えるが実は必要らしい
 $(RESULT): debug-code top
 clean:: nobackup
 
@@ -117,25 +91,5 @@ mytest.out: mytest.ss
 	python3 assembler.py $< > mytest.out
 mytest.res: mytest.out sim
 	./sim -f $< -i raytracer/sld/contest.bin -o $@ -b -d > mytest.log
-
-# なんかいらなさそうだったのでコメントアウト
-# min-caml.html: main.mli main.ml id.ml m.ml s.ml \
-# 		syntax.ml type.ml parser.mly lexer.mll typing.mli typing.ml kNormal.mli kNormal.ml \
-# 		alpha.mli alpha.ml beta.mli beta.ml assoc.mli assoc.ml \
-# 		inline.mli inline.ml constFold.mli constFold.ml elim.mli elim.ml \
-# 		closure.mli closure.ml asm.mli asm.ml virtual.mli virtual.ml \
-# 		simm.mli simm.ml regAlloc.mli regAlloc.ml emit.mli emit.ml
-# 	./to_sparc
-# 	caml2html -o min-caml.html $^
-# 	sed 's/.*<\/title>/MinCaml Source Code<\/title>/g' < min-caml.html > min-caml.tmp.html
-# 	mv min-caml.tmp.html min-caml.html
-# 	sed 's/charset=iso-8859-1/charset=euc-jp/g' < min-caml.html > min-caml.tmp.html
-# 	mv min-caml.tmp.html min-caml.html
-# 	ocaml str.cma anchor.ml < min-caml.html > min-caml.tmp.html
-# 	mv min-caml.tmp.html min-caml.html
-#
-# release: min-caml.html
-# 	rm -fr tmp ; mkdir tmp ; cd tmp ; cvs -d:ext:sumii@min-caml.cvs.sf.net://cvsroot/min-caml export -Dtomorrow min-caml ; tar cvzf ../min-caml.tar.gz min-caml ; cd .. ; rm -fr tmp
-# 	cp Makefile stub.c SPARC/libmincaml.S min-caml.html min-caml.tar.gz ../htdocs/
 
 include OCamlMakefile
