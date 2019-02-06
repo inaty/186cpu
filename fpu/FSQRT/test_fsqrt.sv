@@ -3,7 +3,7 @@
 
 module test_fsqrt();
    wire [31:0] x,y;
-   wire [23:0] xaaa,nib,hikare,ra;
+//   wire [23:0] xaaa,nib,hikare,ra;
    wire [47:0] an;
    logic [31:0] xi;
    shortreal    fx,fy;
@@ -19,7 +19,7 @@ module test_fsqrt();
 
    assign x = xi;
    
-   fsqrt u1(x,y,xaaa,nib,hikare,ra,an);
+   fsqrt u1(x,y/*,xaaa,nib,hikare,ra,an*/);
 
    initial begin
       // $dumpfile("test_finv.vcd");
@@ -42,9 +42,9 @@ module test_fsqrt();
               $display("x      =%e  %b", $bitstoshortreal(x), x);
               $display("true y =%e  %b ", fy, $shortrealtobits(fy));
               $display("my   y =%e  %b \n", $bitstoshortreal(y), y);
-              $display("nib =%b", nib);
+/*              $display("nib =%b", nib);
               $display("%b - %b = %b",hikare,xaaa,ra);
-              $display("an =%b \n", an);
+              $display("an =%b \n", an);*/
            end
         end
       
@@ -66,9 +66,9 @@ module test_fsqrt();
               $display("x      =%e  %b", $bitstoshortreal(x), x);
               $display("true y =%e  %b ", fy, $shortrealtobits(fy));
               $display("my   y =%e  %b \n", $bitstoshortreal(y), y);
-              $display("nib =%b", nib);
+/*              $display("nib =%b", nib);
               $display("%b - %b = %b",hikare,xaaa,ra);
-              $display("an =%b \n", an);
+              $display("an =%b \n", an);*/
               
               disable loop;
               

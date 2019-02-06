@@ -1,10 +1,10 @@
 webtalk_init -webtalk_dir /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.dir/test_fsqrt.sim/webtalk/
 webtalk_register_client -client project
-webtalk_add_data -client project -key date_generated -value "Mon Dec  3 21:29:17 2018" -context "software_version_and_target_device"
+webtalk_add_data -client project -key date_generated -value "Wed Feb  6 23:11:50 2019" -context "software_version_and_target_device"
 webtalk_add_data -client project -key product_version -value "XSIM v2017.4 (64-bit)" -context "software_version_and_target_device"
 webtalk_add_data -client project -key build_version -value "2086221" -context "software_version_and_target_device"
 webtalk_add_data -client project -key os_platform -value "LIN64" -context "software_version_and_target_device"
-webtalk_add_data -client project -key registration_id -value "211142045_1777515821_210661532_022" -context "software_version_and_target_device"
+webtalk_add_data -client project -key registration_id -value "" -context "software_version_and_target_device"
 webtalk_add_data -client project -key tool_flow -value "xsim" -context "software_version_and_target_device"
 webtalk_add_data -client project -key beta -value "FALSE" -context "software_version_and_target_device"
 webtalk_add_data -client project -key route_design -value "FALSE" -context "software_version_and_target_device"
@@ -14,11 +14,11 @@ webtalk_add_data -client project -key target_package -value "not_applicable" -co
 webtalk_add_data -client project -key target_speed -value "not_applicable" -context "software_version_and_target_device"
 webtalk_add_data -client project -key random_id -value "488fec07-86c7-460e-9363-4e70332449c1" -context "software_version_and_target_device"
 webtalk_add_data -client project -key project_id -value "583c0398-0d57-4dac-b4f7-499620c0884a" -context "software_version_and_target_device"
-webtalk_add_data -client project -key project_iteration -value "160" -context "software_version_and_target_device"
+webtalk_add_data -client project -key project_iteration -value "166" -context "software_version_and_target_device"
 webtalk_add_data -client project -key os_name -value "Ubuntu" -context "user_environment"
 webtalk_add_data -client project -key os_release -value "Ubuntu 16.04.5 LTS" -context "user_environment"
 webtalk_add_data -client project -key cpu_name -value "Intel(R) Core(TM) i7-4610M CPU @ 3.00GHz" -context "user_environment"
-webtalk_add_data -client project -key cpu_speed -value "3600.117 MHz" -context "user_environment"
+webtalk_add_data -client project -key cpu_speed -value "3673.593 MHz" -context "user_environment"
 webtalk_add_data -client project -key total_processors -value "1" -context "user_environment"
 webtalk_add_data -client project -key system_ram -value "16.000 GB" -context "user_environment"
 webtalk_register_client -client xsim
@@ -26,7 +26,7 @@ webtalk_add_data -client xsim -key runall -value "true" -context "xsim\\command_
 webtalk_add_data -client xsim -key Command -value "xsim" -context "xsim\\command_line_options"
 webtalk_add_data -client xsim -key runtime -value "33554432 ns" -context "xsim\\usage"
 webtalk_add_data -client xsim -key iteration -value "0" -context "xsim\\usage"
-webtalk_add_data -client xsim -key Simulation_Time -value "31.40_sec" -context "xsim\\usage"
-webtalk_add_data -client xsim -key Simulation_Memory -value "129704_KB" -context "xsim\\usage"
-webtalk_transmit -clientid 3250900606 -regid "211142045_1777515821_210661532_022" -xml /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.dir/test_fsqrt.sim/webtalk/usage_statistics_ext_xsim.xml -html /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.dir/test_fsqrt.sim/webtalk/usage_statistics_ext_xsim.html -wdm /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.dir/test_fsqrt.sim/webtalk/usage_statistics_ext_xsim.wdm -intro "<H3>XSIM Usage Report</H3><BR>"
+webtalk_add_data -client xsim -key Simulation_Time -value "29.83_sec" -context "xsim\\usage"
+webtalk_add_data -client xsim -key Simulation_Memory -value "129700_KB" -context "xsim\\usage"
+webtalk_transmit -clientid 2912225144 -regid "" -xml /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.dir/test_fsqrt.sim/webtalk/usage_statistics_ext_xsim.xml -html /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.dir/test_fsqrt.sim/webtalk/usage_statistics_ext_xsim.html -wdm /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.dir/test_fsqrt.sim/webtalk/usage_statistics_ext_xsim.wdm -intro "<H3>XSIM Usage Report</H3><BR>"
 webtalk_terminate
