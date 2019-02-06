@@ -132,6 +132,10 @@ def replace_pseudo2(line, labels_addrs, cur_addr):
         imm = labels_addrs[label] - cur_addr
         check_and_int(imm, 20)
         return opformat("jal", ["ra", imm])
+    elif opcode == "addr" and operands[0] in labels_addrs:
+        label = operands[0]
+        addr = labels_addrs[label]
+        return opformat("int", [addr])
     else:
         return line
 

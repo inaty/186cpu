@@ -20,21 +20,21 @@
 (**************** グローバル変数の宣言 ****************)
 
 (* オブジェクトの個数 *)
-let n_objects = create_array 1 0 in
+(* let n_objects = create_array 1 0 in *)
 
 (* オブジェクトのデータを入れるベクトル（最大60個）*)
-let objects =
+(* let objects =
   let dummy = create_array 0 0.0 in
-  create_array 60 (0, 0, 0, 0, dummy, dummy, false, dummy, dummy, dummy, dummy) in
+  create_array 60 (0, 0, 0, 0, dummy, dummy, false, dummy, dummy, dummy, dummy) in *)
 
 (* Screen の中心座標 *)
-let screen = create_array 3 0.0 in
+(* let screen = create_array 3 0.0 in *)
 (* 視点の座標 *)
-let viewpoint = create_array 3 0.0 in
+(* let viewpoint = create_array 3 0.0 in *)
 (* 光源方向ベクトル (単位ベクトル) *)
-let light = create_array 3 0.0 in
+(* let light = create_array 3 0.0 in *)
 (* 鏡面ハイライト強度 (標準=255) *)
-let beam = create_array 1 255.0 in
+(* let beam = create_array 1 255.0 in *)
 (* AND ネットワークを保持 *)
 let and_net = create_array 50 (create_array 1 (-1)) in
 (* OR ネットワークを保持 *)

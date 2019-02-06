@@ -315,6 +315,9 @@ def binary_string_of_inst(opcode, operands):
         imm1 = (immsubstr(imm, 20, 20) + immsubstr(imm, 10, 1)
                + immsubstr(imm, 11, 11) + immsubstr(imm, 19, 12))
         return "{}{}{}".format(imm1, rd, opcode)
+    elif opcode == "int":
+        i = int(operands[0])
+        return "".join(["{:08b}".format(b) for b in struct.pack(">i", i)])
     elif opcode == "float":
         f = float(operands[0])
         return "".join(["{:08b}".format(b) for b in struct.pack(">f", f)])
