@@ -50,7 +50,7 @@ raytracer/minrt.s: $(RESULT) raytracer/minrt.ml
 rt.ppm: libmincaml.S raytracer/minrt.s sim
 	python3 linker.py libmincaml.S raytracer/minrt.s
 	python3 assembler.py raytracer/minrt.ss > raytracer/minrt.out
-	./sim -f raytracer/minrt.out -i raytracer/sld/contest.bin -o raytracer/rt.ppm -b -s -p
+	./sim -f raytracer/minrt.out -i raytracer/sld/contest.bin -o raytracer/rt.ppm -b -s
 
 test/%.s: $(RESULT) test/%.ml
 	./$(RESULT) test/$*

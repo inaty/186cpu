@@ -1375,3 +1375,154 @@ min_caml_light:
 	float	0.0
 min_caml_beam:
 	float	255.0
+min_caml_and_net:
+	addr	min_caml_and_net_sub_00
+	addr	min_caml_and_net_sub_01
+	addr	min_caml_and_net_sub_02
+	addr	min_caml_and_net_sub_03
+	addr	min_caml_and_net_sub_04
+	addr	min_caml_and_net_sub_05
+	addr	min_caml_and_net_sub_06
+	addr	min_caml_and_net_sub_07
+	addr	min_caml_and_net_sub_08
+	addr	min_caml_and_net_sub_09
+	addr	min_caml_and_net_sub_10
+	addr	min_caml_and_net_sub_11
+	addr	min_caml_and_net_sub_12
+	addr	min_caml_and_net_sub_13
+	addr	min_caml_and_net_sub_14
+	addr	min_caml_and_net_sub_15
+	addr	min_caml_and_net_sub_16
+	addr	min_caml_and_net_sub_17
+	addr	min_caml_and_net_sub_18
+	addr	min_caml_and_net_sub_19
+	addr	min_caml_and_net_sub_20
+	addr	min_caml_and_net_sub_21
+	addr	min_caml_and_net_sub_22
+	addr	min_caml_and_net_sub_23
+	addr	min_caml_and_net_sub_24
+	addr	min_caml_and_net_sub_25
+	addr	min_caml_and_net_sub_26
+	addr	min_caml_and_net_sub_27
+	addr	min_caml_and_net_sub_28
+	addr	min_caml_and_net_sub_29
+	addr	min_caml_and_net_sub_30
+	addr	min_caml_and_net_sub_31
+	addr	min_caml_and_net_sub_32
+	addr	min_caml_and_net_sub_33
+	addr	min_caml_and_net_sub_34
+	addr	min_caml_and_net_sub_35
+	addr	min_caml_and_net_sub_36
+	addr	min_caml_and_net_sub_37
+	addr	min_caml_and_net_sub_38
+	addr	min_caml_and_net_sub_39
+	addr	min_caml_and_net_sub_40
+	addr	min_caml_and_net_sub_41
+	addr	min_caml_and_net_sub_42
+	addr	min_caml_and_net_sub_43
+	addr	min_caml_and_net_sub_44
+	addr	min_caml_and_net_sub_45
+	addr	min_caml_and_net_sub_46
+	addr	min_caml_and_net_sub_47
+	addr	min_caml_and_net_sub_48
+	addr	min_caml_and_net_sub_49
+min_caml_and_net_sub_00:
+	int	-1
+min_caml_and_net_sub_01:
+	int	-1
+min_caml_and_net_sub_02:
+	int	-1
+min_caml_and_net_sub_03:
+	int	-1
+min_caml_and_net_sub_04:
+	int	-1
+min_caml_and_net_sub_05:
+	int	-1
+min_caml_and_net_sub_06:
+	int	-1
+min_caml_and_net_sub_07:
+	int	-1
+min_caml_and_net_sub_08:
+	int	-1
+min_caml_and_net_sub_09:
+	int	-1
+min_caml_and_net_sub_10:
+	int	-1
+min_caml_and_net_sub_11:
+	int	-1
+min_caml_and_net_sub_12:
+	int	-1
+min_caml_and_net_sub_13:
+	int	-1
+min_caml_and_net_sub_14:
+	int	-1
+min_caml_and_net_sub_15:
+	int	-1
+min_caml_and_net_sub_16:
+	int	-1
+min_caml_and_net_sub_17:
+	int	-1
+min_caml_and_net_sub_18:
+	int	-1
+min_caml_and_net_sub_19:
+	int	-1
+min_caml_and_net_sub_20:
+	int	-1
+min_caml_and_net_sub_21:
+	int	-1
+min_caml_and_net_sub_22:
+	int	-1
+min_caml_and_net_sub_23:
+	int	-1
+min_caml_and_net_sub_24:
+	int	-1
+min_caml_and_net_sub_25:
+	int	-1
+min_caml_and_net_sub_26:
+	int	-1
+min_caml_and_net_sub_27:
+	int	-1
+min_caml_and_net_sub_28:
+	int	-1
+min_caml_and_net_sub_29:
+	int	-1
+min_caml_and_net_sub_30:
+	int	-1
+min_caml_and_net_sub_31:
+	int	-1
+min_caml_and_net_sub_32:
+	int	-1
+min_caml_and_net_sub_33:
+	int	-1
+min_caml_and_net_sub_34:
+	int	-1
+min_caml_and_net_sub_35:
+	int	-1
+min_caml_and_net_sub_36:
+	int	-1
+min_caml_and_net_sub_37:
+	int	-1
+min_caml_and_net_sub_38:
+	int	-1
+min_caml_and_net_sub_39:
+	int	-1
+min_caml_and_net_sub_40:
+	int	-1
+min_caml_and_net_sub_41:
+	int	-1
+min_caml_and_net_sub_42:
+	int	-1
+min_caml_and_net_sub_43:
+	int	-1
+min_caml_and_net_sub_44:
+	int	-1
+min_caml_and_net_sub_45:
+	int	-1
+min_caml_and_net_sub_46:
+	int	-1
+min_caml_and_net_sub_47:
+	int	-1
+min_caml_and_net_sub_48:
+	int	-1
+min_caml_and_net_sub_49:
+	int	-1
