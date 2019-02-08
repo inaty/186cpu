@@ -2,8 +2,8 @@
 # xsim v2017.4 (64-bit)
 # SW Build 2086221 on Fri Dec 15 20:54:30 MST 2017
 # IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
-# Start of session at: Thu Feb  7 19:24:53 2019
-# Process ID: 14462
+# Start of session at: Thu Feb  7 19:16:43 2019
+# Process ID: 13948
 # Current directory: /home/tansei/Desktop/186cpu/fpu/FINV
 # Command line: xsim -mode tcl -source {xsim.dir/test_finv.sim/xsim_script.tcl}
 # Log file: /home/tansei/Desktop/186cpu/fpu/FINV/xsim.log
@@ -14,11 +14,11 @@ source xsim.dir/test_finv.sim/xsim_script.tcl
 Vivado Simulator 2017.4
 Time resolution is 1 ps
 run -all
-oax2_2 = 00000000101010101001110001110110 
+oax2_2 = 00000000xxxxxxxxxxxxxxxxxxxxxxxx 
 
-ox0_2  = 00000001010101010100011100100000 
+ox0_2  = 00000001xxxxxxxxxxxxxxxxxxxxxxx0 
 
-oans   = 00000000101010101010101010101010 
+oans   = 0000000xxxxxxxxxxxxxxxxxxxxxxxxx 
 
 fybit  = 00111110001010101010101010101011 
 
@@ -62,6 +62,6 @@ x = 01101011000111101111101000001110
 5.203154e-27 00010011110011100001111000111111 
 5.203154e-27 00010011110011100001111001000001 
 
-$finish called at time : 10161 ns : File "/home/tansei/Desktop/186cpu/fpu/FINV/test_finv.sv" Line 116
+$finish called at time : 10160 ns : File "/home/tansei/Desktop/186cpu/fpu/FINV/test_finv.sv" Line 114
 exit
-INFO: [Common 17-206] Exiting xsim at Thu Feb  7 19:25:21 2019...
+INFO: [Common 17-206] Exiting xsim at Thu Feb  7 19:17:10 2019...
