@@ -290,7 +290,7 @@ unsigned int finv(unsigned int x){
   
   switch(get(m,22,12)){
   
-      case 0 :
+    case 0 :
         x0 = 8384515;
         x2 = 8380423;
         break;
@@ -8485,19 +8485,56 @@ unsigned int finv(unsigned int x){
   
   }
 
-  unsigned int ax2,ax2_2;
+  unsigned long int ax2;
+  unsigned int ax2_2;
   
-  ax2 = ma * ((1<<23)|x2);
-  ax2_2 = (get(ax2,47,47) == 0) ? get(ax2,46,23) : get(ax2,47,24);
+  /*
+  
+  printf("m   is   ");
+  print(m);
+  printf("ma  is   ");
+  print(ma);
+  printf("1,x2 is  ");
+  print((1<<23)|x2);
+  
+  */
+  
+  ax2 = ((unsigned long int)ma) * ((unsigned long int)((1<<23)|x2));
+  ax2_2 = (lget(ax2,47,47) == 0) ? lget(ax2,46,23) : lget(ax2,47,24);
+  
+  /*
+  
+  printf("ax2 is \n");
+  lprint(ax2);
+  printf("ax2_2 is ");
+  print(ax2_2);
+  
+  */
   
   unsigned int x0_2;
   
   x0_2 = ((1<<23)|x0) << 1;
   
+  /*
+  
+  printf("x_2 is   ");
+  print(x0_2);
+  
+  */
+  
   unsigned int ans;
   
-  ans = x0_2 - ((1<<24)|ax2_2);
+  ans = x0_2 - ((1<<23)|ax2_2);
   y = (e == 0 || e == 255) ? (s<<31) : ((e < 253) ? ((s<<31)|((253-e)<<23)|get(ans,22,0)) : (s<<31) );
+  
+  /*
+  
+  printf("ans is   ");
+  print(ans);
+  printf("y   is   ");
+  print(y);
+  
+  */
   
   return y;
 
@@ -8549,12 +8586,12 @@ unsigned int fsqrt(unsigned int x){
   unsigned int  ma,ea;
 
    ma = (e == 0) ? get(m,22,0) : (1<<23)|get(m,22,0);
-   ea = (e == 0) ? 1 : get(e,7,0);
+   ea = ((e+1) >> 1) + 63 + (((get(e,0,0) == 0) && (m == 0b11111111111111111111111)) ? 1 : 0 );
 
   unsigned int nibunno3x;
   unsigned int nibunnox3;
   
-  switch(1-(get(e,0,0))|get(m,22,12)){
+  switch((1-(get(e,0,0)))<<11|get(m,22,12)){
     case 0 :
         nibunno3x = 4192770;
         nibunnox3 = 8382470;
@@ -24940,30 +24977,99 @@ unsigned int fsqrt(unsigned int x){
         nibunnox3 = 1536;
         break;
     }
+    
+  nibunno3x |= (1 << 23);
+  nibunnox3 |= (1 << 23);
+  
+  /*
+  
+  printf("n3x   is   \n");
+  lprint(nibunno3x);
+  printf("nx3   is   \n");
+  lprint(nibunnox3);
+  
+  */
 
   unsigned long int nibunnox3a,nibunnox3ak1,nibunnox3ak0;
   
-  nibunnox3a = ma * nibunnox3;
-  nibunnox3ak1 = (get(e,0,0) == 1) ? (( (1-(get(e,0,0))|get(m,22,12)) > 1202) ? (nibunnox3a >> 2) : nibunnox3a >> 1) : ( ( (1-(get(e,0,0))|get(m,22,12)) > 2579) ? (nibunnox3a >> 2) : (nibunnox3a >> 1));
-  nibunnox3ak0 = ( (1-(get(e,0,0))|get(m,22,12)) > 2303) ? (nibunnox3ak1 << 1) : nibunnox3ak1;
+  nibunnox3a = ((unsigned long int)ma) * ((unsigned long int)nibunnox3);
+  nibunnox3ak1 = (get(e,0,0) == 1) ? (( ((1-(get(e,0,0)))<<11|get(m,22,12)) > 1202) ? (nibunnox3a >> 2) : nibunnox3a >> 1) : ( ( ((1-(get(e,0,0)))<<11|get(m,22,12)) > 2579) ? (nibunnox3a >> 2) : (nibunnox3a >> 1));
+  nibunnox3ak0 = ( ((1-(get(e,0,0)))<<11|get(m,22,12)) > 2303) ? (nibunnox3ak1 << 1) : nibunnox3ak1;
+  
+  /*
+  
+  printf("n3a   is   \n");
+  lprint(nibunnox3a);
+  printf("n3ak1 is   \n");
+  lprint(nibunnox3ak1);
+  
+  */
   
   unsigned int nibunnox3ak,rootabunno1;
   unsigned long int roota;
   
-  nibunnox3ak = get(nibunnox3ak0,47,24);
+  nibunnox3ak = lget(nibunnox3ak0,47,24);
   rootabunno1 = nibunno3x - nibunnox3ak;
-  roota = ma * rootabunno1;
+  roota = ((unsigned long int)ma) * ((unsigned long int)rootabunno1);
   
   unsigned long int keta;
   unsigned int ans;
   
-  keta = (get(roota,47,47) == 0) ?
-               ((get(roota,46,46) == 0) ?
-               ((get(roota,45,45) == 0) ? 
-               ((get(roota,44,44) == 0) ? (roota << 5) : (roota << 4)) : (roota << 3)) : (roota << 2)): (roota << 1);
-  ans = get(keta,47,25);
+  keta = (lget(roota,47,47) == 0) ?
+               ((lget(roota,46,46) == 0) ?
+               ((lget(roota,45,45) == 0) ? 
+               ((lget(roota,44,44) == 0) ? (roota << 5) : (roota << 4)) : (roota << 3)) : (roota << 2)): (roota << 1);
+  ans = lget(keta,47,25);
   y = (e == 0 || e == 255) ? (s<<31) : ((s<<31)|(ea<<23)|ans) ;
+  
+  /*
+  
+  printf("rabn1 is   ");
+  print(rootabunno1);
+  printf("noota is   \n");
+  lprint(roota);
+  printf("keta  is   \n");
+  lprint(keta);
+  printf("ans   is   ");
+  print(ans);
+  printf("y     is   ");
+  print(y);
+  
+  */
+  
+  return y;
     
 }
 
+
+//個人的なテスト用
+
+int main (){
+
+  union Fbit{
+    unsigned int iv;
+    float fv;
+  };
+
+  union Fbit x,y,z;
+  x.fv = 21;
+  y.fv = 6;
+  
+  z.iv = fmul(x.iv,y.iv);
+  printf("fmul(21,6) = %f\n",z.fv);
+  
+  z.iv = finv(y.iv);
+  printf("finv(6) = %f\n",z.fv);
+  
+  z.iv = fdiv(x.iv,y.iv);
+  printf("fdiv(21,6) = %f\n",z.fv);
+  
+  z.iv = fsqrt(y.iv);
+  printf("fsqrt(6) = %f\n",z.fv);
+  
+  x.fv = -21;
+  z.iv = fdiv(x.iv,y.iv);
+  printf("fdiv(-21,6) = %f\n",z.fv);
+
+}
 
