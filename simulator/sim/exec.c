@@ -234,9 +234,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				printf("lw\tx%d, x%d, %d\n", rd, rs1, imm);
 				printf("%d, %d, %d\n", rg[rd], rg[rs1], mem[(imm+(int)rg[rs1])/4]);
 			}
+                        if (((imm+(int)rg[rs1])/4)>=600*1024){
+                           printf("%x %x\n",imm,(int)rg[rs1]);
+                        }
 			rg[rd]=mem[(imm+(int)rg[rs1])/4];
 			if ((flag&4)==4) { printf("%d, %d, %d\n", rg[rd], rg[rs1], mem[(imm+(int)rg[rs1])/4]); }
-			mmap[(imm+(int)rg[rs1]/4)/KIZAMI]++;
+			mmap[((imm+(int)rg[rs1])/4)/KIZAMI]++;
 			cntodr[14]++;
 		}
 		//lbu
@@ -285,6 +288,9 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				printf("sw\tx%d, x%d, %d\n", rs1, rs2, imm);
 				printf("%d, %d, %d\n", rg[rs1], rg[rs2], mem[(imm+(int)rg[rs1])/4]);
 			}
+                        if (((imm+(int)rg[rs1])/4)>=600*1024){
+                           printf("%x %x\n",imm,(int)rg[rs1]);
+                        }
 			mem[(imm+(int)rg[rs1])/4]=rg[rs2];
 			if ((flag&4)==4) {
 				printf("%d, %d, %d\n", rg[rs1], rg[rs2], mem[(imm+(int)rg[rs1])/4]);
@@ -474,7 +480,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 		// 	tmp=rg[rs1];
 		// 	rg[rd]=tmp>>(int)rg[rs2];
 		// }
-		//or
+		//or //
 		else if(funct3==0b110){
 			if ((flag&4)==4) {
 				printf("or\tx%d, x%d, x%d\n", rd, rs1, rs2);
@@ -542,7 +548,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				printf("fadd.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
 				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
 			}
-			frg[rd]=frg[rs1]+frg[rs2];
+			unsigned int a,b,c;
+			a=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs2]));
+			c=fadd(a,b);
+			frg[rd]=*((float*)&c);
+                        //frg[rd]=frg[rs1]+frg[rs2];
 			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[40]++;
 		}
@@ -552,7 +563,19 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				printf("fsub.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
 				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
 			}
-			frg[rd]=frg[rs1]-frg[rs2];
+			unsigned int a,b,c;
+			a=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs2]));
+                        //printf("%x\n",b);
+                        b=(b&0x7fffffff)|((b&0x80000000)^0x80000000);
+                        //printf("%x\n",b);
+			c=fadd(a,b);
+                        float c2=(frg[rs1]-frg[rs2]);
+			frg[rd]=*((float*)&c);
+                        if (c2!=frg[rd]){
+                          printf("%f %f\n",frg[rd],c2);
+                        }
+                        //frg[rd]=frg[rs1]-frg[rs2];
 			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[41]++;
 		}
@@ -567,6 +590,7 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 			b=*((unsigned int*)&(frg[rs2]));
 			c=fmul(a,b);
 			frg[rd]=*((float*)&c);
+                        //frg[rd]=frg[rs1]*frg[rs2];
 			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[42]++;
 		}
@@ -576,7 +600,12 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				printf("fdiv.s\tf%d, f%d, f%d\n", rd, rs1, rs2);
 				printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]);
 			}
-			frg[rd]=frg[rs1]/frg[rs2];
+			unsigned int a,b,c;
+			a=*((unsigned int*)&(frg[rs1]));
+			b=*((unsigned int*)&(frg[rs2]));
+			c=fdiv(a,b);
+			frg[rd]=*((float*)&c);
+                        //frg[rd]=frg[rs1]/frg[rs2];
 			if ((flag&4)==4) { printf("%f, %f, %f\n", frg[rd], frg[rs1], frg[rs2]); }
 			cntodr[43]++;
 		}
@@ -586,7 +615,11 @@ void exec(unsigned int* rg,float* frg,int flag,unsigned int *command,unsigned in
 				printf("fsqrt.s\tf%d, f%d\n", rd, rs1);
 				printf("%f, %f\n", frg[rd], frg[rs1]);
 			}
-			frg[rd]=sqrtf(frg[rs1]);
+			unsigned int a,c;
+			a=*((unsigned int*)&(frg[rs1]));
+			c=fsqrt(a);
+			frg[rd]=*((float*)&c);
+                        //frg[rd]=sqrtf(frg[rs1]);
 			if ((flag&4)==4) { printf("%f, %f\n", frg[rd], frg[rs1]); }
 			cntodr[44]++;
 		}
