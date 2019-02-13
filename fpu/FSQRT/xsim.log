@@ -2,8 +2,8 @@
 # xsim v2017.4 (64-bit)
 # SW Build 2086221 on Fri Dec 15 20:54:30 MST 2017
 # IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
-# Start of session at: Mon Dec  3 21:28:39 2018
-# Process ID: 15300
+# Start of session at: Fri Feb  8 15:24:27 2019
+# Process ID: 18466
 # Current directory: /home/tansei/Desktop/186cpu/fpu/FSQRT
 # Command line: xsim -mode tcl -source {xsim.dir/test_fsqrt.sim/xsim_script.tcl}
 # Log file: /home/tansei/Desktop/186cpu/fpu/FSQRT/xsim.log
@@ -14,7 +14,14 @@ source xsim.dir/test_fsqrt.sim/xsim_script.tcl
 Vivado Simulator 2017.4
 Time resolution is 1 ps
 run -all
-$finish called at time : 33554432 ns : File "/home/tansei/Desktop/186cpu/fpu/FSQRT/test_fsqrt.sv" Line 80
-run: Time (s): cpu = 00:00:00.03 ; elapsed = 00:00:31 . Memory (MB): peak = 1239.016 ; gain = 0.000 ; free physical = 1274 ; free virtual = 26371
+x      =6.000000e+00  01000000110000000000000000000000
+true y =2.449490e+00  01000000000111001100010001110001 
+my   y =2.449490e+00  01000000000111001100010001110001 
+
+nib =100010110101000010010011
+100111001100000100101101 - 001101000011111000110111 = 011010001000001011110110
+an =010011100110001000111000100000000000000000000000 
+
 exit
-INFO: [Common 17-206] Exiting xsim at Mon Dec  3 21:29:18 2018...
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+INFO: [Common 17-206] Exiting xsim at Fri Feb  8 15:24:54 2019...

@@ -3,7 +3,10 @@
 
 module finv(
   input wire [31:0] x,
-  output wire [31:0] y);
+  output wire [31:0] y/*,
+  output wire [31:0] oax2_2,
+  output wire [31:0] ox0_2,
+  output wire [31:0] oans*/);
 
   wire [0:0] s;
   wire [7:0] e;
@@ -4153,6 +4156,12 @@ endcase
   
   assign ans = x0_2 - {1'b0,ax2_2};
   assign y = (e == 23'b0 || e == 23'd255) ? {s,31'b0} : ((e < 8'd253) ? {s,8'd253-e,ans[22:0]} : {s,31'b0});
+
+/*  
+  assign oax2_2 = {8'b0,ax2_2[23:0]};
+  assign ox0_2 = {7'b0,x0_2[24:0]};
+  assign oans = {7'b0,ans[24:0]};
+*/
   
 endmodule
 `default_nettype wire
