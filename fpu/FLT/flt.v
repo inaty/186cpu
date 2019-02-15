@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-module flt( //s1<=s2ならtrue(1)を返す
+module flt( //s1<s2ならtrue(1)を返す
   input wire [31:0] x1,
   input wire [31:0] x2,
   output wire v);
@@ -38,9 +38,9 @@ module flt( //s1<=s2ならtrue(1)を返す
   assign sel = (e1a < e2a) ? 0 : ((e1a > e2a) ? 1 : 2);
   assign ce = (m1a < m2a) ? 0 : ((m1a > m2a) ? 1 : 2);
 
-  assign v = (s1 == s2) ? ((s1 == 0) ? ((sel == 0 || (sel == 2 && ce != 1) ? 1 : 0 )) :
-                                       ((sel == 1 || (sel == 2 && ce != 0)) ? 1 : 0 ))
-                                        : ((s1 == 0 && ({e1,m1} != 31'b0 || {e2,m2} != 31'b0)) ? 0 : 1 );
+  assign v = (s1 == s2) ? ((s1 == 0) ? ((sel == 0 || (sel == 2 && ce == 0) ? 1 : 0 )) :
+                                       ((sel == 1 || (sel == 2 && ce == 1)) ? 1 : 0 ))
+                                        : ((s1 == 1 && ({e1,m1} != 31'b0 || {e2,m2} != 31'b0)) ? 1 : 0 );
 
 endmodule
 

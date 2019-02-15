@@ -71,7 +71,7 @@ module test_flt();
 
                         fx1 = $bitstoshortreal(x1i);
                         fx2 = $bitstoshortreal(x2i);
-                        fy = (fx1 <= fx2) ? 1 : 0;
+                        fy = (fx1 < fx2) ? 1 : 0;
 
                         #1;
 
@@ -107,7 +107,7 @@ module test_flt();
 
                      fx1 = $bitstoshortreal(x1i);
                      fx2 = $bitstoshortreal(x2i);
-                     fy = (fx1 <= fx2) ? 1 : 0;
+                     fy = (fx1 < fx2) ? 1 : 0;
 
                      #1;
 

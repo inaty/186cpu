@@ -1,7 +1,7 @@
 `timescale 1ns / 100ps
 `default_nettype none
 
-module test_fle();
+module test_flt();
    wire [31:0] x1,x2;
    wire        v;
    logic [31:0] x1i,x2i;
@@ -18,7 +18,7 @@ module test_fle();
    assign x1 = x1i;
    assign x2 = x2i;
    
-   fle u1(x1,x2,v);
+   flt u1(x1,x2,v);
 
    initial begin
       // $dumpfile("test_fsub.vcd");
@@ -71,7 +71,7 @@ module test_fle();
 
                         fx1 = $bitstoshortreal(x1i);
                         fx2 = $bitstoshortreal(x2i);
-                        fy = (fx1 < fx2) ? 1 : 0;
+                        fy = (fx1 <= fx2) ? 1 : 0;
 
                         #1;
 
@@ -107,7 +107,7 @@ module test_fle();
 
                      fx1 = $bitstoshortreal(x1i);
                      fx2 = $bitstoshortreal(x2i);
-                     fy = (fx1 < fx2) ? 1 : 0;
+                     fy = (fx1 <= fx2) ? 1 : 0;
 
                      #1;
 
