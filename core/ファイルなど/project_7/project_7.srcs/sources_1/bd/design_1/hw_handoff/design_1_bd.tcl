@@ -178,7 +178,7 @@ proc create_root_design { parentCell } {
   # Create instance: axi_uartlite_0, and set properties
   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
   set_property -dict [ list \
-   CONFIG.C_BAUDRATE {230400} \
+   CONFIG.C_BAUDRATE {460800} \
    CONFIG.UARTLITE_BOARD_INTERFACE {rs232_uart} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_uartlite_0
@@ -195,6 +195,8 @@ proc create_root_design { parentCell } {
    CONFIG.Enable_B {Always_Enabled} \
    CONFIG.Load_Init_File {true} \
    CONFIG.Memory_Type {True_Dual_Port_RAM} \
+   CONFIG.Operating_Mode_A {READ_FIRST} \
+   CONFIG.Operating_Mode_B {READ_FIRST} \
    CONFIG.Port_B_Clock {100} \
    CONFIG.Port_B_Enable_Rate {100} \
    CONFIG.Port_B_Write_Rate {50} \
@@ -203,22 +205,49 @@ proc create_root_design { parentCell } {
    CONFIG.Register_PortA_Output_of_Memory_Primitives {true} \
    CONFIG.Register_PortB_Output_of_Memory_Primitives {true} \
    CONFIG.Use_Byte_Write_Enable {true} \
-   CONFIG.Use_RSTA_Pin {true} \
-   CONFIG.Use_RSTB_Pin {true} \
-   CONFIG.Write_Depth_A {610304} \
+   CONFIG.Use_RSTA_Pin {false} \
+   CONFIG.Use_RSTB_Pin {false} \
+   CONFIG.Write_Depth_A {411648} \
    CONFIG.use_bram_block {Stand_Alone} \
  ] $blk_mem_gen_0
+
+  # Create instance: blk_mem_gen_1, and set properties
+  set blk_mem_gen_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 blk_mem_gen_1 ]
+  set_property -dict [ list \
+   CONFIG.Assume_Synchronous_Clk {true} \
+   CONFIG.Byte_Size {8} \
+   CONFIG.Coe_File {../../../../../../../minrt.coe} \
+   CONFIG.EN_SAFETY_CKT {false} \
+   CONFIG.Enable_32bit_Address {true} \
+   CONFIG.Enable_A {Always_Enabled} \
+   CONFIG.Enable_B {Always_Enabled} \
+   CONFIG.Load_Init_File {true} \
+   CONFIG.Memory_Type {Dual_Port_ROM} \
+   CONFIG.Port_A_Write_Rate {0} \
+   CONFIG.Port_B_Clock {100} \
+   CONFIG.Port_B_Enable_Rate {100} \
+   CONFIG.Port_B_Write_Rate {0} \
+   CONFIG.RD_ADDR_CHNG_A {false} \
+   CONFIG.RD_ADDR_CHNG_B {false} \
+   CONFIG.Register_PortA_Output_of_Memory_Primitives {true} \
+   CONFIG.Register_PortB_Output_of_Memory_Primitives {true} \
+   CONFIG.Use_Byte_Write_Enable {false} \
+   CONFIG.Use_RSTA_Pin {false} \
+   CONFIG.Use_RSTB_Pin {false} \
+   CONFIG.Write_Depth_A {14336} \
+   CONFIG.use_bram_block {Stand_Alone} \
+ ] $blk_mem_gen_1
 
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.4 clk_wiz_0 ]
   set_property -dict [ list \
-   CONFIG.CLKOUT1_JITTER {107.611} \
-   CONFIG.CLKOUT1_PHASE_ERROR {92.971} \
-   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {150.000} \
+   CONFIG.CLKOUT1_JITTER {113.676} \
+   CONFIG.CLKOUT1_PHASE_ERROR {98.575} \
+   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.000} \
    CONFIG.CLK_IN1_BOARD_INTERFACE {default_sysclk_300} \
-   CONFIG.MMCM_CLKFBOUT_MULT_F {6.625} \
-   CONFIG.MMCM_CLKOUT0_DIVIDE_F {6.625} \
-   CONFIG.MMCM_DIVCLK_DIVIDE {2} \
+   CONFIG.MMCM_CLKFBOUT_MULT_F {10.000} \
+   CONFIG.MMCM_CLKOUT0_DIVIDE_F {5.000} \
+   CONFIG.MMCM_DIVCLK_DIVIDE {3} \
    CONFIG.RESET_BOARD_INTERFACE {reset} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $clk_wiz_0
@@ -251,8 +280,10 @@ proc create_root_design { parentCell } {
   connect_bd_net -net axi_uartlite_0_s_axi_rvalid [get_bd_pins axi_uartlite_0/s_axi_rvalid] [get_bd_pins nino_core_0/io_rvalid]
   connect_bd_net -net axi_uartlite_0_s_axi_wready [get_bd_pins axi_uartlite_0/s_axi_wready] [get_bd_pins nino_core_0/io_wready]
   connect_bd_net -net blk_mem_gen_0_douta [get_bd_pins blk_mem_gen_0/douta] [get_bd_pins nino_core_0/r_data_a]
-  connect_bd_net -net blk_mem_gen_0_doutb [get_bd_pins blk_mem_gen_0/doutb] [get_bd_pins nino_core_0/instoutwire]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axi_uartlite_0/s_axi_aclk] [get_bd_pins blk_mem_gen_0/clka] [get_bd_pins blk_mem_gen_0/clkb] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins nino_core_0/clk] [get_bd_pins rst_clk_wiz_0_100M/slowest_sync_clk]
+  connect_bd_net -net blk_mem_gen_0_doutb [get_bd_pins blk_mem_gen_0/doutb] [get_bd_pins nino_core_0/r_data_as]
+  connect_bd_net -net blk_mem_gen_1_douta [get_bd_pins blk_mem_gen_1/douta] [get_bd_pins nino_core_0/instoutwire]
+  connect_bd_net -net blk_mem_gen_1_doutb [get_bd_pins blk_mem_gen_1/doutb] [get_bd_pins nino_core_0/instoutwires]
+  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axi_uartlite_0/s_axi_aclk] [get_bd_pins blk_mem_gen_0/clka] [get_bd_pins blk_mem_gen_0/clkb] [get_bd_pins blk_mem_gen_1/clka] [get_bd_pins blk_mem_gen_1/clkb] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins nino_core_0/clk] [get_bd_pins rst_clk_wiz_0_100M/slowest_sync_clk]
   connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins rst_clk_wiz_0_100M/dcm_locked]
   connect_bd_net -net nino_core_0_io_araddr [get_bd_pins axi_uartlite_0/s_axi_araddr] [get_bd_pins nino_core_0/io_araddr]
   connect_bd_net -net nino_core_0_io_arvalid_wire [get_bd_pins axi_uartlite_0/s_axi_arvalid] [get_bd_pins nino_core_0/io_arvalid_wire]
@@ -264,12 +295,13 @@ proc create_root_design { parentCell } {
   connect_bd_net -net nino_core_0_io_wstrb [get_bd_pins axi_uartlite_0/s_axi_wstrb] [get_bd_pins nino_core_0/io_wstrb]
   connect_bd_net -net nino_core_0_io_wvalid_wire [get_bd_pins axi_uartlite_0/s_axi_wvalid] [get_bd_pins nino_core_0/io_wvalid_wire]
   connect_bd_net -net nino_core_0_memaddr_a [get_bd_pins blk_mem_gen_0/addra] [get_bd_pins nino_core_0/memaddr_a]
-  connect_bd_net -net nino_core_0_memaddr_b [get_bd_pins blk_mem_gen_0/addrb] [get_bd_pins nino_core_0/memaddr_b]
-  connect_bd_net -net nino_core_0_rstmem [get_bd_pins blk_mem_gen_0/rsta] [get_bd_pins blk_mem_gen_0/rstb] [get_bd_pins nino_core_0/rstmem]
+  connect_bd_net -net nino_core_0_memaddr_as [get_bd_pins blk_mem_gen_0/addrb] [get_bd_pins nino_core_0/memaddr_as]
+  connect_bd_net -net nino_core_0_memaddr_b [get_bd_pins blk_mem_gen_1/addra] [get_bd_pins nino_core_0/memaddr_b]
+  connect_bd_net -net nino_core_0_memaddr_bs [get_bd_pins blk_mem_gen_1/addrb] [get_bd_pins nino_core_0/memaddr_bs]
   connect_bd_net -net nino_core_0_w_data_a [get_bd_pins blk_mem_gen_0/dina] [get_bd_pins nino_core_0/w_data_a]
-  connect_bd_net -net nino_core_0_w_data_b [get_bd_pins blk_mem_gen_0/dinb] [get_bd_pins nino_core_0/w_data_b]
+  connect_bd_net -net nino_core_0_w_data_as [get_bd_pins blk_mem_gen_0/dinb] [get_bd_pins nino_core_0/w_data_as]
   connect_bd_net -net nino_core_0_wenable_a [get_bd_pins blk_mem_gen_0/wea] [get_bd_pins nino_core_0/wenable_a]
-  connect_bd_net -net nino_core_0_wenable_b [get_bd_pins blk_mem_gen_0/web] [get_bd_pins nino_core_0/wenable_b]
+  connect_bd_net -net nino_core_0_wenable_as [get_bd_pins blk_mem_gen_0/web] [get_bd_pins nino_core_0/wenable_as]
   connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins clk_wiz_0/reset] [get_bd_pins rst_clk_wiz_0_100M/ext_reset_in]
   connect_bd_net -net rst_clk_wiz_0_100M_peripheral_aresetn [get_bd_pins axi_uartlite_0/s_axi_aresetn] [get_bd_pins nino_core_0/rst] [get_bd_pins rst_clk_wiz_0_100M/peripheral_aresetn]
 

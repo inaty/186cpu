@@ -17,6 +17,9 @@ proc create_report { reportName command } {
   }
 }
 set_param xicom.use_bs_reader 1
+set_msg_config -id {Common 17-41} -limit 10000000
+set_msg_config -id {HDL 9-1061} -limit 100000
+set_msg_config -id {HDL 9-1654} -limit 100000
 set_msg_config -id {HDL-1065} -limit 10000
 create_project -in_memory -part xcku040-ffva1156-2-e
 
@@ -45,6 +48,7 @@ set_property used_in_implementation false [get_files -all /home/tansei/Desktop/c
 set_property used_in_implementation false [get_files -all /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_rst_clk_wiz_0_100M_0/design_1_rst_clk_wiz_0_100M_0_board.xdc]
 set_property used_in_implementation false [get_files -all /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_rst_clk_wiz_0_100M_0/design_1_rst_clk_wiz_0_100M_0.xdc]
 set_property used_in_implementation false [get_files -all /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_rst_clk_wiz_0_100M_0/design_1_rst_clk_wiz_0_100M_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_blk_mem_gen_1_0/design_1_blk_mem_gen_1_0_ooc.xdc]
 set_property used_in_implementation false [get_files -all /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/design_1_ooc.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -57,6 +61,9 @@ foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
 }
 read_xdc /home/tansei/Desktop/cpu_jikken/const.xdc
 set_property used_in_implementation false [get_files /home/tansei/Desktop/cpu_jikken/const.xdc]
+
+read_xdc /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/constrs_1/new/design_1_wrapper.xdc
+set_property used_in_implementation false [get_files /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/constrs_1/new/design_1_wrapper.xdc]
 
 read_xdc dont_touch.xdc
 set_property used_in_implementation false [get_files dont_touch.xdc]

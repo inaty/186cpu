@@ -1,7 +1,7 @@
 //Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2017.4 (lin64) Build 2086221 Fri Dec 15 20:54:30 MST 2017
-//Date        : Wed Feb 13 15:39:39 2019
+//Date        : Mon Feb 18 15:44:38 2019
 //Host        : ispc2016 running 64-bit Ubuntu 16.04.5 LTS
 //Command     : generate_target design_1.bd
 //Design      : design_1
@@ -9,7 +9,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=5,numReposBlks=5,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_board_cnt=3,da_clkrst_cnt=1,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
+(* CORE_GENERATION_INFO = "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=6,numReposBlks=6,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_board_cnt=3,da_clkrst_cnt=1,synth_mode=OOC_per_IP}" *) (* HW_HANDOFF = "design_1.hwdef" *) 
 module design_1
    (default_sysclk_300_clk_n,
     default_sysclk_300_clk_p,
@@ -34,6 +34,8 @@ module design_1
   wire axi_uartlite_0_s_axi_wready;
   wire [31:0]blk_mem_gen_0_douta;
   wire [31:0]blk_mem_gen_0_doutb;
+  wire [31:0]blk_mem_gen_1_douta;
+  wire [31:0]blk_mem_gen_1_doutb;
   wire clk_wiz_0_clk_out1;
   wire clk_wiz_0_locked;
   wire default_sysclk_300_1_CLK_N;
@@ -48,12 +50,13 @@ module design_1
   wire [3:0]nino_core_0_io_wstrb;
   wire nino_core_0_io_wvalid_wire;
   wire [31:0]nino_core_0_memaddr_a;
+  wire [31:0]nino_core_0_memaddr_as;
   wire [31:0]nino_core_0_memaddr_b;
-  wire nino_core_0_rstmem;
+  wire [31:0]nino_core_0_memaddr_bs;
   wire [31:0]nino_core_0_w_data_a;
-  wire [31:0]nino_core_0_w_data_b;
+  wire [31:0]nino_core_0_w_data_as;
   wire [3:0]nino_core_0_wenable_a;
-  wire [3:0]nino_core_0_wenable_b;
+  wire [3:0]nino_core_0_wenable_as;
   wire reset_1;
   wire [0:0]rst_clk_wiz_0_100M_peripheral_aresetn;
 
@@ -86,17 +89,22 @@ module design_1
         .tx(axi_uartlite_0_UART_TxD));
   design_1_blk_mem_gen_0_0 blk_mem_gen_0
        (.addra(nino_core_0_memaddr_a),
-        .addrb(nino_core_0_memaddr_b),
+        .addrb(nino_core_0_memaddr_as),
         .clka(clk_wiz_0_clk_out1),
         .clkb(clk_wiz_0_clk_out1),
         .dina(nino_core_0_w_data_a),
-        .dinb(nino_core_0_w_data_b),
+        .dinb(nino_core_0_w_data_as),
         .douta(blk_mem_gen_0_douta),
         .doutb(blk_mem_gen_0_doutb),
-        .rsta(nino_core_0_rstmem),
-        .rstb(nino_core_0_rstmem),
         .wea(nino_core_0_wenable_a),
-        .web(nino_core_0_wenable_b));
+        .web(nino_core_0_wenable_as));
+  design_1_blk_mem_gen_1_0 blk_mem_gen_1
+       (.addra(nino_core_0_memaddr_b),
+        .addrb(nino_core_0_memaddr_bs),
+        .clka(clk_wiz_0_clk_out1),
+        .clkb(clk_wiz_0_clk_out1),
+        .douta(blk_mem_gen_1_douta),
+        .doutb(blk_mem_gen_1_doutb));
   design_1_clk_wiz_0_0 clk_wiz_0
        (.clk_in1_n(default_sysclk_300_1_CLK_N),
         .clk_in1_p(default_sysclk_300_1_CLK_P),
@@ -105,7 +113,8 @@ module design_1
         .reset(reset_1));
   design_1_nino_core_0_0 nino_core_0
        (.clk(clk_wiz_0_clk_out1),
-        .instoutwire(blk_mem_gen_0_doutb),
+        .instoutwire(blk_mem_gen_1_douta),
+        .instoutwires(blk_mem_gen_1_doutb),
         .io_araddr(nino_core_0_io_araddr),
         .io_arready(axi_uartlite_0_s_axi_arready),
         .io_arvalid_wire(nino_core_0_io_arvalid_wire),
@@ -124,14 +133,16 @@ module design_1
         .io_wstrb(nino_core_0_io_wstrb),
         .io_wvalid_wire(nino_core_0_io_wvalid_wire),
         .memaddr_a(nino_core_0_memaddr_a),
+        .memaddr_as(nino_core_0_memaddr_as),
         .memaddr_b(nino_core_0_memaddr_b),
+        .memaddr_bs(nino_core_0_memaddr_bs),
         .r_data_a(blk_mem_gen_0_douta),
+        .r_data_as(blk_mem_gen_0_doutb),
         .rst(rst_clk_wiz_0_100M_peripheral_aresetn),
-        .rstmem(nino_core_0_rstmem),
         .w_data_a(nino_core_0_w_data_a),
-        .w_data_b(nino_core_0_w_data_b),
+        .w_data_as(nino_core_0_w_data_as),
         .wenable_a(nino_core_0_wenable_a),
-        .wenable_b(nino_core_0_wenable_b));
+        .wenable_as(nino_core_0_wenable_as));
   design_1_rst_clk_wiz_0_100M_0 rst_clk_wiz_0_100M
        (.aux_reset_in(1'b1),
         .dcm_locked(clk_wiz_0_locked),

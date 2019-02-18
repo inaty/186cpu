@@ -60,6 +60,9 @@ proc step_failed { step } {
   close $ch
 }
 
+set_msg_config -id {Common 17-41} -limit 10000000
+set_msg_config -id {HDL 9-1061} -limit 100000
+set_msg_config -id {HDL 9-1654} -limit 100000
 set_msg_config -id {HDL-1065} -limit 10000
 
 start_step init_design
@@ -83,6 +86,7 @@ set rc [catch {
   add_files /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/design_1.bd
   set_param project.isImplRun false
   read_xdc /home/tansei/Desktop/cpu_jikken/const.xdc
+  read_xdc /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/constrs_1/new/design_1_wrapper.xdc
   set_param project.isImplRun true
   link_design -top design_1_wrapper -part xcku040-ffva1156-2-e
   set_param project.isImplRun false

@@ -1,7 +1,7 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.4 (lin64) Build 2086221 Fri Dec 15 20:54:30 MST 2017
--- Date        : Sat Feb  9 05:38:35 2019
+-- Date        : Sun Feb 10 09:46:37 2019
 -- Host        : ispc2016 running 64-bit Ubuntu 16.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim -rename_top design_1_clk_wiz_0_0 -prefix
 --               design_1_clk_wiz_0_0_ design_1_clk_wiz_0_0_sim_netlist.vhdl
@@ -92,12 +92,12 @@ clkout1_buf: unisim.vcomponents.BUFGCE
 mmcme3_adv_inst: unisim.vcomponents.MMCME3_ADV
     generic map(
       BANDWIDTH => "OPTIMIZED",
-      CLKFBOUT_MULT_F => 6.625000,
+      CLKFBOUT_MULT_F => 10.000000,
       CLKFBOUT_PHASE => 0.000000,
       CLKFBOUT_USE_FINE_PS => "FALSE",
       CLKIN1_PERIOD => 3.333000,
       CLKIN2_PERIOD => 0.000000,
-      CLKOUT0_DIVIDE_F => 6.625000,
+      CLKOUT0_DIVIDE_F => 5.000000,
       CLKOUT0_DUTY_CYCLE => 0.500000,
       CLKOUT0_PHASE => 0.000000,
       CLKOUT0_USE_FINE_PS => "FALSE",
@@ -127,7 +127,7 @@ mmcme3_adv_inst: unisim.vcomponents.MMCME3_ADV
       CLKOUT6_PHASE => 0.000000,
       CLKOUT6_USE_FINE_PS => "FALSE",
       COMPENSATION => "ZHOLD",
-      DIVCLK_DIVIDE => 2,
+      DIVCLK_DIVIDE => 3,
       IS_CLKFBIN_INVERTED => '0',
       IS_CLKIN1_INVERTED => '0',
       IS_CLKIN2_INVERTED => '0',

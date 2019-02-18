@@ -105,15 +105,15 @@
         <spirit:componentRef spirit:library="ip" spirit:name="clk_wiz" spirit:vendor="xilinx.com" spirit:version="5.4"/>
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">design_1_clk_wiz_0_0</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_REQUESTED_OUT_FREQ">150.000</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="MMCM_DIVCLK_DIVIDE">2</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="MMCM_CLKFBOUT_MULT_F">6.625</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="MMCM_CLKOUT0_DIVIDE_F">6.625</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_REQUESTED_OUT_FREQ">200.000</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="MMCM_DIVCLK_DIVIDE">3</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="MMCM_CLKFBOUT_MULT_F">10.000</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="MMCM_CLKOUT0_DIVIDE_F">5.000</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="USE_BOARD_FLOW">true</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="CLK_IN1_BOARD_INTERFACE">default_sysclk_300</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="RESET_BOARD_INTERFACE">reset</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_JITTER">107.611</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_PHASE_ERROR">92.971</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_JITTER">113.676</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="CLKOUT1_PHASE_ERROR">98.575</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -125,20 +125,21 @@
           <spirit:configurableElementValue spirit:referenceId="Enable_32bit_Address">true</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="RD_ADDR_CHNG_A">false</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Assume_Synchronous_Clk">true</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="Write_Depth_A">610304</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Write_Depth_A">411648</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Operating_Mode_A">READ_FIRST</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Enable_A">Always_Enabled</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Operating_Mode_B">READ_FIRST</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Enable_B">Always_Enabled</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Register_PortA_Output_of_Memory_Primitives">true</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Register_PortB_Output_of_Memory_Primitives">true</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Load_Init_File">true</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Coe_File">../../../../../../../minrt.coe</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="Use_RSTA_Pin">true</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="Use_RSTB_Pin">true</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Use_RSTA_Pin">false</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Use_RSTB_Pin">false</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Port_B_Clock">100</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Port_B_Write_Rate">50</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Port_B_Enable_Rate">100</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="use_bram_block">Stand_Alone</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="EN_SAFETY_CKT">false</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -146,7 +147,7 @@
         <spirit:componentRef spirit:library="ip" spirit:name="axi_uartlite" spirit:vendor="xilinx.com" spirit:version="2.0"/>
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">design_1_axi_uartlite_0_0</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="C_BAUDRATE">230400</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_BAUDRATE">460800</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="USE_BOARD_FLOW">true</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="UARTLITE_BOARD_INTERFACE">rs232_uart</spirit:configurableElementValue>
         </spirit:configurableElementValues>
@@ -156,6 +157,31 @@
         <spirit:componentRef spirit:library="ip" spirit:name="proc_sys_reset" spirit:vendor="xilinx.com" spirit:version="5.0"/>
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">design_1_rst_clk_wiz_0_100M_0</spirit:configurableElementValue>
+        </spirit:configurableElementValues>
+      </spirit:componentInstance>
+      <spirit:componentInstance>
+        <spirit:instanceName>blk_mem_gen_1</spirit:instanceName>
+        <spirit:componentRef spirit:library="ip" spirit:name="blk_mem_gen" spirit:vendor="xilinx.com" spirit:version="8.4"/>
+        <spirit:configurableElementValues>
+          <spirit:configurableElementValue spirit:referenceId="bd:xciName">design_1_blk_mem_gen_1_0</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Memory_Type">Dual_Port_ROM</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Enable_32bit_Address">true</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="RD_ADDR_CHNG_A">false</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Assume_Synchronous_Clk">true</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Write_Depth_A">14336</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Enable_A">Always_Enabled</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Enable_B">Always_Enabled</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Register_PortA_Output_of_Memory_Primitives">true</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Register_PortB_Output_of_Memory_Primitives">true</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Load_Init_File">true</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Coe_File">../../../../../../../minrt.coe</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Use_RSTA_Pin">false</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Use_RSTB_Pin">false</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Port_A_Write_Rate">0</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Port_B_Clock">100</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Port_B_Write_Rate">0</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Port_B_Enable_Rate">100</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="use_bram_block">Stand_Alone</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -185,6 +211,8 @@
         <spirit:internalPortReference spirit:componentRef="axi_uartlite_0" spirit:portRef="s_axi_aclk"/>
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="clkb"/>
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="clka"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_1" spirit:portRef="clka"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_1" spirit:portRef="clkb"/>
         <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="clk"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
@@ -197,11 +225,6 @@
         <spirit:internalPortReference spirit:componentRef="rst_clk_wiz_0_100M" spirit:portRef="peripheral_aresetn"/>
         <spirit:internalPortReference spirit:componentRef="axi_uartlite_0" spirit:portRef="s_axi_aresetn"/>
         <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="rst"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>blk_mem_gen_0_doutb</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="doutb"/>
-        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="instoutwire"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
         <spirit:name>axi_uartlite_0_s_axi_awready</spirit:name>
@@ -289,12 +312,6 @@
         <spirit:internalPortReference spirit:componentRef="axi_uartlite_0" spirit:portRef="s_axi_awaddr"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
-        <spirit:name>nino_core_0_rstmem</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="rstmem"/>
-        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="rstb"/>
-        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="rsta"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
         <spirit:name>nino_core_0_memaddr_a</spirit:name>
         <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="memaddr_a"/>
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="addra"/>
@@ -310,24 +327,49 @@
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="wea"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
-        <spirit:name>nino_core_0_memaddr_b</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="memaddr_b"/>
-        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="addrb"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>nino_core_0_w_data_b</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="w_data_b"/>
-        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="dinb"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
-        <spirit:name>nino_core_0_wenable_b</spirit:name>
-        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="wenable_b"/>
-        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="web"/>
-      </spirit:adHocConnection>
-      <spirit:adHocConnection>
         <spirit:name>blk_mem_gen_0_douta</spirit:name>
         <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="douta"/>
         <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="r_data_a"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>nino_core_0_memaddr_as</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="memaddr_as"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="addrb"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>nino_core_0_w_data_as</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="w_data_as"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="dinb"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>blk_mem_gen_0_doutb</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="doutb"/>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="r_data_as"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>nino_core_0_wenable_as</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="wenable_as"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_0" spirit:portRef="web"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>nino_core_0_memaddr_b</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="memaddr_b"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_1" spirit:portRef="addra"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>blk_mem_gen_1_douta</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_1" spirit:portRef="douta"/>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="instoutwire"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>nino_core_0_memaddr_bs</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="memaddr_bs"/>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_1" spirit:portRef="addrb"/>
+      </spirit:adHocConnection>
+      <spirit:adHocConnection>
+        <spirit:name>blk_mem_gen_1_doutb</spirit:name>
+        <spirit:internalPortReference spirit:componentRef="blk_mem_gen_1" spirit:portRef="doutb"/>
+        <spirit:internalPortReference spirit:componentRef="nino_core_0" spirit:portRef="instoutwires"/>
       </spirit:adHocConnection>
     </spirit:adHocConnections>
     <spirit:hierConnections>

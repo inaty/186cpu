@@ -17,6 +17,9 @@ proc create_report { reportName command } {
   }
 }
 set_param xicom.use_bs_reader 1
+set_msg_config -id {Common 17-41} -limit 10000000
+set_msg_config -id {HDL 9-1061} -limit 100000
+set_msg_config -id {HDL 9-1654} -limit 100000
 set_msg_config -id {HDL-1065} -limit 10000
 set_param project.vivado.isBlockSynthRun true
 create_project -in_memory -part xcku040-ffva1156-2-e
@@ -38,12 +41,12 @@ read_verilog -library xil_defaultlib {
   /home/tansei/Desktop/cpu_jikken/fpu/FDIV/fdiv_new.v
   /home/tansei/Desktop/cpu_jikken/fpu/FEQ/feq.v
   /home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v
-  /home/tansei/Desktop/cpu_jikken/fpu/FLT/flt.v
-  /home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v
+  /home/tansei/Desktop/cpu_jikken/fpu/flt.v
+  /home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v
   /home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v
   /home/tansei/Desktop/cpu_jikken/fpu/FTOI/ftoi_new.v
-  /home/tansei/Desktop/cpu_jikken/fpu/ITOF/itof.v
-  /home/tansei/Desktop/cpu_jikken/2_2nocore.v
+  /home/tansei/Desktop/cpu_jikken/fpu/ITOF/itof_new.v
+  /home/tansei/Desktop/cpu_jikken/2_4nocore.v
 }
 read_ip -quiet /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_nino_core_0_0/design_1_nino_core_0_0.xci
 

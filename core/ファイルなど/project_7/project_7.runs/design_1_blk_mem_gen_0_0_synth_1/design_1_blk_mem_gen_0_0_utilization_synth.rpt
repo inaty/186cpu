@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2017.4 (lin64) Build 2086221 Fri Dec 15 20:54:30 MST 2017
-| Date         : Wed Feb 13 15:20:57 2019
+| Date         : Mon Feb 18 16:02:29 2019
 | Host         : ispc2016 running 64-bit Ubuntu 16.04.5 LTS
 | Command      : report_utilization -file design_1_blk_mem_gen_0_0_utilization_synth.rpt -pb design_1_blk_mem_gen_0_0_utilization_synth.pb
 | Design       : design_1_blk_mem_gen_0_0
@@ -31,15 +31,15 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| CLB LUTs*               | 2992 |     0 |    242400 |  1.23 |
-|   LUT as Logic          | 2992 |     0 |    242400 |  1.23 |
+| CLB LUTs*               | 2014 |     0 |    242400 |  0.83 |
+|   LUT as Logic          | 2014 |     0 |    242400 |  0.83 |
 |   LUT as Memory         |    0 |     0 |    112800 |  0.00 |
-| CLB Registers           |   72 |     0 |    484800 |  0.01 |
-|   Register as Flip Flop |   72 |     0 |    484800 |  0.01 |
+| CLB Registers           |   64 |     0 |    484800 |  0.01 |
+|   Register as Flip Flop |   64 |     0 |    484800 |  0.01 |
 |   Register as Latch     |    0 |     0 |    484800 |  0.00 |
 | CARRY8                  |    0 |     0 |     30300 |  0.00 |
-| F7 Muxes                | 1152 |     0 |    121200 |  0.95 |
-| F8 Muxes                |  576 |     0 |     60600 |  0.95 |
+| F7 Muxes                |  832 |     0 |    121200 |  0.69 |
+| F8 Muxes                |  384 |     0 |     60600 |  0.63 |
 | F9 Muxes                |    0 |     0 |     30300 |  0.00 |
 +-------------------------+------+-------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
@@ -60,7 +60,7 @@ Table of Contents
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
 | 0     |          Yes |         Set |            - |
-| 72    |          Yes |       Reset |            - |
+| 64    |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -70,9 +70,9 @@ Table of Contents
 +-------------------+------+-------+-----------+-------+
 |     Site Type     | Used | Fixed | Available | Util% |
 +-------------------+------+-------+-----------+-------+
-| Block RAM Tile    |  596 |     0 |       600 | 99.33 |
-|   RAMB36/FIFO*    |  596 |     0 |       600 | 99.33 |
-|     RAMB36E2 only |  596 |       |           |       |
+| Block RAM Tile    |  402 |     0 |       600 | 67.00 |
+|   RAMB36/FIFO*    |  402 |     0 |       600 | 67.00 |
+|     RAMB36E2 only |  402 |       |           |       |
 |   RAMB18          |    0 |     0 |      1200 |  0.00 |
 +-------------------+------+-------+-----------+-------+
 * Note: Each Block RAM Tile only has one FIFO logic available and therefore can accommodate only one FIFO36E2 or one FIFO18E2. However, if a FIFO18E2 occupies a Block RAM Tile, that tile can still accommodate a RAMB18E2
@@ -153,14 +153,14 @@ Table of Contents
 +----------+------+---------------------+
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
-| LUT6     | 2624 |                 CLB |
-| MUXF7    | 1152 |                 CLB |
-| RAMB36E2 |  596 |           Block Ram |
-| MUXF8    |  576 |                 CLB |
-| LUT5     |  298 |                 CLB |
-| FDRE     |   72 |            Register |
-| LUT3     |   64 |                 CLB |
-| LUT4     |   38 |                 CLB |
+| LUT6     | 1730 |                 CLB |
+| MUXF7    |  832 |                 CLB |
+| RAMB36E2 |  402 |           Block Ram |
+| MUXF8    |  384 |                 CLB |
+| LUT5     |  264 |                 CLB |
+| FDRE     |   64 |            Register |
+| LUT3     |   18 |                 CLB |
+| LUT2     |    2 |                 CLB |
 +----------+------+---------------------+
 
 

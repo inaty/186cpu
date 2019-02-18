@@ -2,8 +2,8 @@
 # Vivado v2017.4 (64-bit)
 # SW Build 2086221 on Fri Dec 15 20:54:30 MST 2017
 # IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
-# Start of session at: Wed Feb 13 14:36:04 2019
-# Process ID: 19520
+# Start of session at: Mon Feb 18 15:44:47 2019
+# Process ID: 3888
 # Current directory: /home/tansei/Desktop/cpu_jikken/project_7/project_7.runs/design_1_nino_core_0_0_synth_1
 # Command line: vivado -log design_1_nino_core_0_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source design_1_nino_core_0_0.tcl
 # Log file: /home/tansei/Desktop/cpu_jikken/project_7/project_7.runs/design_1_nino_core_0_0_synth_1/design_1_nino_core_0_0.vds
@@ -17,43 +17,40 @@ Attempting to get a license for feature 'Synthesis' and/or device 'xcku040'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xcku040'
 INFO: [Common 17-1540] The version limit for your license is '2018.07' and has expired for new software. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
 INFO: Launching helper process for spawning children vivado processes
-INFO: Helper process launched with PID 19550 
+INFO: Helper process launched with PID 3966 
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1324.219 ; gain = 41.992 ; free physical = 4774 ; free virtual = 26885
+Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1326.230 ; gain = 43.992 ; free physical = 3246 ; free virtual = 21580
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'design_1_nino_core_0_0' [/home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_nino_core_0_0/synth/design_1_nino_core_0_0.v:57]
-INFO: [Synth 8-638] synthesizing module 'nino_core' [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:3]
+INFO: [Synth 8-638] synthesizing module 'nino_core' [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:3]
 INFO: [Synth 8-638] synthesizing module 'fadd_d' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:4]
 INFO: [Synth 8-256] done synthesizing module 'fadd_d' (1#1) [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:4]
-INFO: [Synth 8-638] synthesizing module 'fmul_myd' [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:4]
-WARNING: [Synth 8-3936] Found unconnected internal register 'eamyssreg_reg' and it is trimmed from '10' to '9' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:95]
-WARNING: [Synth 8-3848] Net ovf in module/entity fmul_myd does not have driver. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:8]
-INFO: [Synth 8-256] done synthesizing module 'fmul_myd' (2#1) [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:4]
+INFO: [Synth 8-638] synthesizing module 'fmul_myd4' [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:4]
+WARNING: [Synth 8-3936] Found unconnected internal register 'eamyssreg_reg' and it is trimmed from '10' to '9' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:142]
+WARNING: [Synth 8-3848] Net ovf in module/entity fmul_myd4 does not have driver. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:8]
+INFO: [Synth 8-256] done synthesizing module 'fmul_myd4' (2#1) [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:4]
 INFO: [Synth 8-638] synthesizing module 'fdiv_d' [/home/tansei/Desktop/cpu_jikken/fpu/FDIV/fdiv_new.v:4]
 INFO: [Synth 8-638] synthesizing module 'finv_d' [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4]
 INFO: [Synth 8-256] done synthesizing module 'finv_d' (3#1) [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4]
 INFO: [Synth 8-256] done synthesizing module 'fdiv_d' (4#1) [/home/tansei/Desktop/cpu_jikken/fpu/FDIV/fdiv_new.v:4]
 INFO: [Synth 8-638] synthesizing module 'fsqrt_d' [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:4]
 INFO: [Synth 8-256] done synthesizing module 'fsqrt_d' (5#1) [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:4]
-INFO: [Synth 8-638] synthesizing module 'flt' [/home/tansei/Desktop/cpu_jikken/fpu/FLT/flt.v:4]
-INFO: [Synth 8-256] done synthesizing module 'flt' (6#1) [/home/tansei/Desktop/cpu_jikken/fpu/FLT/flt.v:4]
+INFO: [Synth 8-638] synthesizing module 'flt' [/home/tansei/Desktop/cpu_jikken/fpu/flt.v:4]
+INFO: [Synth 8-256] done synthesizing module 'flt' (6#1) [/home/tansei/Desktop/cpu_jikken/fpu/flt.v:4]
 INFO: [Synth 8-638] synthesizing module 'feq' [/home/tansei/Desktop/cpu_jikken/fpu/FEQ/feq.v:4]
 INFO: [Synth 8-256] done synthesizing module 'feq' (7#1) [/home/tansei/Desktop/cpu_jikken/fpu/FEQ/feq.v:4]
 INFO: [Synth 8-638] synthesizing module 'ftoi_d' [/home/tansei/Desktop/cpu_jikken/fpu/FTOI/ftoi_new.v:4]
 INFO: [Synth 8-256] done synthesizing module 'ftoi_d' (8#1) [/home/tansei/Desktop/cpu_jikken/fpu/FTOI/ftoi_new.v:4]
-INFO: [Synth 8-638] synthesizing module 'itof' [/home/tansei/Desktop/cpu_jikken/fpu/ITOF/itof.v:4]
-INFO: [Synth 8-256] done synthesizing module 'itof' (9#1) [/home/tansei/Desktop/cpu_jikken/fpu/ITOF/itof.v:4]
-WARNING: [Synth 8-6014] Unused sequential element epc_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:381]
-WARNING: [Synth 8-6014] Unused sequential element e2pc_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:382]
-WARNING: [Synth 8-6014] Unused sequential element e3pc_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:383]
-WARNING: [Synth 8-6014] Unused sequential element e4pc_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:384]
-WARNING: [Synth 8-6014] Unused sequential element mpc_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:385]
-WARNING: [Synth 8-6014] Unused sequential element wpc_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:386]
-WARNING: [Synth 8-6014] Unused sequential element e2inp_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:466]
-WARNING: [Synth 8-6014] Unused sequential element e2outp_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:468]
-INFO: [Synth 8-256] done synthesizing module 'nino_core' (10#1) [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:3]
+INFO: [Synth 8-638] synthesizing module 'itof_d' [/home/tansei/Desktop/cpu_jikken/fpu/ITOF/itof_new.v:4]
+WARNING: [Synth 8-3936] Found unconnected internal register 'absreg_reg' and it is trimmed from '32' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/ITOF/itof_new.v:18]
+INFO: [Synth 8-256] done synthesizing module 'itof_d' (9#1) [/home/tansei/Desktop/cpu_jikken/fpu/ITOF/itof_new.v:4]
+WARNING: [Synth 8-6014] Unused sequential element e2inp_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:627]
+WARNING: [Synth 8-6014] Unused sequential element e2outp_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:629]
+WARNING: [Synth 8-6014] Unused sequential element e2inps_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:747]
+WARNING: [Synth 8-6014] Unused sequential element e2outps_reg was removed.  [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:749]
+INFO: [Synth 8-256] done synthesizing module 'nino_core' (10#1) [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:3]
 INFO: [Synth 8-256] done synthesizing module 'design_1_nino_core_0_0' (11#1) [/home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_nino_core_0_0/synth/design_1_nino_core_0_0.v:57]
-WARNING: [Synth 8-3331] design fmul_myd has unconnected port ovf
+WARNING: [Synth 8-3331] design fmul_myd4 has unconnected port ovf
 WARNING: [Synth 8-3331] design nino_core has unconnected port io_bresp[1]
 WARNING: [Synth 8-3331] design nino_core has unconnected port io_bresp[0]
 WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[31]
@@ -83,7 +80,7 @@ WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[8]
 WARNING: [Synth 8-3331] design nino_core has unconnected port io_rresp[1]
 WARNING: [Synth 8-3331] design nino_core has unconnected port io_rresp[0]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 1444.922 ; gain = 162.695 ; free physical = 4743 ; free virtual = 26855
+Finished RTL Elaboration : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 1492.504 ; gain = 210.266 ; free physical = 3144 ; free virtual = 21482
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -93,7 +90,7 @@ Report Check Netlist:
 |1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1444.922 ; gain = 162.695 ; free physical = 4755 ; free virtual = 26867
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 1492.504 ; gain = 210.266 ; free physical = 3147 ; free virtual = 21486
 ---------------------------------------------------------------------------------
 INFO: [Device 21-403] Loading part xcku040-ffva1156-2-e
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -105,52 +102,48 @@ Completed Processing XDC Constraints
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00.28 ; elapsed = 00:00:00.09 . Memory (MB): peak = 1940.305 ; gain = 5.000 ; free physical = 4279 ; free virtual = 26392
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.77 ; elapsed = 00:00:00.31 . Memory (MB): peak = 2012.762 ; gain = 11.000 ; free physical = 2296 ; free virtual = 20872
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:23 ; elapsed = 00:00:40 . Memory (MB): peak = 1940.305 ; gain = 658.078 ; free physical = 4343 ; free virtual = 26456
+Finished Constraint Validation : Time (s): cpu = 00:00:34 ; elapsed = 00:00:53 . Memory (MB): peak = 2012.762 ; gain = 730.523 ; free physical = 2361 ; free virtual = 20937
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xcku040-ffva1156-2-e
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:23 ; elapsed = 00:00:40 . Memory (MB): peak = 1940.305 ; gain = 658.078 ; free physical = 4343 ; free virtual = 26456
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:34 ; elapsed = 00:00:53 . Memory (MB): peak = 2012.762 ; gain = 730.523 ; free physical = 2361 ; free virtual = 20937
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:40 . Memory (MB): peak = 1940.305 ; gain = 658.078 ; free physical = 4343 ; free virtual = 26456
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:34 ; elapsed = 00:00:53 . Memory (MB): peak = 2012.762 ; gain = 730.523 ; free physical = 2363 ; free virtual = 20939
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-5818] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the output of the operator [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:120]
-WARNING: [Synth 8-3936] Found unconnected internal register 'eamyssreg_reg' and it is trimmed from '9' to '8' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:95]
-INFO: [Synth 8-5546] ROM "hi1wire0" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "hi2wire0" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5845] Not enough pipeline registers after wide multiplier. Recommended levels of pipeline registers is 2 [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:63]
-WARNING: [Synth 8-6014] Unused sequential element mydreg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:100]
+WARNING: [Synth 8-3936] Found unconnected internal register 'eamyssreg_reg' and it is trimmed from '9' to '8' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:142]
+INFO: [Synth 8-5546] ROM "hi1reg20" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "hi2reg20" won't be mapped to RAM because it is too sparse
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:193]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg4_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:195]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg5_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:196]
 WARNING: [Synth 8-6014] Unused sequential element x0reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4152]
-WARNING: [Synth 8-6014] Unused sequential element x2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4154]
-INFO: [Synth 8-5845] Not enough pipeline registers after wide multiplier. Recommended levels of pipeline registers is 2 [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4163]
-WARNING: [Synth 8-6014] Unused sequential element ax2reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4171]
 WARNING: [Synth 8-6014] Unused sequential element mareg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4153]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4163]
-WARNING: [Synth 8-6014] Unused sequential element  was removed. 
-INFO: [Synth 8-5845] Not enough pipeline registers after wide multiplier. Recommended levels of pipeline registers is 2 [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8266]
-INFO: [Synth 8-5845] Not enough pipeline registers after wide multiplier. Recommended levels of pipeline registers is 2 [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element nibunnox3areg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8270]
-WARNING: [Synth 8-6014] Unused sequential element rootareg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8298]
-WARNING: [Synth 8-6014] Unused sequential element mawirereg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8315]
-WARNING: [Synth 8-6014] Unused sequential element rootabunno1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element mawirereg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8266]
-WARNING: [Synth 8-6014] Unused sequential element  was removed. 
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
+INFO: [Synth 8-5546] ROM "mawire5" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5845] Not enough pipeline registers after wide multiplier. Recommended levels of pipeline registers is 2 [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8267]
+INFO: [Synth 8-5845] Not enough pipeline registers after wide multiplier. Recommended levels of pipeline registers is 2 [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element nibunnox3areg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8271]
+WARNING: [Synth 8-6014] Unused sequential element rootareg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8299]
+WARNING: [Synth 8-6014] Unused sequential element mawirereg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8317]
+WARNING: [Synth 8-6014] Unused sequential element rootabunno1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element mawirereg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
 WARNING: [Synth 8-6014] Unused sequential element  was removed. 
 WARNING: [Synth 8-6014] Unused sequential element  was removed. 
-INFO: [Synth 8-5818] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the output of the operator [/home/tansei/Desktop/cpu_jikken/2_2nocore.v:976]
+INFO: [Synth 8-5818] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the output of the operator [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:2929]
+INFO: [Synth 8-5818] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the output of the operator [/home/tansei/Desktop/cpu_jikken/2_4nocore.v:3401]
 INFO: [Synth 8-5546] ROM "mainreg_reg[31]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainreg_reg[30]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainreg_reg[29]" won't be mapped to RAM because it is too sparse
@@ -183,12 +176,10 @@ INFO: [Synth 8-5546] ROM "mainreg_reg[3]" won't be mapped to RAM because it is t
 INFO: [Synth 8-5546] ROM "mainreg_reg[2]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainreg_reg[1]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainfreg_reg[0]" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "enextpc" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "fpcbf" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "fpc" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "f2pc" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
 INFO: [Synth 8-5546] ROM "rs1" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "imm" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "firstin" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "ebrnc" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "finst" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "efadd" won't be mapped to RAM because it is too sparse
@@ -197,8 +188,22 @@ INFO: [Synth 8-5546] ROM "efmul" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "efsqrt" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "efdiv" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "eftoi" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5544] ROM "startwait" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "io_rready" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
+INFO: [Synth 8-5546] ROM "eitof" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ejal" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "io_araddr" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5544] ROM "fpcbfs" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
+INFO: [Synth 8-5546] ROM "rs1s" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "imms" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ebrncs" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "finsts" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "efadds" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "efsubs" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "efmuls" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "efsqrts" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "efdivs" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "eftois" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "eitofs" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ejals" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainreg_reg[31]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainreg_reg[30]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainreg_reg[29]" won't be mapped to RAM because it is too sparse
@@ -231,131 +236,142 @@ INFO: [Synth 8-5546] ROM "mainreg_reg[3]" won't be mapped to RAM because it is t
 INFO: [Synth 8-5546] ROM "mainreg_reg[2]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainreg_reg[1]" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "mainfreg_reg[0]" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "enextpc" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5544] ROM "fpcbf" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "fpc" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "f2pc" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
 INFO: [Synth 8-5546] ROM "rs1" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "imm" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "firstin" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "ebrnc" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "finst" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "efadd" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "efsub" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "efmul" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "efsqrt" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "efdiv" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "eftoi" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5544] ROM "startwait" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "io_rready" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "e2nextpc" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "e2rslt0" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Common 17-14] Message 'Synth 8-5546' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-5544] ROM "fpcbfs" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "saki0" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "saki0" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "stage" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "stage" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "jumpwire3" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "jumpwire2" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "jumpwire2" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "fwdrs1" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "fwdrs2" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "fwdsrs1" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "fwdsrs2" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "io_awaddr" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "io_araddr" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "io_araddr" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "io_araddr" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "io_state" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 INFO: [Synth 8-5544] ROM "io_state" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "memaddrregs" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "memaddrregs" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "fwdrs1s" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "fwdrs2s" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "fwdsrs1s" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "fwdsrs2s" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:30 ; elapsed = 00:00:47 . Memory (MB): peak = 1940.305 ; gain = 658.078 ; free physical = 4329 ; free virtual = 26441
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:51 ; elapsed = 00:01:10 . Memory (MB): peak = 2012.762 ; gain = 730.523 ; free physical = 2272 ; free virtual = 20848
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
-+-+--------------+------------+----------+
-| |RTL Partition |Replication |Instances |
-+-+--------------+------------+----------+
-+-+--------------+------------+----------+
++------+---------------+------------+----------+
+|      |RTL Partition  |Replication |Instances |
++------+---------------+------------+----------+
+|1     |nino_core__GB0 |           1|     31518|
+|2     |nino_core__GB1 |           1|     11551|
+|3     |nino_core__GB2 |           1|     13243|
+|4     |nino_core__GB3 |           1|     12789|
+|5     |nino_core__GB4 |           1|     26022|
++------+---------------+------------+----------+
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
 ---------------------------------------------------------------------------------
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input     32 Bit       Adders := 1     
-	   3 Input     32 Bit       Adders := 1     
-	   2 Input     31 Bit       Adders := 2     
-	   3 Input     27 Bit       Adders := 2     
-	   2 Input     25 Bit       Adders := 2     
-	   3 Input     24 Bit       Adders := 1     
-	   3 Input     23 Bit       Adders := 1     
-	   2 Input     23 Bit       Adders := 2     
-	   2 Input     21 Bit       Adders := 3     
-	   2 Input     10 Bit       Adders := 6     
-	   2 Input      9 Bit       Adders := 5     
-	   3 Input      9 Bit       Adders := 6     
-	   2 Input      8 Bit       Adders := 10    
-	   3 Input      8 Bit       Adders := 9     
-	   2 Input      5 Bit       Adders := 3     
+	   3 Input     32 Bit       Adders := 2     
+	   2 Input     31 Bit       Adders := 4     
+	   3 Input     27 Bit       Adders := 4     
+	   2 Input     25 Bit       Adders := 4     
+	   3 Input     24 Bit       Adders := 2     
+	   2 Input     24 Bit       Adders := 2     
+	   3 Input     23 Bit       Adders := 2     
+	   2 Input     19 Bit       Adders := 2     
+	   2 Input     14 Bit       Adders := 22    
+	   2 Input     13 Bit       Adders := 2     
+	   2 Input     12 Bit       Adders := 2     
+	   2 Input     10 Bit       Adders := 12    
+	   2 Input      9 Bit       Adders := 10    
+	   3 Input      9 Bit       Adders := 12    
+	   2 Input      8 Bit       Adders := 20    
+	   3 Input      8 Bit       Adders := 18    
+	   2 Input      5 Bit       Adders := 6     
 +---XORs : 
-	   2 Input     32 Bit         XORs := 1     
-	   2 Input      1 Bit         XORs := 3     
+	   2 Input      1 Bit         XORs := 8     
 +---Registers : 
-	               48 Bit    Registers := 7     
-	               32 Bit    Registers := 82    
-	               31 Bit    Registers := 1     
-	               27 Bit    Registers := 4     
-	               25 Bit    Registers := 4     
-	               24 Bit    Registers := 4     
-	               23 Bit    Registers := 24    
-	               18 Bit    Registers := 3     
-	               10 Bit    Registers := 6     
-	                9 Bit    Registers := 3     
-	                8 Bit    Registers := 37    
-	                7 Bit    Registers := 6     
-	                6 Bit    Registers := 2     
-	                5 Bit    Registers := 5     
+	               48 Bit    Registers := 10    
+	               36 Bit    Registers := 4     
+	               35 Bit    Registers := 8     
+	               32 Bit    Registers := 105   
+	               31 Bit    Registers := 4     
+	               27 Bit    Registers := 8     
+	               25 Bit    Registers := 8     
+	               24 Bit    Registers := 10    
+	               23 Bit    Registers := 46    
+	               19 Bit    Registers := 4     
+	               18 Bit    Registers := 2     
+	               14 Bit    Registers := 16    
+	               13 Bit    Registers := 2     
+	               10 Bit    Registers := 13    
+	                9 Bit    Registers := 4     
+	                8 Bit    Registers := 77    
+	                7 Bit    Registers := 21    
+	                5 Bit    Registers := 10    
 	                4 Bit    Registers := 2     
-	                3 Bit    Registers := 4     
-	                2 Bit    Registers := 2     
-	                1 Bit    Registers := 81    
+	                3 Bit    Registers := 6     
+	                2 Bit    Registers := 3     
+	                1 Bit    Registers := 194   
 +---ROMs : 
 	                              ROMs := 2     
 +---Muxes : 
-	   2 Input     48 Bit        Muxes := 8     
-	   2 Input     32 Bit        Muxes := 44    
-	   3 Input     32 Bit        Muxes := 3     
-	  32 Input     32 Bit        Muxes := 1     
-	   4 Input     32 Bit        Muxes := 1     
-	   6 Input     32 Bit        Muxes := 3     
-	   2 Input     31 Bit        Muxes := 2     
-	   2 Input     28 Bit        Muxes := 4     
-	   2 Input     27 Bit        Muxes := 8     
-	   2 Input     25 Bit        Muxes := 10    
+	   2 Input     48 Bit        Muxes := 24    
+	   2 Input     32 Bit        Muxes := 300   
+	  32 Input     32 Bit        Muxes := 2     
+	   3 Input     32 Bit        Muxes := 6     
+	   4 Input     32 Bit        Muxes := 2     
+	   6 Input     32 Bit        Muxes := 2     
+	   2 Input     31 Bit        Muxes := 4     
+	   2 Input     28 Bit        Muxes := 8     
+	   2 Input     27 Bit        Muxes := 16    
+	   2 Input     25 Bit        Muxes := 22    
 	   2 Input     24 Bit        Muxes := 6     
-	   2 Input     23 Bit        Muxes := 32    
-	  13 Input     12 Bit        Muxes := 1     
-	   2 Input      9 Bit        Muxes := 15    
-	   2 Input      8 Bit        Muxes := 48    
-	   2 Input      7 Bit        Muxes := 3     
-	   5 Input      7 Bit        Muxes := 1     
-	   2 Input      6 Bit        Muxes := 48    
-	   6 Input      6 Bit        Muxes := 2     
-	  23 Input      6 Bit        Muxes := 4     
-	   2 Input      5 Bit        Muxes := 8     
-	   2 Input      4 Bit        Muxes := 7     
+	   2 Input     23 Bit        Muxes := 54    
+	   4 Input     19 Bit        Muxes := 1     
+	   2 Input     14 Bit        Muxes := 42    
+	  13 Input     12 Bit        Muxes := 2     
+	   2 Input     10 Bit        Muxes := 40    
+	   2 Input      8 Bit        Muxes := 92    
+	   2 Input      7 Bit        Muxes := 36    
+	   5 Input      7 Bit        Muxes := 2     
+	   8 Input      6 Bit        Muxes := 8     
+	   2 Input      6 Bit        Muxes := 200   
+	   6 Input      6 Bit        Muxes := 4     
+	   2 Input      5 Bit        Muxes := 14    
+	   2 Input      4 Bit        Muxes := 25    
+	   3 Input      4 Bit        Muxes := 2     
 	   5 Input      4 Bit        Muxes := 1     
-	   6 Input      4 Bit        Muxes := 1     
-	   2 Input      3 Bit        Muxes := 49    
-	   7 Input      3 Bit        Muxes := 1     
+	   2 Input      3 Bit        Muxes := 99    
+	   7 Input      3 Bit        Muxes := 2     
 	   9 Input      3 Bit        Muxes := 1     
-	   3 Input      3 Bit        Muxes := 2     
-	   2 Input      2 Bit        Muxes := 16    
-	   4 Input      2 Bit        Muxes := 2     
-	   3 Input      2 Bit        Muxes := 1     
-	  12 Input      2 Bit        Muxes := 1     
-	   2 Input      1 Bit        Muxes := 317   
-	   3 Input      1 Bit        Muxes := 15    
-	   4 Input      1 Bit        Muxes := 2     
-	  11 Input      1 Bit        Muxes := 1     
-	   9 Input      1 Bit        Muxes := 1     
-	   7 Input      1 Bit        Muxes := 1     
-	   6 Input      1 Bit        Muxes := 1     
-	   5 Input      1 Bit        Muxes := 1     
+	  10 Input      3 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 24    
+	   3 Input      2 Bit        Muxes := 2     
+	   4 Input      2 Bit        Muxes := 3     
+	  12 Input      2 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 2174  
+	   4 Input      1 Bit        Muxes := 6     
+	   6 Input      1 Bit        Muxes := 4     
+	   3 Input      1 Bit        Muxes := 30    
+	  11 Input      1 Bit        Muxes := 2     
+	   9 Input      1 Bit        Muxes := 2     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -363,6 +379,319 @@ Finished RTL Component Statistics
 Start RTL Hierarchical Component Statistics 
 ---------------------------------------------------------------------------------
 Hierarchical RTL Component report 
+Module finv_d__1 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     23 Bit       Adders := 1     
+	   2 Input     14 Bit       Adders := 2     
+	   2 Input     13 Bit       Adders := 1     
+	   2 Input     12 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 1     
++---Registers : 
+	               24 Bit    Registers := 1     
+	               23 Bit    Registers := 5     
+	               14 Bit    Registers := 1     
+	               13 Bit    Registers := 1     
+	                8 Bit    Registers := 2     
+	                1 Bit    Registers := 2     
++---ROMs : 
+	                              ROMs := 1     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 2     
+	   2 Input     25 Bit        Muxes := 3     
+	   2 Input     24 Bit        Muxes := 1     
+	   2 Input     23 Bit        Muxes := 1     
+Module fmul_myd4__1 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     10 Bit       Adders := 3     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 4     
+	   2 Input      8 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	               48 Bit    Registers := 1     
+	               36 Bit    Registers := 1     
+	               35 Bit    Registers := 2     
+	               23 Bit    Registers := 2     
+	               10 Bit    Registers := 3     
+	                8 Bit    Registers := 3     
+	                5 Bit    Registers := 2     
+	                1 Bit    Registers := 8     
++---Muxes : 
+	   2 Input     48 Bit        Muxes := 2     
+	   2 Input     28 Bit        Muxes := 2     
+	   2 Input     23 Bit        Muxes := 12    
+	   2 Input      8 Bit        Muxes := 13    
+	   8 Input      6 Bit        Muxes := 2     
+	   2 Input      6 Bit        Muxes := 30    
+	   2 Input      5 Bit        Muxes := 2     
+	   2 Input      2 Bit        Muxes := 4     
+Module fdiv_d__1 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+Module fsqrt_d__1 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     24 Bit       Adders := 1     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      8 Bit       Adders := 1     
++---Registers : 
+	               48 Bit    Registers := 3     
+	               32 Bit    Registers := 1     
+	               24 Bit    Registers := 4     
+	               23 Bit    Registers := 2     
+	               18 Bit    Registers := 1     
+	                8 Bit    Registers := 9     
+	                1 Bit    Registers := 4     
++---Muxes : 
+	   2 Input     48 Bit        Muxes := 8     
+	   2 Input     32 Bit        Muxes := 1     
+	   2 Input     24 Bit        Muxes := 2     
+Module fadd_d__1 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     27 Bit       Adders := 1     
+	   2 Input     25 Bit       Adders := 1     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 3     
+	   2 Input      5 Bit       Adders := 1     
++---Registers : 
+	               27 Bit    Registers := 2     
+	               25 Bit    Registers := 2     
+	               23 Bit    Registers := 6     
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 10    
+	                1 Bit    Registers := 10    
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 6     
+	   2 Input     27 Bit        Muxes := 4     
+	   2 Input     25 Bit        Muxes := 4     
+	   2 Input     23 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 8     
+	   2 Input      6 Bit        Muxes := 20    
+	   6 Input      6 Bit        Muxes := 1     
+	   2 Input      5 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 2     
+Module fadd_d__2 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     27 Bit       Adders := 1     
+	   2 Input     25 Bit       Adders := 1     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 3     
+	   2 Input      5 Bit       Adders := 1     
++---Registers : 
+	               27 Bit    Registers := 2     
+	               25 Bit    Registers := 2     
+	               23 Bit    Registers := 6     
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 10    
+	                1 Bit    Registers := 10    
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 6     
+	   2 Input     27 Bit        Muxes := 4     
+	   2 Input     25 Bit        Muxes := 4     
+	   2 Input     23 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 8     
+	   2 Input      6 Bit        Muxes := 20    
+	   6 Input      6 Bit        Muxes := 1     
+	   2 Input      5 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 2     
+Module fmul_myd4__2 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     10 Bit       Adders := 3     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 4     
+	   2 Input      8 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	               48 Bit    Registers := 1     
+	               36 Bit    Registers := 1     
+	               35 Bit    Registers := 2     
+	               23 Bit    Registers := 2     
+	               10 Bit    Registers := 3     
+	                8 Bit    Registers := 3     
+	                5 Bit    Registers := 2     
+	                1 Bit    Registers := 8     
++---Muxes : 
+	   2 Input     48 Bit        Muxes := 2     
+	   2 Input     28 Bit        Muxes := 2     
+	   2 Input     23 Bit        Muxes := 12    
+	   2 Input      8 Bit        Muxes := 13    
+	   8 Input      6 Bit        Muxes := 2     
+	   2 Input      6 Bit        Muxes := 30    
+	   2 Input      5 Bit        Muxes := 2     
+	   2 Input      2 Bit        Muxes := 4     
+Module fsqrt_d 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     24 Bit       Adders := 1     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      8 Bit       Adders := 1     
++---Registers : 
+	               48 Bit    Registers := 3     
+	               32 Bit    Registers := 1     
+	               24 Bit    Registers := 4     
+	               23 Bit    Registers := 2     
+	               18 Bit    Registers := 1     
+	                8 Bit    Registers := 9     
+	                1 Bit    Registers := 4     
++---Muxes : 
+	   2 Input     48 Bit        Muxes := 8     
+	   2 Input     32 Bit        Muxes := 1     
+	   2 Input     24 Bit        Muxes := 2     
+Module finv_d 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     23 Bit       Adders := 1     
+	   2 Input     14 Bit       Adders := 2     
+	   2 Input     13 Bit       Adders := 1     
+	   2 Input     12 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 1     
++---Registers : 
+	               24 Bit    Registers := 1     
+	               23 Bit    Registers := 5     
+	               14 Bit    Registers := 1     
+	               13 Bit    Registers := 1     
+	                8 Bit    Registers := 2     
+	                1 Bit    Registers := 2     
++---ROMs : 
+	                              ROMs := 1     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 2     
+	   2 Input     25 Bit        Muxes := 3     
+	   2 Input     24 Bit        Muxes := 1     
+	   2 Input     23 Bit        Muxes := 1     
+Module fmul_myd4__3 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     10 Bit       Adders := 3     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 4     
+	   2 Input      8 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	               48 Bit    Registers := 1     
+	               36 Bit    Registers := 1     
+	               35 Bit    Registers := 2     
+	               23 Bit    Registers := 2     
+	               10 Bit    Registers := 3     
+	                8 Bit    Registers := 3     
+	                5 Bit    Registers := 2     
+	                1 Bit    Registers := 8     
++---Muxes : 
+	   2 Input     48 Bit        Muxes := 2     
+	   2 Input     28 Bit        Muxes := 2     
+	   2 Input     23 Bit        Muxes := 12    
+	   2 Input      8 Bit        Muxes := 13    
+	   8 Input      6 Bit        Muxes := 2     
+	   2 Input      6 Bit        Muxes := 30    
+	   2 Input      5 Bit        Muxes := 2     
+	   2 Input      2 Bit        Muxes := 4     
+Module fdiv_d 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+Module itof_d__1 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     31 Bit       Adders := 1     
+	   2 Input      5 Bit       Adders := 1     
++---Registers : 
+	               32 Bit    Registers := 1     
+	               31 Bit    Registers := 1     
++---Muxes : 
+	  32 Input     32 Bit        Muxes := 1     
+	   3 Input     32 Bit        Muxes := 1     
+	   2 Input     31 Bit        Muxes := 1     
+	   3 Input      2 Bit        Muxes := 1     
+Module ftoi_d__1 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     31 Bit       Adders := 1     
+	   2 Input     24 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 1     
++---Registers : 
+	               31 Bit    Registers := 1     
+	                8 Bit    Registers := 1     
+	                1 Bit    Registers := 2     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 2     
+	   3 Input     32 Bit        Muxes := 2     
+	   2 Input     31 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 1     
+Module flt__1 
+Detailed RTL Component Info : 
++---Muxes : 
+	   2 Input      4 Bit        Muxes := 1     
+	   4 Input      2 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 1     
+Module fmul_myd4 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     10 Bit       Adders := 3     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 4     
+	   2 Input      8 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	               48 Bit    Registers := 1     
+	               36 Bit    Registers := 1     
+	               35 Bit    Registers := 2     
+	               23 Bit    Registers := 2     
+	               10 Bit    Registers := 3     
+	                8 Bit    Registers := 3     
+	                5 Bit    Registers := 2     
+	                1 Bit    Registers := 8     
++---Muxes : 
+	   2 Input     48 Bit        Muxes := 2     
+	   2 Input     28 Bit        Muxes := 2     
+	   2 Input     23 Bit        Muxes := 12    
+	   2 Input      8 Bit        Muxes := 13    
+	   8 Input      6 Bit        Muxes := 2     
+	   2 Input      6 Bit        Muxes := 30    
+	   2 Input      5 Bit        Muxes := 2     
+	   2 Input      2 Bit        Muxes := 4     
+Module fadd_d__3 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     27 Bit       Adders := 1     
+	   2 Input     25 Bit       Adders := 1     
+	   2 Input      9 Bit       Adders := 1     
+	   3 Input      9 Bit       Adders := 1     
+	   2 Input      8 Bit       Adders := 3     
+	   2 Input      5 Bit       Adders := 1     
++---Registers : 
+	               27 Bit    Registers := 2     
+	               25 Bit    Registers := 2     
+	               23 Bit    Registers := 6     
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 10    
+	                1 Bit    Registers := 10    
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 6     
+	   2 Input     27 Bit        Muxes := 4     
+	   2 Input     25 Bit        Muxes := 4     
+	   2 Input     23 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 8     
+	   2 Input      6 Bit        Muxes := 20    
+	   6 Input      6 Bit        Muxes := 1     
+	   2 Input      5 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 2     
 Module fadd_d 
 Detailed RTL Component Info : 
 +---Adders : 
@@ -389,155 +718,89 @@ Detailed RTL Component Info :
 	   6 Input      6 Bit        Muxes := 1     
 	   2 Input      5 Bit        Muxes := 1     
 	   2 Input      1 Bit        Muxes := 2     
-Module fmul_myd 
+Module itof_d 
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input     10 Bit       Adders := 3     
-	   2 Input      9 Bit       Adders := 1     
-	   3 Input      9 Bit       Adders := 2     
-	   3 Input      8 Bit       Adders := 4     
-	   2 Input      8 Bit       Adders := 1     
-+---XORs : 
-	   2 Input      1 Bit         XORs := 1     
+	   2 Input     31 Bit       Adders := 1     
+	   2 Input      5 Bit       Adders := 1     
 +---Registers : 
-	               48 Bit    Registers := 2     
-	               10 Bit    Registers := 3     
-	                8 Bit    Registers := 1     
-	                5 Bit    Registers := 2     
-	                1 Bit    Registers := 4     
+	               32 Bit    Registers := 1     
+	               31 Bit    Registers := 1     
 +---Muxes : 
-	   2 Input     28 Bit        Muxes := 2     
-	   2 Input     24 Bit        Muxes := 2     
-	   2 Input     23 Bit        Muxes := 12    
-	   2 Input      8 Bit        Muxes := 13    
-	  23 Input      6 Bit        Muxes := 2     
-	   2 Input      5 Bit        Muxes := 2     
-	   2 Input      2 Bit        Muxes := 4     
-Module finv_d 
-Detailed RTL Component Info : 
-+---Adders : 
-	   3 Input     23 Bit       Adders := 1     
-	   2 Input      8 Bit       Adders := 1     
-+---Registers : 
-	               48 Bit    Registers := 1     
-	               23 Bit    Registers := 3     
-	               18 Bit    Registers := 1     
-	                8 Bit    Registers := 3     
-	                1 Bit    Registers := 2     
-+---ROMs : 
-	                              ROMs := 2     
-+---Muxes : 
-	   2 Input     32 Bit        Muxes := 2     
-	   2 Input     24 Bit        Muxes := 1     
-	   2 Input     23 Bit        Muxes := 1     
-Module fdiv_d 
-Detailed RTL Component Info : 
-+---Registers : 
-	               32 Bit    Registers := 4     
-Module fsqrt_d 
-Detailed RTL Component Info : 
-+---Adders : 
-	   3 Input     24 Bit       Adders := 1     
-	   2 Input      9 Bit       Adders := 1     
-	   3 Input      8 Bit       Adders := 1     
-+---Registers : 
-	               48 Bit    Registers := 2     
-	               24 Bit    Registers := 4     
-	               23 Bit    Registers := 2     
-	               18 Bit    Registers := 2     
-	                8 Bit    Registers := 10    
-	                1 Bit    Registers := 4     
-+---Muxes : 
-	   2 Input     48 Bit        Muxes := 8     
-	   2 Input     32 Bit        Muxes := 1     
-	   2 Input     24 Bit        Muxes := 1     
-Module flt 
-Detailed RTL Component Info : 
-+---Muxes : 
-	   2 Input     25 Bit        Muxes := 2     
-	   2 Input      8 Bit        Muxes := 2     
-	   2 Input      4 Bit        Muxes := 2     
-	   2 Input      3 Bit        Muxes := 2     
-	   4 Input      2 Bit        Muxes := 1     
-	   2 Input      2 Bit        Muxes := 1     
+	  32 Input     32 Bit        Muxes := 1     
+	   3 Input     32 Bit        Muxes := 1     
+	   2 Input     31 Bit        Muxes := 1     
+	   3 Input      2 Bit        Muxes := 1     
 Module ftoi_d 
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input     32 Bit       Adders := 1     
 	   2 Input     31 Bit       Adders := 1     
+	   2 Input     24 Bit       Adders := 1     
 	   2 Input      8 Bit       Adders := 1     
 +---Registers : 
 	               31 Bit    Registers := 1     
 	                8 Bit    Registers := 1     
 	                1 Bit    Registers := 2     
 +---Muxes : 
+	   2 Input     32 Bit        Muxes := 2     
 	   3 Input     32 Bit        Muxes := 2     
-	   2 Input     32 Bit        Muxes := 1     
 	   2 Input     31 Bit        Muxes := 1     
 	   2 Input      8 Bit        Muxes := 1     
-	   2 Input      2 Bit        Muxes := 1     
 	   2 Input      1 Bit        Muxes := 1     
-Module itof 
+Module flt 
 Detailed RTL Component Info : 
-+---Adders : 
-	   2 Input     31 Bit       Adders := 1     
-	   2 Input      5 Bit       Adders := 1     
 +---Muxes : 
-	  32 Input     32 Bit        Muxes := 1     
-	   3 Input     32 Bit        Muxes := 1     
-	   2 Input     31 Bit        Muxes := 1     
-	   3 Input      2 Bit        Muxes := 1     
+	   2 Input      4 Bit        Muxes := 1     
+	   4 Input      2 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 1     
 Module nino_core 
 Detailed RTL Component Info : 
 +---Adders : 
-	   3 Input     32 Bit       Adders := 1     
-	   2 Input     23 Bit       Adders := 2     
-	   2 Input     21 Bit       Adders := 3     
+	   3 Input     32 Bit       Adders := 2     
+	   2 Input     19 Bit       Adders := 2     
+	   2 Input     14 Bit       Adders := 18    
 +---XORs : 
-	   2 Input     32 Bit         XORs := 1     
-	   2 Input      1 Bit         XORs := 1     
+	   2 Input      1 Bit         XORs := 4     
 +---Registers : 
-	               32 Bit    Registers := 78    
-	               23 Bit    Registers := 7     
-	                9 Bit    Registers := 1     
+	               32 Bit    Registers := 93    
+	               19 Bit    Registers := 4     
+	               14 Bit    Registers := 14    
+	               10 Bit    Registers := 1     
 	                8 Bit    Registers := 1     
-	                7 Bit    Registers := 6     
-	                6 Bit    Registers := 2     
-	                5 Bit    Registers := 1     
+	                7 Bit    Registers := 21    
+	                5 Bit    Registers := 2     
 	                4 Bit    Registers := 2     
-	                3 Bit    Registers := 4     
-	                2 Bit    Registers := 2     
-	                1 Bit    Registers := 45    
+	                3 Bit    Registers := 6     
+	                2 Bit    Registers := 3     
+	                1 Bit    Registers := 106   
 +---Muxes : 
-	   2 Input     32 Bit        Muxes := 28    
-	   4 Input     32 Bit        Muxes := 1     
-	   6 Input     32 Bit        Muxes := 3     
-	   2 Input     23 Bit        Muxes := 5     
-	  13 Input     12 Bit        Muxes := 1     
-	   2 Input      9 Bit        Muxes := 15    
-	   2 Input      8 Bit        Muxes := 3     
-	   2 Input      7 Bit        Muxes := 3     
-	   5 Input      7 Bit        Muxes := 1     
-	   2 Input      6 Bit        Muxes := 8     
+	   2 Input     32 Bit        Muxes := 266   
+	   4 Input     32 Bit        Muxes := 2     
+	   6 Input     32 Bit        Muxes := 2     
+	   4 Input     19 Bit        Muxes := 1     
+	   2 Input     14 Bit        Muxes := 42    
+	  13 Input     12 Bit        Muxes := 2     
+	   2 Input     10 Bit        Muxes := 40    
+	   2 Input      8 Bit        Muxes := 6     
+	   2 Input      7 Bit        Muxes := 36    
+	   5 Input      7 Bit        Muxes := 2     
 	   2 Input      5 Bit        Muxes := 2     
-	   2 Input      4 Bit        Muxes := 5     
+	   2 Input      4 Bit        Muxes := 23    
+	   3 Input      4 Bit        Muxes := 2     
 	   5 Input      4 Bit        Muxes := 1     
-	   6 Input      4 Bit        Muxes := 1     
-	   2 Input      3 Bit        Muxes := 47    
-	   7 Input      3 Bit        Muxes := 1     
+	   2 Input      3 Bit        Muxes := 99    
+	   7 Input      3 Bit        Muxes := 2     
 	   9 Input      3 Bit        Muxes := 1     
-	   3 Input      3 Bit        Muxes := 2     
+	  10 Input      3 Bit        Muxes := 1     
 	   2 Input      2 Bit        Muxes := 6     
-	  12 Input      2 Bit        Muxes := 1     
 	   4 Input      2 Bit        Muxes := 1     
-	   2 Input      1 Bit        Muxes := 312   
-	   3 Input      1 Bit        Muxes := 15    
-	   4 Input      1 Bit        Muxes := 2     
-	  11 Input      1 Bit        Muxes := 1     
-	   9 Input      1 Bit        Muxes := 1     
-	   7 Input      1 Bit        Muxes := 1     
-	   6 Input      1 Bit        Muxes := 1     
-	   5 Input      1 Bit        Muxes := 1     
+	  12 Input      2 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 2164  
+	   4 Input      1 Bit        Muxes := 6     
+	   6 Input      1 Bit        Muxes := 4     
+	   3 Input      1 Bit        Muxes := 30    
+	  11 Input      1 Bit        Muxes := 2     
+	   9 Input      1 Bit        Muxes := 2     
 ---------------------------------------------------------------------------------
 Finished RTL Hierarchical Component Statistics
 ---------------------------------------------------------------------------------
@@ -550,127 +813,238 @@ BRAMs: 1200 (col length: RAMB18 120 RAMB36 60)
 ---------------------------------------------------------------------------------
 Finished Part Resource Summary
 ---------------------------------------------------------------------------------
+INFO: [Synth 8-5580] Multithreading enabled for synth_design using a maximum of 4 processes.
 ---------------------------------------------------------------------------------
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-4471] merging register 'fsub_add/s1reg3_reg[0:0]' into 'fadd_d/s1reg3_reg[0:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:95]
-INFO: [Synth 8-4471] merging register 'fsub_add/s1reg_reg' into 'fadd_d/s1reg_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:248]
-INFO: [Synth 8-4471] merging register 'fsub_add/s1reg2_reg' into 'fadd_d/s1reg2_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:177]
-INFO: [Synth 8-4471] merging register 'fsub_add/m1reg3_reg[22:0]' into 'fadd_d/m1reg3_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:240]
-INFO: [Synth 8-4471] merging register 'fsub_add/m1reg_reg[22:0]' into 'fadd_d/m1reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:250]
-INFO: [Synth 8-4471] merging register 'fsub_add/m1reg2_reg[22:0]' into 'fadd_d/m1reg2_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:179]
-INFO: [Synth 8-4471] merging register 'fsub_add/m2reg3_reg[22:0]' into 'fadd_d/m2reg3_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:243]
-INFO: [Synth 8-4471] merging register 'fsub_add/m2reg_reg[22:0]' into 'fadd_d/m2reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:253]
-INFO: [Synth 8-4471] merging register 'fsub_add/m2reg2_reg[22:0]' into 'fadd_d/m2reg2_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:182]
-INFO: [Synth 8-4471] merging register 'fsub_add/e2reg3_reg[7:0]' into 'fadd_d/e2reg3_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:242]
-INFO: [Synth 8-4471] merging register 'fsub_add/e2reg_reg[7:0]' into 'fadd_d/e2reg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:252]
-INFO: [Synth 8-4471] merging register 'fsub_add/e2reg2_reg[7:0]' into 'fadd_d/e2reg2_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:181]
-INFO: [Synth 8-4471] merging register 'fsub_add/e1reg3_reg[7:0]' into 'fadd_d/e1reg3_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:239]
-INFO: [Synth 8-4471] merging register 'fsub_add/e1reg_reg[7:0]' into 'fadd_d/e1reg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:249]
-INFO: [Synth 8-4471] merging register 'fsub_add/e1reg2_reg[7:0]' into 'fadd_d/e1reg2_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:178]
-INFO: [Synth 8-4471] merging register 'fsub_add/e2areg_reg[7:0]' into 'fadd_d/e2areg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:65]
-INFO: [Synth 8-4471] merging register 'fsub_add/e1areg_reg[7:0]' into 'fadd_d/e1areg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:64]
-INFO: [Synth 8-4471] merging register 'fsub_add/m2areg_reg[24:0]' into 'fadd_d/m2areg_reg[24:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:67]
-INFO: [Synth 8-4471] merging register 'fsub_add/m1areg_reg[24:0]' into 'fadd_d/m1areg_reg[24:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:66]
-INFO: [Synth 8-4471] merging register 'fsub_add/tereg_reg[8:0]' into 'fadd_d/tereg_reg[8:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:63]
-INFO: [Synth 8-4471] merging register 'fsub_add/esreg_reg[7:0]' into 'fadd_d/esreg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:128]
-INFO: [Synth 8-4471] merging register 'fsub_add/tstckreg_reg' into 'fadd_d/tstckreg_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:129]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/s1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:95]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/s1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:248]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/s1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:177]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:240]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:250]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:179]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m2reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:243]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:253]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m2reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:182]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e2reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:242]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:252]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e2reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:181]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m2areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:67]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/m1areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:66]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/tereg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:63]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e2areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:65]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e1areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:64]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/esreg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:128]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/tstckreg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:129]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:239]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:249]
-WARNING: [Synth 8-6014] Unused sequential element fsub_add/e1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:178]
-INFO: [Synth 8-5546] ROM "firstin" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "finst" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "enextpc" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "rs1" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "mainreg_reg[31]" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "mainreg_reg[30]" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "mainreg_reg[29]" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "mainreg_reg[28]" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "mainreg_reg[27]" won't be mapped to RAM because it is too sparse
-INFO: [Synth 8-5546] ROM "mainreg_reg[26]" won't be mapped to RAM because it is too sparse
-INFO: [Common 17-14] Message 'Synth 8-5546' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
-INFO: [Synth 8-5544] ROM "startwait" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "fpcbf" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
-INFO: [Synth 8-5544] ROM "io_rready" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
-WARNING: [Synth 8-3936] Found unconnected internal register 'mydreg_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:100]
-WARNING: [Synth 8-3936] Found unconnected internal register 'mydreg_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new2.v:100]
-DSP Report: Generating DSP mydwire, operation Mode is: A*B.
-DSP Report: operator mydwire is absorbed into DSP mydwire.
-DSP Report: operator mydwire is absorbed into DSP mydwire.
-DSP Report: Generating DSP mydreg_reg, operation Mode is: (PCIN>>17)+A*B.
-DSP Report: register mydreg_reg is absorbed into DSP mydreg_reg.
-DSP Report: operator mydwire is absorbed into DSP mydreg_reg.
-DSP Report: operator mydwire is absorbed into DSP mydreg_reg.
-DSP Report: Generating DSP mydwire, operation Mode is: A*B.
-DSP Report: operator mydwire is absorbed into DSP mydwire.
-DSP Report: operator mydwire is absorbed into DSP mydwire.
-DSP Report: Generating DSP mydreg_reg, operation Mode is: (PCIN>>17)+A*B.
-DSP Report: register mydreg_reg is absorbed into DSP mydreg_reg.
-DSP Report: operator mydwire is absorbed into DSP mydreg_reg.
-DSP Report: operator mydwire is absorbed into DSP mydreg_reg.
-WARNING: [Synth 8-3936] Found unconnected internal register 'u1/ax2reg2_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4171]
-WARNING: [Synth 8-3936] Found unconnected internal register 'u1/ax2reg2_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4171]
-WARNING: [Synth 8-3936] Found unconnected internal register 'u1/x0reg2_reg' and it is trimmed from '23' to '22' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4175]
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[31] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[30] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[29] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[28] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[27] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[26] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[25] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[24] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[23] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[22] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[21] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[1] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_a[0] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[31] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[30] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[29] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[28] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[27] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[26] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[25] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[24] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[23] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[22] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[21] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[20] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[19] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[18] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[17] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[16] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[1] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_b[0] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[31] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[30] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[29] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[28] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[27] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[26] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[25] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[24] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[23] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[22] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[21] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[20] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[19] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[18] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[17] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[16] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[15] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[14] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[13] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[12] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[11] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[10] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[9] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[8] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[7] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[6] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[5] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[4] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[3] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[2] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[1] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_b[0] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port wenable_b[3] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port wenable_b[2] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port wenable_b[1] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port wenable_b[0] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[31] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[30] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[29] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[28] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[27] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[26] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[25] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[24] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[23] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[22] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[21] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[1] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_as[0] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[31] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[30] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[29] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[28] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[27] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[26] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[25] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[24] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[23] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[22] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[21] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[20] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[19] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[18] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[17] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[16] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[1] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port memaddr_bs[0] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_bs[31] driven by constant 0
+INFO: [Synth 8-3917] design design_1_nino_core_0_0 has port w_data_bs[30] driven by constant 0
+INFO: [Common 17-14] Message 'Synth 8-3917' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_bresp[1]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_bresp[0]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[31]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[30]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[29]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[28]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[27]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[26]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[25]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[24]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[23]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[22]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[21]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[20]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[19]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[18]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[17]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[16]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[15]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[14]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[13]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[12]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[11]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[10]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[9]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rdata[8]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rresp[1]
+WARNING: [Synth 8-3331] design design_1_nino_core_0_0 has unconnected port io_rresp[0]
+INFO: [Synth 8-4471] merging register 'fsub_adds/s1reg3_reg[0:0]' into 'fadd_ds/s1reg3_reg[0:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:95]
+INFO: [Synth 8-4471] merging register 'fsub_adds/s1reg_reg' into 'fadd_ds/s1reg_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:248]
+INFO: [Synth 8-4471] merging register 'fsub_adds/s1reg2_reg' into 'fadd_ds/s1reg2_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:177]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m1reg3_reg[22:0]' into 'fadd_ds/m1reg3_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:240]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m1reg_reg[22:0]' into 'fadd_ds/m1reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:250]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m1reg2_reg[22:0]' into 'fadd_ds/m1reg2_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:179]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m2reg3_reg[22:0]' into 'fadd_ds/m2reg3_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:243]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m2reg_reg[22:0]' into 'fadd_ds/m2reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:253]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m2reg2_reg[22:0]' into 'fadd_ds/m2reg2_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:182]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e2reg3_reg[7:0]' into 'fadd_ds/e2reg3_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:242]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e2reg_reg[7:0]' into 'fadd_ds/e2reg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:252]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e2reg2_reg[7:0]' into 'fadd_ds/e2reg2_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:181]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e1reg3_reg[7:0]' into 'fadd_ds/e1reg3_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:239]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e1reg_reg[7:0]' into 'fadd_ds/e1reg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:249]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e1reg2_reg[7:0]' into 'fadd_ds/e1reg2_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:178]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e2areg_reg[7:0]' into 'fadd_ds/e2areg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:65]
+INFO: [Synth 8-4471] merging register 'fsub_adds/e1areg_reg[7:0]' into 'fadd_ds/e1areg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:64]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m2areg_reg[24:0]' into 'fadd_ds/m2areg_reg[24:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:67]
+INFO: [Synth 8-4471] merging register 'fsub_adds/m1areg_reg[24:0]' into 'fadd_ds/m1areg_reg[24:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:66]
+INFO: [Synth 8-4471] merging register 'fsub_adds/tereg_reg[8:0]' into 'fadd_ds/tereg_reg[8:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:63]
+INFO: [Synth 8-4471] merging register 'fsub_adds/esreg_reg[7:0]' into 'fadd_ds/esreg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:128]
+INFO: [Synth 8-4471] merging register 'fsub_adds/tstckreg_reg' into 'fadd_ds/tstckreg_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:129]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/s1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:95]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/s1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:248]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/s1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:177]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:240]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:250]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:179]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m2reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:243]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:253]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m2reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:182]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e2reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:242]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:252]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e2reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:181]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m2areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:67]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/m1areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:66]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/tereg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:63]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e2areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:65]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e1areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:64]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/esreg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:128]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/tstckreg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:129]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:239]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:249]
+WARNING: [Synth 8-6014] Unused sequential element fsub_adds/e1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:178]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg5_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:196]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg4_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:195]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:193]
+DSP Report: Generating DSP mydsubreg3_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg3_reg is absorbed into DSP mydsubreg3_reg.
+DSP Report: operator mydsubwire3 is absorbed into DSP mydsubreg3_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg5_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire5 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg4_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire4 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydsubreg1_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg1_reg is absorbed into DSP mydsubreg1_reg.
+DSP Report: operator mydsubwire is absorbed into DSP mydsubreg1_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg2_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire2 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+INFO: [Synth 8-4471] merging register 'u1/x2reg_reg[22:0]' into 'u1/x2reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4154]
+INFO: [Synth 8-4471] merging register 'u1/mareg_reg[23:0]' into 'u1/mareg_reg[23:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4153]
 WARNING: [Synth 8-6014] Unused sequential element u1/x2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4154]
+WARNING: [Synth 8-6014] Unused sequential element u1/mareg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4153]
+WARNING: [Synth 8-3936] Found unconnected internal register 'u1/x0reg2_reg' and it is trimmed from '23' to '22' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4221]
 WARNING: [Synth 8-6014] Unused sequential element u1/x0reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4152]
-WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4163]
+WARNING: [Synth 8-6014] Unused sequential element u1/mareg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4153]
+DSP Report: Generating DSP u1/u2ax2, operation Mode is: A2*B.
+DSP Report: register u1/mareg_reg is absorbed into DSP u1/u2ax2.
+DSP Report: operator u1/u2ax2 is absorbed into DSP u1/u2ax2.
+DSP Report: Generating DSP u1/usax2, operation Mode is: A2*B2.
+DSP Report: register u1/x2reg_reg is absorbed into DSP u1/usax2.
+DSP Report: register u1/mareg_reg is absorbed into DSP u1/usax2.
+DSP Report: operator u1/usax2 is absorbed into DSP u1/usax2.
+WARNING: [Synth 8-6014] Unused sequential element A was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-3936] Found unconnected internal register 'rootareg_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8299]
+WARNING: [Synth 8-3936] Found unconnected internal register 'rootareg_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8299]
+WARNING: [Synth 8-3936] Found unconnected internal register 'nibunnox3areg3_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8271]
+WARNING: [Synth 8-3936] Found unconnected internal register 'nibunnox3areg3_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8271]
+WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
 WARNING: [Synth 8-6014] Unused sequential element B was removed. 
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4163]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4163]
-DSP Report: Generating DSP u1/ax2, operation Mode is: A*B2.
-DSP Report: register B is absorbed into DSP u1/ax2.
-DSP Report: operator u1/ax2 is absorbed into DSP u1/ax2.
-DSP Report: operator u1/ax2 is absorbed into DSP u1/ax2.
-DSP Report: Generating DSP u1/ax2reg2_reg, operation Mode is: (PCIN>>17)+A*B2.
-DSP Report: register B is absorbed into DSP u1/ax2reg2_reg.
-DSP Report: register u1/ax2reg2_reg is absorbed into DSP u1/ax2reg2_reg.
-DSP Report: operator u1/ax2 is absorbed into DSP u1/ax2reg2_reg.
-DSP Report: operator u1/ax2 is absorbed into DSP u1/ax2reg2_reg.
-WARNING: [Synth 8-6014] Unused sequential element A was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-3936] Found unconnected internal register 'rootareg_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8298]
-WARNING: [Synth 8-3936] Found unconnected internal register 'rootareg_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8298]
-WARNING: [Synth 8-3936] Found unconnected internal register 'nibunnox3areg3_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8270]
-WARNING: [Synth 8-3936] Found unconnected internal register 'nibunnox3areg3_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8270]
-WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8266]
+WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
 WARNING: [Synth 8-6014] Unused sequential element B was removed. 
-WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element B was removed. 
-WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element B was removed. 
-WARNING: [Synth 8-6014] Unused sequential element A was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8266]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8266]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8288]
-DSP Report: Generating DSP nibunnox3awire4, operation Mode is: A*B2.
-DSP Report: register B is absorbed into DSP nibunnox3awire4.
+WARNING: [Synth 8-6014] Unused sequential element A was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+DSP Report: Generating DSP nibunnox3awire4, operation Mode is: A*B.
 DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3awire4.
 DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3awire4.
-DSP Report: Generating DSP nibunnox3areg3_reg, operation Mode is: (PCIN>>17)+A*B2.
-DSP Report: register B is absorbed into DSP nibunnox3areg3_reg.
+DSP Report: Generating DSP nibunnox3areg3_reg, operation Mode is: (PCIN>>17)+A*B.
 DSP Report: register nibunnox3areg3_reg is absorbed into DSP nibunnox3areg3_reg.
 DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3areg3_reg.
 DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3areg3_reg.
@@ -687,167 +1061,292 @@ DSP Report: register A is absorbed into DSP rootareg_reg.
 DSP Report: register rootareg_reg is absorbed into DSP rootareg_reg.
 DSP Report: operator rootawire2 is absorbed into DSP rootareg_reg.
 DSP Report: operator rootawire2 is absorbed into DSP rootareg_reg.
-INFO: [Synth 8-5544] ROM "fpcbf" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
-WARNING: [Synth 8-3331] design fmul_myd has unconnected port ovf
-WARNING: [Synth 8-3331] design fdiv_d has unconnected port ovf
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_bresp[1]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_bresp[0]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[31]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[30]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[29]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[28]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[27]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[26]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[25]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[24]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[23]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[22]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[21]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[20]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[19]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[18]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[17]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[16]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[15]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[14]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[13]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[12]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[11]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[10]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[9]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rdata[8]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rresp[1]
-WARNING: [Synth 8-3331] design nino_core has unconnected port io_rresp[0]
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[0]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[0]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[1]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[1]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[2]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[2]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[3]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[3]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[4]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[4]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[5]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[5]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[6]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[6]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[7]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[7]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[8]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[8]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[9]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[9]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[10]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[10]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[11]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[11]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mawirereg4_reg[12]' (FD) to 'inst/fsqrt_d/mwirereg4_reg[12]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mawirereg4_reg[13]' (FD) to 'inst/fsqrt_d/mwirereg4_reg[13]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mawirereg4_reg[14]' (FD) to 'inst/fsqrt_d/mwirereg4_reg[14]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mawirereg4_reg[15]' (FD) to 'inst/fsqrt_d/mwirereg4_reg[15]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mawirereg4_reg[16]' (FD) to 'inst/fsqrt_d/mwirereg4_reg[16]'
-INFO: [Synth 8-3333] propagating constant 1 across sequential element (inst/fsqrt_d/\nibunno3xreg4_reg[23] )
-INFO: [Synth 8-3333] propagating constant 1 across sequential element (inst/fsqrt_d/\nibunnox3reg4_reg[23] )
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[20]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[20]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[19]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[19]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[17]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[17]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[18]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[18]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[22]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[22]'
-INFO: [Synth 8-3886] merging instance 'inst/fsqrt_d/mwirereg4_reg[21]' (FD) to 'inst/fsqrt_d/mawirereg4_reg[21]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[9]' (FD) to 'inst/fadd_d/m1areg_reg[9]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[10]' (FD) to 'inst/fadd_d/m1areg_reg[10]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[11]' (FD) to 'inst/fadd_d/m1areg_reg[11]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[8]' (FD) to 'inst/fadd_d/m1areg_reg[8]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[6]' (FD) to 'inst/fadd_d/m1areg_reg[6]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[7]' (FD) to 'inst/fadd_d/m1areg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[0]' (FD) to 'inst/fadd_d/m1areg_reg[0]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[1]' (FD) to 'inst/fadd_d/m1areg_reg[1]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[2]' (FD) to 'inst/fadd_d/m1areg_reg[2]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[3]' (FD) to 'inst/fadd_d/m1areg_reg[3]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[4]' (FD) to 'inst/fadd_d/m1areg_reg[4]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[5]' (FD) to 'inst/fadd_d/m1areg_reg[5]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[22]' (FD) to 'inst/fadd_d/m1areg_reg[22]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[21]' (FD) to 'inst/fadd_d/m1areg_reg[21]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[20]' (FD) to 'inst/fadd_d/m1areg_reg[20]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[18]' (FD) to 'inst/fadd_d/m1areg_reg[18]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[19]' (FD) to 'inst/fadd_d/m1areg_reg[19]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[12]' (FD) to 'inst/fadd_d/m1areg_reg[12]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[13]' (FD) to 'inst/fadd_d/m1areg_reg[13]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[14]' (FD) to 'inst/fadd_d/m1areg_reg[14]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[15]' (FD) to 'inst/fadd_d/m1areg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[16]' (FD) to 'inst/fadd_d/m1areg_reg[16]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m1reg3_reg[17]' (FD) to 'inst/fadd_d/m1areg_reg[17]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[9]' (FD) to 'inst/fadd_d/m2areg_reg[9]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[10]' (FD) to 'inst/fadd_d/m2areg_reg[10]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[11]' (FD) to 'inst/fadd_d/m2areg_reg[11]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[8]' (FD) to 'inst/fadd_d/m2areg_reg[8]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[6]' (FD) to 'inst/fadd_d/m2areg_reg[6]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[7]' (FD) to 'inst/fadd_d/m2areg_reg[7]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[0]' (FD) to 'inst/fadd_d/m2areg_reg[0]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[1]' (FD) to 'inst/fadd_d/m2areg_reg[1]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[2]' (FD) to 'inst/fadd_d/m2areg_reg[2]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[3]' (FD) to 'inst/fadd_d/m2areg_reg[3]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[4]' (FD) to 'inst/fadd_d/m2areg_reg[4]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[5]' (FD) to 'inst/fadd_d/m2areg_reg[5]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[22]' (FD) to 'inst/fadd_d/m2areg_reg[22]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[21]' (FD) to 'inst/fadd_d/m2areg_reg[21]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[20]' (FD) to 'inst/fadd_d/m2areg_reg[20]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[18]' (FD) to 'inst/fadd_d/m2areg_reg[18]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[19]' (FD) to 'inst/fadd_d/m2areg_reg[19]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[12]' (FD) to 'inst/fadd_d/m2areg_reg[12]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[13]' (FD) to 'inst/fadd_d/m2areg_reg[13]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[14]' (FD) to 'inst/fadd_d/m2areg_reg[14]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[15]' (FD) to 'inst/fadd_d/m2areg_reg[15]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[16]' (FD) to 'inst/fadd_d/m2areg_reg[16]'
-INFO: [Synth 8-3886] merging instance 'inst/fadd_d/m2reg3_reg[17]' (FD) to 'inst/fadd_d/m2areg_reg[17]'
-INFO: [Synth 8-3886] merging instance 'inst/fdiv_d/u2/eamyreg_reg[0]' (FD) to 'inst/fdiv_d/u2/eamyssreg_reg[0]'
-INFO: [Synth 8-3886] merging instance 'inst/fmul_myd/eamyreg_reg[0]' (FD) to 'inst/fmul_myd/eamyssreg_reg[0]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][23]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][24]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][25]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][26]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][27]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][28]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][29]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][30]' (FDRE) to 'inst/mainreg_reg[0][31]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][31]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][0]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][1]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][2]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][3]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][4]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][5]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][6]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][7]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][8]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][9]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][10]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][11]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][12]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][13]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][14]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][15]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][16]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][17]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][18]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Synth 8-3886] merging instance 'inst/mainreg_reg[0][19]' (FDRE) to 'inst/mainreg_reg[0][22]'
-INFO: [Common 17-14] Message 'Synth 8-3886' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\mainreg_reg[0][22] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\io_araddr_reg[2] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\io_wstrb_reg[0] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\io_wstrb_reg[1] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\io_wstrb_reg[2] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\io_wstrb_reg[3] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\io_awaddr_reg[1] )
-INFO: [Synth 8-3333] propagating constant 1 across sequential element (inst/fsqrt_d/\nibunno3xreg3_reg[23] )
-WARNING: [Synth 8-3332] Sequential element (eamydcreg_reg[8]) is unused and will be removed from module fmul_myd.
-WARNING: [Synth 8-3332] Sequential element (u2/eamydcreg_reg[8]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[16]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[15]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[14]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[13]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[12]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[11]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[10]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[9]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[8]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[7]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[6]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[5]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[4]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[3]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[2]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[1]) is unused and will be removed from module fdiv_d.
-WARNING: [Synth 8-3332] Sequential element (u1/ax2reg2_reg[0]) is unused and will be removed from module fdiv_d.
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg5_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:196]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg4_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:195]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:193]
+DSP Report: Generating DSP mydsubreg3_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg3_reg is absorbed into DSP mydsubreg3_reg.
+DSP Report: operator mydsubwire3 is absorbed into DSP mydsubreg3_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg5_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire5 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg4_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire4 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydsubreg1_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg1_reg is absorbed into DSP mydsubreg1_reg.
+DSP Report: operator mydsubwire is absorbed into DSP mydsubreg1_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg2_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire2 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+WARNING: [Synth 8-3331] design fmul_myd4__2 has unconnected port ovf
+WARNING: [Synth 8-3331] design fmul_myd4__1 has unconnected port ovf
+WARNING: [Synth 8-3331] design fdiv_d__1 has unconnected port ovf
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[0]' (FD) to 'fsqrt_d/mawirereg4_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[1]' (FD) to 'fsqrt_d/mawirereg4_reg[1]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[2]' (FD) to 'fsqrt_d/mawirereg4_reg[2]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[3]' (FD) to 'fsqrt_d/mawirereg4_reg[3]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[4]' (FD) to 'fsqrt_d/mawirereg4_reg[4]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[5]' (FD) to 'fsqrt_d/mawirereg4_reg[5]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[6]' (FD) to 'fsqrt_d/mawirereg4_reg[6]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[7]' (FD) to 'fsqrt_d/mawirereg4_reg[7]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[8]' (FD) to 'fsqrt_d/mawirereg4_reg[8]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[9]' (FD) to 'fsqrt_d/mawirereg4_reg[9]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[10]' (FD) to 'fsqrt_d/mawirereg4_reg[10]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[11]' (FD) to 'fsqrt_d/mawirereg4_reg[11]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mawirereg4_reg[12]' (FD) to 'fsqrt_d/mwirereg4_reg[12]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mawirereg4_reg[13]' (FD) to 'fsqrt_d/mwirereg4_reg[13]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mawirereg4_reg[14]' (FD) to 'fsqrt_d/mwirereg4_reg[14]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mawirereg4_reg[15]' (FD) to 'fsqrt_d/mwirereg4_reg[15]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mawirereg4_reg[16]' (FD) to 'fsqrt_d/mwirereg4_reg[16]'
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (fsqrt_d/\nibunno3xreg4_reg[23] )
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (fsqrt_d/\nibunnox3reg4_reg[23] )
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[20]' (FD) to 'fsqrt_d/mawirereg4_reg[20]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[19]' (FD) to 'fsqrt_d/mawirereg4_reg[19]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[17]' (FD) to 'fsqrt_d/mawirereg4_reg[17]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[18]' (FD) to 'fsqrt_d/mawirereg4_reg[18]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[22]' (FD) to 'fsqrt_d/mawirereg4_reg[22]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_d/mwirereg4_reg[21]' (FD) to 'fsqrt_d/mawirereg4_reg[21]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[9]' (FD) to 'fadd_ds/m1areg_reg[9]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[10]' (FD) to 'fadd_ds/m1areg_reg[10]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[11]' (FD) to 'fadd_ds/m1areg_reg[11]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[8]' (FD) to 'fadd_ds/m1areg_reg[8]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[6]' (FD) to 'fadd_ds/m1areg_reg[6]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[7]' (FD) to 'fadd_ds/m1areg_reg[7]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[0]' (FD) to 'fadd_ds/m1areg_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[1]' (FD) to 'fadd_ds/m1areg_reg[1]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[2]' (FD) to 'fadd_ds/m1areg_reg[2]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[3]' (FD) to 'fadd_ds/m1areg_reg[3]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[4]' (FD) to 'fadd_ds/m1areg_reg[4]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[5]' (FD) to 'fadd_ds/m1areg_reg[5]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[22]' (FD) to 'fadd_ds/m1areg_reg[22]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[21]' (FD) to 'fadd_ds/m1areg_reg[21]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[20]' (FD) to 'fadd_ds/m1areg_reg[20]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[18]' (FD) to 'fadd_ds/m1areg_reg[18]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[19]' (FD) to 'fadd_ds/m1areg_reg[19]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[12]' (FD) to 'fadd_ds/m1areg_reg[12]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[13]' (FD) to 'fadd_ds/m1areg_reg[13]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[14]' (FD) to 'fadd_ds/m1areg_reg[14]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[15]' (FD) to 'fadd_ds/m1areg_reg[15]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[16]' (FD) to 'fadd_ds/m1areg_reg[16]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m1reg3_reg[17]' (FD) to 'fadd_ds/m1areg_reg[17]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[9]' (FD) to 'fadd_ds/m2areg_reg[9]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[10]' (FD) to 'fadd_ds/m2areg_reg[10]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[11]' (FD) to 'fadd_ds/m2areg_reg[11]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[8]' (FD) to 'fadd_ds/m2areg_reg[8]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[6]' (FD) to 'fadd_ds/m2areg_reg[6]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[7]' (FD) to 'fadd_ds/m2areg_reg[7]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[0]' (FD) to 'fadd_ds/m2areg_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[1]' (FD) to 'fadd_ds/m2areg_reg[1]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[2]' (FD) to 'fadd_ds/m2areg_reg[2]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[3]' (FD) to 'fadd_ds/m2areg_reg[3]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[4]' (FD) to 'fadd_ds/m2areg_reg[4]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[5]' (FD) to 'fadd_ds/m2areg_reg[5]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[22]' (FD) to 'fadd_ds/m2areg_reg[22]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[21]' (FD) to 'fadd_ds/m2areg_reg[21]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[20]' (FD) to 'fadd_ds/m2areg_reg[20]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[18]' (FD) to 'fadd_ds/m2areg_reg[18]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[19]' (FD) to 'fadd_ds/m2areg_reg[19]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[12]' (FD) to 'fadd_ds/m2areg_reg[12]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[13]' (FD) to 'fadd_ds/m2areg_reg[13]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[14]' (FD) to 'fadd_ds/m2areg_reg[14]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[15]' (FD) to 'fadd_ds/m2areg_reg[15]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[16]' (FD) to 'fadd_ds/m2areg_reg[16]'
+INFO: [Synth 8-3886] merging instance 'fadd_ds/m2reg3_reg[17]' (FD) to 'fadd_ds/m2areg_reg[17]'
+INFO: [Synth 8-3886] merging instance 'fdiv_d/u2/eamydcreg_reg[0]' (FD) to 'fdiv_d/u2/eamysreg_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fmul_myd4s/eamydcreg_reg[0]' (FD) to 'fmul_myd4s/eamysreg_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fdiv_d/u2/eamyreg_reg[0]' (FD) to 'fdiv_d/u2/eamyssreg_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fmul_myd4s/eamyreg_reg[0]' (FD) to 'fmul_myd4s/eamyssreg_reg[0]'
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (fsqrt_d/\nibunno3xreg3_reg[23] )
+WARNING: [Synth 8-3332] Sequential element (u2/eamydcreg_reg[8]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[10]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[9]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[8]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[7]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[6]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[5]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[4]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[3]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[2]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[1]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/x2reg_reg[0]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[21]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[20]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[19]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[18]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[17]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[16]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[15]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[14]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[13]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[12]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[11]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[10]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[9]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[8]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[7]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[6]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[5]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[4]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[3]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[2]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[1]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (u1/stans_reg[0]) is unused and will be removed from module fdiv_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3reg4_reg[23]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[16]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[15]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[14]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[13]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[12]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[11]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[10]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[9]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[8]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[7]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[6]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[5]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[4]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[3]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[2]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[1]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[0]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[11]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[10]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[9]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[8]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[7]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[6]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[5]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[4]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[3]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[2]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[1]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[0]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunno3xreg4_reg[23]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (nibunno3xreg3_reg[23]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[16]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[15]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[14]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[13]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[12]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[11]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[10]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[9]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[8]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[7]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[6]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[5]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[4]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[3]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[2]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[1]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (rootareg_reg[0]) is unused and will be removed from module fsqrt_d__1.
+WARNING: [Synth 8-3332] Sequential element (eamydcreg_reg[8]) is unused and will be removed from module fmul_myd4__2.
+INFO: [Synth 8-3886] merging instance 'fsub_adds/myfreg_reg[26]' (FD) to 'fadd_ds/myfreg_reg[26]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\fadd_ds/myfreg_reg[26] )
+WARNING: [Synth 8-6014] Unused sequential element A was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-3936] Found unconnected internal register 'rootareg_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8299]
+WARNING: [Synth 8-3936] Found unconnected internal register 'rootareg_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8299]
+WARNING: [Synth 8-3936] Found unconnected internal register 'nibunnox3areg3_reg' and it is trimmed from '48' to '31' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8271]
+WARNING: [Synth 8-3936] Found unconnected internal register 'nibunnox3areg3_reg' and it is trimmed from '48' to '17' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8271]
+WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element B was removed. 
+WARNING: [Synth 8-6014] Unused sequential element B was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element B was removed. 
+WARNING: [Synth 8-6014] Unused sequential element A was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+WARNING: [Synth 8-6014] Unused sequential element  was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FSQRT/fsqrt_new.v:8289]
+DSP Report: Generating DSP nibunnox3awire4, operation Mode is: A*B.
+DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3awire4.
+DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3awire4.
+DSP Report: Generating DSP nibunnox3areg3_reg, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: register nibunnox3areg3_reg is absorbed into DSP nibunnox3areg3_reg.
+DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3areg3_reg.
+DSP Report: operator nibunnox3awire4 is absorbed into DSP nibunnox3areg3_reg.
+DSP Report: Generating DSP rootawire2, operation Mode is: A2*B''.
+DSP Report: register B is absorbed into DSP rootawire2.
+DSP Report: register B is absorbed into DSP rootawire2.
+DSP Report: register A is absorbed into DSP rootawire2.
+DSP Report: operator rootawire2 is absorbed into DSP rootawire2.
+DSP Report: operator rootawire2 is absorbed into DSP rootawire2.
+DSP Report: Generating DSP rootareg_reg, operation Mode is: (PCIN>>17)+A2*B''.
+DSP Report: register B is absorbed into DSP rootareg_reg.
+DSP Report: register B is absorbed into DSP rootareg_reg.
+DSP Report: register A is absorbed into DSP rootareg_reg.
+DSP Report: register rootareg_reg is absorbed into DSP rootareg_reg.
+DSP Report: operator rootawire2 is absorbed into DSP rootareg_reg.
+DSP Report: operator rootawire2 is absorbed into DSP rootareg_reg.
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg5_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:196]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg4_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:195]
+WARNING: [Synth 8-6014] Unused sequential element mydsubreg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FMUL/fmul_new3_d.v:193]
+DSP Report: Generating DSP mydsubreg3_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg3_reg is absorbed into DSP mydsubreg3_reg.
+DSP Report: operator mydsubwire3 is absorbed into DSP mydsubreg3_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg5_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire5 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg4_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire4 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydsubreg1_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg1_reg is absorbed into DSP mydsubreg1_reg.
+DSP Report: operator mydsubwire is absorbed into DSP mydsubreg1_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg2_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire2 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+INFO: [Synth 8-4471] merging register 'fdiv_ds/u1/x2reg_reg[22:0]' into 'fdiv_ds/u1/x2reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4154]
+INFO: [Synth 8-4471] merging register 'fdiv_ds/u1/mareg_reg[23:0]' into 'fdiv_ds/u1/mareg_reg[23:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4153]
+WARNING: [Synth 8-6014] Unused sequential element fdiv_ds/u1/x2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4154]
+WARNING: [Synth 8-6014] Unused sequential element fdiv_ds/u1/mareg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4153]
+WARNING: [Synth 8-3936] Found unconnected internal register 'fdiv_ds/u1/x0reg2_reg' and it is trimmed from '23' to '22' bits. [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4221]
+WARNING: [Synth 8-6014] Unused sequential element fdiv_ds/u1/x0reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4152]
+WARNING: [Synth 8-6014] Unused sequential element fdiv_ds/u1/mareg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FINV/finv_new.v:4153]
+DSP Report: Generating DSP fdiv_ds/u1/u2ax2, operation Mode is: A2*B.
+DSP Report: register fdiv_ds/u1/mareg_reg is absorbed into DSP fdiv_ds/u1/u2ax2.
+DSP Report: operator fdiv_ds/u1/u2ax2 is absorbed into DSP fdiv_ds/u1/u2ax2.
+DSP Report: Generating DSP fdiv_ds/u1/usax2, operation Mode is: A2*B2.
+DSP Report: register fdiv_ds/u1/x2reg_reg is absorbed into DSP fdiv_ds/u1/usax2.
+DSP Report: register fdiv_ds/u1/mareg_reg is absorbed into DSP fdiv_ds/u1/usax2.
+DSP Report: operator fdiv_ds/u1/usax2 is absorbed into DSP fdiv_ds/u1/usax2.
+WARNING: [Synth 8-3331] design fmul_myd4__3 has unconnected port ovf
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[0]' (FD) to 'fsqrt_ds/mawirereg4_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[1]' (FD) to 'fsqrt_ds/mawirereg4_reg[1]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[2]' (FD) to 'fsqrt_ds/mawirereg4_reg[2]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[3]' (FD) to 'fsqrt_ds/mawirereg4_reg[3]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[4]' (FD) to 'fsqrt_ds/mawirereg4_reg[4]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[5]' (FD) to 'fsqrt_ds/mawirereg4_reg[5]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[6]' (FD) to 'fsqrt_ds/mawirereg4_reg[6]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[7]' (FD) to 'fsqrt_ds/mawirereg4_reg[7]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[8]' (FD) to 'fsqrt_ds/mawirereg4_reg[8]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[9]' (FD) to 'fsqrt_ds/mawirereg4_reg[9]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[10]' (FD) to 'fsqrt_ds/mawirereg4_reg[10]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[11]' (FD) to 'fsqrt_ds/mawirereg4_reg[11]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mawirereg4_reg[12]' (FD) to 'fsqrt_ds/mwirereg4_reg[12]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mawirereg4_reg[13]' (FD) to 'fsqrt_ds/mwirereg4_reg[13]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mawirereg4_reg[14]' (FD) to 'fsqrt_ds/mwirereg4_reg[14]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mawirereg4_reg[15]' (FD) to 'fsqrt_ds/mwirereg4_reg[15]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mawirereg4_reg[16]' (FD) to 'fsqrt_ds/mwirereg4_reg[16]'
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (fsqrt_ds/\nibunno3xreg4_reg[23] )
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (fsqrt_ds/\nibunnox3reg4_reg[23] )
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[20]' (FD) to 'fsqrt_ds/mawirereg4_reg[20]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[19]' (FD) to 'fsqrt_ds/mawirereg4_reg[19]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[17]' (FD) to 'fsqrt_ds/mawirereg4_reg[17]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[18]' (FD) to 'fsqrt_ds/mawirereg4_reg[18]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[22]' (FD) to 'fsqrt_ds/mawirereg4_reg[22]'
+INFO: [Synth 8-3886] merging instance 'fsqrt_ds/mwirereg4_reg[21]' (FD) to 'fsqrt_ds/mawirereg4_reg[21]'
+INFO: [Synth 8-3886] merging instance 'fdiv_ds/u2/eamydcreg_reg[0]' (FD) to 'fdiv_ds/u2/eamysreg_reg[0]'
+INFO: [Synth 8-3886] merging instance 'fdiv_ds/u2/eamyreg_reg[0]' (FD) to 'fdiv_ds/u2/eamyssreg_reg[0]'
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (fsqrt_ds/\nibunno3xreg3_reg[23] )
 WARNING: [Synth 8-3332] Sequential element (nibunnox3reg4_reg[23]) is unused and will be removed from module fsqrt_d.
 WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[16]) is unused and will be removed from module fsqrt_d.
 WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[15]) is unused and will be removed from module fsqrt_d.
@@ -864,86 +1363,133 @@ WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[5]) is unused and
 WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[4]) is unused and will be removed from module fsqrt_d.
 WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[3]) is unused and will be removed from module fsqrt_d.
 WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[2]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[1]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (nibunnox3areg3_reg[0]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[11]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[10]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[9]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[8]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[7]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[6]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[5]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[4]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[3]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[2]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[1]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mwirereg3_reg[0]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (nibunno3xreg4_reg[23]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (nibunno3xreg3_reg[23]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[16]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[15]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[14]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[13]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[12]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[11]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[10]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[9]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[8]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[7]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[6]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[5]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[4]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[3]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[2]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[1]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (rootareg_reg[0]) is unused and will be removed from module fsqrt_d.
-WARNING: [Synth 8-3332] Sequential element (mainreg_reg[0][22]) is unused and will be removed from module nino_core.
-WARNING: [Synth 8-3332] Sequential element (io_awaddr_reg[1]) is unused and will be removed from module nino_core.
-WARNING: [Synth 8-3332] Sequential element (io_wstrb_reg[3]) is unused and will be removed from module nino_core.
-WARNING: [Synth 8-3332] Sequential element (io_wstrb_reg[2]) is unused and will be removed from module nino_core.
-WARNING: [Synth 8-3332] Sequential element (io_wstrb_reg[1]) is unused and will be removed from module nino_core.
-WARNING: [Synth 8-3332] Sequential element (io_wstrb_reg[0]) is unused and will be removed from module nino_core.
-WARNING: [Synth 8-3332] Sequential element (io_araddr_reg[2]) is unused and will be removed from module nino_core.
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\fadd_d/myfreg_reg[26] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (inst/\fsub_add/myfreg_reg[26] )
-WARNING: [Synth 8-3332] Sequential element (fadd_d/myfreg_reg[26]) is unused and will be removed from module nino_core.
-WARNING: [Synth 8-3332] Sequential element (fsub_add/myfreg_reg[26]) is unused and will be removed from module nino_core.
+INFO: [Common 17-14] Message 'Synth 8-3332' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-4471] merging register 'fadd_d/s1reg3_reg[0:0]' into 'fsub_add/s1reg3_reg[0:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:95]
+INFO: [Synth 8-4471] merging register 'fadd_d/s1reg_reg' into 'fsub_add/s1reg_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:248]
+INFO: [Synth 8-4471] merging register 'fadd_d/s1reg2_reg' into 'fsub_add/s1reg2_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:177]
+INFO: [Synth 8-4471] merging register 'fadd_d/m1reg3_reg[22:0]' into 'fsub_add/m1reg3_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:240]
+INFO: [Synth 8-4471] merging register 'fadd_d/m1reg_reg[22:0]' into 'fsub_add/m1reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:250]
+INFO: [Synth 8-4471] merging register 'fadd_d/m1reg2_reg[22:0]' into 'fsub_add/m1reg2_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:179]
+INFO: [Synth 8-4471] merging register 'fadd_d/m2reg3_reg[22:0]' into 'fsub_add/m2reg3_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:243]
+INFO: [Synth 8-4471] merging register 'fadd_d/m2reg_reg[22:0]' into 'fsub_add/m2reg_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:253]
+INFO: [Synth 8-4471] merging register 'fadd_d/m2reg2_reg[22:0]' into 'fsub_add/m2reg2_reg[22:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:182]
+INFO: [Synth 8-4471] merging register 'fadd_d/e2reg3_reg[7:0]' into 'fsub_add/e2reg3_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:242]
+INFO: [Synth 8-4471] merging register 'fadd_d/e2reg_reg[7:0]' into 'fsub_add/e2reg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:252]
+INFO: [Synth 8-4471] merging register 'fadd_d/e2reg2_reg[7:0]' into 'fsub_add/e2reg2_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:181]
+INFO: [Synth 8-4471] merging register 'fadd_d/e1reg3_reg[7:0]' into 'fsub_add/e1reg3_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:239]
+INFO: [Synth 8-4471] merging register 'fadd_d/e1reg_reg[7:0]' into 'fsub_add/e1reg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:249]
+INFO: [Synth 8-4471] merging register 'fadd_d/e1reg2_reg[7:0]' into 'fsub_add/e1reg2_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:178]
+INFO: [Synth 8-4471] merging register 'fadd_d/e2areg_reg[7:0]' into 'fsub_add/e2areg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:65]
+INFO: [Synth 8-4471] merging register 'fadd_d/e1areg_reg[7:0]' into 'fsub_add/e1areg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:64]
+INFO: [Synth 8-4471] merging register 'fadd_d/m2areg_reg[24:0]' into 'fsub_add/m2areg_reg[24:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:67]
+INFO: [Synth 8-4471] merging register 'fadd_d/m1areg_reg[24:0]' into 'fsub_add/m1areg_reg[24:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:66]
+INFO: [Synth 8-4471] merging register 'fadd_d/tereg_reg[8:0]' into 'fsub_add/tereg_reg[8:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:63]
+INFO: [Synth 8-4471] merging register 'fadd_d/esreg_reg[7:0]' into 'fsub_add/esreg_reg[7:0]' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:128]
+INFO: [Synth 8-4471] merging register 'fadd_d/tstckreg_reg' into 'fsub_add/tstckreg_reg' [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:129]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/s1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:95]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/s1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:248]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/s1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:177]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m1reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:240]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m1reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:250]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m1reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:179]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m2reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:243]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:253]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m2reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:182]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/e2reg3_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:242]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/e2reg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:252]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/e2reg2_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:181]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m2areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:67]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/m1areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:66]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/tereg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:63]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/e2areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:65]
+WARNING: [Synth 8-6014] Unused sequential element fadd_d/e1areg_reg was removed.  [/home/tansei/Desktop/cpu_jikken/fpu/FADD/fadd_new.v:64]
+INFO: [Common 17-14] Message 'Synth 8-6014' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+DSP Report: Generating DSP mydsubreg3_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg3_reg is absorbed into DSP mydsubreg3_reg.
+DSP Report: operator mydsubwire3 is absorbed into DSP mydsubreg3_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg5_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire5 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg4_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire4 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+DSP Report: Generating DSP mydsubreg1_reg, operation Mode is: (A*B)'.
+DSP Report: register mydsubreg1_reg is absorbed into DSP mydsubreg1_reg.
+DSP Report: operator mydsubwire is absorbed into DSP mydsubreg1_reg.
+DSP Report: Generating DSP mydreg0, operation Mode is: C+(A*B)'.
+DSP Report: register mydsubreg2_reg is absorbed into DSP mydreg0.
+DSP Report: operator mydsubwire2 is absorbed into DSP mydreg0.
+DSP Report: operator mydreg0 is absorbed into DSP mydreg0.
+WARNING: [Synth 8-3331] design fmul_myd4 has unconnected port ovf
+INFO: [Synth 8-3886] merging instance 'fsub_add/m1reg3_reg[9]' (FD) to 'fsub_add/m1areg_reg[9]'
+INFO: [Common 17-14] Message 'Synth 8-3886' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\fsub_add/myfreg_reg[26] )
+INFO: [Synth 8-5544] ROM "fpcbfs" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "fpcbf" won't be mapped to Block RAM because address size (2) smaller than threshold (5)
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\io_araddr_reg[2] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\io_wstrb_reg[0] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\io_wstrb_reg[1] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\io_wstrb_reg[2] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\io_wstrb_reg[3] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\io_awaddr_reg[1] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\mainreg_reg[0][31] )
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:02:18 ; elapsed = 00:02:38 . Memory (MB): peak = 2277.305 ; gain = 995.078 ; free physical = 4051 ; free virtual = 26165
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:03:53 ; elapsed = 00:06:30 . Memory (MB): peak = 2407.762 ; gain = 1125.523 ; free physical = 246 ; free virtual = 16154
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP and Shift Register Reporting
 ---------------------------------------------------------------------------------
 
 ROM:
-+------------+--------------+---------------+----------------+
-|Module Name | RTL Object   | Depth x Width | Implemented As | 
-+------------+--------------+---------------+----------------+
-|finv_d      | x2reg_reg    | 2048x23       | Block RAM      | 
-|finv_d      | x0reg_reg    | 2048x23       | Block RAM      | 
-|fsqrt_d     | tab2         | 4096x23       | LUT            | 
-|fsqrt_d     | tab          | 4096x23       | LUT            | 
-|fdiv_d      | u1/x2reg_reg | 2048x23       | Block RAM      | 
-|fdiv_d      | u1/x0reg_reg | 2048x23       | Block RAM      | 
-|fsqrt_d     | tab2         | 4096x23       | LUT            | 
-+------------+--------------+---------------+----------------+
++------------+------------+---------------+----------------+
+|Module Name | RTL Object | Depth x Width | Implemented As | 
++------------+------------+---------------+----------------+
+|finv_d      | tab2       | 2048x23       | LUT            | 
+|finv_d      | x0reg_reg  | 2048x23       | Block RAM      | 
+|fsqrt_d     | tab2       | 4096x23       | LUT            | 
+|fsqrt_d     | tab        | 4096x23       | LUT            | 
++------------+------------+---------------+----------------+
 
 
 DSP: Preliminary Mapping  Report (see note below)
-+------------+-------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|Module Name | DSP Mapping       | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
-+------------+-------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|fmul_myd    | A*B               | 25     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|fmul_myd    | (PCIN>>17)+A*B    | 25     | 8      | -      | -      | 31     | 0    | 0    | -    | -    | -     | 0    | 1    | 
-|fmul_myd    | A*B               | 25     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|fmul_myd    | (PCIN>>17)+A*B    | 25     | 8      | -      | -      | 31     | 0    | 0    | -    | -    | -     | 0    | 1    | 
-|fdiv_d      | A*B2              | 25     | 18     | -      | -      | 48     | 0    | 1    | -    | -    | -     | 0    | 0    | 
-|fdiv_d      | (PCIN>>17)+A*B2   | 25     | 8      | -      | -      | 31     | 0    | 1    | -    | -    | -     | 0    | 1    | 
-|fsqrt_d     | A*B2              | 25     | 18     | -      | -      | 48     | 0    | 1    | -    | -    | -     | 0    | 0    | 
-|fsqrt_d     | (PCIN>>17)+A*B2   | 25     | 8      | -      | -      | 31     | 0    | 1    | -    | -    | -     | 0    | 1    | 
-|fsqrt_d     | A2*B''            | 25     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 0    | 
-|fsqrt_d     | (PCIN>>17)+A2*B'' | 25     | 8      | -      | -      | 31     | 1    | 2    | -    | -    | -     | 0    | 1    | 
-+------------+-------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
++---------------+-------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name    | DSP Mapping       | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++---------------+-------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|fmul_myd4      | (A*B)'            | 24     | 12     | -      | -      | 36     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 12     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 11     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | (A*B)'            | 23     | 12     | -      | -      | 35     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 23     | 12     | 23     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|finv_d         | A2*B              | 24     | 13     | -      | -      | 37     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|fdiv_d         | A2*B2             | 24     | 11     | -      | -      | 35     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|fsqrt_d        | A*B               | 25     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|fsqrt_d        | (PCIN>>17)+A*B    | 25     | 8      | -      | -      | 31     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|fsqrt_d        | A2*B''            | 25     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 0    | 
+|fsqrt_d        | (PCIN>>17)+A2*B'' | 25     | 8      | -      | -      | 31     | 1    | 2    | -    | -    | -     | 0    | 1    | 
+|fmul_myd4      | (A*B)'            | 24     | 12     | -      | -      | 36     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 12     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 11     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | (A*B)'            | 23     | 12     | -      | -      | 35     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 23     | 12     | 23     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fsqrt_d        | A*B               | 25     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|fsqrt_d        | (PCIN>>17)+A*B    | 25     | 8      | -      | -      | 31     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|fsqrt_d        | A2*B''            | 25     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 0    | 
+|fsqrt_d        | (PCIN>>17)+A2*B'' | 25     | 8      | -      | -      | 31     | 1    | 2    | -    | -    | -     | 0    | 1    | 
+|fmul_myd4      | (A*B)'            | 24     | 12     | -      | -      | 36     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 12     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 11     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | (A*B)'            | 23     | 12     | -      | -      | 35     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 23     | 12     | 23     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|finv_d         | A2*B              | 24     | 13     | -      | -      | 37     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|nino_core__GB1 | A2*B2             | 24     | 11     | -      | -      | 35     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|fmul_myd4      | (A*B)'            | 24     | 12     | -      | -      | 36     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 12     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 24     | 11     | 24     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
+|fmul_myd4      | (A*B)'            | 23     | 12     | -      | -      | 35     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|fmul_myd4      | C+(A*B)'          | 23     | 12     | 23     | -      | 36     | 0    | 0    | 0    | -    | -     | 1    | 0    | 
++---------------+-------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
 
 Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
 ---------------------------------------------------------------------------------
@@ -951,42 +1497,55 @@ Finished ROM, RAM, DSP and Shift Register Reporting
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
-+-+--------------+------------+----------+
-| |RTL Partition |Replication |Instances |
-+-+--------------+------------+----------+
-+-+--------------+------------+----------+
++------+---------------+------------+----------+
+|      |RTL Partition  |Replication |Instances |
++------+---------------+------------+----------+
+|1     |nino_core__GB0 |           1|     21394|
+|2     |nino_core__GB1 |           1|     10836|
+|3     |nino_core__GB2 |           1|      7596|
+|4     |nino_core__GB3 |           1|      6773|
+|5     |nino_core__GB4 |           1|     17219|
++------+---------------+------------+----------+
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:02:30 ; elapsed = 00:03:06 . Memory (MB): peak = 2407.320 ; gain = 1125.094 ; free physical = 3744 ; free virtual = 25857
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:04:07 ; elapsed = 00:07:11 . Memory (MB): peak = 2758.418 ; gain = 1476.180 ; free physical = 857 ; free virtual = 16113
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:02:31 ; elapsed = 00:03:07 . Memory (MB): peak = 2416.320 ; gain = 1134.094 ; free physical = 3736 ; free virtual = 25849
+Finished Timing Optimization : Time (s): cpu = 00:04:07 ; elapsed = 00:07:11 . Memory (MB): peak = 2762.418 ; gain = 1480.180 ; free physical = 1384 ; free virtual = 16643
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
-+-+--------------+------------+----------+
-| |RTL Partition |Replication |Instances |
-+-+--------------+------------+----------+
-+-+--------------+------------+----------+
++------+---------------+------------+----------+
+|      |RTL Partition  |Replication |Instances |
++------+---------------+------------+----------+
+|1     |nino_core__GB0 |           1|     21506|
+|2     |nino_core__GB1 |           1|     10913|
+|3     |nino_core__GB2 |           1|      7631|
+|4     |nino_core__GB3 |           1|      6773|
+|5     |nino_core__GB4 |           1|     17219|
++------+---------------+------------+----------+
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-4480] The timing for the instance inst/fdiv_d/u1/x2reg_reg_0 (implemented as a block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
-INFO: [Synth 8-4480] The timing for the instance inst/fdiv_d/u1/x2reg_reg_1 (implemented as a block RAM) might be sub-optimal as no optional output register could be merged into the block ram. Providing additional output register may help in improving timing.
+INFO: [Common 17-14] Message 'Synth 8-3886' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Common 17-14] Message 'Synth 8-3886' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:02:34 ; elapsed = 00:03:11 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3721 ; free virtual = 25834
+Finished Technology Mapping : Time (s): cpu = 00:04:29 ; elapsed = 00:08:27 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 449 ; free virtual = 15759
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
-+-+--------------+------------+----------+
-| |RTL Partition |Replication |Instances |
-+-+--------------+------------+----------+
-+-+--------------+------------+----------+
++------+---------------+------------+----------+
+|      |RTL Partition  |Replication |Instances |
++------+---------------+------------+----------+
+|1     |nino_core__GB0 |           1|     10735|
+|2     |nino_core__GB1 |           1|      7096|
+|3     |nino_core__GB4 |           1|      9078|
++------+---------------+------------+----------+
 ---------------------------------------------------------------------------------
 Start IO Insertion
 ---------------------------------------------------------------------------------
@@ -1003,7 +1562,7 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3718 ; free virtual = 25831
+Finished IO Insertion : Time (s): cpu = 00:04:36 ; elapsed = 00:08:34 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 832 ; free virtual = 16154
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -1016,7 +1575,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3718 ; free virtual = 25831
+Finished Renaming Generated Instances : Time (s): cpu = 00:04:36 ; elapsed = 00:08:34 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 831 ; free virtual = 16153
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -1028,37 +1587,37 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3715 ; free virtual = 25828
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:04:37 ; elapsed = 00:08:36 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 824 ; free virtual = 16146
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3715 ; free virtual = 25828
+Finished Renaming Generated Ports : Time (s): cpu = 00:04:38 ; elapsed = 00:08:36 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 824 ; free virtual = 16147
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3715 ; free virtual = 25828
+Finished Handling Custom Attributes : Time (s): cpu = 00:04:39 ; elapsed = 00:08:37 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 822 ; free virtual = 16145
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3715 ; free virtual = 25828
+Finished Renaming Generated Nets : Time (s): cpu = 00:04:39 ; elapsed = 00:08:37 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 822 ; free virtual = 16145
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP and Shift Register Reporting
 ---------------------------------------------------------------------------------
 
 Static Shift Register Report:
-+-----------------------+-------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
-|Module Name            | RTL Name                      | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
-+-----------------------+-------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
-|design_1_nino_core_0_0 | inst/fdiv_d/x1reg3_reg[18]    | 3      | 2     | NO           | NO                 | YES               | 2      | 0       | 
-|design_1_nino_core_0_0 | inst/fsqrt_d/eawirereg_reg[7] | 4      | 8     | NO           | NO                 | YES               | 8      | 0       | 
-+-----------------------+-------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
++-----------------------+--------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name            | RTL Name                       | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++-----------------------+--------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|design_1_nino_core_0_0 | inst/fsqrt_d/eawirereg_reg[7]  | 4      | 8     | NO           | NO                 | YES               | 8      | 0       | 
+|design_1_nino_core_0_0 | inst/fsqrt_ds/eawirereg_reg[7] | 4      | 8     | NO           | NO                 | YES               | 8      | 0       | 
++-----------------------+--------------------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
 
 ---------------------------------------------------------------------------------
 Finished ROM, RAM, DSP and Shift Register Reporting
@@ -1077,81 +1636,123 @@ Report Cell Usage:
 +------+----------------+------+
 |      |Cell            |Count |
 +------+----------------+------+
-|1     |CARRY8          |    80|
-|2     |DSP_ALU         |    10|
-|3     |DSP_A_B_DATA    |     3|
-|4     |DSP_A_B_DATA_1  |     5|
-|5     |DSP_A_B_DATA_2  |     2|
-|6     |DSP_C_DATA      |    10|
-|7     |DSP_MULTIPLIER  |    10|
-|8     |DSP_M_DATA      |    10|
-|9     |DSP_OUTPUT      |     5|
-|10    |DSP_OUTPUT_1    |     5|
-|11    |DSP_PREADD      |    10|
-|12    |DSP_PREADD_DATA |    10|
-|13    |LUT1            |   118|
-|14    |LUT2            |   282|
-|15    |LUT3            |   416|
-|16    |LUT4            |   851|
-|17    |LUT5            |  1228|
-|18    |LUT6            |  6103|
-|19    |MUXF7           |  1558|
-|20    |MUXF8           |   671|
-|21    |RAMB18E2        |     1|
-|22    |RAMB18E2_2      |     1|
-|23    |RAMB36E2        |     1|
-|24    |RAMB36E2_2      |     1|
-|25    |SRL16E          |    10|
-|26    |FDRE            |  3403|
+|1     |CARRY8          |   129|
+|2     |DSP_ALU         |    20|
+|3     |DSP_ALU_1       |    12|
+|4     |DSP_A_B_DATA    |    12|
+|5     |DSP_A_B_DATA_1  |     4|
+|6     |DSP_A_B_DATA_2  |     4|
+|7     |DSP_A_B_DATA_3  |     4|
+|8     |DSP_A_B_DATA_4  |     6|
+|9     |DSP_A_B_DATA_5  |     2|
+|10    |DSP_C_DATA      |    20|
+|11    |DSP_C_DATA_1    |    12|
+|12    |DSP_MULTIPLIER  |    32|
+|13    |DSP_M_DATA      |    20|
+|14    |DSP_M_DATA_1    |    12|
+|15    |DSP_OUTPUT      |    28|
+|16    |DSP_OUTPUT_1    |     4|
+|17    |DSP_PREADD      |    32|
+|18    |DSP_PREADD_DATA |    32|
+|19    |LUT1            |   187|
+|20    |LUT2            |   485|
+|21    |LUT3            |   915|
+|22    |LUT4            |  1943|
+|23    |LUT5            |  4443|
+|24    |LUT6            | 13506|
+|25    |MUXF7           |  4230|
+|26    |MUXF8           |  1582|
+|27    |RAMB18E2_1      |     2|
+|28    |RAMB36E2_1      |     2|
+|29    |SRL16E          |    16|
+|30    |FDRE            |  5682|
 +------+----------------+------+
 
 Report Instance Areas: 
-+------+-------------------------+---------------------------+------+
-|      |Instance                 |Module                     |Cells |
-+------+-------------------------+---------------------------+------+
-|1     |top                      |                           | 14804|
-|2     |  inst                   |nino_core                  | 14803|
-|3     |    fadd_d               |fadd_d                     |  1027|
-|4     |    fdiv_d               |fdiv_d                     |   748|
-|5     |      u1                 |finv_d                     |    54|
-|6     |        ax2              |\u1/ax2_funnel             |     8|
-|7     |        ax2reg2_reg      |\u1/ax2reg2_reg_funnel     |     8|
-|8     |      u2                 |fmul_myd_1                 |   635|
-|9     |        mydwire          |\u1/ax2_funnel__2          |     8|
-|10    |        mydreg_reg       |mydreg_reg__0_funnel__1    |     8|
-|11    |    fmul_myd             |fmul_myd                   |   840|
-|12    |      mydwire            |mydwire_funnel             |     8|
-|13    |      mydreg_reg__0      |mydreg_reg__0_funnel       |     8|
-|14    |    fsqrt_d              |fsqrt_d                    |  5072|
-|15    |      nibunnox3awire4    |\u1/ax2_funnel__1          |     8|
-|16    |      nibunnox3areg3_reg |\u1/ax2reg2_reg_funnel__1  |     8|
-|17    |      rootawire2         |rootawire2_funnel          |     8|
-|18    |      rootareg_reg       |rootareg_reg_funnel        |     8|
-|19    |    fsub_add             |fadd_d_0                   |   364|
-|20    |    ftoi_d               |ftoi_d                     |   286|
-+------+-------------------------+---------------------------+------+
++------+-------------------------+------------------------------------------+------+
+|      |Instance                 |Module                                    |Cells |
++------+-------------------------+------------------------------------------+------+
+|1     |top                      |                                          | 33378|
+|2     |  inst                   |nino_core                                 | 33378|
+|3     |    feq                  |feq                                       |     2|
+|4     |    flt                  |flt                                       |     5|
+|5     |    feqs                 |feq_2                                     |     2|
+|6     |    flts                 |flt_3                                     |     5|
+|7     |    fadd_d               |fadd_d                                    |   338|
+|8     |    fadd_ds              |fadd_d_0                                  |  3498|
+|9     |    fdiv_d               |fdiv_d                                    |  1675|
+|10    |      u1                 |finv_d_11                                 |   786|
+|11    |        u2ax2            |\u1/u2ax2_funnel                          |     8|
+|12    |        usax2            |\u1/usax2_funnel                          |     8|
+|13    |      u2                 |fmul_myd4_12                              |   826|
+|14    |        mydsubreg3_reg   |\inst/fdiv_d/u2/mydsubreg3_reg_funnel     |     8|
+|15    |        mydreg0          |\u2/mydreg0_funnel                        |     8|
+|16    |        mydreg0__0       |\inst/fdiv_d/u2/mydreg0__0_funnel         |     8|
+|17    |        mydsubreg1_reg   |\inst/fdiv_d/u2/mydsubreg1_reg_funnel     |     8|
+|18    |        mydreg0__1       |\inst/fdiv_d/u2/mydreg0__1_funnel         |     8|
+|19    |    fdiv_ds              |fdiv_d_1                                  |  1663|
+|20    |      u1                 |finv_d                                    |   804|
+|21    |        u2ax2            |\fdiv_ds/u1/u2ax2_funnel                  |     8|
+|22    |        usax2            |\fdiv_ds/u1/usax2_funnel                  |     8|
+|23    |      u2                 |fmul_myd4_10                              |   805|
+|24    |        mydsubreg3_reg   |\inst/fdiv_ds/u2/mydsubreg3_reg_funnel    |     8|
+|25    |        mydreg0          |mydreg0_funnel                            |     8|
+|26    |        mydreg0__0       |\inst/fdiv_ds/u2/mydreg0__0_funnel        |     8|
+|27    |        mydsubreg1_reg   |\inst/fdiv_ds/u2/mydsubreg1_reg_funnel    |     8|
+|28    |        mydreg0__1       |\inst/fdiv_ds/u2/mydreg0__1_funnel        |     8|
+|29    |    fmul_myd4            |fmul_myd4                                 |   990|
+|30    |      mydsubreg3_reg     |mydsubreg3_reg_funnel__2                  |     8|
+|31    |      mydreg0            |mydreg0_funnel__3                         |     8|
+|32    |      mydreg0__0         |mydreg0_funnel__4                         |     8|
+|33    |      mydsubreg1_reg     |mydsubreg3_reg_funnel__3                  |     8|
+|34    |      mydreg0__1         |mydreg0_funnel__5                         |     8|
+|35    |    fmul_myd4s           |fmul_myd4_4                               |   881|
+|36    |      mydsubreg3_reg     |\u2/mydsubreg3_reg_funnel__2              |     8|
+|37    |      mydreg0            |\u2/mydreg0_funnel__3                     |     8|
+|38    |      mydreg0__0         |\u2/mydreg0_funnel__4                     |     8|
+|39    |      mydsubreg1_reg     |\u2/mydsubreg3_reg_funnel__3              |     8|
+|40    |      mydreg0__1         |\u2/mydreg0_funnel__5                     |     8|
+|41    |    fsqrt_d              |fsqrt_d                                   |  2682|
+|42    |      nibunnox3awire4    |\inst/fsqrt_d/nibunnox3awire4_funnel      |     8|
+|43    |      nibunnox3areg3_reg |\inst/fsqrt_d/nibunnox3areg3_reg_funnel   |     8|
+|44    |      rootawire2         |rootawire2_funnel                         |     8|
+|45    |      rootareg_reg       |rootareg_reg_funnel                       |     8|
+|46    |    fsqrt_ds             |fsqrt_d_5                                 |   268|
+|47    |      nibunnox3awire4    |\inst/fsqrt_ds/nibunnox3awire4_funnel     |     8|
+|48    |      nibunnox3areg3_reg |\inst/fsqrt_ds/nibunnox3areg3_reg_funnel  |     8|
+|49    |      rootawire2         |rootawire2_funnel__1                      |     8|
+|50    |      rootareg_reg       |rootareg_reg_funnel__1                    |     8|
+|51    |    fsub_add             |fadd_d_6                                  |   994|
+|52    |    fsub_adds            |fadd_d_7                                  |   345|
+|53    |    ftoi_d               |ftoi_d                                    |   374|
+|54    |    ftoi_ds              |ftoi_d_8                                  |   355|
+|55    |    itof_d               |itof_d                                    |   204|
+|56    |    itof_ds              |itof_d_9                                  |   203|
++------+-------------------------+------------------------------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.547 ; gain = 1271.320 ; free physical = 3715 ; free virtual = 25828
+Finished Writing Synthesis Report : Time (s): cpu = 00:04:39 ; elapsed = 00:08:37 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 822 ; free virtual = 16145
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 181 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:02:30 ; elapsed = 00:02:52 . Memory (MB): peak = 2553.547 ; gain = 775.938 ; free physical = 3742 ; free virtual = 25855
-Synthesis Optimization Complete : Time (s): cpu = 00:02:36 ; elapsed = 00:03:13 . Memory (MB): peak = 2553.555 ; gain = 1271.320 ; free physical = 3742 ; free virtual = 25855
+Synthesis finished with 0 errors, 0 critical warnings and 345 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:04:31 ; elapsed = 00:08:22 . Memory (MB): peak = 2775.344 ; gain = 972.848 ; free physical = 4750 ; free virtual = 20189
+Synthesis Optimization Complete : Time (s): cpu = 00:04:40 ; elapsed = 00:08:48 . Memory (MB): peak = 2775.344 ; gain = 1493.105 ; free physical = 4743 ; free virtual = 20177
 INFO: [Project 1-571] Translating synthesized netlist
-INFO: [Netlist 29-17] Analyzing 2319 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 5973 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 10 instances were transformed.
-  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD_DATA, DSP_PREADD): 10 instances
+  A total of 32 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD_DATA, DSP_PREADD): 32 instances
 
 INFO: [Common 17-83] Releasing license: Synthesis
-305 Infos, 220 Warnings, 0 Critical Warnings and 0 Errors encountered.
+438 Infos, 276 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:02:41 ; elapsed = 00:03:38 . Memory (MB): peak = 2553.555 ; gain = 1304.574 ; free physical = 4005 ; free virtual = 26119
+synth_design: Time (s): cpu = 00:04:46 ; elapsed = 00:09:17 . Memory (MB): peak = 2787.430 ; gain = 1538.438 ; free physical = 4759 ; free virtual = 20217
 INFO: [Common 17-1381] The checkpoint '/home/tansei/Desktop/cpu_jikken/project_7/project_7.runs/design_1_nino_core_0_0_synth_1/design_1_nino_core_0_0.dcp' has been generated.
-INFO: [Coretcl 2-1174] Renamed 9 cell refs.
+write_checkpoint: Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2811.441 ; gain = 24.012 ; free physical = 4746 ; free virtual = 20210
+INFO: [Coretcl 2-1174] Renamed 23 cell refs.
 INFO: [Common 17-1381] The checkpoint '/home/tansei/Desktop/cpu_jikken/project_7/project_7.runs/design_1_nino_core_0_0_synth_1/design_1_nino_core_0_0.dcp' has been generated.
+write_checkpoint: Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2811.441 ; gain = 0.000 ; free physical = 4694 ; free virtual = 20200
 INFO: [runtcl-4] Executing : report_utilization -file design_1_nino_core_0_0_utilization_synth.rpt -pb design_1_nino_core_0_0_utilization_synth.pb
-report_utilization: Time (s): cpu = 00:00:00.21 ; elapsed = 00:00:00.24 . Memory (MB): peak = 2577.559 ; gain = 0.000 ; free physical = 3991 ; free virtual = 26114
-INFO: [Common 17-206] Exiting Vivado at Wed Feb 13 14:40:05 2019...
+report_utilization: Time (s): cpu = 00:00:00.28 ; elapsed = 00:00:00.50 . Memory (MB): peak = 2811.441 ; gain = 0.000 ; free physical = 4693 ; free virtual = 20201
+INFO: [Common 17-206] Exiting Vivado at Mon Feb 18 15:54:57 2019...

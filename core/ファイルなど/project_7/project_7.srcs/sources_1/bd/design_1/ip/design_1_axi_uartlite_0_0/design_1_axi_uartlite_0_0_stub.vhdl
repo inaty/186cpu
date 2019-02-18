@@ -1,10 +1,10 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.4 (lin64) Build 2086221 Fri Dec 15 20:54:30 MST 2017
--- Date        : Wed Feb 13 15:41:29 2019
+-- Date        : Mon Feb 18 10:09:12 2019
 -- Host        : ispc2016 running 64-bit Ubuntu 16.04.5 LTS
--- Command     : write_vhdl -force -mode synth_stub
---               /home/tansei/Desktop/cpu_jikken/project_7/project_7.srcs/sources_1/bd/design_1/ip/design_1_axi_uartlite_0_0/design_1_axi_uartlite_0_0_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub -rename_top design_1_axi_uartlite_0_0 -prefix
+--               design_1_axi_uartlite_0_0_ design_1_axi_uartlite_0_0_stub.vhdl
 -- Design      : design_1_axi_uartlite_0_0
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xcku040-ffva1156-2-e

@@ -65,6 +65,14 @@ module design_1_nino_core_0_0 (
   w_data_b,
   wenable_b,
   instoutwire,
+  memaddr_as,
+  w_data_as,
+  wenable_as,
+  r_data_as,
+  memaddr_bs,
+  w_data_bs,
+  wenable_bs,
+  instoutwires,
   io_awaddr_wire,
   io_awready,
   io_awvalid_wire,
@@ -85,7 +93,7 @@ module design_1_nino_core_0_0 (
   rstmem
 );
 
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, ASSOCIATED_RESET rst, FREQ_HZ 150000000, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, ASSOCIATED_RESET rst, FREQ_HZ 200000000, PHASE 0.0, CLK_DOMAIN design_1_clk_wiz_0_0_clk_out1" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 clk CLK" *)
 input wire clk;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME rst, POLARITY ACTIVE_LOW" *)
@@ -100,6 +108,14 @@ output wire [31 : 0] memaddr_b;
 output wire [31 : 0] w_data_b;
 output wire [3 : 0] wenable_b;
 input wire [31 : 0] instoutwire;
+output wire [31 : 0] memaddr_as;
+output wire [31 : 0] w_data_as;
+output wire [3 : 0] wenable_as;
+input wire [31 : 0] r_data_as;
+output wire [31 : 0] memaddr_bs;
+output wire [31 : 0] w_data_bs;
+output wire [3 : 0] wenable_bs;
+input wire [31 : 0] instoutwires;
 output wire [3 : 0] io_awaddr_wire;
 input wire io_awready;
 output wire io_awvalid_wire;
@@ -131,6 +147,14 @@ output wire rstmem;
     .w_data_b(w_data_b),
     .wenable_b(wenable_b),
     .instoutwire(instoutwire),
+    .memaddr_as(memaddr_as),
+    .w_data_as(w_data_as),
+    .wenable_as(wenable_as),
+    .r_data_as(r_data_as),
+    .memaddr_bs(memaddr_bs),
+    .w_data_bs(w_data_bs),
+    .wenable_bs(wenable_bs),
+    .instoutwires(instoutwires),
     .io_awaddr_wire(io_awaddr_wire),
     .io_awready(io_awready),
     .io_awvalid_wire(io_awvalid_wire),
