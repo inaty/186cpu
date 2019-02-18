@@ -6,10 +6,6 @@ module fsqrt_d(
   output wire [31:0] y,
   input wire clk);
 
-  wire [0:0] swire;
-  wire [7:0] ewire;
-  wire [22:0] m;
-
   
   function [22:0] tab (
     input [11:0] M
@@ -8222,13 +8218,18 @@ module fsqrt_d(
   endfunction
 
 
+
+  reg [31:0] xregtest;
+
+
+
   wire [0:0] swire5;
   wire [7:0] ewire5;
   wire [22:0] mwire5;
 
-  assign swire5 = x[31];
-  assign ewire5 = x[30:23];
-  assign mwire5 = x[22:0];
+  assign swire5 = xregtest[31];
+  assign ewire5 = xregtest[30:23];
+  assign mwire5 = xregtest[22:0];
 
   wire [23:0] mawire5;
   wire [7:0] eawire5;
@@ -8303,6 +8304,7 @@ module fsqrt_d(
   assign y = (ewirereg == 23'b0 || ewirereg == 23'd255) ? {swirereg,31'b0} : {swirereg,eawirereg,ans} ;
 
   always @(posedge clk) begin
+    xregtest<=x;
     
     swirereg4<=swire5;
     ewirereg4<=ewire5;

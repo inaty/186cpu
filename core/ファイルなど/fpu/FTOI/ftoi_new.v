@@ -22,7 +22,7 @@ module ftoi_d(
   wire [31:0] roundm;//core
   
   assign d = (ewire >= 8'd127 && ewire < 8'd158) ? 8'd158 - ewire : 8'b0; // ずらす桁  >127 -> >=127 core
-  assign roundm = (rmwire == 0 || swire == 0) ? {1'b1,m,8'b0} : ({1'b1,m,8'b0}-32'b1);
+  assign roundm = (rmwire == 0 || swire == 0) ? {1'b1,m,8'b0} : {({1'b1,m}-24'b1),8'hff};
   assign i =  roundm >> d ;  //core 
   assign roundwire = i[30:0];
 

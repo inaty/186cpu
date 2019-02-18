@@ -4157,18 +4157,64 @@ endcase
   
   assign x2wire = tab2(m[22:12]);
 
-  wire [47:0] ax2;
+  wire [24:0] ax2;
   wire [23:0] ax2_2;
   ///////
-  assign ax2 = ma * {1'b1,x2};
 
-  reg [47:0] ax2reg2;
+  wire [36:0] u2ax2;
+  wire [34:0] usax2;
+  //wire [23:0] suax2;
+  //wire [21:0] s2ax2;
+  wire [13:0] ueanswire;
+  //wire [14:0] ueanswires;
+  //wire [14:0] ueanswiress;
+  //wire [14:0] ueanswiresss;
+  wire [12:0] ueueanswire;
+  //wire [12:0] ueueanswires;
+  //wire [12:0] ueueanswiress;
+  //wire [12:0] ueueanswiresss;
+  wire [22:0] stanswire;
+
+  assign u2ax2=ma*{1'b1,x2[22:11]};
+  assign usax2=ma*x2[10:0];
+  //assign suax2=ma[10:0]*{1'b1,x2[22:11]};
+  //assign s2ax2=ma[10:0]*x2[10:0];
+  assign ueanswire={1'b0,usax2[34:22]}+{1'b0,u2ax2[23:11]};
+  //assign ueanswires={2'b0,u2ax2[12:0]}+{2'b0,usax2[23:11]}+{2'b0,suax2[23:11]}+1;
+  //assign ueanswiress={2'b0,u2ax2[12:0]}+{2'b0,usax2[23:11]}+{2'b0,suax2[23:11]}+2;
+  //assign ueanswiresss={2'b0,u2ax2[12:0]}+{2'b0,usax2[23:11]}+{2'b0,suax2[23:11]}+3;
+  assign stanswire={({1'b0,usax2[21:11]}+{1'b0,u2ax2[10:0]}),usax2[10:0]};
+  assign ueueanswire=u2ax2[36:24];
+  //assign ueueanswires=u2ax2[25:13]+1;
+  //assign ueueanswiress=u2ax2[25:13]+2;
+  //assign ueueanswiresss=u2ax2[25:13]+3;
+
+  //reg [47:0] ax2reg2;
+  reg [13:0] ueans;
+  //reg [14:0] ueanss;
+  //reg [14:0] ueansss;
+  //reg [14:0] ueanssss;
+  reg [12:0] ueueans;
+  //reg [12:0] ueueanss;
+  //reg [12:0] ueueansss;
+  //reg [12:0] ueueanssss;
+  reg [22:0] stans;
+
   reg [22:0] x0reg2;
   reg [7:0] ereg2;
   reg sreg2;
  
 /////////
-  assign ax2_2 = (ax2reg2[47] == 0) ? ax2reg2[46:23] : ax2reg2[47:24];
+  wire [13:0] ueanss;
+  wire [12:0] ueueanss;
+  assign ueanss=ueans+1;
+  assign ueueanss=ueueans+1;
+  
+  assign ax2= stans[22]?(ueanss[13]?{ueueanss,ueanss[12:1]}:{ueueans,ueanss[12:1]}):
+                                  (ueans[13]?{ueueanss,ueans[12:1]}:{ueueans,ueans[12:1]});
+
+
+  assign ax2_2 = (ax2[24] == 0) ? ax2[23:0] : ax2[24:1];
   
   wire [24:0] x0_2;
   
@@ -4177,7 +4223,7 @@ endcase
   wire [24:0] ans;
   
   assign ans = x0_2 - {1'b0,ax2_2};
-  assign y = (ereg2 == 23'b0 || ereg2 == 23'd255) ? {sreg2,31'b0} : ((ereg2 < 8'd253) ? {sreg2,8'd253-ereg2,ans[22:0]} : {s,31'b0});
+  assign y = (ereg2 == 23'b0 || ereg2 == 23'd255) ? {sreg2,31'b0} : ((ereg2 < 8'd253) ? {sreg2,8'd253-ereg2,ans[22:0]} : {sreg2,31'b0});
 
   always @(posedge clk) begin
     x0reg<=x0wire;
@@ -4186,10 +4232,19 @@ endcase
     ereg<=ewire;
     sreg<=swire;
 
-    ax2reg2<=ax2;
+    //ax2reg2<=ax2;
     x0reg2<=x0;
     ereg2<=e;
     sreg2<=s;
+    ueans<=ueanswire;
+    //ueanss<=ueanswires;
+    //ueansss<=ueanswiress;
+    //ueanssss<=ueanswiresss;
+    ueueans<=ueueanswire;
+    //ueueanss<=ueueanswires;
+    //ueueansss<=ueueanswiress;
+    //ueueanssss<=ueueanswiresss;
+    stans<=stanswire;
     
   end
 
